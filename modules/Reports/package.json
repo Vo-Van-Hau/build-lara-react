@@ -1,0 +1,26 @@
+{
+    "name": "reports",
+    "version": "1.00.000",
+    "author": [
+        {
+            "name": "VoVanHau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "dependencies": {},
+    "devDependencies": {},
+    "component": {
+        "Reports": true
+    },
+    "menu": {
+        "Reports": {
+            "name": "Reports",
+            "icon": "fas fa-cog",
+            "controller": "Reports",
+            "group": "common",
+            "position": 2,
+            "child": []
+        }
+    },
+    "status": true
+}

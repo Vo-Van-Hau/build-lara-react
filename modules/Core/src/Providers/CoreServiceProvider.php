@@ -20,9 +20,11 @@ class CoreServiceProvider extends ServiceProvider {
     public function boot() {
 
         // Load routes
-        $this->loadRoutesFrom(__DIR__ . "/../Routes/web.php");
+        // $this->loadRoutesFrom(__DIR__ . "/../Routes/web.php");
 
-        // Load views
+        /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
+         * You may do this using the service provider's loadViewsFrom method.
+         */
         $this->loadViewsFrom(__DIR__ . "/../../resources/views", \Config::get("module.core.namespace", "Core"));
 
         // Load Lang
@@ -30,7 +32,6 @@ class CoreServiceProvider extends ServiceProvider {
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
-
 
         $this->publishResources();
     }
@@ -49,8 +50,13 @@ class CoreServiceProvider extends ServiceProvider {
         });
 
          /** Bind Base to repository */
-         $this->app->bind(
-            "Modules\Core\Interfaces\BaseRepositoryInterface",
+        //  $this->app->bind(
+        //     "Modules\Core\Interfaces\BaseRepositoryInterface",
+        //     \Modules\Core\Repositories\Eloquents\BaseRepository::class
+        // );
+
+        $this->app->singleton(
+            \Modules\Core\Interfaces\BaseRepositoryInterface::class,
             \Modules\Core\Repositories\Eloquents\BaseRepository::class
         );
     }

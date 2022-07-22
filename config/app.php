@@ -52,9 +52,11 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    "url" => env("APP_URL", "http://localhost"),
 
-    'asset_url' => env('ASSET_URL', null),
+    "backendUrl" => env("APP_BACKEND_URL", "admin"),
+
+    "asset_url" => env("ASSET_URL", null),
 
     /*
     |--------------------------------------------------------------------------
@@ -175,6 +177,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * Core Service Providers...
+         */
+        Modules\Core\Providers\CoreServiceProvider::class,
+        Modules\Core\Providers\CoreRouteServiceProvider::class,
     ],
 
     /*

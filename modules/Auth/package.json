@@ -1,0 +1,14 @@
+{
+    "name": "auth",
+    "version": "1.00.000",
+    "author": [
+        {
+            "name": "VoVanHau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "dependencies": {},
+    "devDependencies": {},
+    "menu": {},
+    "status": true
+}

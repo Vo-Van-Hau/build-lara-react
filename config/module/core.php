@@ -22,5 +22,14 @@ return [
     */
     "api_url" => env("CORE_API_URL", "api"),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Mix Path
+    |--------------------------------------------------------------------------
+    |
+     */
+    "mix_frontend_asset" => env('MIX_FRONTEND_ASSET', "frontend"),
+    "mix_backend_asset" => env('MIX_BACKEND_ASSET', "backend"),
+
     "locales" => ["en", "vn"]
 ];

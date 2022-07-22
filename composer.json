@@ -4,13 +4,23 @@
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "VoVanHau",
+            "email": "vanhau.vo@urekamedia.vn",
+            "homepage": "http://dev.build-laravel-react.com",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "modules/auth": "*@dev",
+        "modules/core": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -29,7 +39,7 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
 
-            "Modules\\": "modules/"
+            "Modules\\Core\\": "modules/Core/src"
         }
     },
     "autoload-dev": {
@@ -54,7 +64,14 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [],
+            "providers": [
+                "Modules\\Core\\Providers\\CoreServiceProvider",
+                "Modules\\Core\\Providers\\CoreRouteServiceProvider"
+            ],
+            "aliases": {
+                "Core": "Modules\\Core\\Facades\\Core"
+            }
         }
     },
     "config": {
