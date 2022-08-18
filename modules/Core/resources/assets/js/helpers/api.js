@@ -1,100 +1,63 @@
-// import Promise from "bluebird";
 import axios from "axios";
 import _ from "lodash";
-// import BaseError from "../components/BaseError";
 
 const defaultOptions = {
-    timeout: 2000
+    timeout: 10000
 };
 
-// const createClient = (clientOptions, { toastErrors, addInterceptor }) => {
-//     const client = axios.create({
-//         ...defaultOptions,
-//         ...clientOptions
-//     });
-//     const onSuccess = response => {
-//         //ProcessLoading.hide();
-//         const statusCode = response.status;
-//         if (statusCode != 200) {
-//             return Promise.reject(
-//                 new BaseError(statusCode, response.data.message, [])
-//             );
-//         }
+/**
+ * @author: <vanhau.vo@urekamedia.vn>
+ * @todo:
+ * @param {Object} clientOptions
+ * @returns
+ */
+const create_client = (clientOptions) => {
+    const instance = axios.create({
+        ...defaultOptions,
+        ...clientOptions
+    });
 
-//         return response;
-//     };
+    // You can intercept requests or responses before they are handled by then or catch.
+    // Add a request interceptor
+    instance.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        return config;
+    }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+    });
 
-//     const onError = error => {
-//         //ProcessLoading.hide();
-//         if (!error.response) {
-//             return Promise.reject(new BaseError(-1, "Network error"));
-//         }
-//         const statusCode = error.response.status;
-//         //Authentication token has expried
-//         if (statusCode == 401) {
-//             let data = error.response.data.error.data;
-//             if (data.redirect_to) {
-//                 window.location.replace(
-//                     window.sparrowConfig.app.backendURL + data.redirect_to
-//                 );
-//             }
-//         }
-//         //Permission Denined
-//         if (statusCode == 403) {
-//             PermissionDenied.show();
-//         }
+    // Add a response interceptor
+    instance.interceptors.response.use(function (response) {
+        // Any status code that lie within the range of 2xx cause this function to trigger
+        // Do something with response data
+        return response;
+    }, function (error) {
+        // Any status codes that falls outside the range of 2xx cause this function to trigger
+        // Do something with response error
+        return Promise.reject(error);
+    });
 
-//         if (toastErrors) {
-//             if (error.response.data.error.message) {
-//                 showToast(error.response.data.error.message);
-//             } else {
-//                 showToast("Something wrong happened. Please try again later.");
-//             }
-//         }
+    return instance;
+};
 
-//         return Promise.reject(
-//             new BaseError(
-//                 statusCode,
-//                 error.response.data.error.message,
-//                 error.response.data.error.data
-//             )
-//         );
-//     };
-//     client.interceptors.response.use(onSuccess, onError);
-//     //ProcessLoading.show();
-//     return client;
-// };
-
-// export default {
-
-//     getApiUrl() {
-//         const overrideApiUrl = window.sparrowConfig.app.backendURL
-//             ? { baseURL: `${window.sparrowConfig.app.backendURL}/api/` }
-//             : { baseURL: `/api/` };
-//         return overrideApiUrl;
-//     },
-//     getSecured({ token, toastErrors = true, timeout = 10000 } = {}) {
-//         if (!token) {
-//             token = window.axios.defaults.headers.common["X-CSRF-TOKEN"];
-//         }
-//         return createClient(
-//             {
-//                 timeout,
-//                 headers: {
-//                     "X-CSRF-TOKEN": token
-//                 },
-//                 ...this.getApiUrl()
-//             },
-//             { toastErrors }
-//         );
-//     },
-
-//     getAnonymous({ toastErrors = true, timeout = 2000 } = {}) {
-//         overrideApiUrl.timeout = timeout;
-//         return createClient(overrideApiUrl, { toastErrors });
-//     },
-
-//     getStripePath() {
-//         return overrideStripePath;
-//     }
-// };
+export default {
+    get_api_url() {
+        const override_api_url = window.sparrowConfig.app.backendURL
+            ? { baseURL: `${window.sparrowConfig.app.backendURL}/api/` }
+            : { baseURL: `/api/` };
+        return override_api_url;
+    },
+    get_secured({ token, timeout = 10000 } = {}) {
+        if (!token) {
+            token = window.axios.defaults.headers.common['X-CSRF-TOKEN'];
+        }
+        return create_client({
+                timeout,
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                ...this.get_api_url()
+            });
+    },
+}

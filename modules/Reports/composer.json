@@ -1,11 +1,11 @@
 {
-    "name": "modules/core",
-    "description": "Module Core",
+    "name": "modules/reports",
+    "description": "Module Reports",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "VoVanHau",
+            "name": "vovanhau",
             "email": "vanhau.vo@urekamedia.vn"
         }
     ],
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Core\\": "src/"
+            "Modules\\Reports\\": "src/"
         },
         "classmap": [
             "database/seeds"
@@ -23,10 +23,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\Core\\Providers\\CoreServiceProvider"
+                "Modules\\Reports\\Providers\\ReportsServiceProvider",
+                "Modules\\Reports\\Providers\\ReportsRouteServiceProvider"
             ],
             "aliases": {
-                "Core": "Modules\\Core\\Facades\\Core"
+                "Reports": "Modules\\Reports\\Facades\\Reports"
             }
         }
     }

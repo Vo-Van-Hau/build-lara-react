@@ -45,7 +45,6 @@ class CoreServiceProvider extends ServiceProvider {
 
         /** Bind Core */
         $this->app->bind("Core", function ($app) {
-
             return $this->app->make("Modules\Core\Core");
         });
 

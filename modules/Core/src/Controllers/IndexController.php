@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Core\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -23,9 +24,7 @@ class IndexController extends Controller {
      * @return void
      */
     public function index() {
-
         $data = [];
-
         return view("Core::index.index", compact("data"));
     }
 
@@ -36,11 +35,11 @@ class IndexController extends Controller {
      */
     public function dynamicRoute() {
         $parameters = request()->route()->parameters;
-        $module = !empty($parameters['module']) ? ucfirst($parameters['module']) : 'Index';
-        $controller = !empty($parameters['controller']) ? ucfirst($parameters['controller']) : $module;
-        $action = !empty($parameters['action']) ? $parameters['action'] : 'index';
-        $param = !empty($parameters['param']) ? $parameters['param'] : null;
+        $module = !empty($parameters["module"]) ? ucfirst($parameters["module"]) : "Index";
+        $controller = !empty($parameters["controller"]) ? ucfirst($parameters["controller"]) : $module;
+        $action = !empty($parameters["action"]) ? $parameters["action"] : 'index';
+        $param = !empty($parameters["param"]) ? $parameters["param"] : null;
         $controller = app()->make("Modules\\{$module}\\Controllers\\{$controller}Controller");
-        return $controller->callAction($action, ['id' => $param]);
+        return $controller->callAction($action, ["id" => $param]);
     }
 }

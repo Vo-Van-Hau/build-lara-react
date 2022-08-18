@@ -1,0 +1,10 @@
+{
+    "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js",
+    "/js/index.js": "/js/index.js",
+    "/css/index.css": "/css/index.css",
+    "/modules/Reports/public/js/manifest.js": "/modules/Reports/public/js/manifest.js",
+    "/modules/Reports/public/js/vendor.js": "/modules/Reports/public/js/vendor.js",
+    "/modules/Reports/public/js/index.js": "/modules/Reports/public/js/index.js",
+    "/modules/Reports/public/css/index.css": "/modules/Reports/public/css/index.css"
+}

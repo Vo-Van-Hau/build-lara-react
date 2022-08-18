@@ -1,41 +1,33 @@
 import React, { Fragment, useContext } from 'react';
 import { Layout } from 'antd';
-import { Routes, Route } from 'react-router-dom';
-import ModuleView from '../Module/ModuleView';
-
-import { CoreContext } from "../Contexts/CoreContext";
+import { CoreContext } from '../Contexts/CoreContext';
+import Sidebar from './Sidebar';
+import HeaderSection from './HeaderSection';
+import FooterSection from './FooterSection';
+import ContentSection from './ContentSection';
 
 /**
  * @author: <vanhau.vo@urekamedia.vn>
  * @todo:
- * @param {*} param0
+ * @param {Object} props
  * @returns
  */
-const Master = ({ history, ...props }) => {
+const MasterLayout = ({ history, ...props }) => {
 
     const { data } = useContext(CoreContext);
+    const {} = props;
 
     return (
         <Fragment>
             <Layout>
+                <Sidebar history={history} />
                 <Layout className="site-layout" style={{}}>
-                    <Layout.Content style={{}}>
-                        <Routes>
-                            {(() => {
-                                let parseURL = window.sparrowConfig.app.adminPrefix ? '/'+ window.sparrowConfig.app.adminPrefix : '';
-                                return (
-                                    <Route
-                                        exact
-                                        path={`${parseURL}/:moduleName/:componentName`}
-                                        element={<ModuleView history={history} />}
-                                    />
-                                );
-                            })()}
-                        </Routes>
-                    </Layout.Content>
+                    <HeaderSection />
+                    <ContentSection history={history}/>
+                    <FooterSection />
                 </Layout>
             </Layout>
         </Fragment>
     );
 };
-export default Master;
+export default MasterLayout;

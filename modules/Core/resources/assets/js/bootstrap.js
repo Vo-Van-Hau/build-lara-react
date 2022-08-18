@@ -1,4 +1,4 @@
-window._ = require("lodash");
+window._ = require('lodash');
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -24,10 +24,5 @@ else { console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x
  * @todo: SparrowConfig
  */
 if(sparrowConfig){
-
   window.sparrowConfig = sparrowConfig;
-}
-else{
-
-  console.error("Sparrow Config NotFound");
-}
+} else { console.error("Sparrow Config NotFound"); }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import queryString from 'query-string';
 import MasterLayout from '../components/Layout/MasterLayout';
 
 // // react-router doesn't do query parsing anymore since V4
@@ -16,23 +15,22 @@ const addLocationQuery = (history) => {
 
 const history = createBrowserHistory({ basename: '/' });
 
-addLocationQuery(history.location);
+// addLocationQuery(history.location);
 
-history.listen(() => {
+// history.listen(() => {
 
-    addLocationQuery(history);
+//     addLocationQuery(history);
 
-    if (window.SEND_USAGE_STATS) {}
-})
+//     if (window.SEND_USAGE_STATS) {}
+// })
 
 /**
  * @author: <vanhau.vo@urekamedia.vn>
  * @todo:
- * @param {*} param0
+ * @param {Object} props
  * @returns
  */
 const RoutesWeb = (props) => {
-
     return (
         <BrowserRouter history={history} >
             <MasterLayout history={history} {...props}/>

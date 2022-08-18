@@ -11,11 +11,11 @@ import { CoreContext } from '../Contexts/CoreContext';
  */
 const App = ({ history, ...props }) => {
 
-    const { data, getModule } = useContext(CoreContext);
+    const { data, get_module } = useContext(CoreContext);
+    const {} = props;
 
     useEffect(() => {
-
-        getModule();
+        get_module();
     }, []);
 
     return RoutesWeb();

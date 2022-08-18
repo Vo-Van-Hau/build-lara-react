@@ -182,6 +182,12 @@ return [
          */
         Modules\Core\Providers\CoreServiceProvider::class,
         Modules\Core\Providers\CoreRouteServiceProvider::class,
+
+        /**
+         * Reports Service Providers...
+         */
+        Modules\Reports\Providers\ReportsServiceProvider::class,
+        Modules\Reports\Providers\ReportsRouteServiceProvider::class,
     ],
 
     /*

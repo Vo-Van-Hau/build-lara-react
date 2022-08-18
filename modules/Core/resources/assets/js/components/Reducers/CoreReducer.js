@@ -34,11 +34,22 @@ export const initialState = {
  * @returns {Object}
  */
 export const CoreReducer = (state = initialState, action) => {
-
     let { type, payload } = action;
-
     switch (type) {
+        case GET_MODULE:
+            let { lang } = payload.language;
+            Object.entries(lang).forEach(([key, lang]) => {
+                Object.entries(lang).forEach(([namespace, resources]) => {
 
+                });
+            });
+            return {
+                ...state,
+                config: payload.config,
+                menus: payload.menus,
+                modules: payload.modules,
+                language: payload.language
+            };
         default: return state;
     }
 };

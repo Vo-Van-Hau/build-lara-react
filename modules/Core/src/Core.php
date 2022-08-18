@@ -14,8 +14,7 @@ class Core {
      *
      * @return void
      */
-    public static function modulePath() {
-
+    public static function module_path() {
         return base_path("modules/");
     }
 
@@ -25,7 +24,6 @@ class Core {
      * @return string
      */
     public static function backendURL() {
-
         return \Config::get("app.url") . '/' . \Config::get("module.core.backend_url");
     }
 
@@ -35,7 +33,6 @@ class Core {
      * @return string
      */
     public static function assetURL() {
-
         return url(\Config::get("module.core.mix_backend_asset"));
     }
     /**
@@ -44,16 +41,13 @@ class Core {
      * @return string
      */
     public static function uploadURL() {
-
         return url("");
     }
+
     /**
-     * mediaURL
-     *
      * @return void
      */
     public static function mediaURL() {
-
         return url(\Config::get("app.url") . "/");
     }
 
@@ -77,7 +71,6 @@ class Core {
      * @return array
      */
     public static function config() {
-
         return [
             "app" => [
                 "name" => \Config::get("app.name", "Sparrow"),
@@ -88,15 +81,7 @@ class Core {
                 "uploadURL" => self::uploadURL(),
                 "mediaURL" => self::mediaURL(),
                 "adminPrefix" => \Config::get("module.core.backend_url")
-            ],
-            // "services" => [
-            //     "facebook" => [
-            //         "client_id" => \Config::get('services.facebook')['client_id'],
-            //     ],
-            //     "google" => [
-            //         "client_id" => \Config::get('services.google')['client_id'],
-            //     ],
-            // ]
+            ]
         ];
     }
 }

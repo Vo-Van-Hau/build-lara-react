@@ -1,137 +1,142 @@
 import axios from '../../helpers/api';
-import InjectedComponent from '../Injected';
+import InjectedComponent from '../Injected/InjectedComponent';
 import { useState, useEffect, useContext } from 'react';
 import { CoreContext } from '../Contexts/CoreContext';
 
 const InjectedModuleView = ({ history, ...props }) => {
-    // const { t } = useTranslation("core");
-    // const { data } = useContext(CoreContext);
-    // //get from data
-    // const { language } = data;
 
-    // const [moduleComponent, setModuleComponent] = useState({
-    //     module: null
-    // });
-    // const [Error, setError] = useState(null);
+    const { data } = useContext(CoreContext);
+    const { language } = data;
+    const [moduleComponent, setModuleComponent] = useState({
+        module: null
+    });
+    const [Error, setError] = useState(null);
 
-    // if (Error) {
-    //     console.log("Error rendering plugin", Error);
-    //     return (props.onNotFound && props.onNotFound(Error)) || null;
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {string} modName
+     * @param {string} comName
+     * @param {boolean} reload
+     * @return {void}
+     */
+    const load_module = (modName, comName, reload = false) => {
+        const moduleName = reload ? modName : modName || props.moduleName;
+        const controllerName = reload ? comName : comName || props.controllerName;
+        if (!window.winter || !window.winter[moduleName]) {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.onload = () => {
+                script.onload = null;
+                window.setTimeout(() => {
+                    set_view_in_state(moduleName, controllerName);
+                }, 0);
+            };
+            script.onerror = () => {
+                script.onerror = null;
+                window.winter[moduleName] = {};
+                window.setTimeout(() => {
+                    set_view_in_state(moduleName, controllerName);
+                }, 0);
+            };
+            script.src = `${window.sparrowConfig.app.assetURL}/modules/${moduleName.toLowerCase()}/js/${"index.js"}?v=${props.version}`;
+            document.getElementsByTagName('head')[0].appendChild(script);
+        } else {
+            setModuleComponent({
+                module: null
+            });
+            window.setTimeout(() => {
+                set_view_in_state(moduleName, controllerName);
+            }, 0);
+        }
+    };
 
-    // useEffect(() => {
-    //     loadModule(props.moduleName, props.componentName);
-    // }, [props.moduleName, props.componentName]);
+    useEffect(function(){
+        load_module(props.moduleName, props.controllerName);
+    }, [props.moduleName, props.controllerName]);
 
-    // const loadModule = (modName, comName, reload = false) => {
-    //     const moduleName = reload ? modName : moduleName || props.moduleName;
-    //     const componentName = reload ? comName : comName || props.componentName;
-    //     if (!window.winter || !window.winter[moduleName]) {
-    //         const script = document.createElement("script");
-    //         script.type = "text/javascript";
-    //         script.onload = () => {
-    //             script.onload = null;
-    //             setImmediate(() => {
-    //                 setViewInState(moduleName, componentName);
-    //             });
-    //         };
-    //         script.onerror = () => {
-    //             script.onerror = null;
-    //             window.winter[moduleName] = {};
-    //             setImmediate(() => {
-    //                 setViewInState(moduleName, componentName);
-    //             });
-    //         };
-    //         script.src =
-    //             window.sparrowConfig.app.assetURL +
-    //             `/modules/${moduleName.toLowerCase()}/js/${"index.js"}?v=${
-    //                 props.version
-    //             }`;
-    //         document.getElementsByTagName("head")[0].appendChild(script);
-    //     } else {
-    //         setModuleComponent({
-    //             module: null
-    //         });
-    //         setImmediate(() => {
-    //             setViewInState(moduleName, componentName);
-    //         });
-    //     }
-    // };
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {string} moduleName
+     * @param {boolean} isLite
+     * @return {void}
+     */
+    const load_module_view = (moduleName, isLite) => {
+        if (!window.winter || !window.winter[moduleName]) {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `${window.sparrowConfig.app.assetURL}/modules/${moduleName.toLowerCase()}/js/${"index.js"}?v=${props.version}`;
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+    };
 
-    // const loadModuleView = (moduleName, isLite) => {
-    //     if (!window.winter || !window.winter[moduleName]) {
-    //         const script = document.createElement("script");
-    //         script.type = "text/javascript";
-    //         script.src =
-    //             window.sparrowConfig.app.assetURL +
-    //             `/modules/${moduleName.toLowerCase()}/js/${"index.js"}?v=${
-    //                 props.version
-    //             }`;
-    //         document.getElementsByTagName("head")[0].appendChild(script);
-    //     }
-    // };
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {string} moduleName
+     * @param {string} componentName
+     * @return {void}
+     */
+    const set_view_in_state = (moduleName, controllerName) => {
+        console.log(window.winter);
+        /**
+         * @author <vanhau.vo@urekamedia.vn>
+         * @todo:
+         * @returns
+         */
+        const view_resolve = () => {
+            // const module = window.winter && window.winter[moduleName];
+            const module = window.winter['ViewDefault'];
+            if (controllerName == undefined) {
+                return module ? module['default'] || window.winter['ViewDefault'] : window.winter['ViewDefault'];
+            }
+            return (
+                module && (module[controllerName] || window.winter['ViewDefault'])
+            );
+        };
 
-    // const setViewInState = (moduleName, componentName) => {
-    //     const viewResolve = () => {
-    //         const module = window.winter && window.winter[moduleName];
-    //         if (componentName == undefined) {
-    //             return module
-    //                 ? module["default"] || window.winter["ViewDefault"]
-    //                 : window.winter["ViewDefault"];
-    //         }
-    //         return (
-    //             module &&
-    //             (module[componentName] || window.winter["ViewDefault"])
-    //         );
-    //     };
-    //     const module = viewResolve();
-    //     if (!module) {
-    //         // @deprecated : Update the error message
-    //         setError(
-    //             new Error(`
-    //             Component "${componentName}" doesn't exist for module "${moduleName}"
-    //             There was a breaking change in how module views are handled in Laravel 11.6
-    //             Web bundles and liteViews were replaced by a more standardized method.
-    //             `)
-    //         );
-    //         setModuleComponent({
-    //             module: null
-    //         });
-    //     } else {
-    //         setModuleComponent({
-    //             module: module
-    //         });
-    //         setError(null);
-    //     }
-    // };
-    // if (!moduleComponent.module) {
-    //     return null;
-    // }
-    // const bp = {
-    //     axios: axios,
-    //     toast,
-    //     sweetAlert,
-    //     getModuleInjector: () => InjectedModuleView,
-    //     loadModuleView: loadModuleView
-    // };
+        const module = view_resolve();
 
-    // const extraProps = props.extraProps || {};
-    // return (
-    //     <InjectedComponent
-    //         t={t}
-    //         component={moduleComponent.module}
-    //         moduleName={props.moduleName}
-    //         componentName={props.componentName}
-    //         history={history}
-    //         bp={bp}
-    //         {...extraProps}
-    //         language={language.locale}
-    //     />
-    // );
+        // console.log(module);
+
+        if (!module) {
+            window.alert(`Component "${controllerName}" doesn't exist for module "${moduleName}"
+                There was a breaking change in how module views are handled in Laravel 11.6
+                Web bundles and liteViews were replaced by a more standardized method.`)
+            setModuleComponent({
+                module: null
+            });
+        } else {
+            setModuleComponent({
+                module: module
+            });
+            setError(null);
+        }
+    };
+
+    if (!moduleComponent.module) {
+        return null;
+    }
+
+    const bp = {
+        axios: axios,
+        getModuleInjector: () => InjectedModuleView,
+        load_module_view: load_module_view
+    };
+
+    const extraProps = props.extraProps || {};
 
     return (
-        <>Foke</>
-    )
+        <InjectedComponent
+            component={moduleComponent.module}
+            moduleName={props.moduleName}
+            controllerName={props.controllerName}
+            history={history}
+            bp={bp}
+            {...extraProps}
+            language={language.locale}
+        />
+    );
 };
-
 export default InjectedModuleView;

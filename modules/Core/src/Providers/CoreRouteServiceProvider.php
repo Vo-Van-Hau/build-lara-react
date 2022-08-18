@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Config;
 
 class CoreRouteServiceProvider extends RouteServiceProvider {
 
@@ -34,20 +35,17 @@ class CoreRouteServiceProvider extends RouteServiceProvider {
      * @return void
      */
     public function boot() {
-
         $this->configureRateLimiting();
-
         $this->routes(function () {
-
-            Route::prefix("/")
-                ->middleware("web")
-                ->namespace($this->namespace)
-                ->group(__DIR__ . "/../Routes/web.php");
-
-            Route::prefix("api")
-                ->middleware("api")
-                ->namespace($this->namespace)
-                ->group(__DIR__ . "/../Routes/api.php");
+            Route::prefix(Config::get("module.core.backend_url"))->group(function() {
+                Route::middleware("web")
+                    ->namespace($this->namespace)
+                    ->group(__DIR__ . "/../Routes/web.php");
+                Route::prefix("api")
+                    ->middleware("api")
+                    ->namespace($this->namespace)
+                    ->group(__DIR__ . "/../Routes/api.php");
+            });
         });
     }
 
@@ -57,7 +55,6 @@ class CoreRouteServiceProvider extends RouteServiceProvider {
      * @return void
      */
     protected function configureRateLimiting() {
-
         RateLimiter::for("api", function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });

@@ -6,7 +6,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "VoVanHau",
+            "name": "vovanhau",
             "email": "vanhau.vo@urekamedia.vn",
             "homepage": "http://dev.build-laravel-react.com",
             "role": "Developer"
@@ -39,7 +39,8 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
 
-            "Modules\\Core\\": "modules/Core/src"
+            "Modules\\Core\\": "modules/Core/src/",
+            "Modules\\Reports\\": "modules/Reports/src/"
         }
     },
     "autoload-dev": {
@@ -70,7 +71,8 @@
                 "Modules\\Core\\Providers\\CoreRouteServiceProvider"
             ],
             "aliases": {
-                "Core": "Modules\\Core\\Facades\\Core"
+                "Core": "Modules\\Core\\Facades\\Core",
+                "Reports": "Modules\\Reports\\Facades\\Reports"
             }
         }
     },

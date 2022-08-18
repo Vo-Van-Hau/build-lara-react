@@ -1,8 +1,8 @@
 {
-    "/themes/backend/modules/core/js/manifest.js": "/themes/backend/modules/core/js/manifest.js",
-    "/themes/backend/modules/core/js/vendor.js": "/themes/backend/modules/core/js/vendor.js",
-    "/themes/backend/modules/core/js/index.js": "/themes/backend/modules/core/js/index.js",
-    "/themes/backend/modules/core/css/index.css": "/themes/backend/modules/core/css/index.css",
+    "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js",
+    "/js/index.js": "/js/index.js",
+    "/css/index.css": "/css/index.css",
     "/modules/Core/public/js/manifest.js": "/modules/Core/public/js/manifest.js",
     "/modules/Core/public/js/vendor.js": "/modules/Core/public/js/vendor.js",
     "/modules/Core/public/js/index.js": "/modules/Core/public/js/index.js",
