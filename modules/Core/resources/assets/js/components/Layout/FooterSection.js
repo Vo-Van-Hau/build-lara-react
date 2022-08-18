@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Layout } from 'antd';
 
 const { Footer } = Layout;

@@ -1,6 +1,6 @@
 import axios from '../../helpers/api';
 import InjectedComponent from '../Injected/InjectedComponent';
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { CoreContext } from '../Contexts/CoreContext';
 
 const InjectedModuleView = ({ history, ...props }) => {
@@ -79,13 +79,14 @@ const InjectedModuleView = ({ history, ...props }) => {
      * @return {void}
      */
     const set_view_in_state = (moduleName, controllerName) => {
-        console.log(window.winter);
         /**
          * @author <vanhau.vo@urekamedia.vn>
          * @todo:
          * @returns
          */
         const view_resolve = () => {
+
+            console.log(window.winter)
             // const module = window.winter && window.winter[moduleName];
             const module = window.winter['ViewDefault'];
             if (controllerName == undefined) {

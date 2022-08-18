@@ -1,10 +1,8 @@
 {
-    "/js/manifest.js": "/js/manifest.js",
-    "/js/vendor.js": "/js/vendor.js",
     "/js/index.js": "/js/index.js",
+    "/js/manifest.js": "/js/manifest.js",
     "/css/index.css": "/css/index.css",
-    "/modules/Core/public/js/manifest.js": "/modules/Core/public/js/manifest.js",
-    "/modules/Core/public/js/vendor.js": "/modules/Core/public/js/vendor.js",
+    "/js/vendor.js": "/js/vendor.js",
     "/modules/Core/public/js/index.js": "/modules/Core/public/js/index.js",
     "/modules/Core/public/css/index.css": "/modules/Core/public/css/index.css"
 }

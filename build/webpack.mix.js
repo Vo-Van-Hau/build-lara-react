@@ -40,7 +40,7 @@ mix.webpackConfig({
     devtool: process.argv.find((x) => x.toLowerCase() === '--nomap') ? false : 'source-map',
     output: {
         libraryTarget: 'assign',
-        library: `winter = typeof winter === 'object ? winter : {}; winter['${moduleName.toLowerCase()}']`,
+        library: `winter = typeof winter === "object" ? winter : {}; winter["${moduleName.toLowerCase()}"]`,
     },
     externals: {
         react: 'React',
@@ -50,23 +50,26 @@ mix.webpackConfig({
     resolve: {
         extensions: ['.js', '.jsx', '.css', '.scss'],
     },
-    // plugins: [new _cleanWebpackPlugin.default()],
+    plugins: [
+        _cleanWebpackPlugin && _cleanWebpackPlugin.default ? new _cleanWebpackPlugin.default.CleanWebpackPlugin() : new _cleanWebpackPlugin.CleanWebpackPlugin()
+    ],
     module: {
         rules: [
             {
+                // test: /\.(js|jsx)$/,
                 test: /\.jsx?$/,
                 use: {
                     loader: 'babel-loader',
                     options: {
                         presets: [
                             ['@babel/preset-env'],
-                            '@babel/preset-typescript',
+                            // '@babel/preset-typescript',
                             '@babel/preset-react',
                         ],
                         plugins: [
                             '@babel/plugin-proposal-class-properties',
-                            '@babel/plugin-syntax-function-bind',
-                            '@babel/plugin-proposal-function-bind',
+                            // '@babel/plugin-syntax-function-bind',
+                            // '@babel/plugin-proposal-function-bind',
                         ],
                     },
                 },

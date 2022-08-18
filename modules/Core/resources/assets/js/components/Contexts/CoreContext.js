@@ -1,7 +1,7 @@
-import { createContext, useReducer } from "react";
-import { initialState, CoreReducer } from "../Reducers/CoreReducer";
-import { GET_MODULE, SET_LOCATE, CHANGE_SIDER} from "../Dispatch/type";
-import api from "../../helpers/api";
+import React, { createContext, useReducer } from 'react';
+import { initialState, CoreReducer } from '../Reducers/CoreReducer';
+import { GET_MODULE, SET_LOCATE, CHANGE_SIDER} from '../Dispatch/type';
+import api from '../../helpers/api';
 
 export const CoreContext = createContext();
 
