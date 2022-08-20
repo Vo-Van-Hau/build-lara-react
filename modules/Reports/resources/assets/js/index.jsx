@@ -1,15 +1,6 @@
-import '../sass/index.scss';
-import Overview from './Overview/index';
-import Daily from './Daily/index';
+import Overview from './Overview';
+import Daily from './Daily';
 
-const Reports = () => {
-
-    return (
-        <>This is reports</>
-    )
-}
-export default Reports;
+export default Overview;
 export { Overview as overview }
 export { Daily as daily }
-
-

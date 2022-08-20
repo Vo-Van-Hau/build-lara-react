@@ -28,9 +28,7 @@
     <!-- Your application code -->
     <script src="{{ Core::mix('js/index.js', '/modules/core') }}"></script>
 
-    <script>
-
-    </script>
+    <script></script>
 </body>
 
 </html>

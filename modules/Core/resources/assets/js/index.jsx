@@ -1,12 +1,16 @@
-require("./bootstrap");
+require('./bootstrap');
 
-import React, { Suspense } from 'react';
+import React from 'react';
+import ReactDOMOld from 'react-dom';
 import ReactDOM from 'react-dom/client';
 import 'antd/dist/antd.css';
 import { Index }                    from './components/ViewDefault/Index';
 import CoreContextProvicer          from './components/Contexts/CoreContext';
 import App                          from './components/App/App';
+import { Suspense } from 'react';
 
+window.React = React;
+window.ReactDOMOld = ReactDOMOld;
 window.winter = typeof window.winter === 'object' ? window.winter : {};
 window.winter['ViewDefault'] = Index;
 

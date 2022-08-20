@@ -1,6 +1,6 @@
+import React, { useState, useEffect, useContext } from 'react';
 import axios from '../../helpers/api';
 import InjectedComponent from '../Injected/InjectedComponent';
-import React, { useState, useEffect, useContext } from 'react';
 import { CoreContext } from '../Contexts/CoreContext';
 
 const InjectedModuleView = ({ history, ...props }) => {
@@ -85,10 +85,7 @@ const InjectedModuleView = ({ history, ...props }) => {
          * @returns
          */
         const view_resolve = () => {
-
-            console.log(window.winter)
-            // const module = window.winter && window.winter[moduleName];
-            const module = window.winter['ViewDefault'];
+            const module = window.winter && window[`winter_${moduleName}`];
             if (controllerName == undefined) {
                 return module ? module['default'] || window.winter['ViewDefault'] : window.winter['ViewDefault'];
             }
@@ -96,11 +93,7 @@ const InjectedModuleView = ({ history, ...props }) => {
                 module && (module[controllerName] || window.winter['ViewDefault'])
             );
         };
-
         const module = view_resolve();
-
-        // console.log(module);
-
         if (!module) {
             window.alert(`Component "${controllerName}" doesn't exist for module "${moduleName}"
                 There was a breaking change in how module views are handled in Laravel 11.6

@@ -3,10 +3,7 @@ const _ = require('lodash');
 const path = require('path');
 
 const defaultConfig = {
-    defaultEnv:
-        global.process.env.APP_ENV == 'production'
-            ? 'production'
-            : 'development',
+    defaultEnv: global.process.env.APP_ENV == 'production' ? 'production' : 'development',
     defaultSource: 'backend',
     defaultPackage: 'app',
     defaultPreset: 'dev',
@@ -24,6 +21,7 @@ const defaultConfig = {
         },
         watch: {
             args: ['--watch'],
+            // config: []
         },
         poll: {
             args: ['--watch', '--watch-poll'],

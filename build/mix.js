@@ -1,18 +1,34 @@
 const path = require('path');
 require('dotenv').config();
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+/**
+ * @author: <vanhau.vo@urekamedia.vn>
+ * @todo:
+ * @param {string} string
+ * @returns
+ */
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 // Load preset
+/**
+ *
+[
+    'node.exe',
+    'build\\mix',
+    'watch',
+    'backend',
+    'reports'
+]
+ */
 const args = global.process.argv.splice(2);
 const config = require('./config');
 const preset_name = args[0] || config.defaultPreset;
 const preset = config.presets[preset_name];
 if (!preset) {
-    console.log('Invalid preset', preset_name);
-    console.log('Available presets:', Object.keys(config.presets).join(','));
+    console.log('Invalid preset: ', preset_name);
+    console.log('Available presets: ', Object.keys(config.presets).join(','));
     global.process.exit(1);
 }
 // Set env
@@ -50,19 +66,25 @@ global.process.env.MIX_MODULE = capitalizeFirstLetter(module_name);
  */
 global.process.argv = [global.process.argv[0], global.process.argv[1]].concat(config.baseArgs).concat(preset.args);
 global.process.argv.push('--config=' + (preset.config || config.defaultConfig));
+/**
+[
+  'node.exe',
+  'build\\mix',
+  '--progress',
+  '--watch',
+  '--config=./node_modules/laravel-mix/setup/webpack.config.js'
+]
+ */
 
 // Debug
 console.log('[MIX] Source Name: ' + source_name);
 console.log('[MIX] Module Name: ' + module_name);
 
-//projectRoot
+// projectRoot
 global.process.processRoot = config.projectRoot;
 
 // Require entry
 require(path.resolve(config.projectRoot, preset.entry || config.defaultEntry));
-
-
-
 
 
 
