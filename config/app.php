@@ -177,15 +177,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /**
-         * Core Service Providers...
-         */
+
         Modules\Core\Providers\CoreServiceProvider::class,
         Modules\Core\Providers\CoreRouteServiceProvider::class,
-
-        /**
-         * Reports Service Providers...
-         */
+        Modules\Auth\Providers\AuthServiceProvider::class,
+        Modules\Auth\Providers\AuthRouteServiceProvider::class,
         Modules\Reports\Providers\ReportsServiceProvider::class,
         Modules\Reports\Providers\ReportsRouteServiceProvider::class,
     ],
