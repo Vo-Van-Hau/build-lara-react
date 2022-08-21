@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { initialState, AuthReducer } from '../Reducers/AuthReducer';
 import { SET_CONFIG } from '../Dispatch/type';
 import api from '../../helpers/api';
-
+import axios from 'axios';
 export const AuthContext = createContext();
 
 const AuthContextProvicer = ({ children, axios, history }) => {

@@ -43,16 +43,13 @@ const create_client = (clientOptions) => {
 
 export default {
     get_api_url() {
-        const override_api_url = window.sparrowConfig.app.backendURL
-            ? { baseURL: `${window.sparrowConfig.app.backendURL}/api/` }
-            : { baseURL: `/api/` };
+        const override_api_url = window.sparrowConfig.app.backendURL ? { baseURL: `${window.sparrowConfig.app.backendURL}/api/` } : { baseURL: `/api/` };
         return override_api_url;
     },
     get_secured({ token, timeout = 10000 } = {}) {
         if (!token) {
             token = window.axios.defaults.headers.common['X-CSRF-TOKEN'];
         }
-        console.log(window.axios.defaults.headers.common);
         return create_client({
                 timeout,
                 headers: {

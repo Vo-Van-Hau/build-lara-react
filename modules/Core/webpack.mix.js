@@ -12,11 +12,11 @@ if (mix.inProduction()) {
 }
 mix
     .js(resourcePath + '/resources/assets/js/index.jsx', '/js/index.js')
-    .copy(publicPath + '/js/index.js', resourcePath + '/public/js')
+    // .copy(publicPath + '/js/index.js', resourcePath + '/public/js')
     .react()
 mix
     .sass(resourcePath + '/resources/assets/sass/index.scss', '/css')
-    .copy(publicPath + '/css/index.css', resourcePath + '/public/css')
+    // .copy(publicPath + '/css/index.css', resourcePath + '/public/css')
 if (mix.inProduction()) {
     mix.disableNotifications();
 }

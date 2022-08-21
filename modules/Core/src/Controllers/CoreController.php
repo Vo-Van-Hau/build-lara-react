@@ -5,7 +5,7 @@ namespace Modules\Core\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Modules\Core\Exceptions\ApiException;
-use Modules\Core\Trails\Locates;
+use Modules\Core\Traits\Locates;
 
 /**
  * @author <hauvo1709@gmail.com>

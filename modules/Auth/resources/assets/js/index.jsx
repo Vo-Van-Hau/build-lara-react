@@ -1,5 +1,5 @@
 require('./bootstrap');
-console.log(window)
+
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import AuthContextProvicer from './components/Contexts/AuthContext';

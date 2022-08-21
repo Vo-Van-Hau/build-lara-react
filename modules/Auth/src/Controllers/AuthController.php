@@ -5,9 +5,13 @@ namespace Modules\Auth\Controllers;
 use Modules\Core\Controllers\ControllerBase;
 use Modules\Core\Core;
 use Illuminate\Support\Facades\Config;
-use Modules\Core\Trails\Locates;
+use Modules\Core\Traits\Locates;
+use Modules\Auth\Controllers\Traits\Auth as AuthTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Modules\Core\Exceptions\ApiException;
+use Modules\Users\Interfaces\UsersRepositoryInterface;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -20,10 +24,12 @@ use Illuminate\Support\Facades\Validator;
  */
 class AuthController extends ControllerBase {
 
-    use Locates;
+    use Locates, AuthTrait;
 
-    public function __construct() {
+    protected $usersRepository;
 
+    public function __construct(UsersRepositoryInterface $usersRepository) {
+        $this->usersRepository = $usersRepository;
     }
 
     /**
@@ -62,54 +68,36 @@ class AuthController extends ControllerBase {
      * @return void
      */
     public function login(Request $request) {
-        return response()->json([
-            "input" => $request->all()
-        ]);
         if ($request->isMethod("post")) {
             $validator = $this->validate_login($request);
             if ($validator->fails()) {
-                // throw new ApiException(trans('Auth::auth.invalid_credentials'), 400, $validator->getMessageBag()->toArray());
-                return response()->json([
-                    "status" => "Invalid credentials"
-                ]);
+                throw new ApiException(trans("Auth::auth.invalid_credentials"), 400, $validator->getMessageBag()->toArray());
             } else {
                 $credentials = $this->get_credentials($request);
-                return response()->json([
-                    "credentials"   => $credentials
-                ]);
                 try {
-                    if (\Auth::guard('module')->attempt($credentials, $request->has('remember'))) {
-                        if (!$this->checkTwoFactor(\Auth::guard('module')->id(), $request->email)) {
-                            //login
-                            \Auth::guard('module')->loginUsingId(\Auth::id(), $request->has('remember'));
-                            if (!$this->buildSession()) {
-                                throw new ApiException(trans('Auth::auth.failed'), 400, []);
-                            }
-                            return response()->json(
-                                [
-                                    'redirect_to' => $this->redirectTo(),
-                                    'status' => true,
-                                    'message' => trans('Auth::auth.login_success'),
-                                ]
-                            );
-                        } else {
-                            //logout keep session two facetor
-                            \Auth::guard('module')->logout();
-                            return response()->json(
-                                [
-                                    'status' => true,
-                                ]
-                            );
+                    if (Auth::guard("module")->attempt($credentials, $request->has("remember"))) {
+                        /**
+                         * @description: To log a user into the application by their ID, you may use the loginUsingId method.
+                         * This method accepts the primary key of the user you wish to authenticate
+                         */
+                        $id = Auth::id(); // Get the currently authenticated user's ID...
+                        Auth::guard("module")->loginUsingId($id, $request->has("remember")); // Login and "remember" the given user...
+                        if (!$this->build_session()) {
+                            throw new ApiException(trans("Auth::auth.failed"), 400, []);
                         }
+                        return response()->json([
+                                "redirect_to" => $this->redirectTo(),
+                                "status" => true,
+                                "message" => trans("Auth::auth.login_success"),
+                            ]);
                     } else {
-                        throw new ApiException(trans('Auth::auth.failed'), 400, []);
+                        throw new ApiException(trans("Auth::auth.failed"), 400, []);
                     }
                 } catch (Exception $errors) {
-                    // throw new ApiException($e->getMessage(), 500, []);
+                    throw new ApiException($errors->getMessage(), 500, []);
                 }
             }
         }
-        return view('Auth::auth.login');
     }
 
      /**
@@ -123,7 +111,7 @@ class AuthController extends ControllerBase {
             $this->login_username() => "required",
             "password" => "required|min:3",
         );
-        return \Validator::make($request->all(), $rules);
+        return Validator::make($request->all(), $rules);
     }
 
     /**
@@ -148,5 +136,14 @@ class AuthController extends ControllerBase {
             $field => $request->get("email"),
             "password" => $request->password,
         ];
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: redirectTo
+     * @return void
+     */
+    protected function redirectTo() {
+        return Core::backendURL() . "/dashboard";
     }
 }

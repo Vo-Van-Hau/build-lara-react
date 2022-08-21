@@ -4,6 +4,7 @@ namespace Modules\Reports\Providers;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Config;
 
 class ReportsServiceProvider extends ServiceProvider {
 
@@ -22,10 +23,10 @@ class ReportsServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", \Config::get("module.reports.namespace", "Reports"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("module.reports.namespace", "Reports"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", \Config::get("module.reports.namespace", "Reports"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("module.reports.namespace", "Reports"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");

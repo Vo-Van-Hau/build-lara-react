@@ -51,7 +51,8 @@ class CoreRouteServiceProvider extends RouteServiceProvider {
                     ->namespace($this->namespace)
                     ->group(__DIR__ . "/../Routes/web.php");
                 Route::prefix("api")
-                    ->middleware("api")
+                    // ->middleware("api")
+                    ->middleware("web")
                     ->namespace($this->namespace)
                     ->group(__DIR__ . "/../Routes/api.php");
             });

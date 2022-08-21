@@ -22,18 +22,12 @@ const Login = ({ history, ...props }) => {
         setLoadingStatus(true);
         let data = await login(values);
         setLoadingStatus(false);
-        if (data.error != null) {
+        if (data.error !== null) {
             setError(data.error);
         }
-        console.log(data);
-        // if (data.redirect_to) {
-        //     window.location.replace(data.redirect_to);
-        // }
-        // if (data.next_step != null) {
-        //     const { qr_code } = data;
-        //     props.changeQRCode(qr_code);
-        //     props.changePage(data.next_step);
-        // }
+        if (data.redirect_to) {
+            window.location.replace(data.redirect_to);
+        }
     };
 
     const onFinishFailed = errorInfo => {};

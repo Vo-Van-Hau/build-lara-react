@@ -1,0 +1,35 @@
+{
+    "name": "modules/users",
+    "description": "Module Users",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Users\\": "src/"
+        },
+        "classmap": [
+            "database/seeds"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Users\\Providers\\UsersServiceProvider",
+                "Modules\\Users\\Providers\\UsersRouteServiceProvider"
+            ],
+            "aliases": {
+                "Users": "Modules\\Users\\Facades\\Users"
+            }
+        }
+    }
+}
+

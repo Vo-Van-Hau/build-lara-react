@@ -4,6 +4,7 @@ namespace Modules\Core\Providers;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Config;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -34,10 +35,10 @@ class CoreServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", \Config::get("module.core.namespace", "Core"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("module.core.namespace", "Core"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", \Config::get("module.core.namespace", "Core"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("module.core.namespace", "Core"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");

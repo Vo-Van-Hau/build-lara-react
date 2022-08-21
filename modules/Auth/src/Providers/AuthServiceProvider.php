@@ -4,6 +4,7 @@ namespace Modules\Auth\Providers;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Config;
 
 class AuthServiceProvider extends ServiceProvider {
 
@@ -22,10 +23,10 @@ class AuthServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", \Config::get("module.auth.namespace", "Auth"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("module.auth.namespace", "Auth"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", \Config::get("module.auth.namespace", "Auth"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("module.auth.namespace", "Auth"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");

@@ -41,6 +41,7 @@
 
             "Modules\\Core\\": "modules/Core/src/",
             "Modules\\Auth\\": "modules/Auth/src/",
+            "Modules\\Users\\": "modules/Users/src/",
             "Modules\\Reports\\": "modules/Reports/src/"
         }
     },
