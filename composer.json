@@ -19,8 +19,11 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "modules/core": "*@dev",
         "modules/auth": "*@dev",
-        "modules/core": "*@dev"
+        "modules/users": "*@dev",
+        "modules/module": "*@dev",
+        "modules/reports": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -42,6 +45,7 @@
             "Modules\\Core\\": "modules/Core/src/",
             "Modules\\Auth\\": "modules/Auth/src/",
             "Modules\\Users\\": "modules/Users/src/",
+            "Modules\\Module\\": "modules/Module/src/",
             "Modules\\Reports\\": "modules/Reports/src/"
         }
     },
@@ -70,10 +74,25 @@
             "dont-discover": [],
             "providers": [
                 "Modules\\Core\\Providers\\CoreServiceProvider",
-                "Modules\\Core\\Providers\\CoreRouteServiceProvider"
+                "Modules\\Core\\Providers\\CoreRouteServiceProvider",
+
+                "Modules\\Auth\\Providers\\AuthServiceProvider",
+                "Modules\\Auth\\Providers\\AuthRouteServiceProvider",
+
+                "Modules\\Users\\Providers\\UsersServiceProvider",
+                "Modules\\Users\\Providers\\UsersRouteServiceProvider",
+
+                "Modules\\Module\\Providers\\ModuleServiceProvider",
+                "Modules\\Module\\Providers\\ModuleRouteServiceProvider",
+
+                "Modules\\Reports\\Providers\\ReportsServiceProvider",
+                "Modules\\Reports\\Providers\\ReportsRouteServiceProvider"
             ],
             "aliases": {
                 "Core": "Modules\\Core\\Facades\\Core",
+                "Auth": "Modules\\Auth\\Facades\\Auth",
+                "Users": "Modules\\Users\\Facades\\Users",
+                "Module": "Modules\\Module\\Facades\\Module",
                 "Reports": "Modules\\Reports\\Facades\\Reports"
             }
         }
@@ -88,12 +107,27 @@
     "repositories": [
         {
             "type": "path",
+            "url": "modules/Core",
+            "symlink": false
+        },
+        {
+            "type": "path",
             "url": "modules/Auth",
             "symlink": false
         },
         {
             "type": "path",
-            "url": "modules/Core",
+            "url": "modules/Users",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "modules/Module",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "modules/Reports",
             "symlink": false
         }
     ]

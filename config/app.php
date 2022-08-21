@@ -182,12 +182,18 @@ return [
          */
         Modules\Core\Providers\CoreServiceProvider::class,
         Modules\Core\Providers\CoreRouteServiceProvider::class,
+        
         Modules\Auth\Providers\AuthServiceProvider::class,
         Modules\Auth\Providers\AuthRouteServiceProvider::class,
-        Modules\Reports\Providers\ReportsServiceProvider::class,
-        Modules\Reports\Providers\ReportsRouteServiceProvider::class,
+
         Modules\Users\Providers\UsersServiceProvider::class,
         Modules\Users\Providers\UsersRouteServiceProvider::class,
+
+        Modules\Module\Providers\ModuleServiceProvider::class,
+        Modules\Module\Providers\ModuleRouteServiceProvider::class,
+
+        Modules\Reports\Providers\ReportsServiceProvider::class,
+        Modules\Reports\Providers\ReportsRouteServiceProvider::class,
     ],
 
     /*

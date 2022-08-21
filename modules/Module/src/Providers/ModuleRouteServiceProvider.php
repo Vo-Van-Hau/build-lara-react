@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Users\Providers;
+namespace Modules\Module\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 
-class UsersRouteServiceProvider extends RouteServiceProvider {
+class ModuleRouteServiceProvider extends RouteServiceProvider {
 
     /**
      * The path to the "admin" route for your application.
