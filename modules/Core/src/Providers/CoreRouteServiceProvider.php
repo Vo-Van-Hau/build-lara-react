@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * @author <hauvo1709@gmail.com>
+ * @package Provider
+ * @copyright 2022 http://www.cayluaviet.online/
+ * @license License 1.0
+ * @version Release: 1.00.000
+ * @link http://www.docs.v1.cayluaviet.online/
+ * @since 2022-07-21
+ */
 class CoreRouteServiceProvider extends RouteServiceProvider {
 
     /**

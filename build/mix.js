@@ -78,7 +78,7 @@ global.process.argv.push('--config=' + (preset.config || config.defaultConfig));
 
 // Debug
 console.log('[MIX] Source Name: ' + source_name);
-console.log('[MIX] Module Name: ' + module_name);
+console.log('[MIX] Module Name: ' + capitalizeFirstLetter(module_name));
 
 // projectRoot
 global.process.processRoot = config.projectRoot;

@@ -3,7 +3,6 @@ require('./bootstrap');
 import React from 'react';
 import ReactDOMOld from 'react-dom';
 import ReactDOM from 'react-dom/client';
-import 'antd/dist/antd.css';
 import { Index }                    from './components/ViewDefault/Index';
 import CoreContextProvicer          from './components/Contexts/CoreContext';
 import App                          from './components/App/App';

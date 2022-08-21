@@ -22,9 +22,9 @@
 <body>
     <div id="root" class="wrapper"></div>
     <!-- The Webpack manifest runtime -->
-    <script src="{{ Core::mix('js/manifest.js', '/modules/core') }}"></script>
+    <!-- <script src="{{ Core::mix('js/manifest.js', '/modules/core') }}"></script> -->
     <!-- Your vendor libraries -->
-    <script src="{{ Core::mix('js/vendor.js', '/modules/core') }}"></script>
+    <!-- <script src="{{ Core::mix('js/vendor.js', '/modules/core') }}"></script> -->
     <!-- Your application code -->
     <script src="{{ Core::mix('js/index.js', '/modules/core') }}"></script>
 

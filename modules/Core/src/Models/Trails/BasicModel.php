@@ -2,6 +2,15 @@
 
 namespace Modules\Core\Models\Trails;
 
+/**
+ * @author <hauvo1709@gmail.com>
+ * @package Trait
+ * @copyright 2022 http://www.cayluaviet.online/
+ * @license License 1.0
+ * @version Release: 1.00.000
+ * @link http://www.docs.v1.cayluaviet.online/
+ * @since 2022-07-21
+ */
 trait BasicModel {
 
     public function get_list_view($search = [])

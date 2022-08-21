@@ -5,7 +5,6 @@ const InjectedComponent = (gbprops) => {
 
     const { data } = useContext(CoreContext);
     const { component: Component, ...props } = gbprops;
-    console.log(props);
 
     const [error, setError] = useState(null);
 

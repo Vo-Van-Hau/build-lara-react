@@ -17,6 +17,7 @@ mix
 mix
     .sass(resourcePath + '/resources/assets/sass/index.scss', '/css')
     .copy(publicPath + '/css/index.css', resourcePath + '/public/css')
+mix.extract(['react', 'jquery']);
 if (mix.inProduction()) {
     mix.disableNotifications();
 }

@@ -5,6 +5,15 @@ namespace Modules\Core\Providers;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * @author <hauvo1709@gmail.com>
+ * @package Provider
+ * @copyright 2022 http://www.cayluaviet.online/
+ * @license License 1.0
+ * @version Release: 1.00.000
+ * @link http://www.docs.v1.cayluaviet.online/
+ * @since 2022-07-21
+ */
 class CoreServiceProvider extends ServiceProvider {
 
     /**

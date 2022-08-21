@@ -3,7 +3,17 @@
 namespace Modules\Core\Trails;
 
 use File;
+use Illuminate\Support\Facades\Config;
 
+/**
+ * @author <hauvo1709@gmail.com>
+ * @package Trait
+ * @copyright 2022 http://www.cayluaviet.online/
+ * @license License 1.0
+ * @version Release: 1.00.000
+ * @link http://www.docs.v1.cayluaviet.online/
+ * @since 2022-07-21
+ */
 trait Locates {
 
     /**
@@ -14,7 +24,7 @@ trait Locates {
      */
     protected function translations($module = "Core") {
         $translations = collect();
-        foreach (\Config::get("module.core.locales", []) as $locale) {
+        foreach (Config::get("module.core.locales", []) as $locale) {
             $translations[$locale] = $this->translation($locale, $module);
         }
         return $translations;

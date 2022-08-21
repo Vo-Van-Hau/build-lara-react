@@ -1,5 +1,5 @@
-import axios from "axios";
-import _ from "lodash";
+import axios from 'axios';
+import _ from 'lodash';
 
 const defaultOptions = {
     timeout: 10000
@@ -9,7 +9,7 @@ const defaultOptions = {
  * @author: <vanhau.vo@urekamedia.vn>
  * @todo:
  * @param {Object} clientOptions
- * @returns
+ * @returns {Object}
  */
 const create_client = (clientOptions) => {
     const instance = axios.create({
