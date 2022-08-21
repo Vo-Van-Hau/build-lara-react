@@ -19,11 +19,10 @@ trait Auth {
      * @return boolean
      */
     public function build_session() {
-
         if (empty(\Auth::guard("module")->check())) return false;
-
         $user = \Auth::guard("module")->getUser();
-
+        request()->session()->put("auth_module", $user);
+        request()->session()->save();
         return true;
     }
 }

@@ -19,4 +19,5 @@ return [
     'invalid_credentials' => 'Invalid credentials',
     'failed' => 'These credentials do not match our records.',
     'login_success' => 'Login success',
+    'the_authentication_token_was_expired' => 'The authentication token was expired',
 ];

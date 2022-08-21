@@ -47,12 +47,10 @@ class CoreRouteServiceProvider extends RouteServiceProvider {
         $this->configureRateLimiting();
         $this->routes(function () {
             Route::prefix(Config::get("module.core.backend_url"))->group(function() {
-                Route::middleware("web")
+                Route::prefix("/")
                     ->namespace($this->namespace)
                     ->group(__DIR__ . "/../Routes/web.php");
                 Route::prefix("api")
-                    // ->middleware("api")
-                    ->middleware("web")
                     ->namespace($this->namespace)
                     ->group(__DIR__ . "/../Routes/api.php");
             });

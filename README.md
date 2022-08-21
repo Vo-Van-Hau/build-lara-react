@@ -7,6 +7,8 @@
         php artisan key:generate
 4. clear cache: 
         php artisan cache:clear
+5. node_modules:
+        npm install 
 
 # run mixing module
 npm run mix watch {resource} {module}
