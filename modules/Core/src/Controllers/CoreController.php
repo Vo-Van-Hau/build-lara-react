@@ -43,7 +43,12 @@ class CoreController extends ControllerBase {
                 );
             }
         }
-        $menu_acl = (Array) $dirs;
+        $menu_acl = array();
+        if(!is_null(request()->session()->get("auth_module"))) {
+            if(isset(request()->session()->get("auth_module")["menu_acl"])) {
+                $menu_acl = (Array) request()->session()->get("auth_module")["menu_acl"];
+            }
+        }
         return response()->json([
                 "status" => true,
                 "config" => \Modules\Core\Core::config(),

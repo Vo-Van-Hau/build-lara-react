@@ -3,7 +3,7 @@
 namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Models\Trails\BasicModel;
+use Modules\Core\Models\Traits\BasicModel;
 
 /**
  * @author <hauvo1709@gmail.com>

@@ -48,6 +48,7 @@ const AuthContextProvicer = ({ children, axios, history }) => {
                 password,
                 remember
             });
+            console.log(data);
             return {
                 error: null,
                 ...data

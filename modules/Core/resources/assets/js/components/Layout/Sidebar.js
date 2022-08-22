@@ -1,7 +1,7 @@
-import React, { Fragment, useContext, useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { CoreContext } from "../Contexts/CoreContext";
-import _ from "lodash";
+import React, { Fragment, useContext, useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import { CoreContext } from '../Contexts/CoreContext';
+import _ from 'lodash';
 import {
     AppstoreOutlined,
     ContainerOutlined,
@@ -17,10 +17,8 @@ const { Sider } = Layout;
 const Sidebar = ({ history, ...props }) => {
 
     const { data } = useContext(CoreContext);
-    const { menus, config } = data;
-
-    const [collapsed, setCollapsed] = useState(false);
-
+    const { menus, config, siderBar } = data;
+    const { collapsed } = siderBar;
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo:
@@ -30,27 +28,6 @@ const Sidebar = ({ history, ...props }) => {
     const getItem = (label, key, icon, children, type) => {
         return { key, icon, children, label, type };
     }
-
-    const items = menus.map((menu, index) => {
-        return getItem(menu.name, index, <DesktopOutlined />, []);
-    });
-
-    // const items = [
-        // getItem('Option 1', '1', <PieChartOutlined />),
-        // getItem('Option 2', '2', <DesktopOutlined />),
-        // getItem('Option 3', '3', <ContainerOutlined />),
-        // getItem('Navigation One', 'sub1', <MailOutlined />, [
-        //   getItem('Option 5', '5'),
-        //   getItem('Option 6', '6'),
-        //   getItem('Option 7', '7'),
-        //   getItem('Option 8', '8'),
-        // ]),
-        // getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-        //   getItem('Option 9', '9'),
-        //   getItem('Option 10', '10'),
-        //   getItem('Submenu', 'sub3', null, [getItem('Option 11', '11'), getItem('Option 12', '12')]),
-        // ]),
-    // ];
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -62,87 +39,58 @@ const Sidebar = ({ history, ...props }) => {
         setCollapsed(!collapsed);
     };
 
-    const createMenuItem = (menu, index, sub_key) => {
-        var result = [];
-        if (menu != undefined) {
-            menu.forEach((element, key) => {
-                result.push(
-                    <Menu.Item
-                        key={"/" + config.app.adminPrefix + element.link}
-                    >
-                        <NavLink
-                            exact
-                            to={`/${config.app.adminPrefix +
-                                (element.link ? element.link : "")}`}
-                            title={element.name}
-                            className=""
-                            style={{ padding: 0 }}
-                        >
-                            {element.name}
-                        </NavLink>
-                    </Menu.Item>
-                );
-            });
-        }
-        return result;
-    };
-
-    const createSubmenu = (menu, index) => {
-        let subMenu = [];
-        Object.keys(menu).forEach((module, key) => {
-            let childMenu = menu[module].child;
-            let moduleName = menu[module].name.toLowerCase();
-            if (childMenu != undefined && childMenu.length > 0) {
-                subMenu.push(
-                    <Menu.SubMenu
-                        key={moduleName}
-                        title={`${menu[module].name}`}
-                    >
-                        {createMenuItem(childMenu, index, key)}
-                    </Menu.SubMenu>
-                );
-            } else if(menu[module].link){
-                //have not child menu
-                subMenu.push(
-                    <Menu.Item
-                        key={"/" + config.app.adminPrefix + menu[module].link}
-                    >
-                        <NavLink
-                            exact
-                            to={
-                                "/" + config.app.adminPrefix + menu[module].link
-                            }
-                            title={menu[module].name}
-                            className=""
-                            style={{ padding: 0 }}
-                        >
-                            {menu[module].name}
-                        </NavLink>
-                    </Menu.Item>
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {array} menu
+     * @returns {array}
+     */
+    const create_sub_menu = (menu) => {
+        let results = [];
+        menu.forEach((menu_item, _i) => {
+            let child_menu = menu_item.child;
+            let module_name = menu_item.name ? menu_item.name : '';
+            if(child_menu !== undefined && child_menu.length > 0) {
+                results.push(
+                    getItem(module_name, `${module_name.toLowerCase()}`, null, [
+                        ...child_menu.map((child, _i) => {
+                            return getItem((
+                                <NavLink to={`/${config.app.adminPrefix + child.link}`}>
+                                   {child.name}
+                                </NavLink>
+                            ), `/${config.app.adminPrefix + child.link}`, null)
+                        })
+                    ])
                 );
             }
+            else if(menu_item.link) {
+                results.push(
+                    getItem((
+                        <NavLink to={`/${config.app.adminPrefix + menu_item.link}`}>
+                            {module_name}
+                        </NavLink>
+                    ), `/${config.app.adminPrefix + menu_item.link}`, null)
+                );
+            }
+            else {}
         });
-        return subMenu;
-    };
+        return results;
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo:
-     * @param {array} menus
-     * @returns
+     * @param {Object} menus
+     * @returns {array}
      */
     const create_menu_item_group = (menus) => {
         let results = [];
-        console.log(Object.keys(menus))
-        Object.keys(menus).forEach((group, index) => {
+        Object.keys(menus).forEach((group, _i) => {
             let menu = menus[group];
             results.push(
-                <Menu.ItemGroup
-                    key={`group-` + index}
-                    title={group.toUpperCase()}
-                >
-                    {/* {createSubmenu(menu, index)} */}
-                </Menu.ItemGroup>
+                getItem(group.toUpperCase(), `group-menu-${_i}`, null, [
+                    ...create_sub_menu(menu)
+                ], 'group')
             );
         });
         return results;
@@ -154,7 +102,6 @@ const Sidebar = ({ history, ...props }) => {
     if (segments[1] !== '') {
         module = segments[2] ? segments[2] : '';
     }
-
     return (
         <Fragment>
             <Sider
@@ -163,7 +110,7 @@ const Sidebar = ({ history, ...props }) => {
                 theme='light'
                 collapsed={collapsed}
                 className='customMenu'
-                id='menuNav'
+                id='sidebar_backend'
                 style={{
                     overflow: 'auto',
                     height: '100vh',
@@ -174,14 +121,14 @@ const Sidebar = ({ history, ...props }) => {
                     { collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined /> }
                 </Button> */}
                 <div className='logo'>
-                    { collapsed ? config.app.name : '' }
+                    { !collapsed ? config.app.name : '' }
                 </div>
                 <Menu
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
+                    defaultSelectedKeys={[path_name]}
+                    defaultOpenKeys={[module]}
                     mode='inline'
                     theme='light'
-                    items={items}
+                    items={create_menu_item_group(menus)}
                 />
             </Sider>
         </Fragment>

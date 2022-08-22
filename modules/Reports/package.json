@@ -18,8 +18,23 @@
             "icon": "fas fa-cog",
             "controller": "Reports",
             "group": "common",
-            "position": 2,
-            "child": []
+            "position": 1,
+            "child": [
+                {
+                    "name": "Overview Reports",
+                    "link": "/reports/overview",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Overview"
+                },
+                {
+                    "name": "Daily Reports",
+                    "link": "/reports/daily",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Daily"
+                }
+            ]
         }
     },
     "status": true

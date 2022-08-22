@@ -2,6 +2,8 @@
 
 namespace Modules\Core;
 
+use Illuminate\Support\Facades\Config;
+
 /**
  * @author <hauvo1709@gmail.com>
  * @package Controller
@@ -33,7 +35,7 @@ class Core {
      * @return string
      */
     public static function backendURL() {
-        return \Config::get("app.url") . '/' . \Config::get("module.core.backend_url");
+        return Config::get("app.url") . '/' . Config::get("module.core.backend_url");
     }
 
     /**
@@ -42,7 +44,7 @@ class Core {
      * @return string
      */
     public static function assetURL() {
-        return url(\Config::get("module.core.mix_backend_asset"));
+        return url(Config::get("module.core.mix_backend_asset"));
     }
     /**
      * uploadURL
@@ -57,7 +59,7 @@ class Core {
      * @return void
      */
     public static function mediaURL() {
-        return url(\Config::get("app.url") . "/");
+        return url(Config::get("app.url") . "/");
     }
 
     /**
@@ -70,8 +72,8 @@ class Core {
      */
     public static function mix(string $source, string $module) {
 
-        // return asset(mix($source, \Config::get("module.core.mix_backend_asset") . $module));
-        return asset(\Config::get("module.core.mix_backend_asset") . $module . "/" . $source);
+        // return asset(mix($source, Config::get("module.core.mix_backend_asset") . $module));
+        return asset(Config::get("module.core.mix_backend_asset") . $module . "/" . $source);
     }
 
     /**
@@ -82,14 +84,14 @@ class Core {
     public static function config() {
         return [
             "app" => [
-                "name" => \Config::get("app.name", "Sparrow"),
-                "version" => \Config::get('module.core.version', "0.00.000"),
+                "name" => Config::get("app.name", "Sparrow"),
+                "version" => Config::get('module.core.version', "0.00.000"),
                 "baseURL" => url(""),
                 "backendURL" => self::backendURL(),
                 "assetURL" => self::assetURL(),
                 "uploadURL" => self::uploadURL(),
                 "mediaURL" => self::mediaURL(),
-                "adminPrefix" => \Config::get("module.core.backend_url")
+                "adminPrefix" => Config::get("module.core.backend_url")
             ]
         ];
     }

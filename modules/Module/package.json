@@ -9,6 +9,29 @@
     ],
     "dependencies": {},
     "devDependencies": {},
-    "menu": {},
+    "component": {
+        "Module": {
+            "getModule": "list",
+            "getDatabase": "list",
+            "getField": "edit",
+            "getFieldEditLayout": "edit",
+            "saveModule": "save",
+            "saveField": "save",
+            "updateField": "save",
+            "saveDatabase": "save",
+            "deleteField": "delete"
+        }
+    },
+    "menu": {
+        "Module": {
+            "name": "Module Builder",
+            "link": "/module",
+            "icon": "fas fa-solar-panel",
+            "controller": "Module",
+            "group": "systems",
+            "position": 2,
+            "child": {}
+        }
+    },
     "status": true
 }

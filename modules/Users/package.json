@@ -9,6 +9,42 @@
     ],
     "dependencies": {},
     "devDependencies": {},
-    "menu": {},
+    "component": {
+        "Groups": true,
+        "Roles": true,
+        "Users": true
+    },
+    "menu": {
+        "Users": {
+            "name": "Users",
+            "icon": "fas fa-user",
+            "controller": "Users",
+            "group": "systems",
+            "position": 3,
+            "child": [
+                {
+                    "name": "View Users",
+                    "link": "\/users\/users",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Users"
+                },
+                {
+                    "name": "View Group",
+                    "link": "\/users\/groups",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Groups"
+                },
+                {
+                    "name": "View Roles",
+                    "link": "\/users\/roles",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Roles"
+                }
+            ]
+        }
+    },
     "status": true
 }

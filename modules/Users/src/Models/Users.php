@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Users\Models\Traits\ACL;
 use Modules\Core\Models\Traits\BasicModel;
+use Modules\Users\Models\Roles;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -40,6 +41,7 @@ class Users extends Authenticatable {
         "username",
         "status"
     ];
+
     protected $dates = [
         "updated_at",
         "created_at",
@@ -64,4 +66,17 @@ class Users extends Authenticatable {
     protected $casts = [
         "email_verified_at" => "datetime",
     ];
+
+    /**=======================
+     *     RelationShip
+     *=======================*/
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: relationShip
+     * @return void
+     */
+    public function roles() {
+        return $this->belongsTo(Roles::class, "role_id", "id")->with("acl_role");
+    }
 }
