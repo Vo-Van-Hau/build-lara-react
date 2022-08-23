@@ -60,6 +60,14 @@ module.exports = {
         },
         clean: true,
     },
+    externals: {
+        /**
+         * Some bug:
+         * - Hooks can only be called inside the body of a function component.
+         */
+        react: 'React',
+        'react-dom': 'ReactDOM'
+    },
     resolve: {
         extensions: ['.js', '.jsx', '.css', '.scss'],
     },
@@ -77,7 +85,7 @@ module.exports = {
                         presets: [
                             '@babel/preset-env',
                             '@babel/preset-typescript',
-                            ["@babel/preset-react", {"runtime": "automatic"}]
+                            ['@babel/preset-react', {'runtime': 'automatic'}]
                         ],
                         plugins: [
                             '@babel/plugin-proposal-class-properties',

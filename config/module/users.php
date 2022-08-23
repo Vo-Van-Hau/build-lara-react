@@ -14,4 +14,9 @@ return [
         "access" => "access_internal",
         "access_pub" => "access_publisher"
      ),
+     "status_list" => array(
+        array("value" => 1, "text" => "Active"),
+        array("value" => 0, "text" => "Inactive"),
+     ),
+     "item_per_page" => 10,
 ];

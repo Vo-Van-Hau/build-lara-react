@@ -15,6 +15,10 @@ use App\Http\Controllers\Controller;
  */
 class ControllerBase extends Controller {
 
+    public function __construct() {
+
+    }
+    
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:

@@ -30,7 +30,7 @@
                     "controller": "Users"
                 },
                 {
-                    "name": "View Group",
+                    "name": "View Groups",
                     "link": "\/users\/groups",
                     "role": "view",
                     "icon": "fa fa-table",

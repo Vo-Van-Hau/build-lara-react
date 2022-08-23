@@ -52,6 +52,10 @@ class UsersServiceProvider extends ServiceProvider {
             \Modules\Users\Interfaces\UsersRepositoryInterface::class,
             \Modules\Users\Repositories\Eloquents\UsersRepository::class
         );
+        $this->app->singleton(
+            \Modules\Users\Interfaces\GroupsRepositoryInterface::class,
+            \Modules\Users\Repositories\Eloquents\GroupsRepository::class
+        );
     }
 
     /**

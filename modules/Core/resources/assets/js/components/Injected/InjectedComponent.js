@@ -1,10 +1,10 @@
 import React, { Component, useState, useEffect, useContext } from 'react';
 import { CoreContext } from '../Contexts/CoreContext';
 
-const InjectedComponent = (gbprops) => {
+const InjectedComponent = (props) => {
 
     const { data } = useContext(CoreContext);
-    const { component: Component, ...props } = gbprops;
+    const { component: Component, ...subprops } = props;
 
     const [error, setError] = useState(null);
 
@@ -12,7 +12,7 @@ const InjectedComponent = (gbprops) => {
 
     }, []);
 
-    if(!error) return (<><Component {...props} /></>)
+    if(!error) return (<><Component {...subprops} /></>)
 
     return (
         <div className="container">

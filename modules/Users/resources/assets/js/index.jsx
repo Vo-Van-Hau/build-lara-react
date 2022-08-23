@@ -1,6 +1,8 @@
-import Overview from './Overview';
-import Daily from './Daily';
+import Groups from './Groups';
+import Roles from './Roles';
+import Users from './Users';
 
-export default Overview;
-export { Overview as overview }
-export { Daily as daily }
+export default Users;
+export { Groups as groups }
+export { Roles as roles }
+export { Users as users }

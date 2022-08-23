@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 
-class Daily extends React.Component {
+class Users extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {}
     }
 
@@ -12,10 +12,10 @@ class Daily extends React.Component {
     render() {
         return (
             <Fragment>
-                This is Daily Reports
+                This is Users Users
             </Fragment>
         )
     }
 }
 
-export default Daily;
+export default Users;

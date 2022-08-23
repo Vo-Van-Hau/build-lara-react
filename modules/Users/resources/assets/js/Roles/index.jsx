@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 
-class Overview extends React.Component {
+class Roles extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {}
     }
 
@@ -12,11 +12,11 @@ class Overview extends React.Component {
     render() {
         return (
             <Fragment>
-                This is Overview Reports
+                This is Users Roles
             </Fragment>
         )
     }
 }
 
-export default Overview;
+export default Roles;
 
