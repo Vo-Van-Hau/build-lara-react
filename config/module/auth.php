@@ -2,5 +2,6 @@
 
 return [
     "namespace"     => "Auth",
-    "version"       => "1.00.000"
+    "version"       => "1.00.000",
+    "guard"         => "module",
 ];

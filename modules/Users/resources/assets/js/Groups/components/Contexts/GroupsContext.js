@@ -16,7 +16,7 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: get groups
      * @param {string} page
-     * @param {string}
+     * @param {string} keySearch
      * @return {void}
      */
     const get_groups = (page, keySearch) => {
@@ -119,6 +119,11 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
     //     dispatch({ type: SET_DRAWER });
     // }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: 
+     * @return {void}
+     */
     const set_mouted = (values) => {
         dispatch({ type: MOUTED, payload: values});
     }

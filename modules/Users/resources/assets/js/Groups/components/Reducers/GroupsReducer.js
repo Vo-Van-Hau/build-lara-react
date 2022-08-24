@@ -25,7 +25,7 @@ export const GroupsReducer = (state = initialState, action) => {
     let { type, payload } = action;
     switch (type) {
         case GET_GROUPS:
-            return { ...state, groups: [...payload] };
+            return {...state, groups: [...payload]};
 
         // case SET_USER_GROUPS:
         //     let {id, users, user} = payload;
@@ -47,15 +47,15 @@ export const GroupsReducer = (state = initialState, action) => {
         //     // xong
         //     return { ...state, Groups:[...Groups] };
         case SET_PAGINATION:
-            return { ...state, pagination: { ...payload, showSizeChanger: false} };
+            return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:
-            return { ...state, loading_table: !state.loading_table };
+            return {...state, loading_table: !state.loading_table};
         // case SET_FORM_LOADING:
         //     return { ...state, loadingForm: !state.loadingForm };
         // case SET_DRAWER:
         //     return { ...state, visible: !state.visible };
         case MOUTED:
-            return { ...state, mouted: payload };
+            return {...state, mouted: payload};
 
         default: return state;
     }

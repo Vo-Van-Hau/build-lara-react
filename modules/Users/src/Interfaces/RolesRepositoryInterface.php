@@ -13,7 +13,6 @@ use Modules\Core\Interfaces\BaseRepositoryInterface;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-08-23
  */
-interface GroupsRepositoryInterface extends BaseRepositoryInterface {
-    
+interface RolesRepositoryInterface extends BaseRepositoryInterface {
     public function get_all($keyword = "", $status = []);
 }

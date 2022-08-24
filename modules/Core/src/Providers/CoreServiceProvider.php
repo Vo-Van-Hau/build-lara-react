@@ -21,6 +21,13 @@ class CoreServiceProvider extends ServiceProvider {
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
+    protected $module = "Core";
+    protected $models = [
+        "Core" => [
+            "name" => "Core",
+            "status" => "active",
+        ]
+    ];
 
     /**
      * Bootstrap the application events.
@@ -52,22 +59,18 @@ class CoreServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-
         /** Bind Core */
-        $this->app->bind("Core", function ($app) {
-            return $this->app->make("Modules\Core\Core");
+        $this->app->bind($this->module, function ($app) {
+            return $this->app->make("Modules\\{$this->module}\\{$this->module}");
         });
-
-         /** Bind Base to repository */
-        //  $this->app->bind(
-        //     "Modules\Core\Interfaces\BaseRepositoryInterface",
-        //     \Modules\Core\Repositories\Eloquents\BaseRepository::class
-        // );
-
-        $this->app->singleton(
-            \Modules\Core\Interfaces\BaseRepositoryInterface::class,
-            \Modules\Core\Repositories\Eloquents\BaseRepository::class
-        );
+        /** Bind Base to repository */
+        foreach ($this->models as $model) {
+            if($model["status"] != "active") continue;
+            $this->app->bind(
+                "Modules\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
+                "Modules\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
+            );
+        }
     }
 
     /**

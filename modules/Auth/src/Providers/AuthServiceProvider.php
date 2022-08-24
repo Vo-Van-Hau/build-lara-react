@@ -12,6 +12,13 @@ class AuthServiceProvider extends ServiceProvider {
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
+    protected $module = "Auth";
+    protected $models = [
+        "Auth" => [
+            "name" => "Auth",
+            "status" => "active",
+        ]
+    ];
 
     /**
      * Bootstrap the application events.
@@ -42,16 +49,19 @@ class AuthServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-
-        /** Bind Core */
-        $this->app->bind("Auth", function ($app) {
-            return $this->app->make("Modules\Auth\Auth");
+        $this->app->bind($this->module, function ($app) {
+            return $this->app->make("Modules\\{$this->module}\\{$this->module}");
         });
-
-        $this->app->singleton(
-            \Modules\Auth\InterfacesAuthRepositoryInterface::class,
-            \Modules\Auth\Repositories\Eloquents\AuthRepository::class
-        );
+        $this->app->bind("AuthCMS", function ($app) {
+            return $this->app->make("Modules\\{$this->module}\AuthCMS");
+        });
+        foreach ($this->models as $model) {
+            if($model["status"] != "active") continue;
+            $this->app->bind(
+                "Modules\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
+                "Modules\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
+            );
+        }
     }
 
     /**

@@ -22,8 +22,8 @@ trait Auth {
      * @return boolean
      */
     public function build_session() {
-        if (empty(\Auth::guard("module")->check())) return false;
-        $user = \Auth::guard("module")->getUser();
+        if (empty(\Auth::guard(Config::get("module.auth.guard", "module"))->check())) return false;
+        $user = \Auth::guard(Config::get("module.auth.guard", "module"))->getUser();
         $acl_list = array();
         if(!empty($user->roles)) {
             foreach($user->roles->acl_role as $key => $item) {

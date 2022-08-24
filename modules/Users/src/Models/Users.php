@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Modules\Users\Models\Traits\ACL;
 use Modules\Core\Models\Traits\BasicModel;
 use Modules\Users\Models\Roles;
+use Modules\Users\Models\Groups;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -73,10 +74,19 @@ class Users extends Authenticatable {
 
     /**
      * @author <hauvo1709@gmail.com>
-     * @todo: relationShip
+     * @todo: relationship
      * @return void
      */
     public function roles() {
         return $this->belongsTo(Roles::class, "role_id", "id")->with("acl_role");
+    }
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: relationship
+     * @return void
+     */
+    public function groups(){
+        return $this->belongsToMany(Groups::class, "user_group", "user_id", "group_id")->wherePivot("deleted", "=", 0);
     }
 }

@@ -75,13 +75,13 @@ class AuthController extends ControllerBase {
             } else {
                 $credentials = $this->get_credentials($request);
                 try {
-                    if (Auth::guard("module")->attempt($credentials, $request->has("remember"))) {
+                    if (Auth::guard(Config::get("module.auth.guard", "module"))->attempt($credentials, $request->has("remember"))) {
                         /**
                          * @description: To log a user into the application by their ID, you may use the loginUsingId method.
                          * This method accepts the primary key of the user you wish to authenticate
                          */
                         $id = Auth::id(); // Get the currently authenticated user's ID...
-                        Auth::guard("module")->loginUsingId($id, $request->has("remember")); // Login and "remember" the given user...
+                        Auth::guard(Config::get("module.auth.guard", "module"))->loginUsingId($id, $request->has("remember")); // Login and "remember" the given user...
                         if (!$this->build_session()) {
                             throw new ApiException(trans("Auth::auth.failed"), 400, []);
                         }

@@ -17,7 +17,6 @@ const ListGroups = (props) => {
         keyword: null,
         status: null
     });
-
     const columns = [
         {
             title: 'ID',
@@ -135,8 +134,14 @@ const ListGroups = (props) => {
 //         setViewAct(true);
 //     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {mixed} pagination
+     * @param {mixed} filters
+     * @return {void}
+     */
     const handleTableChange = (pagination, filters) => {
-        console.log(pagination, filters);
         let { status } = filters;
         setKeySearch({...keySearch, status });
         get_groups(pagination.current, {...keySearch, status});
@@ -144,7 +149,7 @@ const ListGroups = (props) => {
 
     useEffect(() => {
         if(mouted) get_groups(1, keySearch);
-        return () =>{ set_mouted(false) }
+        return () => { set_mouted(false); }
     }, []);
 
     return (
@@ -162,14 +167,15 @@ const ListGroups = (props) => {
                         </Col>
                         <Col xs={24} xl={12}>
                             <Search placeholder="Search by name !!!"
-                                onChange={(event) => {
-                                    let { value } = event.target;
-                                    setkeySearch({...keySearch, keyword: value});
-                                }}
-                                onSearch={()=>{
-                                    getGroups(1, keySearch);
-                                }}
-                                enterButton />
+                                // onChange={(event) => {
+                                //     let { value } = event.target;
+                                //     setkeySearch({...keySearch, keyword: value});
+                                // }}
+                                // onSearch={()=>{
+                                //     getGroups(1, keySearch);
+                                // }}
+                                // enterButton
+                            />
                         </Col>
                     </Row>
                 ))}

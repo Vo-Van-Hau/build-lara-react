@@ -3,6 +3,9 @@
 namespace Modules\Users\Controllers;
 
 use Modules\Core\Controllers\ControllerBase;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Modules\Users\Interfaces\RolesRepositoryInterface;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -15,8 +18,14 @@ use Modules\Core\Controllers\ControllerBase;
  */
 class RolesController extends ControllerBase {
 
-    public function __construct() {
+    protected $module_name = "Users";
+    protected $controller_name = "Roles";
+    protected $model_name = "Roles";
+    protected $RolesRepository;
 
+    public function __construct(RolesRepositoryInterface $RolesRepository) {
+        $this->RolesRepository = $RolesRepository;
+        parent::__construct();
     }
 
     /**

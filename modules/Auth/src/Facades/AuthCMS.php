@@ -4,7 +4,7 @@ namespace Modules\Auth\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Auth extends Facade {
+class AuthCMS extends Facade {
 
     /**
      * Get the registered name of the component.
@@ -12,6 +12,6 @@ class Auth extends Facade {
      * @return string
      */
     protected static function getFacadeAccessor() {
-        return "Auth";
+        return "AuthCMS";
     }
 }

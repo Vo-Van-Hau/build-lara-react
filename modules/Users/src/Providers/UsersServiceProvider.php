@@ -12,6 +12,21 @@ class UsersServiceProvider extends ServiceProvider {
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
+    protected $module = "Users";
+    protected $models = [
+        "Users" => [
+            "name" => "Users",
+            "status" => "active",
+        ],
+        "Groups" => [
+            "name" => "Groups",
+            "status" => "active",
+        ],
+        "Roles" => [
+            "name" => "Roles",
+            "status" => "active",
+        ]
+    ];
 
     /**
      * Bootstrap the application events.
@@ -42,20 +57,16 @@ class UsersServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-
-        /** Bind Core */
-        $this->app->bind("Users", function ($app) {
-            return $this->app->make("Modules\Users\Users");
+        $this->app->bind($this->module, function ($app) {
+            return $this->app->make("Modules\\{$this->module}\\{$this->module}");
         });
-
-        $this->app->singleton(
-            \Modules\Users\Interfaces\UsersRepositoryInterface::class,
-            \Modules\Users\Repositories\Eloquents\UsersRepository::class
-        );
-        $this->app->singleton(
-            \Modules\Users\Interfaces\GroupsRepositoryInterface::class,
-            \Modules\Users\Repositories\Eloquents\GroupsRepository::class
-        );
+        foreach ($this->models as $model) {
+            if($model["status"] != "active") continue;
+            $this->app->bind(
+                "Modules\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
+                "Modules\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
+            );
+        }
     }
 
     /**

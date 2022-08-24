@@ -19,7 +19,9 @@ npm run mix watch {resource} {module}
 npm run build-by-webpack --source={resource} --module={module}
 
 # Migration
-1. users: php artisan migrate --path=modules\Users\database\migrations\2022_08_21_115601_create_users_table.php
+1. users: 
+    php artisan migrate --path=modules\Users\database\migrations\2022_08_21_115601_create_users_table.php
+    php artisan migrate --path=modules\Users\database\migrations\2022_08_24_171110_add_is_publisher_column_to_users_table.php
 2. roles: php artisan migrate --path=modules\Users\database\migrations\2022_08_21_181616_create_roles_table.php
 3. acl_role: php artisan migrate --path=modules\Users\database\migrations\2022_08_21_183620_create_acl_role_table.php
 4. groups: php artisan migrate --path=modules\Users\database\migrations\2022_08_22_095100_create_groups_table.php

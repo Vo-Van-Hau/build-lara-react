@@ -36,7 +36,7 @@ class GroupsRepository extends BaseRepository implements GroupsRepositoryInterfa
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status=[]){
+    public function get_all($keyword = "", $status = []){
         $result = $this->model->where(["deleted" => 0]);
         if(!empty($status)){
             $result = $result->whereIn("status", $status);

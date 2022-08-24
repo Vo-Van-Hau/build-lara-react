@@ -12,6 +12,13 @@ class ModuleServiceProvider extends ServiceProvider {
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
+    protected $module = "Module";
+    protected $models = [
+        "Module" => [
+            "name" => "Module",
+            "status" => "active",
+        ]
+    ];
 
     /**
      * Bootstrap the application events.
@@ -42,16 +49,16 @@ class ModuleServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-
-        /** Bind Core */
-        $this->app->bind("Module", function ($app) {
-            return $this->app->make("Modules\Module\Module");
+        $this->app->bind($this->module, function ($app) {
+            return $this->app->make("Modules\\{$this->module}\\{$this->module}");
         });
-
-        $this->app->singleton(
-            \Modules\Module\Interfaces\ModuleRepositoryInterface::class,
-            \Modules\Module\Repositories\Eloquents\ModuleRepository::class
-        );
+        foreach ($this->models as $model) {
+            if($model["status"] != "active") continue;
+            $this->app->bind(
+                "Modules\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
+                "Modules\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
+            );
+        }
     }
 
     /**

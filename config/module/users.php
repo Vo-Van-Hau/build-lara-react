@@ -2,7 +2,7 @@
 
 return [
     "map_acl_action_list" => array(
-        "getlist" => "list",
+        "get_list" => "list",
         "list" => "list",
         "getall" => "list",
         "getUsers" => "list",
@@ -19,4 +19,23 @@ return [
         array("value" => 0, "text" => "Inactive"),
      ),
      "item_per_page" => 10,
+     "is_publisher" => array(
+        array("value" => 1, "text" => "Publisher"),
+        array("value" => 0, "text" => "Internal"),
+     ),
+     "users_type" => array(
+        array("value" => 0, "text" => "All"),
+        array("value" => 1, "text" => "Sale"),
+        array("value" => 2, "text" => "AdOps"),
+        array("value" => 3, "text" => "Admin"),
+        array("value" => 4, "text" => "Manager"),
+     ),
+     "currencies" => array(
+        array("value" => "VND", "text" => "VND"),
+        array("value" => "USD", "text" => "USD"),
+     ),
+     "extend_permission" => array(
+        "access_internal"   => true,
+        "access_publisher"  => true,
+     ),
 ];

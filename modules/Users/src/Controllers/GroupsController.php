@@ -4,8 +4,8 @@ namespace Modules\Users\Controllers;
 
 use Modules\Core\Controllers\ControllerBase;
 use Illuminate\Http\Request;
-use Modules\Users\Interfaces\GroupsRepositoryInterface;
 use Illuminate\Support\Facades\Config;
+use Modules\Users\Interfaces\GroupsRepositoryInterface;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -71,8 +71,9 @@ class GroupsController extends ControllerBase {
         }
         else {
             return response()->json([
+                "status" => false,
                 "message" => "This method is not supported for this route"
-            ], 200);
+            ], 400);
         }
     }
 }

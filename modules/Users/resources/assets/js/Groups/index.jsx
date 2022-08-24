@@ -25,7 +25,7 @@ const Groups = (props) => {
             setConfig({
                 ...config,
                 status
-            })
+            });
         })
         .catch((errors) => {});
     }
