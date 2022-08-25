@@ -7,7 +7,6 @@ import { UsergroupAddOutlined } from '@ant-design/icons';
 const { Search } = Input;
 
 const ListGroups = (props) => {
-    // const { data, getGroups, destroyGroup, setMouted } = useContext(GroupsContext);
     const { data, get_groups, set_mouted, destroy_group } = useContext(GroupsContext);
     const { config, mouted, groups, loading_table, pagination } = data;
     const [group, setGroup] = useState({});
@@ -162,7 +161,7 @@ const ListGroups = (props) => {
                                 type="primary"
                                 onClick={() =>{ newGroup() }}
                             >
-                                New Groups
+                                New Group
                             </Button>
                         </Col>
                         <Col xs={24} xl={12}>

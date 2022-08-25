@@ -49,18 +49,27 @@ class UsersController extends ControllerBase {
         return response()->json([], 200);
     }
 
-    public function get_config() {
-        $data = [
-            "config" => [
-                "status" => config("module.users.status_list"),
-                "account_type" => config("module.users.is_publisher"),
-                "users_type" => config("module.users.users_type"),
-                "currencies" => config("module.users.currencies"),
-                "roles" => $this->RolesRepository->get_all(),
-                "user" => AuthCMS::info(),
-            ]
-        ];
-        return response()->json($data, 200);
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_config(Request $request) {
+        if($request->isMethod("post")) {
+            $data = [
+                "config" => [
+                    "status" => config("module.users.status_list"),
+                    "account_type" => config("module.users.is_publisher"),
+                    "users_type" => config("module.users.users_type"),
+                    "currencies" => config("module.users.currencies"),
+                    "roles" => $this->RolesRepository->all_override(),
+                    "user" => AuthCMS::info(),
+                ]
+            ];
+            return response()->json($data, 200);
+        }
+        return $this->response_base([], "Access denied !", 403);
     }
 
     /**
@@ -79,11 +88,6 @@ class UsersController extends ControllerBase {
             $data_json["users"] = $this->UsersRepository->get_all($keyword, $status, $group);
             return response()->json($data_json, 200);
         }
-        else {
-            return response()->json([
-                "status" => false,
-                "message" => "This method is not supported for this route"
-            ], 400);
-        }
+        return $this->response_base([], "Access denied !", 403);
     }
 }

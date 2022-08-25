@@ -140,9 +140,7 @@ const UsersContextProvicer = ({ children, axios, history, config }) =>{
      * @todo: get axios
      * @return {Object}
      */
-    const get_axios = () =>{
-        return axios;
-    }
+    const get_axios = () => axios;
 
     const todoContextData = {
         data: {...data, config}, history, dispatch, get_axios, get_users,

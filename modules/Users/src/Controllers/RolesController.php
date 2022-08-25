@@ -37,4 +37,39 @@ class RolesController extends ControllerBase {
     public function index() {
         return response()->json([], 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_config(Request $request) {
+        if($request->isMethod("post")) {
+            $data = [
+                "config" => [
+                    "status" => Config::get("module.users.status_list"),
+                ]
+            ];
+            return response()->json($data, 200);
+        }
+        return $this->response_base([], "Access denied !", 403);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_list(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
+            $status = isset($input["status"]) ? $input["status"] : [];
+            $data_json["roles"] = $this->RolesRepository->get_all($keyword, $status);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base([], "Access denied !", 403);
+    }
 }

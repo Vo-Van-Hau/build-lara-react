@@ -53,6 +53,7 @@ class GroupsController extends ControllerBase {
             ];
             return response()->json($data, 200);
         }
+        return $this->response_base([], "Access denied !", 403);
     }
 
     /**
@@ -69,11 +70,6 @@ class GroupsController extends ControllerBase {
             $data_json["groups"] = $this->GroupsRepository->get_all($keyword, $status);
             return response()->json($data_json, 200);
         }
-        else {
-            return response()->json([
-                "status" => false,
-                "message" => "This method is not supported for this route"
-            ], 400);
-        }
+        return $this->response_base([], "Access denied !", 403);
     }
 }

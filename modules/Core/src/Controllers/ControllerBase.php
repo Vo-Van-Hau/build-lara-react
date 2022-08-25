@@ -18,7 +18,7 @@ class ControllerBase extends Controller {
     public function __construct() {
 
     }
-    
+
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
@@ -27,10 +27,10 @@ class ControllerBase extends Controller {
      * @param int $status
      * @return void
      */
-    protected function response($data = [], $message = "Succcees!", $status = 200) {
+    protected function response_base($data = [], $message = "", $status = 200) {
         return response()->json([
             "status" => true,
-            "status"  => $message,
+            "message"  => $message,
             "data" => $data
         ], $status);
     }
