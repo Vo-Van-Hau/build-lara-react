@@ -1,20 +1,20 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { RolesContext } from '../Contexts/RolesContext';
-import ActGroup from '../Actions/ActGroup';
-import ActRole from '../Actions/ActRole';
-import ActUser from '../Actions/ActUser';
-import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
+import Helper from '../Helper/Helper';
+// import ActGroup from '../Actions/ActGroup';
+import ActionRole from '../Actions/ActionRole';
+// import ActUser from '../Actions/ActUser';
+import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip, Drawer } from 'antd';
 import { UsergroupAddOutlined, ToolOutlined } from '@ant-design/icons';
 const { Search } = Input;
 
 const ListRoles = () => {
-    // const { data, getRoles, destroyRoles, setMouted } = useContext(RolesContext);
-    const { data, get_roles, set_mouted } = useContext(RolesContext);
+    const { data, get_roles, set_mouted, destroy_roles, set_table_loading } = useContext(RolesContext);
     const { roles, config, pagination, loading_table, mouted } = data;
     const [role, setRole] = useState({});
-    const [viewAct, setViewAct] = useState(false);
-    const [viewUsers, setViewUsers] = useState(false);
-    const [viewRoles, setViewRoles] = useState(false);
+    const [viewAction, setViewAction] = useState(false);
+    // const [viewUsers, setViewUsers] = useState(false);
+    // const [viewRoles, setViewRoles] = useState(false);
     const [keySearch, setKeySearch] = useState({
         keyword: null,
         status: null
@@ -96,9 +96,9 @@ const ListRoles = () => {
             render: (_, record) => {
                 return (
                     <Space size={5}>
-                        <Button type="link" size="small">Edit</Button>
+                        <Button type="link" size="small" onClick={() => edit_role(record)}>Edit</Button>
                         <>||</>
-                        <Popconfirm title="Sure to delete?" placement="leftTop">
+                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => delete_role(record)}>
                             <Button type="link" size="small" danger>Delete</Button>
                         </Popconfirm>
                     </Space>
@@ -117,19 +117,48 @@ const ListRoles = () => {
     //     setViewUsers(true);
     // }
 
-    // const update = (record) => {
-    //     setRole(record);
-    //     setViewAct(true);
-    // }
 
-    // const remove = (record) => {
-    //     destroyRoles(record.id);
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+    const new_role = () =>{
+        setRole({});
+        setViewAction(true);
+    }
 
-    // const newGroup = () =>{
-    //     setRole({});
-    //     setViewAct(true);
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} record
+     * @return {void}
+     */
+    const edit_role = (record) => {
+        setRole(record);
+        setViewAction(true);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} record
+     * @return {void}
+     */
+    const delete_role = (record) => {
+        destroy_roles(record.id)
+        .then((res) => {
+            let { status, message } = res.data;
+            if (status) {
+                get_roles(1, {});
+                Helper.Notification('success', '[Delete Role]', message);
+            } else {
+                Helper.Notification('error', '[Delete Role]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -151,15 +180,12 @@ const ListRoles = () => {
     }, []);
 
     return (
-        <div className="content">
+        <>
             <Table
                 title={(() => (
                     <Row gutter={[8, 8]}>
                         <Col xs={24} xl={12}>
-                            <Button
-                                type="primary"
-                                // onClick={() =>{ newGroup() }}
-                            >
+                            <Button type="primary" onClick={() => {new_role()}}>
                                 New Role
                             </Button>
                         </Col>
@@ -187,11 +213,10 @@ const ListRoles = () => {
                 onChange={handleTableChange}
                 rowKey='id'
             />
-            {/* <ActGroup role={role} visible={viewAct} setDrawer={setViewAct}/>
-            <ActRole role={role} visible={viewRoles} setDrawer={setViewRoles}/>
-            <ActUser role={role} visible={viewUsers} setDrawer={setViewUsers}/> */}
-            {/* List Roles */}
-        </div>
+            <ActionRole role={role} visible={viewAction} setDrawer={setViewAction} />
+            {/* <ActGroup role={role} visible={viewAct} setDrawer={setViewAct}/> */}
+            {/* <ActUser role={role} visible={viewUsers} setDrawer={setViewUsers}/> */}
+        </>
     )
 }
 export default ListRoles;

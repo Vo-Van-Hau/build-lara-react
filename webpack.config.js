@@ -66,7 +66,7 @@ module.exports = {
          * - Hooks can only be called inside the body of a function component.
          */
         react: 'React',
-        'react-dom': 'ReactDOM'
+        'react-dom/client': 'ReactDOM'
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css', '.scss'],

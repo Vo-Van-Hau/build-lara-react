@@ -5,18 +5,11 @@ import {
     SET_PAGINATION, SET_TABLE_LOADING, SET_FORM_LOADING, SET_DRAWER,
     MOUTED
 } from '../Dispatch/type';
-import Helper from '../Helper/helper';
 export const RolesContext = createContext();
 
 const RolesContextProvicer = ({ children, axios, history, config }) =>{
 
     const [data, dispatch] = useReducer(RolesReducer, initialState);
-
-    // const getUsers = (page, keySearch) => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/users/getlist?page=${page}`, {...keySearch})
-    // }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -40,33 +33,43 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
         .finally(() => {set_table_loading();});
     }
 
-    // const storageRole = (values) => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/storage`, {...values})
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} values
+     * @return {void}
+     */
+    const storage_role = (values) => {
+        return axios
+        .get_secured()
+        .post(`/users/roles/storage`, {...values});
 
-    // }
+    }
 
-    // const updateRole = (values) => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/edit`, {...values})
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} values
+     * @return {void}
+     */
+    const update_role = (values) => {
+        return axios
+        .get_secured()
+        .post(`/users/roles/update`, {...values});
+    }
 
-    // const destroyRoles = (id) => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/delete`, {id})
-    //     .then((res) => {
-    //         let { status, mess } = res.data;
-    //         if (status) {
-    //             getRoles(1, {});
-    //             Helper.Noti('success', '[Delete Role]', mess);
-    //         } else {
-    //             Helper.Noti('error', '[Delete Role]', mess);
-    //         }
-    //     }).catch((err) => { })
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {number} id
+     * @return {void}
+     */
+    const destroy_roles = (id) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/users/roles/destroy`, {id});
+    }
 
     // const getUserbyRoles = (id) =>{
     //     return axios
@@ -139,9 +142,10 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
 
     const todoContextData = {
         data:{...data, config}, history, dispatch, get_axios,
-        set_mouted, get_roles, set_table_loading
-        // setForm, setTable, setMouted, setDrawer,
-        // getRoles, storageRole, updateRole, destroyRoles, getUserbyRoles,
+        set_mouted, get_roles, set_table_loading,
+        // setForm, setDrawer,
+        storage_role, update_role, destroy_roles,
+        // getUserbyRoles,
         // getUsers, storageRoleUser, setUserGroup,
         // initRoles, getAcl, saveAcl
     };

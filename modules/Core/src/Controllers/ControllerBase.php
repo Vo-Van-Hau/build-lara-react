@@ -29,7 +29,7 @@ class ControllerBase extends Controller {
      */
     protected function response_base($data = [], $message = "", $status = 200) {
         return response()->json([
-            "status" => true,
+            "status" => intval($status) == 200 ? true : false,
             "message"  => $message,
             "data" => $data
         ], $status);
