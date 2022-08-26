@@ -90,9 +90,7 @@ class RolesController extends ControllerBase {
                 return $this->response_base([], "Role name already exists !!!", 0);
             }
             $result = $this->RolesRepository->store($input);
-            if ($result) {
-                return $this->response_base([$result], "You storage new item successfully !!!", 200);
-            }
+            if ($result) return $this->response_base([$result], "You storage new item successfully !!!", 200);
         }
         return $this->response_base([], "Access denied !", 403);
     }
@@ -132,7 +130,7 @@ class RolesController extends ControllerBase {
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
-     * @todo update role
+     * @todo destroy role
      * @param \Illuminate\Support\Facades\Request $request
      * @return void
      */
@@ -142,10 +140,10 @@ class RolesController extends ControllerBase {
             $id = isset($input["id"]) ? intval($input["id"]) : "";
             try {
                 $result = $this->RolesRepository->destroy($id);
-                if ($result) {
-                    return $this->response_base([], "You deleted this item successfully !!!", 200);
-                }
-            } catch (\Exception $errors) {}
+                if ($result) return $this->response_base([], "You deleted this item successfully !!!", 200);
+            } catch (\Exception $errors) {
+                return $this->response_base([], "You have failed to delete !!!", 0);
+            }
         }
         return $this->response_base([], "Access denied !", 403);
     }

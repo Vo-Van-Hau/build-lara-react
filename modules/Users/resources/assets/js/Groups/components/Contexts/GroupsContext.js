@@ -33,19 +33,30 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
         .finally(() => {set_table_loading();});
     }
 
-    // const getParentGroups = () =>{
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/groups/parents`)
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get groups
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+    const get_parent_groups = () =>{
+        return axios
+        .get_secured()
+        .post(`/users/groups/get_parents`);
+    }
 
-    // }
-
-    // const storageGroup = (values) => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/groups/storage`, {...values})
-
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: storage group
+     * @param {Object} values
+     * @return {void}
+     */
+    const storage_group = (values) => {
+        return axios
+        .get_secured()
+        .post(`/users/groups/storage`, {...values})
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -55,8 +66,8 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
      */
     const update_group = (values) => {
         return axios
-        .getSecured()
-        .post(`/users/groups/edit`, {...values})
+        .get_secured()
+        .post(`/users/groups/update`, {...values})
     }
 
     /**
@@ -66,18 +77,10 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
      * @return {void}
      */
     const destroy_group = (id) => {
+        set_table_loading();
         return axios
-        .getSecured()
-        .post(`/users/groups/delete`, {id})
-        .then((res) => {
-            // let { status, mess } = res.data;
-            // if (status) {
-            //     getGroups(1, {});
-            //     Helper.Noti('success', '[Delete Group]', mess);
-            // } else {
-            //     Helper.Noti('error', '[Delete Group]', mess);
-            // }
-        }).catch((errors) => {});
+        .get_secured()
+        .post(`/users/groups/destroy`, {id});
     }
 
     // const getUserbyGroups = (id) =>{
@@ -121,7 +124,7 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: 
+     * @todo:
      * @return {void}
      */
     const set_mouted = (values) => {
@@ -137,10 +140,8 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
 
     const todoContextData = {
         data: {...data, config},
-        history, dispatch, get_axios,
-        //, getParentGroups, storageGroup,
-        update_group,
-        destroy_group,
+        history, dispatch, get_axios, storage_group,
+        get_parent_groups, update_group, destroy_group,
         // getUserbyGroups, getUsers, setUserGroup, storageGroupUser,
         // setForm,
         set_table_loading,

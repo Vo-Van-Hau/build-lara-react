@@ -9,7 +9,7 @@ import { UsergroupAddOutlined, ToolOutlined } from '@ant-design/icons';
 const { Search } = Input;
 
 const ListRoles = () => {
-    const { data, get_roles, set_mouted, destroy_roles, set_table_loading } = useContext(RolesContext);
+    const { data, get_roles, set_mouted, destroy_role, set_table_loading } = useContext(RolesContext);
     const { roles, config, pagination, loading_table, mouted } = data;
     const [role, setRole] = useState({});
     const [viewAction, setViewAction] = useState(false);
@@ -146,7 +146,7 @@ const ListRoles = () => {
      * @return {void}
      */
     const delete_role = (record) => {
-        destroy_roles(record.id)
+        destroy_role(record.id)
         .then((res) => {
             let { status, message } = res.data;
             if (status) {

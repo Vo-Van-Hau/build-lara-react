@@ -1,16 +1,17 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { GroupsContext } from '../Contexts/GroupsContext';
-// import ActGroup from '../Actions/ActGroup';
+import ActionGroup from '../Actions/ActionGroup';
 // import ActUser from '../Actions/ActUser';
 import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
+import Helper from '../Helper/Helper';
 const { Search } = Input;
 
 const ListGroups = (props) => {
-    const { data, get_groups, set_mouted, destroy_group } = useContext(GroupsContext);
+    const { data, get_groups, set_mouted, destroy_group, set_table_loading } = useContext(GroupsContext);
     const { config, mouted, groups, loading_table, pagination } = data;
     const [group, setGroup] = useState({});
-    const [viewAct, setViewAct] = useState(false);
+    const [viewAction, setViewAction] = useState(false);
     const [viewUsers, setViewUsers] = useState(false);
     const [keySearch, setKeySearch] = useState({
         keyword: null,
@@ -55,20 +56,20 @@ const ListGroups = (props) => {
                 );
             }
         },
-        {
-            title: 'User',
-            dataIndex: 'User',
-            key: 'User',
-            width: 100,
-            align: 'center',
-            render: (_, record) => {
-                return (
-                    <Tooltip title="Add User" placement="topRight">
-                        <Button type="dashed" shape="circle" icon={<UsergroupAddOutlined />} onClick={() => group_user(record)}/>
-                    </Tooltip>
-                );
-            }
-        },
+        // {
+        //     title: 'User',
+        //     dataIndex: 'User',
+        //     key: 'User',
+        //     width: 100,
+        //     align: 'center',
+        //     render: (_, record) => {
+        //         return (
+        //             <Tooltip title="Add User" placement="topRight">
+        //                 <Button type="dashed" shape="circle" icon={<UsergroupAddOutlined />} onClick={() => group_user(record)}/>
+        //             </Tooltip>
+        //         );
+        //     }
+        // },
         {
             title: 'Status',
             dataIndex: 'status',
@@ -91,9 +92,9 @@ const ListGroups = (props) => {
             render: (_, record) => {
                 return (
                     <Space size={5}>
-                        <Button type="link" size="small" onClick={() => update_group(record)}>Edit</Button>
+                        <Button type="link" size="small" onClick={() => edit_group(record)}>Edit</Button>
                         <>||</>
-                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => remove_group(record)}>
+                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => delete_group(record)}>
                             <Button type="link" size="small" danger>Delete</Button>
                         </Popconfirm>
                     </Space>
@@ -104,34 +105,60 @@ const ListGroups = (props) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+    const new_group = () => {
+        setGroup({});
+        setViewAction(true);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: update an existed record
      * @param {Object} record
      * @return {void}
      */
-    const update_group = (record) => {
+    const edit_group = (record) => {
         setGroup(record);
-        setViewAct(true);
+        setViewAction(true);
     }
 
-    /**
+    // /**
+    //  * @author: <vanhau.vo@urekamedia.vn>
+    //  * @todo: remove an existed record
+    //  * @param {Object} record
+    //  * @return {void}
+    //  */
+    // const remove_group = (record) => {
+    //     destroyGroup(record.id);
+    // }
+     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: remove an existed record
      * @param {Object} record
      * @return {void}
      */
-    const remove_group = (record) => {
-        destroyGroup(record.id);
+    const delete_group = (record) => {
+        destroy_group(record.id)
+        .then((res) => {
+            console.log(res);
+            let { status, message } = res.data;
+            if (status) {
+                get_groups(1, {});
+                Helper.Notification('success', '[Delete Group]', message);
+            } else {
+                Helper.Notification('error', '[Delete Group]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
     }
 
-    const group_user = (record) => {
-        setGroup(record);
-        setViewUsers(true);
-    }
-
-//     const newGroup = () => {
-//         setGroup({});
-//         setViewAct(true);
-//     }
+    // const group_user = (record) => {
+    //     setGroup(record);
+    //     setViewUsers(true);
+    // }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -148,7 +175,7 @@ const ListGroups = (props) => {
 
     useEffect(() => {
         if(mouted) get_groups(1, keySearch);
-        return () => { set_mouted(false); }
+        return () => {set_mouted(false);}
     }, []);
 
     return (
@@ -159,7 +186,7 @@ const ListGroups = (props) => {
                         <Col xs={24} xl={12}>
                             <Button
                                 type="primary"
-                                onClick={() =>{ newGroup() }}
+                                onClick={() => {new_group()}}
                             >
                                 New Group
                             </Button>
@@ -187,8 +214,8 @@ const ListGroups = (props) => {
                 onChange={handleTableChange} // Callback executed when pagination, filters or sorter is changed
                 rowKey='id'
             />
-            {/* <ActGroup group={group} visible={viewAct} setDrawer={setViewAct}/>
-            <ActUser group={group} visible={viewUsers} setDrawer={setViewUsers}/> */}
+            <ActionGroup group={group} visible={viewAction} setDrawer={setViewAction}/>
+            {/* <ActUser group={group} visible={viewUsers} setDrawer={setViewUsers}/> */}
         </div>
     );
 }

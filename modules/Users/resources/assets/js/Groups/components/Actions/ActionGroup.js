@@ -1,94 +1,107 @@
-/**
- * Groups - quản lý Groups
- * @author Quang Huy <quanghuy.phung@urekamedia.vn>
- * @since 1.0.0
- * @todo Action Groups trong module Users
- * @return View
- */
 import React,{ useContext, useState ,useEffect } from 'react';
 import { GroupsContext } from '../Contexts/GroupsContext';
-import Helper from '../Helper/helper';
+import Helper from '../Helper/Helper';
 import { Drawer, Button, Spin, Form, Input, Select } from 'antd';
 const { Option } = Select;
 const { TextArea } = Input;
-const ActGroup = ({group, visible, setDrawer}) => {
-    const { data, getParentGroups, getGroups, storageGroup, updateGroup } = useContext(GroupsContext);
+
+const ActionGroup = ({group, visible, setDrawer}) => {
+    const { data, get_parent_groups, get_groups, storage_group, update_group } = useContext(GroupsContext);
     const { config } = data;
     const [ loading, setLoading ] = useState(false);
-    const [ parent, setParent ] = useState([]);
+    const [ parents, setParents ] = useState([]);
     const [form] = Form.useForm();
-    
-    useEffect(() => {
-        if(visible){
-            setLoading(true);
-            getParentGroups().then((res)=>{
-                let {parents} = res.data;
-                setParent(parents);
-                if(group.id){
-                    form.setFieldsValue({...group});
-                }
-            }).catch((err) => {
-            }).finally(() =>{
-                setLoading(false);
-            });
 
-        }
-    }, [visible]);
-
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: close Drawer
+     * @return {void}
+     */
     const onClose = () =>{
         setDrawer(false);
         form.resetFields();
     }
 
-    const onSubmit = () => {
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+    const onSave = () => {
         form.validateFields().then((values) => {
-            if(group.id){
+            if(group.id) {
                 values.id = group.id;
-                update(values);
-            }else{
-                storege(values);
+                requestUpdating(values);
+            } else {
+                requestCreating(values);
             }
-        }).catch((errorInfo) => {
-        });
-    }
-
-    const storege = (values) => {
-        setLoading(true);
-        storageGroup(values).then((res)=>{
-            let { status, mess } = res.data;
-            if (status) {
-                onClose();
-                getGroups(1, {});
-                Helper.Noti('success', '[Storage Group]', mess);
-            }else{
-                Helper.Noti('error', '[Storage Group]', mess);
-            }
-        }).catch((errorInfo) => {
-        }).finally(() => {
-            setLoading(false);
         })
+        .catch((errors) => {});
     }
 
-    const update = (values) => {
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: request for creating
+     * @param {Object} values
+     * @return {void}
+     */
+    const requestCreating = (values) => {
         setLoading(true);
-        updateGroup(values).then((res)=>{
-            let { status, mess } = res.data;
+        storage_group(values).then((res)=>{
+            let { status, message } = res.data;
+            if(status) {
+                onClose();
+                get_groups(1, {});
+                Helper.Notification('success', '[Storage Group]', message);
+            } else {
+                Helper.Notification('success', '[Storage Group]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {setLoading(false);});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: request for updating
+     * @param {Object} values
+     * @return {void}
+     */
+    const requestUpdating = (values) => {
+        setLoading(true);
+        update_group(values)
+        .then((res) => {
+            let { status, message } = res.data;
             if (status) {
                 onClose();
-                getGroups(1, {});
-                Helper.Noti('success', '[Update Group]', mess);
-            }else{
-                Helper.Noti('error', '[Update Group]', mess);
+                get_groups(1, {});
+                Helper.Notification('success', '[Update Group]', message);
+            } else {
+                Helper.Notification('success', '[Update Group]', message);
             }
-        }).catch((errorInfo) => {
-        }).finally(() => {
-            setLoading(false);
-        });
+        })
+        .catch((errors) => {})
+        .finally(() => {setLoading(false);});
     }
+
+    useEffect(() => {
+        if(visible) {
+            setLoading(true);
+            get_parent_groups().then((res) => {
+                let parents_res = res.data.parents;
+                setParents(parents_res);
+                if(group.id) {
+                    form.setFieldsValue({...group});
+                }
+            })
+            .catch((errors) => {})
+            .finally(() => {setLoading(false);});
+        }
+    }, [visible]);
 
     return(
         <Drawer
-            title={group.id ? <>{'Edit Group'}<br /><small>{group.name}</small></> : <h6>{'New Group'}</h6>}
+            title={group.id ? <>{'Edit Group'}<br/><small>{group.name}</small></> : <h6>{'New Group'}</h6>}
             width={520}
             closable={false}
             onClose={onClose}
@@ -98,18 +111,15 @@ const ActGroup = ({group, visible, setDrawer}) => {
                     <Button onClick={onClose} style={{ marginRight: 8 }}>
                         Cancel
                     </Button>
-                    <Button onClick={onSubmit} type="primary">
-                        Submit
+                    <Button onClick={onSave} type="primary">
+                        Save
                     </Button>
                 </div>
             }
         >
             <Spin tip="Loading..." spinning={loading}>
-                <Form
-                    form={form}
-                    layout="vertical"
-                >
-                    <Form.Item 
+                <Form form={form} layout="vertical">
+                    <Form.Item
                         label="Name"
                         name="name"
                         rules={[{ required: true, message: 'Please input name!' }]}
@@ -117,28 +127,28 @@ const ActGroup = ({group, visible, setDrawer}) => {
                         <Input placeholder="Please input name!"/>
                     </Form.Item>
 
-                    <Form.Item 
-                        label="Parent"
+                    <Form.Item
+                        label="Parents"
                         name="parent_group_id"
                     >
                         <Select
-                            showSearch 
+                            showSearch
                             optionFilterProp="children"
                             placeholder="Please choose Parent!"
                         >
-                            {parent.map(item => (
+                            {parents.map(item => (
                                 <Option key={item.value} value={item.value}>{item.text}</Option>
                             ))}
                         </Select>
                     </Form.Item>
 
-                    <Form.Item 
+                    <Form.Item
                         label="Status"
                         name="status"
                         rules={[{ required: true, message: 'Please choose status!' }]}
                     >
                         <Select
-                            showSearch 
+                            showSearch
                             optionFilterProp="children"
                             placeholder="Please choose status!"
                         >
@@ -148,7 +158,7 @@ const ActGroup = ({group, visible, setDrawer}) => {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item 
+                    <Form.Item
                         label="Description"
                         name="description"
                     >
@@ -159,4 +169,5 @@ const ActGroup = ({group, visible, setDrawer}) => {
         </Drawer>
     );
 }
-export default ActGroup;
+
+export default ActionGroup;

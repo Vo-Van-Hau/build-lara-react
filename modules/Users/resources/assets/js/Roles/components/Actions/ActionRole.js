@@ -13,7 +13,7 @@ const ActionRole = ({role, visible, setDrawer}) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: close edit form
+     * @todo: close Drawer
      * @return {void}
      */
     const onClose = () =>{
@@ -90,7 +90,7 @@ const ActionRole = ({role, visible, setDrawer}) => {
 
     return(
         <Drawer
-            title={role.id ? <>{'Edit Role'}<br /><small>{role.name}</small></> : <h6>{'New Role'}</h6>}
+            title={role.id ? <>{'Edit Role'}<br/><small>{role.name}</small></> : <h6>{'New Role'}</h6>}
             width={520}
             closable={false}
             onClose={onClose}

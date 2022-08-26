@@ -35,7 +35,7 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo:
+     * @todo: storage role
      * @param {Object} values
      * @return {void}
      */
@@ -64,7 +64,7 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
      * @param {number} id
      * @return {void}
      */
-    const destroy_roles = (id) => {
+    const destroy_role = (id) => {
         set_table_loading();
         return axios
         .get_secured()
@@ -144,7 +144,7 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
         data:{...data, config}, history, dispatch, get_axios,
         set_mouted, get_roles, set_table_loading,
         // setForm, setDrawer,
-        storage_role, update_role, destroy_roles,
+        storage_role, update_role, destroy_role,
         // getUserbyRoles,
         // getUsers, storageRoleUser, setUserGroup,
         // initRoles, getAcl, saveAcl
