@@ -9,7 +9,9 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "build-by-webpack": "webpack --progress --config ./webpack.config.js"
+        "build-by-webpack": "webpack --progress --config ./webpack.config.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "compile": "node build/compile"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^4.0.0",

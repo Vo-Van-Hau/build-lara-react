@@ -42,7 +42,8 @@
             "Modules\\Auth\\": "modules/Auth/src/",
             "Modules\\Users\\": "modules/Users/src/",
             "Modules\\Module\\": "modules/Module/src/",
-            "Modules\\Reports\\": "modules/Reports/src/"
+            "Modules\\Reports\\": "modules/Reports/src/",
+            "Modules\\Publishers\\": "modules/Publishers/src/"
         }
     },
     "autoload-dev": {
@@ -82,14 +83,18 @@
                 "Modules\\Module\\Providers\\ModuleRouteServiceProvider",
 
                 "Modules\\Reports\\Providers\\ReportsServiceProvider",
-                "Modules\\Reports\\Providers\\ReportsRouteServiceProvider"
+                "Modules\\Reports\\Providers\\ReportsRouteServiceProvider",
+
+                "Modules\\Publishers\\Providers\\PublishersServiceProvider",
+                "Modules\\Publishers\\Providers\\PublishersRouteServiceProvider"
             ],
             "aliases": {
                 "Core": "Modules\\Core\\Facades\\Core",
                 "AuthCMS": "Modules\\Auth\\Facades\\AuthCMS",
                 "Users": "Modules\\Users\\Facades\\Users",
                 "Module": "Modules\\Module\\Facades\\Module",
-                "Reports": "Modules\\Reports\\Facades\\Reports"
+                "Reports": "Modules\\Reports\\Facades\\Reports",
+                "Publishers": "Modules\\Publishers\\Facades\\Publishers"
             }
         }
     },
@@ -124,6 +129,11 @@
         {
             "type": "path",
             "url": "modules/Reports",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "modules/Publishers",
             "symlink": false
         }
     ]

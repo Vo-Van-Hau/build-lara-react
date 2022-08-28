@@ -53,7 +53,7 @@ class GroupsController extends ControllerBase {
             ];
             return response()->json($data, 200);
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -70,7 +70,7 @@ class GroupsController extends ControllerBase {
             $data_json["groups"] = $this->GroupsRepository->get_all($keyword, $status);
             return response()->json($data_json, 200);
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -84,7 +84,7 @@ class GroupsController extends ControllerBase {
             $data_json["parents"] = $this->GroupsRepository->all_override();
             return response()->json($data_json, 200);
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -102,12 +102,12 @@ class GroupsController extends ControllerBase {
             $input["description"] = isset($input["description"]) ? $input["description"] : "";
             $check = $this->checkUnique($input["name"]);
             if(!$check){
-                return $this->response_base([], "Group name already exists !!!", 0);
+                return $this->response_base(["status" => false], "Group name already exists !!!", 200);
             }
             $result = $this->GroupsRepository->store($input);
-            if ($result) return $this->response_base([$result], "You storage new item successfully !!!", 200);
+            if ($result) return $this->response_base(["status" => true, $result], "You storage new item successfully !!!", 200);
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -126,13 +126,13 @@ class GroupsController extends ControllerBase {
             $input["description"] = isset($input["description"]) ? $input["description"] : "";
              $result = $this->GroupsRepository->update($id, $input);
              if ($result) {
-                return $this->response_base([], "You edit item successfully !!!", 200);
+                return $this->response_base(["status" => true], "You edit item successfully !!!", 200);
              }
              else {
-                return $this->response_base([], "You have failed to update !!!", 0);
+                return $this->response_base(["status" => false], "You have failed to update !!!", 200);
              }
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -159,11 +159,11 @@ class GroupsController extends ControllerBase {
             $id = isset($input["id"]) ? intval($input["id"]) : "";
             try {
                 $result = $this->GroupsRepository->destroy($id);
-                if ($result) return $this->response_base([], "You deleted this item successfully !!!", 200);
+                if ($result) return $this->response_base(["status" => true], "You deleted this item successfully !!!", 200);
             } catch (\Exception $errors) {
-                return $this->response_base([], "You have failed to delete !!!", 0);
+                return $this->response_base(["status" => false], "You have failed to delete !!!", 200);
             }
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 }

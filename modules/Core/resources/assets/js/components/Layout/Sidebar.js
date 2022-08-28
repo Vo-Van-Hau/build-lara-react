@@ -1,17 +1,8 @@
-import React, { Fragment, useContext, useState, useEffect } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { CoreContext } from '../Contexts/CoreContext';
 import _ from 'lodash';
-import {
-    AppstoreOutlined,
-    ContainerOutlined,
-    DesktopOutlined,
-    MailOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    PieChartOutlined,
-} from '@ant-design/icons';
-import { Button, Menu, Layout } from 'antd';
+import { Menu, Layout } from 'antd';
 const { Sider } = Layout;
 
 const Sidebar = ({ history, ...props }) => {

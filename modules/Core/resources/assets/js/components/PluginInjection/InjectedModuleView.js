@@ -130,6 +130,8 @@ const InjectedModuleView = ({ history, ...props }) => {
             bp={bp}
             {...extraProps}
             language={language.locale}
+            searchParams={props.searchParams}
+            navigate={props.navigate}
         />
     );
 };

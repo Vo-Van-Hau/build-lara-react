@@ -30,7 +30,7 @@ const Login = ({ history, ...props }) => {
         }
     };
 
-    const onFinishFailed = errorInfo => {};
+    const onFinishFailed = errors => {};
 
     useEffect(function() {
         form.setFieldsValue({

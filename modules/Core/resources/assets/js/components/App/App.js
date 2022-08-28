@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import RoutesWeb from '../../routes/RoutesWeb';
 import { CoreContext } from '../Contexts/CoreContext';
 

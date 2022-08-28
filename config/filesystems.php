@@ -42,6 +42,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'public_local' => [
+            'driver' => 'local',
+            'root' => public_path(),
+            'visibility' => 'public',
+            'timeout' => 300000,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

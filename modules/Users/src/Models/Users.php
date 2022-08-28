@@ -11,6 +11,7 @@ use Modules\Users\Models\Traits\ACL;
 use Modules\Core\Models\Traits\BasicModel;
 use Modules\Users\Models\Roles;
 use Modules\Users\Models\Groups;
+use Modules\Publishers\Models\Publishers;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -88,5 +89,14 @@ class Users extends Authenticatable {
      */
     public function groups(){
         return $this->belongsToMany(Groups::class, "user_group", "user_id", "group_id")->wherePivot("deleted", "=", 0);
+    }
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: relationship
+     * @return void
+     */
+    public function publishers(){
+        return $this->belongsToMany(Publishers::class, "user_publisher", "user_id", "publisher_id")->wherePivot("deleted", "=", 0);
     }
 }

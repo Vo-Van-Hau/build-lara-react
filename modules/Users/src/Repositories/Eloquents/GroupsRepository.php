@@ -86,10 +86,6 @@ class GroupsRepository extends BaseRepository implements GroupsRepositoryInterfa
      * @return boolean
      */
     public function update($id, $input = []){
-        $existed = Groups::find($id);
-        if(empty($existed)) {
-            return false;
-        }
         $existed = $this->model->find($id);
         if(empty($existed)) return false;
         $existed->name = $input["name"];

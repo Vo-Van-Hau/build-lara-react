@@ -19,3 +19,9 @@ if (!function_exists("app_url")) {
     }
 }
 
+if(!function_exists("change_boolean")) {
+    function change_boolean($value = null) {
+        if($value == "false" || $value == "0" || $value == "undefined") return false;
+        return true;
+    }
+}

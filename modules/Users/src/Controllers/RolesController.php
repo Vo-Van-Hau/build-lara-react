@@ -53,7 +53,7 @@ class RolesController extends ControllerBase {
             ];
             return response()->json($data, 200);
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -70,7 +70,7 @@ class RolesController extends ControllerBase {
             $data_json["roles"] = $this->RolesRepository->get_all($keyword, $status);
             return response()->json($data_json, 200);
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -79,7 +79,7 @@ class RolesController extends ControllerBase {
      * @param \Illuminate\Support\Facades\Request $request
      * @return void
      */
-    public function storage(Request $request){
+    public function storage(Request $request) {
         if ($request->isMethod("POST")) {
             $input = $request->all();
             $input["name"] = isset($input["name"]) ? $input["name"] : "";
@@ -87,12 +87,12 @@ class RolesController extends ControllerBase {
             $input["description"] = isset($input["description"]) ? $input["description"] : "";
             $check = $this->checkUnique($input["name"]);
             if(!$check) {
-                return $this->response_base([], "Role name already exists !!!", 0);
+                return $this->response_base(["status" => false], "Role name already exists !!!", 200);
             }
             $result = $this->RolesRepository->store($input);
-            if ($result) return $this->response_base([$result], "You storage new item successfully !!!", 200);
+            if ($result) return $this->response_base(["status" => false, $result], "You storage new item successfully !!!", 200);
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -101,7 +101,7 @@ class RolesController extends ControllerBase {
      * @param \Illuminate\Support\Facades\Request $request
      * @return void
      */
-    public function update(Request $request){
+    public function update(Request $request) {
         if($request->isMethod("post")) {
             $input = $request->all();
             $id = isset($input["id"]) ? intval($input["id"]) : 0;
@@ -110,10 +110,10 @@ class RolesController extends ControllerBase {
             $input["description"] = isset($input["description"]) ? $input["description"] : "";
             $result = $this->RolesRepository->update($id, $input);
             if ($result) {
-                return $this->response_base([], "You edit item successfully !!!", 200);
+                return $this->response_base(["status" => true], "You edit item successfully !!!", 200);
             }
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
     /**
@@ -122,7 +122,7 @@ class RolesController extends ControllerBase {
      * @param string $name
      * @return void
      */
-    public function checkUnique($name){
+    public function checkUnique($name) {
         $count = $this->RolesRepository->findbyname($name);
         if(empty($count)) return true;
         return false;
@@ -134,17 +134,17 @@ class RolesController extends ControllerBase {
      * @param \Illuminate\Support\Facades\Request $request
      * @return void
      */
-    public function destroy(Request $request){
+    public function destroy(Request $request) {
         if ($request->isMethod("post")) {
             $input = request()->all();
             $id = isset($input["id"]) ? intval($input["id"]) : "";
             try {
                 $result = $this->RolesRepository->destroy($id);
-                if ($result) return $this->response_base([], "You deleted this item successfully !!!", 200);
+                if ($result) return $this->response_base(["status" => true], "You deleted this item successfully !!!", 200);
             } catch (\Exception $errors) {
-                return $this->response_base([], "You have failed to delete !!!", 0);
+                return $this->response_base(["status" => false], "You have failed to delete !!!", 200);
             }
         }
-        return $this->response_base([], "Access denied !", 403);
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 }

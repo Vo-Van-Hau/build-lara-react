@@ -5,7 +5,6 @@ const InjectedComponent = (props) => {
 
     const { data } = useContext(CoreContext);
     const { component: Component, ...subprops } = props;
-
     const [error, setError] = useState(null);
 
     useEffect(function() {

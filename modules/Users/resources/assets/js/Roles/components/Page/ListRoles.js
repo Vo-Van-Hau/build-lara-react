@@ -68,8 +68,8 @@ const ListRoles = () => {
         //     align: 'center',
         //     render: (_, record) => {
         //         return (
-        //             <Tooltip title="Add User" placement="topRight">
-        //                 <Button type="dashed" shape="circle" icon={<UsergroupAddOutlined />} onClick={() => groupUser(record)}/>
+        //             <Tooltip title='Add User' placement='topRight'>
+        //                 <Button type='dashed' shape='circle' icon={<UsergroupAddOutlined />} onClick={() => groupUser(record)}/>
         //             </Tooltip>
         //         );
         //     }
@@ -82,8 +82,8 @@ const ListRoles = () => {
         //     align: 'center',
         //     render: (_, record) => {
         //         return (
-        //             <Tooltip title="Change Acl" placement="topRight">
-        //                 <Button type="dashed" shape="circle" icon={<ToolOutlined />} onClick={() => groupRoles(record)}/>
+        //             <Tooltip title='Change Acl' placement='topRight'>
+        //                 <Button type='dashed' shape='circle' icon={<ToolOutlined />} onClick={() => groupRoles(record)}/>
         //             </Tooltip>
         //         );
         //     }
@@ -96,10 +96,10 @@ const ListRoles = () => {
             render: (_, record) => {
                 return (
                     <Space size={5}>
-                        <Button type="link" size="small" onClick={() => edit_role(record)}>Edit</Button>
+                        <Button type='link' size='small' onClick={() => edit_role(record)}>Edit</Button>
                         <>||</>
-                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => delete_role(record)}>
-                            <Button type="link" size="small" danger>Delete</Button>
+                        <Popconfirm title='Sure to delete?' placement='leftTop' onConfirm={() => delete_role(record)}>
+                            <Button type='link' size='small' danger>Delete</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -185,12 +185,12 @@ const ListRoles = () => {
                 title={(() => (
                     <Row gutter={[8, 8]}>
                         <Col xs={24} xl={12}>
-                            <Button type="primary" onClick={() => {new_role()}}>
+                            <Button type='primary' onClick={() => {new_role()}}>
                                 New Role
                             </Button>
                         </Col>
                         <Col xs={24} xl={12}>
-                            <Search placeholder="Search by name !!!"
+                            <Search placeholder='Search by name !!!'
                                 // onChange={(event) => {
                                 //     let { value } = event.target;
 

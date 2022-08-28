@@ -21,7 +21,7 @@ class UsersRequest extends FormRequest {
      * @return bool
      */
     public function authorize() {
-        return false;
+        return true;
     }
 
     /**
@@ -30,7 +30,14 @@ class UsersRequest extends FormRequest {
      * @return array
      */
     public function rules() {
-        return [];
+        return [
+            "name"      => "required",
+            "username"  => "required",
+            "email"     => "required",
+            "password"  => "required",
+            "role"      => "required",
+            "type"      => "required"
+        ];
     }
 
     /**
@@ -39,6 +46,13 @@ class UsersRequest extends FormRequest {
      * @return array
      */
     public function messages() {
-        return [];
+        return [
+            "name.required" => "required!",
+            "username.required" => "required!",
+            "email.required" => "required!",
+            "password.required" => "required!",
+            "role.required" => "required!",
+            "type.required" => "required!"
+        ];
     }
 }

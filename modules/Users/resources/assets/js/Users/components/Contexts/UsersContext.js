@@ -5,11 +5,10 @@ import {
     SET_PAGINATION, SET_TABLE_LOADING, SET_FORM_LOADING, SET_DRAWER,
     MOUTED
 } from '../Dispatch/type';
-import Helper from '../Helper/helper';
-
+import Helper from '../Helper/Helper';
 export const UsersContext = createContext();
 
-const UsersContextProvicer = ({ children, axios, history, config }) =>{
+const UsersContextProvicer = ({ children, axios, history, config, navigate }) => {
 
     const [data, dispatch] = useReducer(UsersReducer, initialState);
 
@@ -35,51 +34,56 @@ const UsersContextProvicer = ({ children, axios, history, config }) =>{
             .finally(() => {set_table_loading();});
     }
 
-    // const getItemCP = (keyID) => {
-    //     return axios
-    //     .getSecured()
-    //     .get(`/users/users/getitem`, { params: { id: keyID } })
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {number} id
+     * @return {void}
+     */
+    const get_user = (keyID) => {
+        return axios
+        .get_secured()
+        .post(`/users/users/get_user`, {id: keyID });
+    }
 
-    // const storageUser = (formData) => {
-    //     const config = {
-    //         timeout: 1000 * 60 * 2,
-    //         headers: { 'content-type': 'multipart/form-data' }
-    //     }
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/users/storage`, formData, config)
-    // }
+    const storage_user = (formData) => {
+        const config = {
+            timeout: 1000 * 60 * 2,
+            headers: { 'content-type': 'multipart/form-data' }
+        }
+        return axios
+        .get_secured()
+        .post(`/users/users/storage`, formData, config)
+    }
 
-    // const updateUser = (formData) => {
-    //     const config = {
-    //         timeout: 1000 * 60 * 2,
-    //         headers: { 'content-type': 'multipart/form-data' }
-    //     }
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/users/edit`, formData, config)
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: update user
+     * @param {Object} values
+     * @return {void}
+     */
+    const update_user = (formData) => {
+        const config = {
+            timeout: 1000 * 60 * 2,
+            headers: { 'content-type': 'multipart/form-data' }
+        }
+        return axios
+        .get_secured()
+        .post(`/users/users/update`, formData, config);
+    }
 
-    // const deleteUser = (id) =>{
-    //     setTable();
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/users/delete`, {id})
-    //     .then((res) => {
-    //         let { status, message } = res.data;
-    //         if (status) {
-    //             dispatch({ type: DELETE_USERS, payload: id });
-    //             Helper.Noti('success', '[Users] Delete', message);
-    //         } else {
-    //             Helper.Noti('error', '[Users] Delete', message);
-    //         }
-    //     })
-    //     .catch((error) => {
-    //     }).finally(() =>{
-    //         setTable();
-    //     })
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {number} id
+     * @return {void}
+     */
+    const destroy_user = (id) =>{
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/users/users/destroy`, {id});
+    }
 
     // const accessUser = (id) =>{
     //     return axios
@@ -87,27 +91,47 @@ const UsersContextProvicer = ({ children, axios, history, config }) =>{
     //     .post(`/users/access/access`, {id})
     // }
 
-    // const getGroups = (page, keySearch) => {
-    //     return axios
-    //     .getSecured()
-    //     .get(`/users/users/get_groups`, { params: {...keySearch, page:page}})
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get groups
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+    const get_groups = (page, keySearch) => {
+        return axios
+        .get_secured()
+        .post(`/users/users/get_groups`, {...keySearch, page})
+    }
 
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get groups
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+    const get_publishers = (page, keySearch) => {
+        return axios
+        .get_secured()
+        .post(`/users/users/get_publishers`, {...keySearch, page})
+    }
 
-    // const getPublishers = (page, keySearch) => {
-    //     return axios
-    //     .getSecured()
-    //     .get(`/users/users/get_publishers`, { params: {...keySearch, page:page}})
-    // }
-
-    // const setRouter = (action, id = "") => {
-    //     setMouted(true);
-    //     let paseURL = window.sparrowConfig.app.adminPrefix ? '/'+window.sparrowConfig.app.adminPrefix : "";
-    //     paseURL += `/users/users`;
-    //     let paseACT = action ? `?action=${action}` : ``;
-    //     let paseKeyID = id ? `&id=${id}` : ``;
-    //     return history.push(`${paseURL}${paseACT}${paseKeyID}`);
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: redirect to...
+     * @param {string} action
+     * @param {string} id
+     * @return {void}
+     */
+    const setRouter = (action, id = '') => {
+        set_mouted(true);
+        let paseURL = window.sparrowConfig.app.adminPrefix ? '/' + window.sparrowConfig.app.adminPrefix : '';
+        paseURL += `/users/users`;
+        let paseACT = action ? `?action=${action}` : ``;
+        let paseKeyID = id ? `&id=${id}` : ``;
+        return navigate(`${paseURL}${paseACT}${paseKeyID}`, { replace: true });
+    }
 
     // const setForm = () => {
     //     dispatch({ type: SET_FORM_LOADING });
@@ -144,11 +168,10 @@ const UsersContextProvicer = ({ children, axios, history, config }) =>{
 
     const todoContextData = {
         data: {...data, config}, history, dispatch, get_axios, get_users,
-        set_mouted, set_table_loading,
-        // setForm, setTable, setMouted, setDrawer, setRouter,
-        // getUsers, storageUser, updateUser, deleteUser, accessUser,
-        // getItemCP,
-        // getGroups, getPublishers,
+        set_mouted, set_table_loading, setRouter, get_groups, get_publishers,
+        storage_user, destroy_user, get_user, update_user
+        // setForm, setDrawer,
+        // accessUser,
     };
     return (
         <UsersContext.Provider value={todoContextData}>

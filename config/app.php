@@ -195,6 +195,9 @@ return [
         Modules\Reports\Providers\ReportsServiceProvider::class,
         Modules\Reports\Providers\ReportsRouteServiceProvider::class,
 
+        Modules\Publishers\Providers\PublishersServiceProvider::class,
+        Modules\Publishers\Providers\PublishersRouteServiceProvider::class,
+
         /**
          * MongoDB package for Laravel: If your Laravel project does not load dependencies automatically,
          * you may also need to add the following to the provider’s section in your app.php file

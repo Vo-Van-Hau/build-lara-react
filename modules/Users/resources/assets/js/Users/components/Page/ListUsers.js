@@ -1,12 +1,12 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { UsersContext } from '../Contexts/UsersContext';
-import Helper from '../Helper/helper';
+import Helper from '../Helper/Helper';
 import { Table, Space, Popconfirm, Input, Button, Row, Col, Avatar, Popover, Tooltip } from 'antd';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
 const { Search } = Input;
 
 const ListUsers = () => {
-    const { data, get_users, set_mouted } = useContext(UsersContext);
+    const { data, get_users, set_mouted, setRouter, destroy_user, set_table_loading } = useContext(UsersContext);
     const { users, config, pagination, loading_table, mouted } = data;
     const [ user, setUser ] = useState({});
     const [keySearch, setKeySearch] = useState({
@@ -79,9 +79,9 @@ const ListUsers = () => {
             render: (_, record) => {
                 return (
                     <Space size={5}>
-                        <Button type="link" size="small">Edit</Button>
+                        <Button type="link" size="small" onClick={() => edit_user(record)}>Edit</Button>
                         <>||</>
-                        <Popconfirm title="Sure to delete?" placement="leftTop">
+                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => delete_user(record)}>
                             <Button type="link" size="small" danger>Delete</Button>
                         </Popconfirm>
                     </Space>
@@ -126,13 +126,35 @@ const ListUsers = () => {
     //     })
     // }
 
-    // const update = (record) => {
-    //     setRouter("detail", record.id);
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} record
+     * @return {void}
+     */
+    const edit_user = (record) => setRouter('upsert', record.id);
 
-    // const remove = (record) => {
-    //     deleteUser(record.id);
-    // }
+    /**
+     *
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} record
+     * @return {void}
+     */
+    const delete_user = (record) => {
+        destroy_user(record.id)
+        .then((res) => {
+            let { status, message } = res.data;
+            if (status) {
+                get_users(1, {});
+                Helper.Notification('success', '[Delete Users]', message);
+            } else {
+                Helper.Notification('error', '[Delete Users]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    };
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -161,7 +183,7 @@ const ListUsers = () => {
                             <Col xs={24} xl={12}>
                                 <Button
                                     type="primary"
-                                    onClick={() =>{ setRouter("detail", '') }}
+                                    onClick={() =>{ setRouter('upsert', '') }}
                                 >
                                     New User
                                 </Button>

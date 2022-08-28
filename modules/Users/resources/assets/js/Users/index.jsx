@@ -1,5 +1,6 @@
-import React, { Fragment, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import ListUsers from './components/Page/ListUsers';
+import ActionUser from "./components/Actions/ActionUser";
 import UsersContextProvicer from './components/Contexts/UsersContext';
 
 const Users = (props) => {
@@ -37,23 +38,41 @@ const Users = (props) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get module configuration
+     * @param:
+     * @returns {void}
+     */
+    const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
      * @param:
      * @returns {void}
      */
     const render_view = () => {
         switch (action) {
+            case 'upsert': return (<ActionUser {...props} keyID={id}/>);
             default: return (<ListUsers {...props}/>);
         }
     }
 
     useEffect(function() {
         get_config();
+        get_action();
     }, []);
 
     return (
         <>
-            <UsersContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <UsersContextProvicer axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </UsersContextProvicer>
         </>

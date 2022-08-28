@@ -2,31 +2,27 @@ import React, { useState, useContext, useEffect } from 'react';
 import { UsersContext } from '../../Contexts/UsersContext';
 import { Button, Card, Col, Form, Input, Row, Switch, Upload, Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import Helper from '../../Helper/helper';
+import Helper from '../../Helper/Helper';
 const { Dragger } = Upload;
 const { Option } = Select;
 
-const BasicInfo = ({fileList, setFileList, genPassword, disabled }) => {
-    const { data, setRouter } = useContext(UsersContext);
+const BasicInfo = ({fileList, setFileList, generatePassword, disabled }) => {
+    const { data } = useContext(UsersContext);
     const { config } = data;
-    const { users_type, currencies, pub_field, exclude_fields, roles, account_type, user } = config;
-    const [disabledfield, setDisabledfield] = useState([]);
+    const { users_type, roles, account_type, user } = config;
+    const [disabledField, setDisabledField] = useState([]);
 
-    useEffect(() => {
-        setDisabledfield(false);
-        if(user.is_admin === 0 && user.type !== 2 && user.role_id !== 6){
-            setDisabledfield(true);
-        }
-    }, [user]);
-    const normFile = info => {
+    /**
+     * @author : <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @link https://github.com/react-component/upload#customrequest
+     * @return {string}
+     */
+    const normFile = (info) => {
         let { file } = info;
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isLt5M) {
-            Helper.Noti(
-                "error",
-                "[Upload]",
-                "File size must smaller than 5MB!"
-            );
+            Helper.Notification('error', '[Upload]', 'File size must smaller than 5MB!');
         } else {
             let fileList = [...info.fileList];
             fileList = fileList.slice(-1);
@@ -34,83 +30,93 @@ const BasicInfo = ({fileList, setFileList, genPassword, disabled }) => {
             return info && fileList;
         }
     };
-    const dummyRequest = ({ file, onSuccess }) => {
+
+    /**
+     * @author : <vanhau.vo@urekamedia.vn>
+     * @todo: Override for the default xhr behavior allowing for additional customization and ability to implement your own XMLHttpRequest
+     * @link https://github.com/react-component/upload#customrequest
+     * @return {string}
+     */
+    const dummyRequest = ({ file, filename, data, onProgress, onSuccess, onError, withCredentials, action, headers }) => {
         setTimeout(() => {
-            onSuccess("ok");
+            onSuccess('ok');
         }, 0);
     };
 
-    const generate = () => {
-        genPassword();
+    /**
+     * @author : <vanhau.vo@urekamedia.vn>
+     * @todo: call function to generate new password
+     * @return {string}
+     */
+    const generate_password = () => {
+        generatePassword();
     }
+
+    useEffect(() => {
+        setDisabledField(false);
+        if(user.is_admin === 0 && user.type !== 2 && user.role_id !== 6){
+            setDisabledField(true); // Controller Permission
+        }
+    }, [user]);
 
     return(
         <>
             <Row gutter={[16, 16]}>
                 <Col sm={12}>
-                    <Card size="small" title="Basic Info" bordered={false} headStyle={{ color: "#1890ff" }}>
+                    <Card size='small' title='Basic Info' bordered={false} headStyle={{ color: '#1890ff' }}>
                         <Form.Item
-                            label="Name"
-                            name="name"
+                            label='Name'
+                            name='name'
                             style={{ marginBottom: 8 }}
                             rules={[
-                                { required: true, message: "Please input name!" }
+                                { required: true, message: 'Please input name!' }
                             ]}
                         >
-                            <Input placeholder="Please input name!" />
+                            <Input placeholder='Please input name!' />
                         </Form.Item>
                         <Form.Item
-                            label="User Name"
-                            name="username"
+                            label='User Name'
+                            name='username'
                             style={{ marginBottom: 8 }}
                             rules={[
                                 {
                                     required: true,
-                                    message: "Please input user name!"
+                                    message: 'Please input user name!'
                                 }
                             ]}
                         >
-                            <Input placeholder="Please input user name!" disabled={disabledfield}/>
+                            <Input placeholder='Please input user name!' disabled={disabledField}/>
                         </Form.Item>
                         <Form.Item
-                            label="Email"
-                            name="email"
+                            label='Email'
+                            name='email'
                             style={{ marginBottom: 8 }}
                             rules={[
-                                {
-                                    type: "email",
-                                    message: "The input is not valid E-mail!"
-                                },
-                                { required: true, message: "Please input email!" }
+                                {type: 'email', message: 'The input is not valid E-mail!'},
+                                { required: true, message: 'Please input email!' }
                             ]}
                         >
-                            <Input placeholder="Please input email!" disabled={disabled} />
+                            <Input placeholder='Please input email!' disabled={disabled}/>
                         </Form.Item>
                         <Form.Item
-                            label="Password"
-                            name="passwordPC"
+                            label='Password'
                             style={{ marginBottom: 8}}
                         >
                             <Input.Group compact>
                                 <Form.Item
-                                    name="password"
+                                    name='password'
                                     style={{ marginBottom: 0, width: 'calc(100% - 100px)' }}
-                                    rules={[
-                                        {
-                                            required: !disabled,
-                                            message: "Please input password!"
-                                        }
-                                    ]}
+                                    rules={[{required: !disabled, message: 'Please input password!'}]}
                                 >
-                                    <Input.Password placeholder="Please input password!"/>
+                                    <Input.Password placeholder='Please input password!'/>
                                 </Form.Item>
                                 <Form.Item
                                     style={{ marginBottom: 0, width: '100px' }}
                                 >
-                                    <Button 
-                                        style={{display: "block", width:"100%"}} 
-                                        type="primary"
-                                        onClick={() => generate()}
+                                    <Button
+                                        style={{display: 'block', width:'100%'}}
+                                        type='primary'
+                                        onClick={() => generate_password()}
                                     >
                                         Generate
                                     </Button>
@@ -118,30 +124,28 @@ const BasicInfo = ({fileList, setFileList, genPassword, disabled }) => {
                             </Input.Group>
                         </Form.Item>
                         <Form.Item
-                            label="Status"
-                            name="status"
-                            valuePropName="checked"
+                            label='Status'
+                            name='status'
+                            valuePropName='checked'
                             style={{ marginBottom: 0 }}
                         >
-                            <Switch disabled={disabledfield}/>
+                            <Switch disabled={disabledField}/>
                         </Form.Item>
                     </Card>
                 </Col>
                 <Col sm={12}>
-                    <Card size="small" title="User settings" bordered={false} headStyle={{ color: "#1890ff" }}>
+                    <Card size='small' title='User settings' bordered={false} headStyle={{ color: '#1890ff' }}>
                         <Form.Item
-                            label="Role"
-                            name="role_id"
+                            label='Role'
+                            name='role_id'
                             style={{ marginBottom: 8 }}
-                            rules={[
-                                { required: true, message: "Required!" }
-                            ]}
+                            rules={[{ required: true, message: 'Required!' }]}
                         >
                             <Select
                                 showSearch
-                                optionFilterProp="children"
-                                placeholder="Please choose Role!"
-                                disabled={disabledfield}
+                                optionFilterProp='children'
+                                placeholder='Please choose Role!'
+                                disabled={disabledField}
                             >
                                 <Option key={0} value={0}>Default</Option>
                                 {roles && roles.map(item => (
@@ -152,39 +156,36 @@ const BasicInfo = ({fileList, setFileList, genPassword, disabled }) => {
                             </Select>
                         </Form.Item>
                         <Form.Item
-                            label="Type Users"
-                            name="is_publisher"
+                            label='Type Users'
+                            name='is_publisher'
                             style={{ marginBottom: 8 }}
-                            rules={[
-                                { required: true, message: "Required!" }
-                            ]}
+                            rules={[{ required: true, message: 'Required!' }]}
                         >
                             <Select
-                                optionFilterProp="children"
-                                placeholder="Please choose Type Users!"
-                                disabled={disabledfield}
+                                optionFilterProp='children'
+                                placeholder='Please choose Type Users!'
+                                disabled={disabledField}
                             >
-                                {/* {account_type && account_type.map(item => (
+                                {account_type && account_type.map(item => (
                                     <Option key={item.value} value={item.value}>
                                         {item.text}
                                     </Option>
-                                ))} */}
-                                <Select.Option value={0}>Internal</Select.Option>
+                                ))}
                             </Select>
                         </Form.Item>
                         <Form.Item
                             label="User's type"
-                            name="type"
+                            name='type'
                             style={{ marginBottom: 8 }}
                             rules={[
-                                { required: true, message: "Required!" }
+                                { required: true, message: 'Required!' }
                             ]}
                         >
                             <Select
                                 showSearch
-                                optionFilterProp="children"
+                                optionFilterProp='children'
                                 placeholder="Please choose User's type!"
-                                disabled={disabledfield}
+                                disabled={disabledField}
                             >
                                 {users_type && users_type.map(item => (
                                     <Option key={item.value} value={item.value}>
@@ -194,13 +195,13 @@ const BasicInfo = ({fileList, setFileList, genPassword, disabled }) => {
                             </Select>
                         </Form.Item>
                         {/* <Form.Item
-                            label="CC Mails"
-                            name="cc_mails"
+                            label='CC Mails'
+                            name='cc_mails'
                             style={{ marginBottom: 8 }}
-                            extra="use ',' between mails."
+                            extra='use ',' between mails.'
                         >
                             <Input
-                                placeholder="Please input email!"
+                                placeholder='Please input email!'
                                 disabled={disabledfield}
                             />
                         </Form.Item> */}
@@ -209,25 +210,25 @@ const BasicInfo = ({fileList, setFileList, genPassword, disabled }) => {
             </Row>
             <Row gutter={[16, 8]}>
                 <Col sm={12}>
-                    <Card size="small" title="Avatar" bordered={false} headStyle={{ color: "#1890ff" }}>
+                    <Card size='small' title='Avatar' bordered={false} headStyle={{ color: '#1890ff' }}>
                         <Form.Item
-                            name="avatar"
-                            valuePropName="file"
-                            getValueFromEvent={normFile}
+                            name='avatar'
+                            valuePropName='file'
+                            getValueFromEvent={normFile} // Specify how to get value from event or other onChange arguments
                         >
                             <Dragger
-                                accept="image/*"
+                                accept='image/*'
                                 fileList={fileList}
                                 customRequest={dummyRequest}
-                                listType="picture"
+                                listType='picture'
                             >
-                                <p className="ant-upload-drag-icon">
+                                <p className='ant-upload-drag-icon'>
                                     <InboxOutlined />
                                 </p>
-                                <p className="ant-upload-text">
+                                <p className='ant-upload-text'>
                                     Click or drag file to this area
                                 </p>
-                                <p className="ant-upload-hint">
+                                <p className='ant-upload-hint'>
                                     Support for a single or bulk upload.<br />Strictly
                                     prohibit from uploading company data or other
                                     band files

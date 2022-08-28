@@ -1,11 +1,10 @@
 require('./bootstrap');
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Index }                    from './components/ViewDefault/Index';
 import CoreContextProvicer          from './components/Contexts/CoreContext';
 import App                          from './components/App/App';
-import { Suspense } from 'react';
 
 window.React = React;
 window.winter = typeof window.winter === 'object' ? window.winter : {};

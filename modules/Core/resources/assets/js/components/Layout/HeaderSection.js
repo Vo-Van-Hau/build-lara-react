@@ -1,7 +1,5 @@
-import React, { Fragment } from 'react';
 import { Layout, Menu } from 'antd';
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
-
 const { Header } = Layout;
 
 const HeaderSection = ({...props}) => {
@@ -42,14 +40,14 @@ const HeaderSection = ({...props}) => {
     ]; // submenu keys of first level
 
     return (
-        <Fragment>
+        <>
             <Header style={{color: '#FFFFFF', paddingLeft: '0px', paddingRight: '0px'}} theme='light'>
                 <Menu
                     mode='horizontal'
                     items={items}
                 />
             </Header>
-        </Fragment>
+        </>
     )
 }
 export default HeaderSection;

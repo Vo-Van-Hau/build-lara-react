@@ -26,12 +26,14 @@ npm run build-by-webpack --source={resource} --module={module}
 3. acl_role: php artisan migrate --path=modules\Users\database\migrations\2022_08_21_183620_create_acl_role_table.php
 4. groups: php artisan migrate --path=modules\Users\database\migrations\2022_08_22_095100_create_groups_table.php
 5. user_group: php artisan migrate --path=modules\Users\database\migrations\2022_08_22_100128_create_user_group_table.php
+6. publishers: php artisan migrate --path=modules\Publishers\database\migrations\2022_08_28_043811_create_publishers_table.php
+7. user_publisher: php artisan migrate --path=modules\Users\database\migrations\2022_08_28_081632_create_user_publisher_table.php
 
 ## MongoDB and Laravel Integration:
-1. the mongodb extension (Link download MongoDB driver for PHP: https://pecl.php.net/package/mongodb) is enabled in your php.ini file. 
+1. The mongodb extension (Link download MongoDB driver for PHP: https://pecl.php.net/package/mongodb) is enabled in your php.ini file. 
 - Find the .dll file. Copy it to the ext directory of your XAMPP installation (C:\xampp\php\ext)
 - Run command "php -i|findstr "Thread" (on Windows) or command "php -i|grep Thread" (on *nix) to check the version of installed PHP Thread safe or Non Thread Safe.
 - Add the following line to your php.ini file: 
         extension=mongodb.so OR extension=php_mongodb.dll
-2. run the following command from your Laravel project directory in order to add the MongoDB package for Laravel:
+2. Run the following command from your Laravel project directory in order to add the MongoDB package for Laravel:
         composer require jenssegers/mongodb:3.8

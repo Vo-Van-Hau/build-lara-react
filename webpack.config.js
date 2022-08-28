@@ -42,6 +42,22 @@ var _cleanWebpackPlugin = _interopRequireDefault(
     require('clean-webpack-plugin')
 );
 
+/**
+ * @note
+ */
+var required_externals = {
+    /**
+     * Some bug:
+     * - Hooks can only be called inside the body of a function component.
+     */
+    react: 'React',
+    'react-dom/client': 'ReactDOM'
+};
+
+if(module_name === 'core' || module_name === 'auth') {
+    required_externals = {};
+}
+
 module.exports = {
     mode: global.process.env.NODE_ENV ? global.process.env.NODE_ENV : 'development',
     devtool: process.argv.find((x) => x.toLowerCase() === '--nomap') ? false : 'source-map',
@@ -60,14 +76,7 @@ module.exports = {
         },
         clean: true,
     },
-    externals: {
-        /**
-         * Some bug:
-         * - Hooks can only be called inside the body of a function component.
-         */
-        react: 'React',
-        'react-dom/client': 'ReactDOM'
-    },
+    externals: required_externals,
     resolve: {
         extensions: ['.js', '.jsx', '.css', '.scss'],
     },

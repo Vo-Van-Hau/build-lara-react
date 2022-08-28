@@ -27,9 +27,11 @@ class ControllerBase extends Controller {
      * @param int $status
      * @return void
      */
-    protected function response_base($data = [], $message = "", $status = 200) {
+    protected function response_base($data = [
+        "status" => true
+    ], $message = "", $status = 200, $status_response = true) {
         return response()->json([
-            "status" => intval($status) == 200 ? true : false,
+            "status" => $data["status"],
             "message"  => $message,
             "data" => $data
         ], $status);

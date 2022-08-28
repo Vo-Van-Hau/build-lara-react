@@ -1,7 +1,7 @@
-import React, { Fragment, useContext } from 'react';
+import { useContext } from 'react';
 import _ from 'lodash';
 import { CoreContext } from '../Contexts/CoreContext';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import InjectedModuleView from '../PluginInjection/InjectedModuleView';
 import helper from '../../helpers/helper';
 
@@ -17,7 +17,8 @@ const ModuleView = ({ history, ...props }) => {
     const {} = props;
     const { modules } = data;
     const { capitalize_first_letter } = helper;
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
     const { moduleName, controllerName } = useParams();
 
     if (!modules) return null;
@@ -32,13 +33,15 @@ const ModuleView = ({ history, ...props }) => {
             controllerName={controllerName}
             version={module.version}
             history={history}
+            searchParams={searchParams}
+            navigate={navigate}
         />
     ) : <>There's nothing here!</>;
 
     return (
-        <Fragment>
+        <>
             { contents }
-        </Fragment>
+        </>
     );
 };
 
