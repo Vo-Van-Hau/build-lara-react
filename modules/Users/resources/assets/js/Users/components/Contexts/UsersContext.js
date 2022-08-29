@@ -126,11 +126,11 @@ const UsersContextProvicer = ({ children, axios, history, config, navigate }) =>
      */
     const setRouter = (action, id = '') => {
         set_mouted(true);
-        let paseURL = window.sparrowConfig.app.adminPrefix ? '/' + window.sparrowConfig.app.adminPrefix : '';
-        paseURL += `/users/users`;
-        let paseACT = action ? `?action=${action}` : ``;
-        let paseKeyID = id ? `&id=${id}` : ``;
-        return navigate(`${paseURL}${paseACT}${paseKeyID}`, { replace: true });
+        let parseURL = window.sparrowConfig.app.adminPrefix ? '/' + window.sparrowConfig.app.adminPrefix : '';
+        parseURL += `/users/users`;
+        let parseACT = action ? `?action=${action}` : ``;
+        let parseKeyID = id ? `&id=${id}` : ``;
+        return navigate(`${parseURL}${parseACT}${parseKeyID}`, { replace: true });
     }
 
     // const setForm = () => {

@@ -28,4 +28,22 @@ class ModuleController extends ControllerBase {
     public function index() {
         return response()->json([], 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param: \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_config(Request $request) {
+        if($request->isMethod("post")) {
+            $data = [
+                "config" => [
+                    "status" => Config::get("module.module.status_list", []),
+                ]
+            ];
+            return response()->json($data, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }

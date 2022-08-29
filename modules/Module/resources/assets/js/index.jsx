@@ -1,6 +1,4 @@
-import Overview from './Overview';
-import Daily from './Daily';
+import Builder from './Builder';
 
-export default Overview;
-export { Overview as overview }
-export { Daily as daily }
+export default Builder;
+export { Builder as builder };

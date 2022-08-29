@@ -24,13 +24,20 @@
     },
     "menu": {
         "Module": {
-            "name": "Module Builder",
-            "link": "/module",
+            "name": "Module Management",
             "icon": "fas fa-solar-panel",
             "controller": "Module",
             "group": "systems",
             "position": 2,
-            "child": {}
+            "child": [
+                {
+                    "name": "Module Builder",
+                    "link": "\/module\/builder",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Module"
+                }
+            ]
         }
     },
     "status": true

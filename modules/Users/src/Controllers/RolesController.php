@@ -90,7 +90,7 @@ class RolesController extends ControllerBase {
                 return $this->response_base(["status" => false], "Role name already exists !!!", 200);
             }
             $result = $this->RolesRepository->store($input);
-            if ($result) return $this->response_base(["status" => false, $result], "You storage new item successfully !!!", 200);
+            if ($result) return $this->response_base(["status" => true, $result], "You storage new item successfully !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }

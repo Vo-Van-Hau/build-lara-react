@@ -26,6 +26,7 @@ export const initialState = {
     visible: false,
     mouted: true
 }
+
 export const UsersReducer = (state = initialState, action) => {
     let { type, payload } = action;
     switch (type) {

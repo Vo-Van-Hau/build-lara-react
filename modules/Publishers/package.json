@@ -10,7 +10,7 @@
     "dependencies": {},
     "devDependencies": {},
     "component": {
-        "Publishers": true,
+        "Publishers": true
     },
     "menu": {
         "Publishers": {
