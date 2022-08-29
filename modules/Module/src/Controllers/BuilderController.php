@@ -183,7 +183,7 @@ class BuilderController extends ControllerBase {
     public function create_module(Request $request) {
         if($request->isMethod("post")) {
             $input = $request->all();
-            $name = isset($input["name"]) ? trim($input["name"]) : null;
+            $name = isset($input["name"]) ? strtolower(trim($input["name"])) : null;
             if(is_null($name)) return $this->response_base(["status" => false], "You have failed to create new module!!!", 200);
             $validator = Validator::make($input, array(
                 "name" => "required",
@@ -192,7 +192,7 @@ class BuilderController extends ControllerBase {
             /**
              * @todo: create <Module> folder
              */
-            $module_name = ucfirst(strtolower($name));
+            $module_name = ucfirst($name);
             $current_datetime = date("Y-m-d");
             $path = Core::module_path();
             $module_path = $path . $module_name;
@@ -327,6 +327,164 @@ class BuilderController extends ControllerBase {
              */
             $model_path = $module_path . "/src/Models";
             if (!is_dir($model_path)) mkdir($model_path, 0777, true);
+            /**
+             * @todo: create <Providers> folder in module
+             */
+            $provider_path = $module_path . "/src/Providers";
+            if (!is_dir($provider_path)) mkdir($provider_path, 0777, true);
+            $providers_file = [
+                0 => $provider_path . "/" . $module_name . "RouteServiceProviderController.php",
+                1 => $provider_path . "/" . $module_name . "ServiceProvider.php"
+            ];
+            foreach ($providers_file as $key => $provider_file) {
+                if (!is_file($provider_file)) {
+                    $file = fopen($provider_file, "w"); // used to create a file
+                    if($key == 0) {
+                        $content = <<<EOD
+                            <?php
+
+                            namespace Modules\\{$module_name}\\Providers;
+
+                            use Illuminate\Cache\RateLimiting\Limit;
+                            use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+                            use Illuminate\Http\Request;
+                            use Illuminate\Support\Facades\RateLimiter;
+                            use Illuminate\Support\Facades\Route;
+                            use Illuminate\Support\Facades\Config;
+
+                            class {$module_name}RouteServiceProvider extends RouteServiceProvider {
+
+                                /**
+                                 * The path to the "admin" route for your application.
+                                 *
+                                 * This is used by Laravel authentication to redirect users after login.
+                                 *
+                                 * @var string
+                                 */
+                                public const ADMIN = "/admin";
+
+                                /**
+                                 * The controller namespace for the application.
+                                 *
+                                 * When present, controller route declarations will automatically be prefixed with this namespace.
+                                 *
+                                 * @var string|null
+                                 */
+                                // protected \$namespace = 'App\\Http\\Controllers';
+
+                                /**
+                                 * Define your route model bindings, pattern filters, etc.
+                                 *
+                                 * @return void
+                                 */
+                                public function boot() {
+                                    \$this->configureRateLimiting();
+                                    \$this->routes(function () {
+                                        Route::prefix(Config::get("module.core.backend_url"))->group(function() {
+                                            Route::prefix("/")
+                                                ->namespace(\$this->namespace)
+                                                ->group(__DIR__ . "/../Routes/web.php");
+                                            Route::prefix("api")
+                                                ->namespace(\$this->namespace)
+                                                ->group(__DIR__ . "/../Routes/api.php");
+                                        });
+                                    });
+                                }
+
+                                /**
+                                 * Configure the rate limiters for the application.
+                                 *
+                                 * @return void
+                                 */
+                                protected function configureRateLimiting() {
+                                    RateLimiter::for("api", function (Request \$request) {
+                                        return Limit::perMinute(60)->by(optional(\$request->user())->id ?: \$request->ip());
+                                    });
+                                }
+                            }
+                        EOD;
+                    } else {
+                        $content = <<<EOD
+                            <?php
+
+                            namespace Modules\\{$module_name}\\Providers;
+
+                            use Illuminate\Foundation\AliasLoader;
+                            use Illuminate\Support\ServiceProvider;
+                            use Illuminate\Support\Facades\Config;
+
+                            class ModuleServiceProvider extends ServiceProvider {
+
+                                /**
+                                 * @var \Illuminate\Foundation\Application
+                                 */
+                                protected \$app;
+                                protected \$module = "{$module_name}";
+                                protected \$models = [
+                                    "{$module_name}" => [
+                                        "name" => "{$module_name}",
+                                        "status" => "active",
+                                    ]
+                                ];
+
+                                /**
+                                 * Bootstrap the application events.
+                                 *
+                                 * @return void
+                                 */
+                                public function boot() {
+
+                                    /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
+                                    * You may do this using the service provider's loadViewsFrom method.
+                                    */
+                                    \$this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("module.{$name}.namespace", "{$module_name}"));
+
+                                    // Load Lang
+                                    \$this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("module.{$name}.namespace", "{$module_name}"));
+
+                                    // Load migrations
+                                    \$this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
+
+                                    \$this->publishResources();
+
+                                    \$this->commands([]);
+                                }
+
+                                /**
+                                 * @author <vanhau.vo@urekamedia.vn>
+                                 * @todo: Register the service provider.
+                                 * @return void
+                                 */
+                                public function register() {
+                                    \$this->app->bind(\$this->module, function (\$app) {
+                                        return \$this->app->make("Modules\\{\$this->module}\\{\$this->module}");
+                                    });
+                                    foreach (\$this->models as \$model) {
+                                        if(\$model["status"] != "active") continue;
+                                        \$this->app->bind(
+                                            "Modules\\\{\$this->module}\Interfaces\\\{\$model["name"]}RepositoryInterface",
+                                            "Modules\\\{\$this->module}\Repositories\Eloquents\\\{\$model["name"]}Repository"
+                                        );
+                                    }
+                                }
+
+                                /**
+                                 * @author <vanhau.vo@urekamedia.vn>
+                                 * @todo: Publish resources.
+                                 * @return void
+                                 */
+                                private function publishResources() {
+
+                                    //Publish Resource
+                                    \$this->publishes([__DIR__ . "/../../config/config.php" => config_path("module/{$name}.php")], "config");
+                                }
+                            }
+                        EOD;
+                    }
+                    fwrite($file, $content); // used to write to a file.
+                    fclose($file);
+                }
+            }
             /**
              * @todo: create <Repositories> folder in module
              */
@@ -516,6 +674,39 @@ class BuilderController extends ControllerBase {
             $path_package = $module_path . "/package.json";
             if (!is_file($path_package)) {
                 file_put_contents($path_package, json_encode($package, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT));
+            }
+             /**
+             * @todo: create webpack.mix.js file in root module
+             */
+            $path_webpack_mix = $module_path . "/webpack.mix.js";
+            if (!is_file($path_webpack_mix)) {
+                $file = fopen($path_webpack_mix, "w");
+                $content = <<<EOD
+                    const mix = require('laravel-mix');
+                    const moduleName = '{$module_name}';
+                    const resourcePath = `./modules/\${moduleName}`;
+                    const publicPath = `./public/themes/backend/modules/\${moduleName.toLowerCase()}`;
+
+                    if(!moduleName) return;
+                    mix.setPublicPath(`\${publicPath}`);
+                    if (mix.inProduction()) {
+                        mix.version();
+                    } else {
+                        mix.sourceMaps();
+                    }
+                    mix
+                        .js(resourcePath + '/resources/assets/js/index.jsx', '/js/index.js')
+                        // .copy(publicPath + '/js/index.js', resourcePath + '/public/js')
+                        .react()
+                    mix
+                        .sass(resourcePath + '/resources/assets/sass/index.scss', '/css')
+                        // .copy(publicPath + '/css/index.css', resourcePath + '/public/css')
+                    if (mix.inProduction()) {
+                        mix.disableNotifications();
+                    }
+                EOD;
+                fwrite($file, $content);
+                fclose($file);
             }
             /**
              * @todo: create <metadata> folder in module

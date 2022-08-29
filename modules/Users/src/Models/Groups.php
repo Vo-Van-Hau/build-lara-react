@@ -22,7 +22,7 @@ class Groups extends ModelBase {
     }
 
     public function parent_group(){
-        return $this->belongsTo("\Modules\Users\Models\Groups", "parent_group_id",);
+        return $this->belongsTo("\Modules\Users\Models\Groups", "parent_group_id");
     }
 
     public function users(){

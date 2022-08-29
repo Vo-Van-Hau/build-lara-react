@@ -30,10 +30,10 @@ class ModuleServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("module.users.namespace", "Module"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("module.module.namespace", "Module"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("module.users.namespace", "Module"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("module.module.namespace", "Module"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
