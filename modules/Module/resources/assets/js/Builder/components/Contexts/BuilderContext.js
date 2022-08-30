@@ -50,7 +50,7 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get databases by module
+     * @todo: get table by module
      * @param {Object} values
      * @return {void}
      */
@@ -83,39 +83,26 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: storage group
+     * @todo: create new table
      * @param {Object} values
      * @return {void}
      */
-    const storage_group = (values) => {
+    const create_table = (values = {}) =>{
         return axios
         .get_secured()
-        .post(`/users/groups/storage`, {...values})
+        .post(`/module/builder/create_table`, {...values});
     }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: update group
+     * @todo: create new column in table SQL
      * @param {Object} values
      * @return {void}
      */
-    const update_group = (values) => {
+    const create_column = (values = {}) => {
         return axios
         .get_secured()
-        .post(`/users/groups/update`, {...values})
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: destroy group
-     * @param {number} id
-     * @return {void}
-     */
-    const destroy_group = (id) => {
-        set_table_loading();
-        return axios
-        .get_secured()
-        .post(`/users/groups/destroy`, {id});
+        .post(`/module/builder/create_column`, {...values});
     }
 
     /**
@@ -162,9 +149,9 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
 
     const todoContextData = {
         data: {...data, config},
-        history, dispatch, get_axios, update_group,
+        history, dispatch, get_axios,
         set_table_loading, set_mouted, get_modules, setRouter, get_databases,
-        get_table, create_module
+        get_table, create_module, create_table, create_column
     };
 
     return (

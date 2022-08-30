@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
-import { BuilderContext } from '../Contexts/BuilderContext';
 import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
-import { EditOutlined, ToolOutlined, ThunderboltOutlined } from '@ant-design/icons'
+import { EditOutlined, ToolOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { BuilderContext } from '../Contexts/BuilderContext';
+import DrawerColumnUpsert from './Drawers/DrawerColumnUpsert';
 import Helper from '../Helper/Helper';
 const { Search } = Input;
 
@@ -9,7 +10,6 @@ const ActionTable = ({keyID, moduleID}) => {
     const { data, set_mouted, set_table_loading, get_table, setRouter } = useContext(BuilderContext);
     const { config, mouted, table, loading_table, pagination } = data;
     const [viewAction, setViewAction] = useState(false);
-    const [viewUsers, setViewUsers] = useState(false);
     const [keySearch, setKeySearch] = useState({
         keyword: null,
         status: null
@@ -31,8 +31,6 @@ const ActionTable = ({keyID, moduleID}) => {
         },
         {
             title: 'Not null',
-            dataIndex: 'name',
-            key: 'name',
             fixed: 'left',
             ellipsis: true,
             render: (_, record) => {
@@ -73,6 +71,14 @@ const ActionTable = ({keyID, moduleID}) => {
         }
     ];
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+     const new_column = () => {
+        setViewAction(true);
+     }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -113,23 +119,12 @@ const ActionTable = ({keyID, moduleID}) => {
                         <Col xs={24} xl={12}>
                             <Button
                                 type="primary"
-                                onClick={() => {new_group()}}
+                                onClick={() => {new_column()}}
                             >
-                                New Table (SQL)
+                                New Column (SQL)
                             </Button>
                         </Col>
-                        <Col xs={24} xl={12}>
-                            <Search placeholder="Search by name !!!"
-                                // onChange={(event) => {
-                                //     let { value } = event.target;
-                                //     setkeySearch({...keySearch, keyword: value});
-                                // }}
-                                // onSearch={()=>{
-                                //     getGroups(1, keySearch);
-                                // }}
-                                // enterButton
-                            />
-                        </Col>
+                        <Col xs={24} xl={12}></Col>
                     </Row>
                 ))}
                 columns={columns}
@@ -141,6 +136,7 @@ const ActionTable = ({keyID, moduleID}) => {
                 onChange={handleTableChange} // Callback executed when pagination, filters or sorter is changed
                 rowKey='name'
             />
+            <DrawerColumnUpsert module={moduleID} table={{...table, name: keyID}} visible={viewAction} setDrawer={setViewAction}/>
         </div>
     );
 }

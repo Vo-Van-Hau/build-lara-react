@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
-import { BuilderContext } from '../Contexts/BuilderContext';
 import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
-import { EditOutlined, ToolOutlined, ThunderboltOutlined } from '@ant-design/icons'
+import { BuilderContext } from '../Contexts/BuilderContext';
+import { EditOutlined, ToolOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import DrawerTableUpsert from '../Actions/Drawers/DrawerTableUpsert';
 import Helper from '../Helper/Helper';
 const { Search } = Input;
 
@@ -10,7 +11,6 @@ const ListDatabase = ({keyID}) => {
     const { config, mouted, databases, loading_table, pagination } = data;
     const [table, setTable] = useState({});
     const [viewAction, setViewAction] = useState(false);
-    const [viewUsers, setViewUsers] = useState(false);
     const [keySearch, setKeySearch] = useState({
         keyword: null,
         status: null
@@ -39,6 +39,24 @@ const ListDatabase = ({keyID}) => {
         }
     ];
 
+     /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+    const new_table = () => {
+        setTable({});
+        setViewAction(true);
+    }
+
+     /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+    const repair_tables = () => {
+        set_table_loading();
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -77,25 +95,12 @@ const ListDatabase = ({keyID}) => {
                 title={(() => (
                     <Row gutter={[8, 8]}>
                         <Col xs={24} xl={12}>
-                            <Button
-                                type="primary"
-                                onClick={() => {new_group()}}
-                            >
-                                New Table (SQL)
-                            </Button>
+                            <Space>
+                                <Button type="primary" onClick={() => {new_table()}}>New Table (SQL)</Button>
+                                <Button type="primary" onClick={() => {repair_tables()}}>Repair Tables</Button>
+                            </Space>
                         </Col>
-                        <Col xs={24} xl={12}>
-                            <Search placeholder="Search by name !!!"
-                                // onChange={(event) => {
-                                //     let { value } = event.target;
-                                //     setkeySearch({...keySearch, keyword: value});
-                                // }}
-                                // onSearch={()=>{
-                                //     getGroups(1, keySearch);
-                                // }}
-                                // enterButton
-                            />
-                        </Col>
+                        <Col xs={24} xl={12}></Col>
                     </Row>
                 ))}
                 columns={columns}
@@ -107,6 +112,7 @@ const ListDatabase = ({keyID}) => {
                 onChange={handleTableChange} // Callback executed when pagination, filters or sorter is changed
                 rowKey='name'
             />
+            <DrawerTableUpsert module={keyID} table={table} visible={viewAction} setDrawer={setViewAction}/>
         </div>
     );
 }

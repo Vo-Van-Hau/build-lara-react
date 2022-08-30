@@ -727,4 +727,212 @@ class BuilderController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: create new table SQL
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function create_table(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $module_name = isset($input["module"]) ? ucfirst($input["module"]) : null;
+            $table_name = isset($input["name"]) ? strtolower($input["name"]) : null;
+            $validator = Validator::make($input, array(
+                "name" => "required",
+                "module" => "required",
+            ));
+            if($validator->fails()) return $this->response_base(["status" => false], trans("Module::module.invalid_credentials"), 200);
+            $module_path = Core::module_path() . $module_name;
+            $current_datetime = date("Y-m-d");
+            if (!empty($input["with_controller"]) && $input["with_controller"]) {
+                /**
+                 * @todo: create <Controllers> folder in module
+                 */
+                $controller_path = $module_path . "/src/Controllers";
+                $controller_name = ucfirst($table_name);
+                if (!is_dir($controller_path)) mkdir($controller_path, 0777, true);
+                $controller_file = $controller_path . "/" . $controller_name . "Controller.php";
+                if (!is_file($controller_file)) {
+                    $file = fopen($controller_file, "w"); // used to create a file
+                    $content = <<<EOD
+                        <?php
+
+                        namespace Modules\\{$module_name}\\Controllers;
+
+                        use Modules\Core\Controllers\ControllerBase;
+
+                        /**
+                         * @author <hauvo1709@gmail.com>
+                         * @package Controller
+                         * @copyright 2022 http://www.cayluaviet.online/
+                         * @license License 1.0
+                         * @version Release: 1.00.000
+                         * @link http://www.docs.v1.cayluaviet.online/
+                         * @since {$current_datetime}
+                         */
+                        class {$controller_name}Controller extends ControllerBase {
+
+                            public function __construct() {
+
+                            }
+
+                            /**
+                             * @author <vanhau.vo@urekamedia.vn>
+                             * @todo:
+                             * @param:
+                             * @return void
+                             */
+                            public function index(){
+                                return response()->json([], 200);
+                            }
+                        }
+                    EOD;
+                    fwrite($file, $content); // used to write to a file.
+                    fclose($file);
+                }
+            }
+            /**
+             * @todo: create <Models> folder in module
+             */
+            $model_path = $module_path . "/src/Models";
+            $model_name = ucfirst($table_name);
+            if (!is_dir($model_path)) mkdir($model_path, 0777, true);
+            $model_file = $model_path . '/' . $model_name . ".php";
+            if (!is_file($model_file)) {
+                $file = fopen($model_file, "w");
+                $content = <<<EOD
+                        <?php
+
+                        namespace Modules\\{$module_name}\\Models;
+
+                        use Modules\Core\Models\ModelBase;
+                        use Illuminate\Database\Eloquent\SoftDeletes;
+
+                        /**
+                         * @author <hauvo1709@gmail.com>
+                         * @package Model
+                         * @copyright 2022 http://www.cayluaviet.online/
+                         * @license License 1.0
+                         * @version Release: 1.00.000
+                         * @link http://www.docs.v1.cayluaviet.online/
+                         * @since {$current_datetime}
+                         */
+                        class {$model_name} extends ModelBase {
+
+                            use SoftDeletes;
+
+                            protected \$connection = "mysql";
+
+                            protected \$table = "{$table_name}";
+
+                            /**
+                             * The attributes that are mass assignable.
+                             *
+                             * @var array
+                             */
+                            protected \$fillable = [];
+                        }
+                    EOD;
+                fwrite($file, $content);
+                fclose($file);
+            }
+                /**
+             * @todo: create <metadata> folder in module
+             */
+            $metadata_path = $module_path . "/metadata";
+            if (!is_dir($metadata_path)) mkdir($metadata_path, 0777, true);
+            /**
+             * @todo: create <databases> folder in module/metadata
+             */
+            $db_dir = $metadata_path . "/databases";
+            if (!is_dir($db_dir)) mkdir($db_dir, 0777, true);
+            /**
+             * @todo: create <layouts> folder in module/metadata
+             */
+            $layout_dir = $metadata_path . "/layouts";
+            if (!is_dir($layout_dir)) mkdir($layout_dir, 0777, true);
+            /**
+             * @todo: create <database_structures> file in module/metadata
+             */
+            $model_name = strtolower($model_name);
+            $data_structures_name = $model_name . "_database_structures.ini.php";
+            $data_structures_file = $db_dir . "/" . $data_structures_name;
+            if (!is_file($data_structures_file)) {
+                $file = fopen($data_structures_file, "w");
+                $content = <<<EOD
+                    <?php
+                    return [
+                        "{$model_name}" => [
+                            'fields' => [],
+                            'indexes' => []
+                        ],
+                    ];
+                EOD;
+                fwrite($file, $content);
+                fclose($file);
+            }
+            return $this->response_base(["status" => true], trans("Module::module.create_database_structures_success"), 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: create new column in table SQL
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function create_column(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $module_name = isset($input["module"]) ? ucfirst($input["module"]) : "";
+            $table_name = isset($input["table"]) ? strtolower($input["table"]) : "";
+            $field_name = isset($input["name"]) ? $input["name"] : "";
+            $field_type = isset($input["type"]) ? $input["type"] : "";
+            $field_size = isset($input["size"]) ? $input["size"] : "";
+            $field_default = isset($input["default"]) ? $input["default"] : "";
+            $not_null = isset($input["not_null"]) ? $input["not_null"] : false;
+            $metadata_path = Core::module_path() . $module_name . "/metadata/databases";
+            $db_file = $metadata_path . "/" . $table_name . '_database_structures.ini.php';
+            $database = array();
+            if (is_file($db_file)) $database = include $db_file;
+            if (empty($field_size)) {
+                if (empty($field_default)) {
+                    $database[$table_name]["fields"][$field_name] = array(
+                        "type" => $field_type,
+                        "not_null" => (bool) $not_null,
+                    );
+                } else {
+                    $database[$table_name]["fields"][$field_name] = array(
+                        "type" => $field_type,
+                        "not_null" => (bool) $not_null,
+                        'default' => $field_default,
+                    );
+                }
+            } else {
+                if (empty($field_default)) {
+                    $database[$table_name]["fields"][$field_name] = array(
+                        "type" => $field_type,
+                        "size" => (int) $field_size,
+                        "not_null" => (bool) $not_null,
+                    );
+                } else {
+                    $database[$table_name]["fields"][$field_name] = array(
+                        "type" => $field_type,
+                        "size" => (int) $field_size,
+                        "not_null" => (bool) $not_null,
+                        "default" => $field_default,
+                    );
+                }
+            }
+            $export[$table_name] = $database[$table_name];
+            $file = fopen($db_file, "w");
+            fwrite($file, "<?php\n\n return " . var_export($export, true) . ";\n");
+            fclose($file);
+            return $this->response_base(["status" => true], trans("Module::module.save_field_success"), 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }

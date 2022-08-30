@@ -1,10 +1,11 @@
 import React,{ useContext, useState ,useEffect } from 'react';
-import { BuilderContext } from '../Contexts/BuilderContext';
-import Helper from '../Helper/Helper';
-import { Drawer, Button, Spin, Form, Input } from 'antd';
+import { BuilderContext } from '../../Contexts/BuilderContext';
+import Helper from '../../Helper/Helper';
+import { Drawer, Button, Spin, Form, Input, Checkbox } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
-const ActionModule = ({module, visible, setDrawer}) => {
-    const { data, create_module, get_modules } = useContext(BuilderContext);
+const DrawerTableUpsert = ({module, table, visible, setDrawer}) => {
+    const { data, create_table, get_databases } = useContext(BuilderContext);
     const { config } = data;
     const [ loading, setLoading ] = useState(false);
     const [form] = Form.useForm();
@@ -39,15 +40,15 @@ const ActionModule = ({module, visible, setDrawer}) => {
      */
     const requestCreating = (values) => {
         setLoading(true);
-        create_module(values).then((res) => {
-            console.log(res);
+        values.module = module;
+        create_table(values).then((res) => {
             let { status, message } = res.data;
             if(status) {
                 onClose();
-                get_modules();
-                Helper.Notification('success', '[Create Module]', message);
+                get_databases(module);
+                Helper.Notification('success', '[Create Table]', message);
             } else {
-                Helper.Notification('success', '[Create Module]', message);
+                Helper.Notification('success', '[Create Table]', message);
             }
         })
         .catch((errors) => {})
@@ -71,7 +72,7 @@ const ActionModule = ({module, visible, setDrawer}) => {
 
     return(
         <Drawer
-            title={<h6>{'New Module'}</h6>}
+            title={<h6>{'New Table'}</h6>}
             width={520}
             closable={false}
             onClose={onClose}
@@ -90,16 +91,24 @@ const ActionModule = ({module, visible, setDrawer}) => {
             <Spin tip="Loading..." spinning={loading}>
                 <Form form={form} layout="vertical">
                     <Form.Item
-                        label={<><span>Module Name (ex: Accounts)</span></>}
+                        label={<><span>Table Name (ex: users)</span></>}
                         name="name"
                         rules={[{ required: true, message: 'Please input name!' }]}
                     >
                         <Input placeholder="Please input name!"/>
                     </Form.Item>
+                    <Form.Item
+                        label={<><span style={{marginRight: 8}}>Options</span><QuestionCircleOutlined /></>}
+                        name="with_controller"
+                        valuePropName="checked"
+                    >
+                        <Checkbox>Create table with controller</Checkbox>
+                    </Form.Item>
+
                 </Form>
             </Spin>
         </Drawer>
     );
 }
 
-export default ActionModule;
+export default DrawerTableUpsert;
