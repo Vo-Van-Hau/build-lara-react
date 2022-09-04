@@ -6,6 +6,9 @@ use Modules\Core\Controllers\ControllerBase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Modules\Core\Core;
 
 /**
@@ -126,7 +129,7 @@ class BuilderController extends ControllerBase {
                     $databases[] = [
                         "module" => ucfirst($module),
                         "name" => strtolower($model_name),
-                        "is_checked" => false,
+                        "is_checked" => true,
                         "translate" => $translate,
                     ];
                 }
@@ -908,7 +911,7 @@ class BuilderController extends ControllerBase {
                     $database[$table_name]["fields"][$field_name] = array(
                         "type" => $field_type,
                         "not_null" => (bool) $not_null,
-                        'default' => $field_default,
+                        "default" => $field_default,
                     );
                 }
             } else {
@@ -934,5 +937,314 @@ class BuilderController extends ControllerBase {
             return $this->response_base(["status" => true], trans("Module::module.save_field_success"), 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: repair tables belong to module
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function repair_tables(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $validator = Validator::make($input, array(
+                "module" => "required",
+                "tables" => "required",
+            ));
+            if($validator->fails()) return $this->response_base(["status" => false], trans("Module::module.invalid_credentials"), 200);
+            /**
+             * @description: Set the number of seconds a script is allowed to run. If this is reached, the script returns a fatal error.
+             * The default limit is 30 seconds or, if it exists, the max_execution_time value defined in the php.ini
+             */
+            set_time_limit(100000);
+            $tables = isset($input["tables"]) ? $input["tables"] : array();
+            $module_path = Core::module_path() . ucfirst($input["module"]);
+            $databases = array();
+            foreach ($tables as $table) {
+                if (!empty($table["is_checked"]) && (bool) $table["is_checked"] == true) {
+                    $path = $module_path . "/metadata/databases/" . strtolower($table["name"]) . "_database_structures.ini.php";
+                    $db_tmp = include $path;
+                    $databases = array_merge($databases, $db_tmp);
+                }
+            }
+            $tables = $databases;
+            $table_name = "";
+            foreach ($tables as $key => $table_data) {
+                $table_name = $key;
+                $table_language = [];
+                $indexes_language = [];
+                $table_language_name = $table_name . "_translations";
+                if(!empty($table_data["translate"]) && $table_data["translate"] == true) {
+                    // extra table language
+                    foreach ($table_data["fields"] as $key_field => $field) {
+                        if (!empty($field["language"]) && $field["language"] == true) {
+                            $table_language[$key_field] = $field;
+                            unset($table_data["fields"][$key_field]);
+                        }
+                    }
+                }
+                if(!empty($table_language)) {
+                    $pk_name = $key . "_id";
+                    $table_language[$pk_name] = [
+                        "type" => "INTEGER",
+                        "size" => 11,
+                        "default" => 0,
+                        "not_null" => false,
+                    ];
+                    $table_language["locale"] = [
+                        "type" => "VARCHAR",
+                        "size" => 50,
+                        "default" => 0,
+                        "not_null" => false,
+                    ];
+                    // $this->process_repair_table($table_language_name, $table_language);
+                }
+                $this->process_repair_table(
+                    $table_name,
+                    isset($table_data["fields"]) ? $table_data["fields"] : [],
+                    !empty($table_data["indexes"]) ? $table_data["indexes"] : []
+                );
+            }
+            return $this->response_base(["status" => true], trans("Module::module.repair_database_success"), 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param string $table_name
+     * @param array $fields
+     * @param array $indexes
+     * @return void
+     */
+    protected function process_repair_table($table_name, $fields, $indexes = []) {
+        $new_columns = array(
+            "columns" => array(
+                "user_owner_id" => array(
+                    "type" => "INTEGER",
+                    "default" => 0,
+                    "not_null" => false,
+                ),
+                "user_created_id" => array(
+                    "type" => "INTEGER",
+                    "default" => 0,
+                    "not_null" => false,
+                ),
+                "user_updated_id" => array(
+                    "type" => "INTEGER",
+                    "default" => 0,
+                    "not_null" => false,
+                ),
+                "deleted" => array(
+                    "type" => "BOOLEAN",
+                    "size" => 1,
+                    "default" => 0,
+                    "not_null" => true,
+                ),
+                "deleted_at" => array(
+                    "type" => "DATETIME",
+                    "not_null" => false,
+                ),
+            ),
+            "indexes" => array(),
+        );
+        $exists = Schema::connection("mysql")->hasTable($table_name);
+        if($exists) {
+            $current_fields = Schema::connection("mysql")->getColumnListing($table_name);
+            $data_fields = array_merge($new_columns["columns"], $fields);
+            foreach($data_fields as $field_name => $options) {
+                if(Schema::connection("mysql")->hasColumn($table_name, $field_name)) {
+                    Schema::connection("mysql")->table($table_name, function(Blueprint $table) use ($field_name, $options) {
+                        $this->detect_field($table, $field_name, $options, "update");
+                    });
+                } else {
+                    Schema::connection("mysql")->table($table_name, function(Blueprint $table) use ($field_name, $options) {
+                        $this->detect_field($table, $field_name, $options, "create");
+                    });
+                }
+            }
+            if(!empty($indexes)) {
+                foreach ($indexes as $index => $index_data) {
+                    Schema::connection("mysql")->table($table_name, function(Blueprint $table) use ($table_name, $index, $index_data) {
+                        $keyExists = DB::select(DB::raw("SHOW KEYS FROM " . $table_name . "WHERE Key_name=\"" . $index_data["name"] . "\""));
+                        if (strtolower($index_data["type"]) == "primary") {
+                            // $table->dropPrimary($table_name.'_id_primary');
+                            // $table->primary($index_data);
+                        } else if (strtolower($index_data["type"]) == "unique") {
+                            if(!empty($keyExists)) {
+                                $table->dropUnique($index_data["name"]);
+                            }
+                            $table->unique($index_data["fields"], $index_data["name"]);
+                        } else if(strtolower($index_data["type"]) == "index") {
+                            if(!empty($keyExists)) {
+                                $table->dropIndex($index_data["name"]);
+                            }
+                            // $table->index($index_data['fields'],$index_data['name']);
+                        }
+                    });
+                }
+            }
+        } else {
+            $new_field = array_merge($new_columns["columns"], $fields);
+            Schema::connection("mysql")->create($table_name, function(Blueprint $table) use ($new_field) {
+                $table->increments("id");
+                $table->timestamps();
+                foreach($new_field as $key => $value) {
+                    $this->detect_field($table, $key, $value, "create");
+                }
+            });
+            if(!empty($indexes)) { // @param array $indexes
+                $new_indexes = array_merge($new_columns["indexes"], $indexes);
+            } else {
+                $new_indexes = $new_columns["indexes"];
+            }
+            Schema::connection("mysql")->table($table_name, function(Blueprint $table) use ($new_indexes) {
+                foreach ($new_indexes as $index => $index_data) {
+                    if(strtolower($index_data["type"]) == "primary") {
+                        $table->primary($index_data["fields"], $index_data["name"]);
+                    } else if (strtolower($index_data["type"]) == "unique") {
+                        $table->unique($index_data["fields"], $index_data["name"]);
+                    } else if (strtolower($index_data["type"]) == "index") {
+                        $table->index($index_data["fields"], $index_data["name"]);
+                    } else if (strtolower($index_data["type"]) == "insrements") {}
+                }
+            });
+        }
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param [type] $table
+     * @param [type] $key
+     * @param array $value
+     * @param string $type
+     * @return void
+     */
+    protected function detect_field($table, $key, $value, $type) {
+        if ($type == "create") {
+            switch ($value["type"]) {
+                case "INTEGER":
+                    if(!empty($value["default"])) {
+                        $value["default"] = (int) $value["default"];
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->integer($key)->default($value["default"])->unsigned() : $table->integer($key)->default($value["default"])->nullable()->unsigned())
+                            : ($value["not_null"] ? $table->integer($key)->default($value["default"]) : $table->integer($key)->default($value["default"])->nullable());
+                    } else {
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->integer($key)->unsigned() : $table->integer($key)->nullable()->unsigned())
+                            : ($value["not_null"] ? $table->integer($key) : $table->integer($key)->nullable());
+                    }
+                    break;
+                case "BIGINT":
+                    if(!empty($value["default"])) {
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->bigInteger($key)->default($value["default"])->unsigned() : $table->bigInteger($key)->default($value["default"])->nullable()->unsigned())
+                            : ($value["not_null"] ? $table->bigInteger($key)->default($value["default"]) : $table->bigInteger($key)->default($value["default"])->nullable());
+                    } else {
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->bigInteger($key)->unsigned() : $table->bigInteger($key)->nullable()->unsigned())
+                            : ($value["not_null"] ? $table->bigInteger($key) : $table->bigInteger($key)->nullable());
+                    }
+                    break;
+                case "BOOLEAN":
+                    if(isset($value["default"])) {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->boolean($key)->default($value["default"])) : ($table->boolean($key)->default($value["default"])->nullable());
+                    } else {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->boolean($key)) : ($table->boolean($key)->default($value["default"])->nullable());
+                    }
+                    break;
+                case "VARCHAR":
+                    if(isset($value["default"])) {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->string($key, $value['size'])->default($value["default"])) : ($table->string($key, $value['size'])->default($value["default"])->nullable());
+                    } else {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->string($key, $value['size'])) : ($table->string($key, $value['size'])->nullable());
+                    }
+                    break;
+                case "TEXT":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->text($key)) : ($table->text($key)->nullable());
+                    break;
+                case "TOKEN":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->rememberToken($key)) : ($table->rememberToken($key)->nullable());
+                    break;
+                case "DATE":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->date($key)) : ($table->date($key)->nullable());
+                    break;
+                case "DATETIME":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->dateTime($key)) : ($table->dateTime($key)->nullable());
+                    break;
+                case "CHAR":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->char($key)) : ($table->char($key)->nullable());
+                    break;
+                case "JSON":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->json($key)) : ($table->json($key)->nullable());
+                    break;
+                case "FLOAT":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->float($key)) : ($table->float($key)->nullable());
+                    break;
+            }
+        } else if ($type == "update") {
+            switch ($value["type"]) {
+                case "INTEGER":
+                    if(!empty($value["default"])) {
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->integer($key)->default($value["default"])->unsigned()->change() : $table->integer($key)->default($value["default"])->nullable()->unsigned()->change())
+                            : ($value["not_null"] ? $table->integer($key)->default($value["default"])->change() : $table->integer($key)->default($value["default"])->nullable()->change());
+                    } else {
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->integer($key)->unsigned()->change() : $table->integer($key)->nullable()->unsigned()->change())
+                            : ($value["not_null"] ? $table->integer($key)->change() : $table->integer($key)->nullable()->change());
+                    }
+                    break;
+                case "BIGINT":
+                    if(!empty($value["default"])) {
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->bigInteger($key)->default($value["default"])->unsigned()->change() : $table->bigInteger($key)->default($value["default"])->nullable()->unsigned()->change())
+                            : ($value["not_null"] ? $table->bigInteger($key)->default($value["default"])->change() : $table->bigInteger($key)->default($value["default"])->nullable()->change());
+                    } else {
+                        (!empty($value["unsigned"]) && $value["unsigned"] == true) ?
+                            ($value["not_null"] ? $table->bigInteger($key)->unsigned()->change() : $table->bigInteger($key)->nullable()->unsigned()->change())
+                            : ($value["not_null"] ? $table->bigInteger($key)->change() : $table->bigInteger($key)->nullable()->change());
+                    }
+                    break;
+                case "BOOLEAN":
+                    if(isset($value["default"])) {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->boolean($key)->default($value["default"])->change()) : ($table->boolean($key)->default($value["default"])->nullable()->change());
+                    } else {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->boolean($key)->change()) : ($table->boolean($key)->default($value["default"])->nullable()->change());
+                    }
+                    break;
+                case "VARCHAR":
+                    if(isset($value["default"])) {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->string($key, $value['size'])->default($value["default"])->change()) : ($table->string($key, $value['size'])->default($value["default"])->nullable()->change());
+                    } else {
+                        (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->string($key, $value['size'])->change()) : ($table->string($key, $value['size'])->nullable()->change());
+                    }
+                    break;
+                case "TEXT":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->text($key)->change()) : ($table->text($key)->nullable()->change());
+                    break;
+                case "TOKEN":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->rememberToken($key)->change()) : ($table->rememberToken($key)->nullable()->change());
+                    break;
+                case "DATE":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->date($key)->change()) : ($table->date($key)->nullable()->change());
+                    break;
+                case "DATETIME":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->dateTime($key)->change()) : ($table->dateTime($key)->nullable()->change());
+                    break;
+                case "CHAR":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->char($key)->change()) : ($table->char($key)->nullable()->change());
+                    break;
+                case "JSON":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->json($key)->change()) : ($table->json($key)->nullable()->change());
+                    break;
+                case "FLOAT":
+                    (!empty($value["not_null"]) && $value["not_null"] == true) ? ($table->float($key)->change()) : ($table->float($key)->nullable()->change());
+                    break;
+            }
+        }
     }
 }

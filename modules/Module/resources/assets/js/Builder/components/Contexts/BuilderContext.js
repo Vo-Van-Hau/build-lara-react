@@ -105,6 +105,12 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
         .post(`/module/builder/create_column`, {...values});
     }
 
+    const repair_tables = (values) => {
+        return axios
+        .get_secured()
+        .post(`/module/builder/repair_tables`, {...values});
+    }
+
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: set table loading...
@@ -151,7 +157,7 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
         data: {...data, config},
         history, dispatch, get_axios,
         set_table_loading, set_mouted, get_modules, setRouter, get_databases,
-        get_table, create_module, create_table, create_column
+        get_table, create_module, create_table, create_column, repair_tables
     };
 
     return (

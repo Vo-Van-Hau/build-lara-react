@@ -7,8 +7,8 @@ import Helper from '../Helper/Helper';
 const { Search } = Input;
 
 const ListDatabase = ({keyID}) => {
-    const { data, set_mouted, set_table_loading, get_databases, setRouter } = useContext(BuilderContext);
-    const { config, mouted, databases, loading_table, pagination } = data;
+    const { data, set_mouted, set_table_loading, get_databases, setRouter, repair_tables } = useContext(BuilderContext);
+    const { mouted, databases, loading_table, pagination } = data;
     const [table, setTable] = useState({});
     const [viewAction, setViewAction] = useState(false);
     const [keySearch, setKeySearch] = useState({
@@ -54,8 +54,21 @@ const ListDatabase = ({keyID}) => {
      * @todo:
      * @return {void}
      */
-    const repair_tables = () => {
+    const handle_repair_tables = () => {
         set_table_loading();
+        repair_tables({
+            module: keyID,
+            tables: databases
+        })
+        .then((res) => {
+            let { status, message } = res.data;
+            if (status) {
+                Helper.Notification('success', '[Repair Tables]', message);
+            } else {
+                Helper.Notification('error', '[Repair Tables]', message);
+            }
+        })
+        .finally(() => set_table_loading());
     }
 
     /**
@@ -97,7 +110,7 @@ const ListDatabase = ({keyID}) => {
                         <Col xs={24} xl={12}>
                             <Space>
                                 <Button type="primary" onClick={() => {new_table()}}>New Table (SQL)</Button>
-                                <Button type="primary" onClick={() => {repair_tables()}}>Repair Tables</Button>
+                                <Button type="primary" onClick={() => {handle_repair_tables()}}>Repair Tables</Button>
                             </Space>
                         </Col>
                         <Col xs={24} xl={12}></Col>
