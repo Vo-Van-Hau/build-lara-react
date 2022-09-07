@@ -987,6 +987,32 @@ class BuilderController extends ControllerBase {
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
+     * @todo: delete an existing column in table SQL
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function delete_column(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $module_name = $request->get("module");
+            $table_name = strtolower($request->get("table"));
+            $field_name = $request->get("field_name");
+            $database_path = Core::module_path() . $module_name . "/metadata/databases";
+            $db_file = $database_path . "/" . $table_name . "_database_structures.ini.php";
+            $database = array();
+            if (is_file($db_file)) $database = include $db_file;
+            unset($database[strtolower($table_name)]["fields"][$field_name]);
+            $export[$table_name] = $database[$table_name];
+            $file = fopen($db_file, "w");
+            fwrite($file, "<?php\n\n return " . var_export($export, true) . ";\n");
+            fclose($file);
+            return $this->response_base(["status" => true], trans("Module::module.delete_field_success"), 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
      * @todo: repair tables belong to module
      * @param \Illuminate\Support\Facades\Request $request
      * @return void

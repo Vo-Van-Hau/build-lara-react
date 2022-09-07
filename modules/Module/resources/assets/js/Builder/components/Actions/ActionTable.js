@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
 import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
-import { EditOutlined, ToolOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { EditOutlined, ToolOutlined, ThunderboltOutlined, DeleteOutlined } from '@ant-design/icons';
 import { BuilderContext } from '../Contexts/BuilderContext';
 import DrawerColumnUpsert from './Drawers/DrawerColumnUpsert';
 import Helper from '../Helper/Helper';
 const { Search } = Input;
 
 const ActionTable = ({keyID, moduleID}) => {
-    const { data, set_mouted, set_table_loading, get_table, setRouter } = useContext(BuilderContext);
+    const { data, set_mouted, set_table_loading, get_table, setRouter, delete_column } = useContext(BuilderContext);
     const { config, mouted, table, loading_table, pagination } = data;
     const [column, setColumn] = useState({});
     const [viewAction, setViewAction] = useState(false);
@@ -64,8 +64,12 @@ const ActionTable = ({keyID, moduleID}) => {
                 return (
                     <Space size={5}>
                         <Tooltip title="Edit Column (SQL)">
-                            <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => edit_column(record)}></Button>
+                            <Button size="small" icon={<EditOutlined />} onClick={() => edit_column(record)}></Button>
                         </Tooltip>
+                        <>||</>
+                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => remove_column(record)}>
+                            <Button  size="small" danger icon={<DeleteOutlined />} />
+                        </Popconfirm>
                     </Space>
                 )
             }
@@ -91,6 +95,32 @@ const ActionTable = ({keyID, moduleID}) => {
      const edit_column = (record) => {
         setColumn(record);
         setViewAction(true);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: remove an existed record
+     * @param {Object} record
+     * @return {void}
+     */
+    const remove_column = (record) => {
+        console.log(record);
+        record.module = moduleID ? moduleID : null;
+        record.table = keyID ? keyID : null;
+        record.field_name = record.name ? record.name : null;
+        delete_column(record)
+        .then((res) => {
+            let { status, message } = res.data;
+            if (status) {
+                get_table(keyID, moduleID);
+                Helper.Notification('success', '[Delete Column]', message);
+            } else {
+                Helper.Notification('success', '[Delete Column]', message);
+            }
+            consolr.log(res);
+        })
+        .catch((errors) => {})
+        .finally(() => {});
     }
 
     /**

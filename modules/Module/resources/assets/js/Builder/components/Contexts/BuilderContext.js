@@ -114,7 +114,19 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
     const update_column = (values) => {
         return axios
         .get_secured()
-        .post(`/module/builder/update_column`, {...values})
+        .post(`/module/builder/update_column`, {...values});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: delete column
+     * @param {Object} values
+     * @return {void}
+     */
+    const delete_column = (values) => {
+        return axios
+        .get_secured()
+        .post(`/module/builder/delete_column`, {...values})
     }
 
     const repair_tables = (values) => {
@@ -170,7 +182,7 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
         history, dispatch, get_axios,
         set_table_loading, set_mouted, get_modules, setRouter, get_databases,
         get_table, create_module, create_table, create_column, update_column,
-        repair_tables
+        repair_tables, delete_column
     };
 
     return (
