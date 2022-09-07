@@ -5,8 +5,8 @@ import { Drawer, Button, Spin, Form, Input, Select } from 'antd';
 
 const { Option } = Select;
 
-const DrawerColumnUpsert = ({module, table, visible, setDrawer}) => {
-    const { data, create_column, get_table } = useContext(BuilderContext);
+const DrawerColumnUpsert = ({module, table, column, visible, setDrawer}) => {
+    const { data, create_column, update_column, get_table } = useContext(BuilderContext);
     const { config } = data;
     const [ loading, setLoading ] = useState(false);
     const [form] = Form.useForm();
@@ -28,7 +28,11 @@ const DrawerColumnUpsert = ({module, table, visible, setDrawer}) => {
      */
     const onSave = () => {
         form.validateFields().then((values) => {
-            requestCreating(values);
+            if(column && column.name) {
+                requestUpdating(values);
+            } else {
+                requestCreating(values);
+            }
         })
         .catch((errors) => {});
     }
@@ -57,9 +61,44 @@ const DrawerColumnUpsert = ({module, table, visible, setDrawer}) => {
         .finally(() => {setLoading(false);});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: request for updating
+     * @param {Object} values
+     * @return {void}
+     */
+    const requestUpdating = (values) => {
+        setLoading(true);
+        values.module = module;
+        values.table = table.name ? table.name : null;
+        values.field_name = values.name ? values.name : null;
+        values[values.name] = {
+            type: values.type,
+            size: values.size,
+            not_null: values.not_null,
+            default: values.default
+        };
+        update_column(values)
+        .then((res) => {
+            let { status, message } = res.data;
+            if (status) {
+                onClose();
+                get_table(table.name, module);
+                Helper.Notification('success', '[Update Column]', message);
+            } else {
+                Helper.Notification('success', '[Update Column]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {setLoading(false);});
+    }
+
     useEffect(() => {
         if(visible) {
             form.setFieldsValue({not_null: "false"});
+            if(column && column.name) {
+                form.setFieldsValue({...column});
+            }
         }
     }, [visible]);
 
@@ -111,8 +150,8 @@ const DrawerColumnUpsert = ({module, table, visible, setDrawer}) => {
                         rules={[{ required: true, message: 'required!' }]}
                     >
                         <Select>
-                            <Option value="false">False</Option>
-                            <Option value="true">True</Option>
+                            <Option value={false}>False</Option>
+                            <Option value={true}>True</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item

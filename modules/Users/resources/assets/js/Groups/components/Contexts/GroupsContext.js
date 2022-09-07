@@ -55,7 +55,7 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
     const storage_group = (values) => {
         return axios
         .get_secured()
-        .post(`/users/groups/storage`, {...values})
+        .post(`/users/groups/storage`, {...values});
     }
 
     /**
@@ -67,7 +67,7 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
     const update_group = (values) => {
         return axios
         .get_secured()
-        .post(`/users/groups/update`, {...values})
+        .post(`/users/groups/update`, {...values});
     }
 
     /**

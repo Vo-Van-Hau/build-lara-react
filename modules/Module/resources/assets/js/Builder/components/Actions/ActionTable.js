@@ -9,6 +9,7 @@ const { Search } = Input;
 const ActionTable = ({keyID, moduleID}) => {
     const { data, set_mouted, set_table_loading, get_table, setRouter } = useContext(BuilderContext);
     const { config, mouted, table, loading_table, pagination } = data;
+    const [column, setColumn] = useState({});
     const [viewAction, setViewAction] = useState(false);
     const [keySearch, setKeySearch] = useState({
         keyword: null,
@@ -59,11 +60,11 @@ const ActionTable = ({keyID, moduleID}) => {
             title: 'Actions',
             dataIndex: 'actions',
             key: 'actions',
-            render: (_, table) => {
+            render: (_, record) => {
                 return (
                     <Space size={5}>
-                        <Tooltip title="Edit Table (SQL)">
-                            <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => edit_table(table)}></Button>
+                        <Tooltip title="Edit Column (SQL)">
+                            <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => edit_column(record)}></Button>
                         </Tooltip>
                     </Space>
                 )
@@ -77,6 +78,7 @@ const ActionTable = ({keyID, moduleID}) => {
      * @return {void}
      */
      const new_column = () => {
+        setColumn({});
         setViewAction(true);
      }
 
@@ -86,9 +88,9 @@ const ActionTable = ({keyID, moduleID}) => {
      * @param {Object} record
      * @return {void}
      */
-     const edit_table = (table) => {
-        setTable(table);
-        return setRouter({action: 'edit_table', id: table.name, module: table.module});
+     const edit_column = (record) => {
+        setColumn(record);
+        setViewAction(true);
     }
 
     /**
@@ -136,7 +138,7 @@ const ActionTable = ({keyID, moduleID}) => {
                 onChange={handleTableChange} // Callback executed when pagination, filters or sorter is changed
                 rowKey='name'
             />
-            <DrawerColumnUpsert module={moduleID} table={{...table, name: keyID}} visible={viewAction} setDrawer={setViewAction}/>
+            <DrawerColumnUpsert module={moduleID} table={{...table, name: keyID}} column={column} visible={viewAction} setDrawer={setViewAction}/>
         </div>
     );
 }

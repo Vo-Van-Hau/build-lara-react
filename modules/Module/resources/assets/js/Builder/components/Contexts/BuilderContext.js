@@ -105,6 +105,18 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
         .post(`/module/builder/create_column`, {...values});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: update column
+     * @param {Object} values
+     * @return {void}
+     */
+    const update_column = (values) => {
+        return axios
+        .get_secured()
+        .post(`/module/builder/update_column`, {...values})
+    }
+
     const repair_tables = (values) => {
         return axios
         .get_secured()
@@ -157,7 +169,8 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
         data: {...data, config},
         history, dispatch, get_axios,
         set_table_loading, set_mouted, get_modules, setRouter, get_databases,
-        get_table, create_module, create_table, create_column, repair_tables
+        get_table, create_module, create_table, create_column, update_column,
+        repair_tables
     };
 
     return (
