@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+    # PHP-FPM (FastCGI Process Manager) Service
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: app
+        restart: unless-stopped
+        tty: true
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+            - ./docker-files/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - app-network
+
+    # NGINX Service
+    webserver:
+        image: nginx:alpine
+        container_name: webserver
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "8001:80"
+        volumes:
+            - ./:/var/www
+            - ./docker-files/nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - app-network
+
+    #MySQL Service
+    mysql:
+        image: mysql
+        container_name: mysql
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./mysqldata:/var/lib/mysql
+            - ./docker-files/mysql/my.cnf:/etc/mysql/mysql.cnf
+        environment:
+            - DB_HOST=127.0.0.1
+            - MYSQL_DATABASE=fanthbol_v2
+            - MYSQL_ROOT_PASSWORD=OuPfme45oAM6m6S8lqy4PQfxlYFlCnmPzyaloZ5Zw=
+        networks:
+            - app-network
+
+# volumes
+volumes:
+    mysqldata:
+        driver: local
+# networks
+networks:
+    app-network:
+        driver: bridge

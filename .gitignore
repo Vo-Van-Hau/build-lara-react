@@ -17,3 +17,4 @@ storage/logs/
 composer.lock
 public/themes/
 package-lock.json
+/mysqldata
