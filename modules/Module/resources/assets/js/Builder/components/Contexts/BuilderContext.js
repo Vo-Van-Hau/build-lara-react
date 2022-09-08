@@ -95,6 +95,18 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: delete an existing table
+     * @param {Object} values
+     * @return {void}
+     */
+    const delete_table = (values = {}) => {
+        return axios
+        .get_secured()
+        .post(`/module/builder/delete_table`, {...values});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: create new column in table SQL
      * @param {Object} values
      * @return {void}
@@ -182,7 +194,7 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
         history, dispatch, get_axios,
         set_table_loading, set_mouted, get_modules, setRouter, get_databases,
         get_table, create_module, create_table, create_column, update_column,
-        repair_tables, delete_column
+        repair_tables, delete_column, delete_table
     };
 
     return (

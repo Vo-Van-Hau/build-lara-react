@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
 import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
 import { BuilderContext } from '../Contexts/BuilderContext';
-import { EditOutlined, ToolOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { EditOutlined, ToolOutlined, ThunderboltOutlined, DeleteOutlined } from '@ant-design/icons';
 import DrawerTableUpsert from '../Actions/Drawers/DrawerTableUpsert';
 import Helper from '../Helper/Helper';
 const { Search } = Input;
 
 const ListDatabase = ({keyID}) => {
-    const { data, set_mouted, set_table_loading, get_databases, setRouter, repair_tables } = useContext(BuilderContext);
+    const { data, set_mouted, set_table_loading, get_databases, setRouter, repair_tables, delete_table } = useContext(BuilderContext);
     const { mouted, databases, loading_table, pagination } = data;
     const [table, setTable] = useState({});
     const [viewAction, setViewAction] = useState(false);
@@ -33,6 +33,10 @@ const ListDatabase = ({keyID}) => {
                         <Tooltip title="Edit Table (SQL)">
                             <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => edit_table(table)}></Button>
                         </Tooltip>
+                        <>||</>
+                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => remove_table(table)}>
+                            <Button size="small" danger icon={<DeleteOutlined />} />
+                        </Popconfirm>
                     </Space>
                 )
             }
@@ -47,6 +51,28 @@ const ListDatabase = ({keyID}) => {
     const new_table = () => {
         setTable({});
         setViewAction(true);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+    const remove_table = (table) => {
+        table.module = keyID ? keyID : null;
+        delete_table(table)
+        .then(function(res) {
+            let { status, message } = res.data;
+            if(status) {
+                get_databases(keyID)
+                Helper.Notification('success', '[Delete Table]', message);
+            } else {
+                Helper.Notification('success', '[Delete Table]', message);
+            }
+
+        })
+        .catch(function(errors) {})
+        .finally(function() {});
     }
 
      /**

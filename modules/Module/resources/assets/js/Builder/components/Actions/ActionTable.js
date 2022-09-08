@@ -64,11 +64,11 @@ const ActionTable = ({keyID, moduleID}) => {
                 return (
                     <Space size={5}>
                         <Tooltip title="Edit Column (SQL)">
-                            <Button size="small" icon={<EditOutlined />} onClick={() => edit_column(record)}></Button>
+                            <Button size="small" type="primary" icon={<EditOutlined />} onClick={() => edit_column(record)}></Button>
                         </Tooltip>
                         <>||</>
                         <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => remove_column(record)}>
-                            <Button  size="small" danger icon={<DeleteOutlined />} />
+                            <Button size="small" danger icon={<DeleteOutlined />} />
                         </Popconfirm>
                     </Space>
                 )
@@ -104,7 +104,6 @@ const ActionTable = ({keyID, moduleID}) => {
      * @return {void}
      */
     const remove_column = (record) => {
-        console.log(record);
         record.module = moduleID ? moduleID : null;
         record.table = keyID ? keyID : null;
         record.field_name = record.name ? record.name : null;

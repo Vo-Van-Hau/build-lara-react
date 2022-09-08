@@ -841,7 +841,7 @@ class BuilderController extends ControllerBase {
                 fwrite($file, $content);
                 fclose($file);
             }
-                /**
+            /**
              * @todo: create <metadata> folder in module
              */
             $metadata_path = $module_path . "/metadata";
@@ -877,6 +877,54 @@ class BuilderController extends ControllerBase {
                 fclose($file);
             }
             return $this->response_base(["status" => true], trans("Module::module.create_database_structures_success"), 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: create new table SQL
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function delete_table(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $module_name = isset($input["module"]) ? ucfirst($input["module"]) : null;
+            $table_name = isset($input["name"]) ? strtolower($input["name"]) : null;
+            $validator = Validator::make($input, array(
+                "name" => "required",
+                "module" => "required",
+            ));
+            if($validator->fails()) return $this->response_base(["status" => false], trans("Module::module.invalid_credentials"), 200);
+            $module_path = Core::module_path() . $module_name;
+
+            /**
+             * @todo: delete <Model> in module
+             */
+            $model_path = $module_path . "/src/Models";
+            $model_name = ucfirst($table_name);
+            $model_file = $model_path . '/' . $model_name . ".php";
+             /**
+              * @todo: delete *_database_structures.ini.php file
+              */
+            $metadata_path = $module_path . "/metadata";
+            $db_dir = $metadata_path . "/databases";
+            $model_name = strtolower($model_name);
+            $data_structures_name = $model_name . "_database_structures.ini.php";
+            $data_structures_file = $db_dir . "/" . $data_structures_name;
+            /**
+             * @todo:
+             */
+            if (is_file($data_structures_file) && is_file($model_file)) {
+                if(file_exists($data_structures_file)) {
+                    unlink($data_structures_file);
+                    unlink($model_file);
+                    Schema::dropIfExists($model_name);
+                    return $this->response_base(["status" => true], "Table is deleted successfully !!!", 200);
+                }
+            }
+            return $this->response_base(["status" => true], "Table is not found !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
@@ -993,7 +1041,6 @@ class BuilderController extends ControllerBase {
      */
     public function delete_column(Request $request) {
         if($request->isMethod("post")) {
-            $input = $request->all();
             $module_name = $request->get("module");
             $table_name = strtolower($request->get("table"));
             $field_name = $request->get("field_name");
