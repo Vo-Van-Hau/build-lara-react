@@ -86,8 +86,7 @@ class UsersController extends ControllerBase {
             $input = $request->all();
             $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
             $status = isset($input["status"]) ? $input["status"] : [];
-            $is_publisher = 0;
-            $group = isset($input["group"]) ? $data["group"] : [];
+            $group = isset($input["group"]) ? $input["group"] : [];
             $data_json["users"] = $this->UsersRepository->get_all($keyword, $status, $group);
             return response()->json($data_json, 200);
         }
@@ -226,7 +225,7 @@ class UsersController extends ControllerBase {
                     if ($patch_url) $input["avatar"] = "/" . $patch_url;
                 }
                 $result = $this->UsersRepository->update($id, $input);
-                if ($result) 
+                if ($result)
                     return $this->response_base([
                         "status" => true,
                         "data" => $input

@@ -166,4 +166,38 @@ class GroupsController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo get all users in group
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_users(Request $request) {
+        if ($request->isMethod("post")) {
+            $input = request()->all();
+            $id = isset($input["id"]) ? intval($input["id"]) : "";
+            $data_json["result"] = $this->GroupsRepository->usersbygroup($id);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo add new user to group
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function storage_user_to_group(Request $request) {
+        if ($request->isMethod("post")) {
+            $input = request()->all();
+            $group_id = isset($input["group_id"]) ? intval($input["group_id"]) : "";
+            $id = isset($input["user_id"]) ? intval($input["user_id"]) : "";
+            $status = $this->GroupsRepository->storage_user_group($group_id, $id);
+            if($status) return $this->response_base(["status" => true], "You storage new item successfully !!!", 200);
+            return $this->response_base(["status" => true], "You storage new item failed!!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }

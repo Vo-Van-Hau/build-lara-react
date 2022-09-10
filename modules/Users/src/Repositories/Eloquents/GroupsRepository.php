@@ -6,7 +6,9 @@ use Modules\Core\Repositories\Eloquents\BaseRepository;
 use Modules\Users\Interfaces\GroupsRepositoryInterface;
 use Modules\Core\Models\ModelBase;
 use Modules\Users\Models\Groups;
+use Modules\Users\Models\Users;
 use Illuminate\Support\Facades\Config;
+use Modules\Auth\AuthCMS;
 
 class GroupsRepository extends BaseRepository implements GroupsRepositoryInterface {
 
@@ -116,5 +118,42 @@ class GroupsRepository extends BaseRepository implements GroupsRepositoryInterfa
         $existed = $this->model->find($id);
         if(empty($existed)) return false;
         return $existed->delete();
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $id
+     * @return mixed
+     */
+    public function usersbygroup($id){
+        return $this->model->where(["id" => $id])
+        ->with(["users:id,name,username,email,avatar"])
+        ->first("id");
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: add new user to group
+     * @param int $group_id
+     * @param int $id
+     * @return boolean
+     */
+    public function storage_user_group($group_id, $id) {
+        if($id) {
+            $existed = Users::find($id);
+            $auth_id = AuthCMS::info("id");
+            if(empty($existed)) return false;
+            $pivot[$group_id] = array(
+                "user_created_id" => $auth_id,
+                "user_updated_id" => $auth_id,
+                "created_at" => new \DateTime(),
+                "updated_at" => new \DateTime(),
+                "deleted" => 0,
+            );
+            $existed->groups()->attach($pivot);
+            return true;
+        }
+        return false;
     }
 }

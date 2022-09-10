@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { GroupsContext } from '../Contexts/GroupsContext';
 import ActionGroup from '../Actions/ActionGroup';
-// import ActUser from '../Actions/ActUser';
+import ActionUser from '../Actions/ActionUser';
 import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import Helper from '../Helper/Helper';
@@ -38,7 +38,7 @@ const ListGroups = (props) => {
             key: 'parent_group',
             width: 200,
             ellipsis: true,
-            render: (item) => {
+            render: (item, record) => {
                 return (
                     <>{item ? item.name : ''}</>
                 );
@@ -50,26 +50,12 @@ const ListGroups = (props) => {
             key: 'users',
             width: 150,
             ellipsis: true,
-            render: (item) => {
+            render: (item, record) => {
                 return (
                     <>{`${item.length} Users`}</>
                 );
             }
         },
-        // {
-        //     title: 'User',
-        //     dataIndex: 'User',
-        //     key: 'User',
-        //     width: 100,
-        //     align: 'center',
-        //     render: (_, record) => {
-        //         return (
-        //             <Tooltip title="Add User" placement="topRight">
-        //                 <Button type="dashed" shape="circle" icon={<UsergroupAddOutlined />} onClick={() => group_user(record)}/>
-        //             </Tooltip>
-        //         );
-        //     }
-        // },
         {
             title: 'Status',
             dataIndex: 'status',
@@ -81,6 +67,20 @@ const ListGroups = (props) => {
                 let text = status ? status.find(item => item.value == value): null;
                 return (
                     <>{text ? text.text : ''}</>
+                );
+            }
+        },
+        {
+            title: 'User Actions',
+            dataIndex: 'User',
+            key: 'User',
+            width: 100,
+            align: 'center',
+            render: (_, record) => {
+                return (
+                    <Tooltip title="Add User" placement="topRight">
+                        <Button type="dashed" shape="circle" icon={<UsergroupAddOutlined />} onClick={() => group_user(record)}/>
+                    </Tooltip>
                 );
             }
         },
@@ -124,15 +124,6 @@ const ListGroups = (props) => {
         setViewAction(true);
     }
 
-    // /**
-    //  * @author: <vanhau.vo@urekamedia.vn>
-    //  * @todo: remove an existed record
-    //  * @param {Object} record
-    //  * @return {void}
-    //  */
-    // const remove_group = (record) => {
-    //     destroyGroup(record.id);
-    // }
      /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: remove an existed record
@@ -155,10 +146,16 @@ const ListGroups = (props) => {
         .finally(() => {set_table_loading();});
     }
 
-    // const group_user = (record) => {
-    //     setGroup(record);
-    //     setViewUsers(true);
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {object} record
+     * @return {void}
+     */
+    const group_user = (record) => {
+        setGroup(record);
+        setViewUsers(true);
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -215,7 +212,7 @@ const ListGroups = (props) => {
                 rowKey='id'
             />
             <ActionGroup group={group} visible={viewAction} setDrawer={setViewAction}/>
-            {/* <ActUser group={group} visible={viewUsers} setDrawer={setViewUsers}/> */}
+            <ActionUser group={group} visible={viewUsers} setDrawer={setViewUsers}/>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import {
     GET_GROUPS, SET_USER_GROUPS, SET_PAGINATION,
-    SET_TABLE_LOADING, SET_FORM_LOADING, SET_DRAWER, MOUTED
+    SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const initialState = {
@@ -26,37 +26,19 @@ export const GroupsReducer = (state = initialState, action) => {
     switch (type) {
         case GET_GROUPS:
             return {...state, groups: [...payload]};
-
-        // case SET_USER_GROUPS:
-        //     let {id, users, user} = payload;
-        //     let { Groups } = state;
-        //     // // xử lý group select
-        //     let index = Groups.findIndex(item => item.id === id);
-        //     let record = Groups.find(item => item.id === id);
-        //     Groups[index] = {...record, users:[...users]};
-        //     // xử lý group cũ của user
-        //     // let { groups } = user;
-        //     // let group_id = groups[0] ? groups[0].id : null;
-        //     // if(group_id){
-        //     //     let indexCP = Groups.findIndex(item => item.id === group_id);
-        //     //     let recordCP = Groups.find(item => item.id === group_id);
-        //     //     let user_old = recordCP.users;
-        //     //     let userCP = user_old.filter(item => item.id !== user.id);
-        //     //     Groups[indexCP] = {...recordCP, users:[...userCP]};
-        //     // }
-        //     // xong
-        //     return { ...state, Groups:[...Groups] };
+        case SET_USER_GROUPS:
+            let {id, users} = payload;
+            let { groups } = state;
+            let index = groups.findIndex(item => item.id === id);
+            let record = groups.find(item => item.id === id);
+            groups[index] = {...record, users:[...users]};
+            return {...state, groups: [...groups]};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:
             return {...state, loading_table: !state.loading_table};
-        // case SET_FORM_LOADING:
-        //     return { ...state, loadingForm: !state.loadingForm };
-        // case SET_DRAWER:
-        //     return { ...state, visible: !state.visible };
         case MOUTED:
             return {...state, mouted: payload};
-
         default: return state;
     }
 }

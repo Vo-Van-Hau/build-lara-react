@@ -2,8 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { initialState, GroupsReducer } from '../Reducers/GroupsReducer';
 import {
     GET_GROUPS, SET_USER_GROUPS,
-    SET_PAGINATION, SET_TABLE_LOADING, SET_FORM_LOADING, SET_DRAWER,
-    MOUTED
+    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const GroupsContext = createContext();
@@ -29,7 +28,8 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
             let { total, data, current_page, per_page } = groups;
             dispatch({ type: GET_GROUPS, payload: data });
             dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
-        }).catch((errors) => {})
+        })
+        .catch((errors) => {})
         .finally(() => {set_table_loading();});
     }
 
@@ -83,31 +83,47 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
         .post(`/users/groups/destroy`, {id});
     }
 
-    // const getUserbyGroups = (id) =>{
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/groups/get_users`, {id})
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get all users in group
+     * @param {number} id
+     * @return {void}
+     */
+    const get_user_by_groups = (id) =>{
+        return axios
+        .get_secured()
+        .post(`/users/groups/get_users`, {id});
+    }
 
-    // const getUsers = (page, keySearch) => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/users/getlist?page=${page}`, {...keySearch})
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get users
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+    const get_users = (page, keySearch) => {
+        return axios
+        .get_secured()
+        .post(`/users/users/get_list?page=${page}`, {...keySearch});
+    }
 
-    // const storageGroupUser = (values) =>{
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/groups/storage_user_group`, {...values})
-    // }
+    const storage_user_to_group = (values) =>{
+        return axios
+        .get_secured()
+        .post(`/users/groups/storage_user_to_group`, {...values});
+    }
 
-    // const setUserGroup = (id, users, user) => {
-    //     dispatch({ type: SET_USER_GROUPS, payload:{id, users, user}});
-    // }
-
-    // const setForm = () => {
-    //     dispatch({ type: SET_FORM_LOADING });
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: reset users
+     * @param {number} id
+     * @param {array} users
+     * @return {void}
+     */
+    const set_user_group = (id, users) => {
+        dispatch({ type: SET_USER_GROUPS, payload: {id, users}});
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -117,10 +133,6 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
     const set_table_loading = () => {
         dispatch({ type: SET_TABLE_LOADING })
     }
-
-    // const setDrawer = () => {
-    //     dispatch({ type: SET_DRAWER });
-    // }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -142,12 +154,8 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
         data: {...data, config},
         history, dispatch, get_axios, storage_group,
         get_parent_groups, update_group, destroy_group,
-        // getUserbyGroups, getUsers, setUserGroup, storageGroupUser,
-        // setForm,
-        set_table_loading,
-        set_mouted,
-        // setDrawer,
-        get_groups
+        get_user_by_groups, get_users, storage_user_to_group,
+        set_user_group, set_table_loading, set_mouted, get_groups
     };
 
     return (
