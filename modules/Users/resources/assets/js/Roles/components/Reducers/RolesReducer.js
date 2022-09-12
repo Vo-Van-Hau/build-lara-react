@@ -1,7 +1,6 @@
 import {
     GET_ROLES, SET_USER_ROLES,
-    SET_PAGINATION, SET_TABLE_LOADING, SET_FORM_LOADING, SET_DRAWER,
-    MOUTED
+    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const initialState = {
@@ -27,31 +26,26 @@ export const RolesReducer = (state = initialState, action) => {
     switch (type) {
         case GET_ROLES:
             return {...state, roles: [...payload]};
-        // case SET_USER_ROLES:
-        //     let {id, users, user} = payload;
-        //     let { Roles } = state;
-        //     // xử lý group select
-        //     let index = Roles.findIndex(item => item.id === id);
-        //     let record = Roles.find(item => item.id === id);
-        //     Roles[index] = {...record, users:[...users]};
-        //     // xử lý group cũ của user
-        //     let indexCP = Roles.findIndex(item => item.id === user.role_id);
-        //     let recordCP = Roles.find(item => item.id === user.role_id);
-        //     if(recordCP && recordCP['users']){
-        //         let user_old = recordCP.users;
-        //         let userCP = user_old.filter(item => item.id !== user.id);
-        //         Roles[indexCP] = {...recordCP, users:[...userCP]};
-        //     }
-        //     // xong
-        //     return { ...state, Roles:[...Roles] };
+        case SET_USER_ROLES:
+            let {id, users, user} = payload;
+            let { roles } = state;
+            // selected role
+            let index = roles.findIndex(item => item.id === id);
+            let record = roles.find(item => item.id === id);
+            roles[index] = {...record, users: [...users]};
+            // updated old role
+            let ole_index = roles.findIndex(item => item.id === user.role_id);
+            let old_record = roles.find(item => item.id === user.role_id);
+            if(old_record && old_record['users']) {
+                let old_users = old_record.users;
+                let filter_users = old_users.filter(item => item.id !== user.id);
+                roles[ole_index] = {...old_record, users: [...filter_users]};
+            }
+            return {...state, roles: [...roles]};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:
             return {...state, loading_table: !state.loading_table};
-        // case SET_FORM_LOADING:
-        //     return { ...state, loadingForm: !state.loadingForm };
-        // case SET_DRAWER:
-        //     return { ...state, visible: !state.visible };
         case MOUTED:
             return {...state, mouted: payload};
         default:

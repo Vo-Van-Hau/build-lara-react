@@ -80,7 +80,7 @@ class GroupsController extends ControllerBase {
      * @return void
      */
     public function get_parents(Request $request) {
-        if ($request->isMethod("post")) {
+        if($request->isMethod("post")) {
             $data_json["parents"] = $this->GroupsRepository->all_override();
             return response()->json($data_json, 200);
         }
@@ -94,7 +94,7 @@ class GroupsController extends ControllerBase {
      * @return void
      */
     public function storage(Request $request) {
-        if ($request->isMethod("post")) {
+        if($request->isMethod("post")) {
             $input = $request->all();
             $input["name"] = isset($input["name"]) ? $input["name"] : "";
             $input["status"] = isset($input["status"]) ? intval($input["status"]) : "";
@@ -117,7 +117,7 @@ class GroupsController extends ControllerBase {
      * @return void
      */
     public function update(Request $request){
-        if ($request->isMethod("post")) {
+        if($request->isMethod("post")) {
             $input = $request->all();
             $id = isset($input["id"]) ? intval($input["id"]) : 0;
             $input["name"] = isset($input["name"]) ? $input["name"] : "";
@@ -154,7 +154,7 @@ class GroupsController extends ControllerBase {
      * @return void
      */
     public function destroy(Request $request){
-        if ($request->isMethod("post")) {
+        if($request->isMethod("post")) {
             $input = request()->all();
             $id = isset($input["id"]) ? intval($input["id"]) : "";
             try {
@@ -190,7 +190,7 @@ class GroupsController extends ControllerBase {
      * @return void
      */
     public function storage_user_to_group(Request $request) {
-        if ($request->isMethod("post")) {
+        if($request->isMethod("post")) {
             $input = request()->all();
             $group_id = isset($input["group_id"]) ? intval($input["group_id"]) : "";
             $id = isset($input["user_id"]) ? intval($input["user_id"]) : "";

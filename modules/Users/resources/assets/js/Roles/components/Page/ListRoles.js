@@ -1,10 +1,10 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { RolesContext } from '../Contexts/RolesContext';
 import Helper from '../Helper/Helper';
-// import ActGroup from '../Actions/ActGroup';
 import ActionRole from '../Actions/ActionRole';
-// import ActUser from '../Actions/ActUser';
-import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip, Drawer } from 'antd';
+import ActionUser from '../Actions/ActionUser';
+import ActionACL from '../Actions/ActionACL';
+import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
 import { UsergroupAddOutlined, ToolOutlined } from '@ant-design/icons';
 const { Search } = Input;
 
@@ -13,8 +13,8 @@ const ListRoles = () => {
     const { roles, config, pagination, loading_table, mouted } = data;
     const [role, setRole] = useState({});
     const [viewAction, setViewAction] = useState(false);
-    // const [viewUsers, setViewUsers] = useState(false);
-    // const [viewRoles, setViewRoles] = useState(false);
+    const [viewUsers, setViewUsers] = useState(false);
+    const [viewACL, setViewACL] = useState(false);
     const [keySearch, setKeySearch] = useState({
         keyword: null,
         status: null
@@ -60,34 +60,34 @@ const ListRoles = () => {
                 );
             }
         },
-        // {
-        //     title: 'User',
-        //     dataIndex: 'User',
-        //     key: 'User',
-        //     width: 100,
-        //     align: 'center',
-        //     render: (_, record) => {
-        //         return (
-        //             <Tooltip title='Add User' placement='topRight'>
-        //                 <Button type='dashed' shape='circle' icon={<UsergroupAddOutlined />} onClick={() => groupUser(record)}/>
-        //             </Tooltip>
-        //         );
-        //     }
-        // },
-        // {
-        //     title: 'Acl',
-        //     dataIndex: 'acl',
-        //     key: 'acl',
-        //     width: 100,
-        //     align: 'center',
-        //     render: (_, record) => {
-        //         return (
-        //             <Tooltip title='Change Acl' placement='topRight'>
-        //                 <Button type='dashed' shape='circle' icon={<ToolOutlined />} onClick={() => groupRoles(record)}/>
-        //             </Tooltip>
-        //         );
-        //     }
-        // },
+        {
+            title: 'User Actions',
+            dataIndex: 'User',
+            key: 'User',
+            width: 100,
+            align: 'center',
+            render: (_, record) => {
+                return (
+                    <Tooltip title='Add User' placement='topRight'>
+                        <Button type='dashed' shape='circle' icon={<UsergroupAddOutlined />} onClick={() => group_users(record)}/>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            title: 'ACL',
+            dataIndex: 'acl',
+            key: 'acl',
+            width: 100,
+            align: 'center',
+            render: (_, record) => {
+                return (
+                    <Tooltip title='Change ACL' placement='topRight'>
+                        <Button type='dashed' shape='circle' icon={<ToolOutlined />} onClick={() => group_acl(record)}/>
+                    </Tooltip>
+                );
+            }
+        },
         {
             title: 'Actions',
             dataIndex: 'actions',
@@ -107,16 +107,27 @@ const ListRoles = () => {
         }
     ];
 
-    // const groupRoles = (record) => {
-    //     setRole(record);
-    //     setViewRoles(true);
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: add user to role
+     * @param {Object} record
+     * @return {void}
+     */
+    const group_users = (record) => {
+        setRole(record);
+        setViewUsers(true);
+    }
 
-    // const groupUser = (record) => {
-    //     setRole(record);
-    //     setViewUsers(true);
-    // }
-
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} record
+     * @return {void}
+     */
+    const group_acl = (record) => {
+        setRole(record);
+        setViewACL(true);
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -214,8 +225,8 @@ const ListRoles = () => {
                 rowKey='id'
             />
             <ActionRole role={role} visible={viewAction} setDrawer={setViewAction} />
-            {/* <ActGroup role={role} visible={viewAct} setDrawer={setViewAct}/> */}
-            {/* <ActUser role={role} visible={viewUsers} setDrawer={setViewUsers}/> */}
+            <ActionACL role={role} visible={viewACL} setDrawer={setViewACL}/>
+            <ActionUser role={role} visible={viewUsers} setDrawer={setViewUsers}/>
         </>
     )
 }

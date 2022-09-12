@@ -2,9 +2,9 @@ import React, { createContext, useReducer } from 'react';
 import { initialState, RolesReducer } from '../Reducers/RolesReducer';
 import {
     GET_ROLES, SET_USER_ROLES,
-    SET_PAGINATION, SET_TABLE_LOADING, SET_FORM_LOADING, SET_DRAWER,
-    MOUTED
+    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
+
 export const RolesContext = createContext();
 
 const RolesContextProvicer = ({ children, axios, history, config }) =>{
@@ -71,45 +71,89 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
         .post(`/users/roles/destroy`, {id});
     }
 
-    // const getUserbyRoles = (id) =>{
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/get_users`, {id})
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get all users in role
+     * @param {number} id
+     * @return {void}
+     */
+    const get_users_by_role = (id) =>{
+        return axios
+        .get_secured()
+        .post(`/users/roles/get_users`, {id});
+    }
 
-    // const storageRoleUser = (values) =>{
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/storage_user_role`, {...values})
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get users
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+     const get_users = (page, keySearch) => {
+        return axios
+        .get_secured()
+        .post(`/users/users/get_list?page=${page}`, {...keySearch});
+    }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: storage user to role
+     * @param {Object} values
+     * @return {void}
+     */
+    const storage_user_to_role = (values) =>{
+        return axios
+        .get_secured()
+        .post(`/users/roles/storage_user_to_role`, {...values});
+    }
 
-    // const initRoles = () => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/get_init_acl_role`)
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+    const init_acl_role = () => {
+        return axios
+        .get_secured()
+        .post(`/users/roles/get_init_acl_role`);
+    }
 
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} values
+     * @return {void}
+     */
+    const get_acl = (values) => {
+        return axios
+        .get_secured()
+        .post(`/users/roles/get_acl_role`, {...values});
+    }
 
-    // const getAcl = (values) => {
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/get_acl_role`, {...values})
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} values
+     * @return {void}
+     */
+    const save_acl_role = (values) =>{
+        return axios
+        .get_secured()
+        .post(`/users/roles/save_acl_role`, {...values});
+    }
 
-    // const saveAcl = (values) =>{
-    //     return axios
-    //     .getSecured()
-    //     .post(`/users/roles/save_acl_role`, {...values})
-    // }
-
-    // const setUserGroup = (id, users, user) => {
-    //     dispatch({ type: SET_USER_ROLES, payload:{id, users, user}});
-    // }
-
-    // const setForm = () => {
-    //     dispatch({ type: SET_FORM_LOADING });
-    // }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: reset users
+     * @param {number} id
+     * @param {array} users
+     * @param {Object} user
+     * @return {void}
+     */
+    const set_user_role = (id, users, user) => {
+        dispatch({type: SET_USER_ROLES, payload: {id, users, user}});
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -117,16 +161,13 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
      * @return {void}
      */
     const set_table_loading = () => {
-        dispatch({ type: SET_TABLE_LOADING })
+        dispatch({ type: SET_TABLE_LOADING });
     }
-
-    // const setDrawer = () => {
-    //     dispatch({ type: SET_DRAWER });
-    // }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo:
+     * @param {Object} values
      * @return {void}
      */
     const set_mouted = (values) => {
@@ -142,12 +183,9 @@ const RolesContextProvicer = ({ children, axios, history, config }) =>{
 
     const todoContextData = {
         data:{...data, config}, history, dispatch, get_axios,
-        set_mouted, get_roles, set_table_loading,
-        // setForm, setDrawer,
-        storage_role, update_role, destroy_role,
-        // getUserbyRoles,
-        // getUsers, storageRoleUser, setUserGroup,
-        // initRoles, getAcl, saveAcl
+        set_mouted, get_roles, set_table_loading, storage_user_to_role,
+        storage_role, update_role, destroy_role, init_acl_role,
+        get_users_by_role, get_users, set_user_role, get_acl, save_acl_role
     };
 
     return (

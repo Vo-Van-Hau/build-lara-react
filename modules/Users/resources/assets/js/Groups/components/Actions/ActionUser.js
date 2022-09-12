@@ -11,6 +11,11 @@ const ActionUser = ({group, visible, setDrawer}) => {
     const [users, setUsers] = useState([]);
     const [viewAction, setViewAction] = useState(false);
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: close Drawer
+     * @return {void}
+     */
     const onClose = () =>{
         setDrawer(false);
         setUsers([]);

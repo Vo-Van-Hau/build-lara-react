@@ -108,6 +108,12 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
         .post(`/users/users/get_list?page=${page}`, {...keySearch});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: storage user to group
+     * @param {Object} values
+     * @return {void}
+     */
     const storage_user_to_group = (values) =>{
         return axios
         .get_secured()

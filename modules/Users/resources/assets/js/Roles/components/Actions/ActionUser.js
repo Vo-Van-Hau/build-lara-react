@@ -1,41 +1,15 @@
-/**
- * Groups - Thêm user vào groups
- * @author Quang Huy <quanghuy.phung@urekamedia.vn>
- * @since 1.0.0
- * @todo Action Groups trong module Users
- * @return View
- */
 import React,{ useContext, useState ,useEffect } from 'react';
 import { RolesContext } from '../Contexts/RolesContext';
 import ListUsers from './Components/ListUsers';
-import Helper from '../Helper/helper';
 import { Drawer, Table, Button, Avatar } from 'antd';
 import { UserOutlined, PlusOutlined } from '@ant-design/icons';
-const ActUser = ({role, visible, setDrawer}) => {
-    const { data, getUserbyRoles } = useContext(RolesContext);
-    const [ loadingTable, setLoadingTable ] = useState(false);
-    const [ users, setUsers ] = useState([]);
-    const [viewAct, setViewAct] = useState(false);
 
-    useEffect(() => {
-        if(visible){
-            setLoadingTable(true);
-            getUserbyRoles(role.id).then((res) => {
-                let {result} = res.data;
-                let {users} = result;
-                setUsers(users);
-            }).catch((err)=>{
-            }).finally(() => {
-                setLoadingTable(false);
-            });
-        }
-    }, [visible]);
+const ActionUser = ({role, visible, setDrawer}) => {
 
-    const onClose = () =>{
-        setDrawer(false);
-        setUsers([]);
-    }
-
+    const { data, get_users_by_role } = useContext(RolesContext);
+    const [loadingTable, setLoadingTable] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [viewAction, setViewAction] = useState(false);
     const columns = [
         {
             title: 'ID',
@@ -44,7 +18,8 @@ const ActUser = ({role, visible, setDrawer}) => {
             width: 75,
             fixed: 'left',
             align: 'center',
-        },{
+        },
+        {
             title: 'Users',
             dataIndex: 'fullname',
             key: 'fullname',
@@ -54,7 +29,8 @@ const ActUser = ({role, visible, setDrawer}) => {
                     <>{record.name}<br /><small>{record.email}</small></>
                 )
             }
-        },{
+        },
+        {
             title: 'Avatar',
             dataIndex: 'avatar',
             key: 'avatar',
@@ -62,34 +38,56 @@ const ActUser = ({role, visible, setDrawer}) => {
             align: 'center',
             render: (_, record) => {
                 let { avatar } = record;
-                if(avatar){
-                    return (<Avatar src={avatar}/>);
-                }
+                if(avatar) return (<Avatar src={avatar}/>);
                 return (<Avatar icon={<UserOutlined />}/>)
             }
         }
     ];
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: close Drawer
+     * @return {void}
+     */
+    const onClose = () =>{
+        setDrawer(false);
+        setUsers([]);
+    }
+
+    useEffect(() => {
+        if(visible) {
+            setLoadingTable(true);
+            get_users_by_role(role.id)
+            .then((res) => {
+                let {result} = res.data;
+                let {users} = result;
+                setUsers(users);
+            })
+            .catch((errors)=>{})
+            .finally(() => {setLoadingTable(false);});
+        }
+    }, [visible]);
+
     return(
         <Drawer
-            title={role.id ? <>{'Add User'}<br /><small>{role.name}</small></> : <></>}
+            title={role.id ? <>{role.name}</> : <></>}
             width={520}
             closable={false}
             onClose={onClose}
             visible={visible}
-            bodyStyle={{padding: "0"}}
+            bodyStyle={{padding: '0'}}
         >
             <Table
                 title={(() => (
-                    <Button 
-                        type="primary" 
-                        icon={<PlusOutlined />} 
-                        onClick={() => {setViewAct(true)}} 
+                    <Button
+                        type='primary'
+                        icon={<PlusOutlined />}
+                        onClick={() => {setViewAction(true)}}
                     >
                         List Users
                     </Button>
                 ))}
-                size="small"
+                size='small'
                 columns={columns}
                 bordered={false}
                 dataSource={users}
@@ -97,14 +95,15 @@ const ActUser = ({role, visible, setDrawer}) => {
                 loading={loadingTable}
                 rowKey='id'
             />
-            <ListUsers 
-                role={role} 
-                items={users} 
-                setItems={setUsers} 
-                visible={viewAct} 
-                setDrawer={setViewAct}
+            <ListUsers
+                role={role}
+                items={users}
+                setItems={setUsers}
+                visible={viewAction}
+                setDrawer={setViewAction}
             />
         </Drawer>
     );
 }
-export default ActUser;
+
+export default ActionUser;

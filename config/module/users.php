@@ -38,4 +38,19 @@ return [
         "access_internal"   => true,
         "access_publisher"  => true,
      ),
+     "acl_list" => array(
+        0 => "Denied",
+        1 => "All",
+        2 => "Owner",
+        3 => "Group",
+        4 => "None",
+     ),
+     "acl_mapping_default" => array(
+        "list" => true,
+        "view" => true,
+        "edit" => true,
+        "save" => true,
+        "delete" => true
+     ),
+     "default_none_acl" => 0,
 ];

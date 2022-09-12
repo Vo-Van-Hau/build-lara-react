@@ -3,6 +3,7 @@
 namespace Modules\Core\Controllers;
 
 use App\Http\Controllers\Controller;
+use Modules\Core\Controllers\Traits\BasicController;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -14,6 +15,8 @@ use App\Http\Controllers\Controller;
  * @since 2022-07-21
  */
 class ControllerBase extends Controller {
+
+    use BasicController;
 
     public function __construct() {
 
