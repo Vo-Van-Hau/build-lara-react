@@ -192,9 +192,6 @@ return [
         Modules\Module\Providers\ModuleServiceProvider::class,
         Modules\Module\Providers\ModuleRouteServiceProvider::class,
 
-        Modules\Reports\Providers\ReportsServiceProvider::class,
-        Modules\Reports\Providers\ReportsRouteServiceProvider::class,
-
         Modules\Publishers\Providers\PublishersServiceProvider::class,
         Modules\Publishers\Providers\PublishersRouteServiceProvider::class,
 
