@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Reports\Interfaces;
+namespace Modules\Auth\Interfaces;
 
 use Modules\Core\Interfaces\BaseRepositoryInterface;
 

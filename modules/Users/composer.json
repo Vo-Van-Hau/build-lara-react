@@ -17,7 +17,7 @@
             "Modules\\Users\\": "src/"
         },
         "classmap": [
-            "database/seeds"
+            "database/seeders"
         ]
     },
     "extra": {

@@ -14,10 +14,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Users\\": "src/"
+            "Modules\\Module\\": "src/"
         },
         "classmap": [
-            "database/seeds"
+            "database/seeders"
         ]
     },
     "extra": {
@@ -27,7 +27,7 @@
                 "Modules\\Module\\Providers\\ModuleRouteServiceProvider"
             ],
             "aliases": {
-                "Users": "Modules\\Module\\Facades\\Module"
+                "Module": "Modules\\Module\\Facades\\Module"
             }
         }
     }

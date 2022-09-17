@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Users\Requests;
+namespace Modules\Publishers\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,7 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-07-22
  */
-class UsersRequest extends FormRequest {
+class PublishersRequest extends FormRequest {
 
     /**
      * Determine if the user is authorized to make this request.
