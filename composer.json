@@ -69,30 +69,7 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": [],
-            "providers": [
-                "Modules\\Core\\Providers\\CoreServiceProvider",
-                "Modules\\Core\\Providers\\CoreRouteServiceProvider",
-
-                "Modules\\Auth\\Providers\\AuthServiceProvider",
-                "Modules\\Auth\\Providers\\AuthRouteServiceProvider",
-
-                "Modules\\Users\\Providers\\UsersServiceProvider",
-                "Modules\\Users\\Providers\\UsersRouteServiceProvider",
-
-                "Modules\\Module\\Providers\\ModuleServiceProvider",
-                "Modules\\Module\\Providers\\ModuleRouteServiceProvider",
-
-                "Modules\\Publishers\\Providers\\PublishersServiceProvider",
-                "Modules\\Publishers\\Providers\\PublishersRouteServiceProvider"
-            ],
-            "aliases": {
-                "Core": "Modules\\Core\\Facades\\Core",
-                "AuthCMS": "Modules\\Auth\\Facades\\AuthCMS",
-                "Users": "Modules\\Users\\Facades\\Users",
-                "Module": "Modules\\Module\\Facades\\Module",
-                "Publishers": "Modules\\Publishers\\Facades\\Publishers"
-            }
+            "dont-discover": []
         }
     },
     "config": {
