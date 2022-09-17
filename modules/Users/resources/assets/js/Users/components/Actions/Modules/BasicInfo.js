@@ -6,7 +6,7 @@ import Helper from '../../Helper/Helper';
 const { Dragger } = Upload;
 const { Option } = Select;
 
-const BasicInfo = ({fileList, setFileList, generatePassword, disabled }) => {
+const BasicInfo = ({fileList, setFileList, generatePassword, disabled}) => {
     const { data } = useContext(UsersContext);
     const { config } = data;
     const { users_type, roles, account_type, user } = config;

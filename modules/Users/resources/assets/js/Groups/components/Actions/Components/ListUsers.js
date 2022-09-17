@@ -133,12 +133,12 @@ const ListUsers = ({group, items, setItems, visible, setDrawer}) => {
         storage_user_to_group(values)
         .then((res) => {
             let{status, message} =  res.data;
-            if(status){
+            if(status) {
                 let new_items = [...items, record];
                 setItems(new_items);
                 set_user_group(group.id, new_items);
                 Helper.Notification('success', '[Users]', message);
-            }else{
+            } else {
                 Helper.Notification('error', '[Users]', message);
             }
         })

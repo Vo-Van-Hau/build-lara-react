@@ -336,7 +336,7 @@ class BuilderController extends ControllerBase {
             $provider_path = $module_path . "/src/Providers";
             if (!is_dir($provider_path)) mkdir($provider_path, 0777, true);
             $providers_file = [
-                0 => $provider_path . "/" . $module_name . "RouteServiceProviderController.php",
+                0 => $provider_path . "/" . $module_name . "RouteServiceProvider.php",
                 1 => $provider_path . "/" . $module_name . "ServiceProvider.php"
             ];
             foreach ($providers_file as $key => $provider_file) {
@@ -416,7 +416,7 @@ class BuilderController extends ControllerBase {
                             use Illuminate\Support\ServiceProvider;
                             use Illuminate\Support\Facades\Config;
 
-                            class ModuleServiceProvider extends ServiceProvider {
+                            class {$module_name}ServiceProvider extends ServiceProvider {
 
                                 /**
                                  * @var \Illuminate\Foundation\Application
