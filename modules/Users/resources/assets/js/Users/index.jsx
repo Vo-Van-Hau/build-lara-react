@@ -68,7 +68,7 @@ const Users = (props) => {
     useEffect(function() {
         get_config();
         get_action();
-    }, []);
+    }, [props]);
 
     return (
         <>

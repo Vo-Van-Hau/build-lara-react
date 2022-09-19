@@ -1,11 +1,11 @@
 import React, { createContext, useReducer } from 'react';
 import { initialState, UsersReducer } from '../Reducers/UsersReducer';
+import { createSearchParams } from 'react-router-dom';
 import {
     GET_USERS, RESET_API_KEY, DELETE_USERS,
-    SET_PAGINATION, SET_TABLE_LOADING, SET_FORM_LOADING, SET_DRAWER,
+    SET_PAGINATION, SET_TABLE_LOADING,
     MOUTED
 } from '../Dispatch/type';
-import Helper from '../Helper/Helper';
 export const UsersContext = createContext();
 
 const UsersContextProvicer = ({ children, axios, history, config, navigate }) => {
@@ -130,12 +130,13 @@ const UsersContextProvicer = ({ children, axios, history, config, navigate }) =>
         parseURL += `/users/users`;
         let parseACT = action ? `?action=${action}` : ``;
         let parseKeyID = id ? `&id=${id}` : ``;
-        return navigate(`${parseURL}${parseACT}${parseKeyID}`, { replace: true });
+        let nextURL = `${parseURL}${parseACT}${parseKeyID}`;
+        history.push(nextURL);
+        return navigate({
+            pathname: parseURL,
+            search: `?${createSearchParams({action, id})}`,
+        });
     }
-
-    // const setForm = () => {
-    //     dispatch({ type: SET_FORM_LOADING });
-    // }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -145,10 +146,6 @@ const UsersContextProvicer = ({ children, axios, history, config, navigate }) =>
      const set_table_loading = () => {
         dispatch({ type: SET_TABLE_LOADING })
     }
-
-    // const setDrawer = () => {
-    //     dispatch({ type: SET_DRAWER });
-    // }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -170,8 +167,6 @@ const UsersContextProvicer = ({ children, axios, history, config, navigate }) =>
         data: {...data, config}, history, dispatch, get_axios, get_users,
         set_mouted, set_table_loading, setRouter, get_groups, get_publishers,
         storage_user, destroy_user, get_user, update_user
-        // setForm, setDrawer,
-        // accessUser,
     };
     return (
         <UsersContext.Provider value={todoContextData}>

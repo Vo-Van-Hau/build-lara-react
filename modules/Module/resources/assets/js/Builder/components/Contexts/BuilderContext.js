@@ -1,5 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import { initialState, BuilderReducer } from '../Reducers/BuilderReducer';
+import { createSearchParams } from 'react-router-dom';
 import {
     GET_MODULES, SET_TABLE_LOADING, MOUTED,
     GET_DATABASES, GET_TABLE
@@ -179,7 +180,12 @@ const BuilderContextProvicer = ({ children, axios, history, config, navigate }) 
         let parseACT = action ? `?action=${action}` : ``;
         let parseKeyID = id ? `&id=${id}` : ``;
         let parseModule = module ? `&module=${module}` : ``;
-        return navigate(`${parseURL}${parseACT}${parseKeyID}${parseModule}`, { replace: true });
+        let nextURL = `${parseURL}${parseACT}${parseKeyID}${parseModule}`;
+        history.push(nextURL);
+        return navigate({
+            pathname: parseURL,
+            search: `?${createSearchParams({action, id, module})}`,
+        });
     }
 
     /**

@@ -6,23 +6,34 @@ import MasterLayout from '../components/Layout/MasterLayout';
 
 // // react-router doesn't do query parsing anymore since V4
 // // https://github.com/ReactTraining/react-router/issues/4410
-const addLocationQuery = history => {
+const addLocationQuery = (history, params = null) => {
     var location = history.location;
-    Object.defineProperty(history, 'location', { // object is not extensible
-        value: {
-            ...location,
-            query: queryString.parse(history.location.search)
-        },
-        writable: true
-    });
+    if(params) {
+        Object.defineProperty(history, 'location', { // object is not extensible
+            value: {
+                ...location,
+                ...params.location
+            },
+            writable: true
+        });
+    } else {
+        Object.defineProperty(history, 'location', { // object is not extensible
+            value: {
+                ...location,
+                query: queryString.parse(history.location.search)
+            },
+            writable: true
+        });
+    }
 }
 const history = createBrowserHistory({ basename: '/' });
-// addLocationQuery(history);
+addLocationQuery(history);
 
-// history.listen(() => {
-//     addLocationQuery(history);
-//     if (window.SEND_USAGE_STATS) {}
-// });
+history.listen(({location, action}) => {
+    addLocationQuery(history, {
+        location, action
+    });
+});
 
 /**
  * @author: <vanhau.vo@urekamedia.vn>

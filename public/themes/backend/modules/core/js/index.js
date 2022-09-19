@@ -5920,6 +5920,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var Content = antd__WEBPACK_IMPORTED_MODULE_2__["default"].Content;
 
 var ContentSection = function ContentSection(props) {
@@ -5932,18 +5933,22 @@ var ContentSection = function ContentSection(props) {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Routes, {
         children: function () {
           var parseURL = window.sparrowConfig.app.adminPrefix ? "/".concat(window.sparrowConfig.app.adminPrefix) : '';
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
             path: "/",
             element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Outlet, {})
             }),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
-              exact: true,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
               path: "".concat(parseURL, "/:moduleName/:controllerName"),
               element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_Module_ModuleView__WEBPACK_IMPORTED_MODULE_0__["default"], _objectSpread({
                 history: history
               }, props))
-            })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
+              path: "*",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+                children: "Page not found !!!"
+              })
+            })]
           });
         }()
       })
@@ -7104,24 +7109,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 var addLocationQuery = function addLocationQuery(history) {
+  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   var location = history.location;
-  Object.defineProperty(history, 'location', {
-    // object is not extensible
-    value: _objectSpread(_objectSpread({}, location), {}, {
-      query: query_string__WEBPACK_IMPORTED_MODULE_1__.parse(history.location.search)
-    }),
-    writable: true
-  });
+
+  if (params) {
+    Object.defineProperty(history, 'location', {
+      // object is not extensible
+      value: _objectSpread(_objectSpread({}, location), params.location),
+      writable: true
+    });
+  } else {
+    Object.defineProperty(history, 'location', {
+      // object is not extensible
+      value: _objectSpread(_objectSpread({}, location), {}, {
+        query: query_string__WEBPACK_IMPORTED_MODULE_1__.parse(history.location.search)
+      }),
+      writable: true
+    });
+  }
 };
 
 var history = (0,history__WEBPACK_IMPORTED_MODULE_4__.createBrowserHistory)({
   basename: '/'
-}); // addLocationQuery(history);
-// history.listen(() => {
-//     addLocationQuery(history);
-//     if (window.SEND_USAGE_STATS) {}
-// });
-
+});
+addLocationQuery(history);
+history.listen(function (_ref) {
+  var location = _ref.location,
+      action = _ref.action;
+  addLocationQuery(history, {
+    location: location,
+    action: action
+  });
+});
 /**
  * @author: <vanhau.vo@urekamedia.vn>
  * @todo:

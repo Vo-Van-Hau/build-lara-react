@@ -17,10 +17,12 @@ const ContentSection = (props) => {
                         return (
                             <Route path='/' element={<><Outlet /></>}>
                                 <Route
-                                    exact
                                     path={`${parseURL}/:moduleName/:controllerName`}
                                     element={<ModuleView history={history} {...props}/>}
                                 />
+                                <Route path='*'>
+                                    <>Page not found !!!</>
+                                </Route>
                             </Route>
                         );
                     })()}
