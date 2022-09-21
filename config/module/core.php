@@ -11,6 +11,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
+    "frontend_url" => env("APP_FRONTEND_URL", ""),
     "backend_url" => env("APP_BACKEND_URL", "admin"),
 
 

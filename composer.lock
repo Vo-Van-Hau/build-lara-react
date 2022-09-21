@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1963bc44f874cd3ec0ce3ff42eebf0bf",
+    "content-hash": "3c3405bc310d4c8dd58bb857fa00ede4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -830,6 +830,51 @@
                 }
             ],
             "time": "2020-12-29T14:50:06+00:00"
+        },
+        {
+            "name": "frontend/core",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Core",
+                "reference": "287dd6362834fd194ee4bd2bfdcd98533ea815af"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Core\\Providers\\CoreServiceProvider",
+                        "Frontend\\Core\\Providers\\CoreRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "CoreFrontend": "Frontend\\Core\\Facades\\Core"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Core\\": "src/"
+                },
+                "classmap": [
+                    "database/seeders"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "fruitcake/laravel-cors",
@@ -8522,7 +8567,8 @@
         "modules/auth": 20,
         "modules/users": 20,
         "modules/module": 20,
-        "modules/publishers": 20
+        "modules/publishers": 20,
+        "frontend/core": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
