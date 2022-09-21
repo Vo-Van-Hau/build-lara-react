@@ -10,6 +10,10 @@ else if(MIX_SOURCE && MIX_SOURCE === 'frontend') {
     branchesPath = `${__dirname}/packages/Frontend/modules/${MIX_MODULE}`;
     pathMix = `${branchesPath}/webpack.mix.js`;
 }
+else if(MIX_SOURCE && MIX_SOURCE === 'sellers') {
+    branchesPath = `${__dirname}/packages/Sellers/modules/${MIX_MODULE}`;
+    pathMix = `${branchesPath}/webpack.mix.js`;
+}
 
 // fs.existsSync() The fs.existsSync() method is used to synchronously check if a file already exists in the given path or not.
 // It returns a boolean value which indicates the presence of a file.

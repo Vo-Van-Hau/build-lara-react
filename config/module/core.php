@@ -11,9 +11,9 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    "frontend_url" => env("APP_FRONTEND_URL", ""),
+    "frontend_url" => env("APP_FRONTEND_URL", "shopping"),
     "backend_url" => env("APP_BACKEND_URL", "admin"),
-
+    "sellers_url" => env("APP_SELLERS_URL", "sellers"),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,6 +31,7 @@ return [
      */
     "mix_frontend_asset" => env("MIX_FRONTEND_ASSET", "frontend"),
     "mix_backend_asset" => env("MIX_BACKEND_ASSET", "backend"),
+    "mix_sellers_asset" => env("MIX_SELLERS_ASSET", "sellers"),
 
     "locales" => ["en", "vn"],
 

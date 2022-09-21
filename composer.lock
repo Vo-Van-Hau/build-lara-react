@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c3405bc310d4c8dd58bb857fa00ede4",
+    "content-hash": "2ae989bbfbf57b8efe361920bcd87b51",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3738,6 +3738,51 @@
                 }
             ],
             "time": "2021-09-25T23:10:38+00:00"
+        },
+        {
+            "name": "sellers/core",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Sellers/modules/Core",
+                "reference": "fd5c4ef906a85cff56c2ad914b0e59e463377569"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sellers\\Core\\Providers\\CoreServiceProvider",
+                        "Sellers\\Core\\Providers\\CoreRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "CoreSellers": "Sellers\\Core\\Facades\\Core"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sellers\\Core\\": "src/"
+                },
+                "classmap": [
+                    "database/seeders"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -8568,7 +8613,8 @@
         "modules/users": 20,
         "modules/module": 20,
         "modules/publishers": 20,
-        "frontend/core": 20
+        "frontend/core": 20,
+        "sellers/core": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

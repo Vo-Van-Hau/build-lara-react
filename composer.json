@@ -28,7 +28,8 @@
         "modules/module": "*@dev",
         "modules/publishers": "*@dev",
 
-        "frontend/core": "*@dev"
+        "frontend/core": "*@dev",
+        "sellers/core": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -45,7 +46,8 @@
         "psr-4": {
             "App\\": "app/",
             "Modules\\": "modules/",
-            "Frontend\\": "packages/Frontend/modules/"
+            "Frontend\\": "packages/Frontend/modules/",
+            "Sellers\\": "packages/Sellers/modules/"
         }
     },
     "autoload-dev": {
@@ -112,6 +114,11 @@
         {
             "type": "path",
             "url": "packages/Frontend/modules/Core",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "packages/Sellers/modules/Core",
             "symlink": false
         }
     ]

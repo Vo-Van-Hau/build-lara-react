@@ -2,7 +2,7 @@
 
 return [
 
-    "namespace"     => "CoreFrontend",
+    "namespace"     => "CoreSellers",
     "version"       => "1.00.000",
 
     /*
@@ -11,5 +11,5 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    "frontend_url" => env("APP_FRONTEND_URL", "shopping"),
+    "sellers_url" => env("APP_SELLERS_URL", "sellers"),
 ];
