@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Controllers\Traits;
+namespace Sellers\Core\Controllers\Traits;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -9,7 +9,7 @@ namespace Modules\Core\Controllers\Traits;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-09-11
+ * @since 2022-09-22
  */
 trait BasicController {
 

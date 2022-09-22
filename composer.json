@@ -31,7 +31,8 @@
         "frontend/core": "*@dev",
         "frontend/products": "*@dev",
 
-        "sellers/core": "*@dev"
+        "sellers/core": "*@dev",
+        "sellers/orders": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -115,6 +116,7 @@
         },
 
 
+
         {
             "type": "path",
             "url": "packages/Frontend/modules/Core",
@@ -126,10 +128,16 @@
             "symlink": false
         },
 
+        
 
         {
             "type": "path",
             "url": "packages/Sellers/modules/Core",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "packages/Sellers/modules/Orders",
             "symlink": false
         }
     ]

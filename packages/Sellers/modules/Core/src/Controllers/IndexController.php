@@ -4,7 +4,7 @@ namespace Sellers\Core\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Core\Core;
+use Sellers\Core\Core;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -13,7 +13,7 @@ use Modules\Core\Core;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-09-21
+ * @since 2022-09-22
  */
 class IndexController extends Controller {
 

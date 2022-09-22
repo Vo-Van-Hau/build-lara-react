@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b1ab6ee067c1b1202e2dd0ab9ab1ded",
+    "content-hash": "5d0de753c8cec8cd6ce8c7235a05d874",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3825,6 +3825,51 @@
                 }
             ],
             "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "sellers/orders",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Sellers/modules/Orders",
+                "reference": "5f6d191990c429843775b157bc36c4a2a6f9867e"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sellers\\Orders\\Providers\\OrdersServiceProvider",
+                        "Sellers\\Orders\\Providers\\OrdersRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "OrdersSellers": "Sellers\\Orders\\Facades\\Orders"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sellers\\Orders\\": "src/"
+                },
+                "classmap": [
+                    "database/seeders"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Orders",
             "transport-options": {
                 "relative": true
             }
@@ -8660,7 +8705,8 @@
         "modules/publishers": 20,
         "frontend/core": 20,
         "frontend/products": 20,
-        "sellers/core": 20
+        "sellers/core": 20,
+        "sellers/orders": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

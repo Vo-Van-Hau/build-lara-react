@@ -1,6 +1,6 @@
 const mix = require('laravel-mix');
-const packageName = 'Frontend';
-const moduleName = 'Products';
+const packageName = 'Sellers';
+const moduleName = 'Orders';
 const resourcePath = `./packages/${packageName}/modules/${moduleName}`;
 const publicPath = `./public/themes/${packageName.toLowerCase()}/modules/${moduleName.toLowerCase()}`;
 

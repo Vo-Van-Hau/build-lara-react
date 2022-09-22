@@ -1,7 +1,8 @@
 const mix = require('laravel-mix');
+const packageName = 'Sellers';
 const moduleName = 'Core';
-const resourcePath = `./packages/Sellers/modules/${moduleName}`;
-const publicPath = `./public/themes/sellers/modules/${moduleName.toLowerCase()}`;
+const resourcePath = `./packages/${packageName}/modules/${moduleName}`;
+const publicPath = `./public/themes/${packageName.toLowerCase()}/modules/${moduleName.toLowerCase()}`;
 
 if(!moduleName) return;
 mix.setPublicPath(`${publicPath}`);

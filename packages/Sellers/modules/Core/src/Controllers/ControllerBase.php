@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Core\Controllers;
+namespace Sellers\Core\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Core\Controllers\Traits\BasicController;
+use Sellers\Core\Controllers\Traits\BasicController;
 
 /**
  * @author <hauvo1709@gmail.com>

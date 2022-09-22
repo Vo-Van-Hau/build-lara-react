@@ -1,6 +1,6 @@
 <?php
 
-namespace Sellers\Core\Providers;
+namespace Sellers\Orders\Providers;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -13,21 +13,21 @@ use Illuminate\Support\Facades\Config;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-09-21
+ * @since 2022-09-22
  */
-class CoreServiceProvider extends ServiceProvider {
+class OrdersServiceProvider extends ServiceProvider {
 
     /**
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
     protected $package = "Sellers";
-    protected $module = "Core";
+    protected $module = "Orders";
     protected $models = [
-        "Core" => [
-            "name" => "Core",
-            "status" => "active",
-        ]
+    //     "Publishers" => [
+    //         "name" => "Publishers",
+    //         "status" => "active",
+    //     ]
     ];
 
     /**
@@ -37,21 +37,20 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function boot() {
 
-        // Load routes
-        // $this->loadRoutesFrom(__DIR__ . "/../Routes/web.php");
-
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.core.namespace", "CoreSellers"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.orders.namespace", "OrdersSellers"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.core.namespace", "CoreSellers"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.orders.namespace", "OrdersSellers"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
 
         $this->publishResources();
+
+        $this->commands([]);
     }
 
     /**
@@ -60,13 +59,11 @@ class CoreServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        /** Bind Core */
         $this->app->bind($this->module . $this->package, function ($app) {
             return $this->app->make("{$this->package}\\{$this->module}\\{$this->module}");
         });
-        /** Bind Base to repository */
         foreach ($this->models as $model) {
-            if($model["status"] != "active") continue;
+            // if($model["status"] != "active") continue;
             // $this->app->bind(
             //     "Modules\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
             //     "Modules\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
@@ -82,6 +79,6 @@ class CoreServiceProvider extends ServiceProvider {
     private function publishResources() {
 
         //Publish Resource
-        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/core.php")], "config");
+        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/orders.php")], "config");
     }
 }

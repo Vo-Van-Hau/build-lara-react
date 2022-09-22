@@ -2,7 +2,7 @@
 
 namespace Frontend\Products\Models;
 
-use Products\Core\Models\ModelBase;
+use Frontend\Core\Models\ModelBase;
 
 class Products extends ModelBase {
 

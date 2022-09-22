@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Core\Controllers;
+namespace Sellers\Core\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Modules\Core\Exceptions\ApiException;
-use Modules\Core\Traits\Locates;
+use Sellers\Core\Exceptions\ApiException;
+use Sellers\Core\Traits\Locates;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -14,7 +14,7 @@ use Modules\Core\Traits\Locates;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-07-21
+ * @since 2022-09-22
  */
 class CoreController extends ControllerBase {
 
@@ -26,7 +26,7 @@ class CoreController extends ControllerBase {
      * @return void
      */
     public function get_module() {
-        $module_path = \Modules\Core\Core::module_path();
+        $module_path = \Sellers\Core\Core::module_path();
         $dirs = [];
         foreach (glob($module_path . "/*", GLOB_ONLYDIR) as $dir) {
             $folder = basename($dir);
@@ -51,7 +51,7 @@ class CoreController extends ControllerBase {
         }
         return response()->json([
                 "status" => true,
-                "config" => \Modules\Core\Core::config(),
+                "config" => \Sellers\Core\Core::config(),
                 "modules" => $dirs,
                 "menus" => $menu_acl,
                 "language" => [
