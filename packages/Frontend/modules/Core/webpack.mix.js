@@ -1,7 +1,8 @@
 const mix = require('laravel-mix');
+const packageName = 'Frontend';
 const moduleName = 'Core';
-const resourcePath = `./packages/Frontend/modules/${moduleName}`;
-const publicPath = `./public/themes/frontend/modules/${moduleName.toLowerCase()}`;
+const resourcePath = `./packages/${packageName}/modules/${moduleName}`;
+const publicPath = `./public/themes/${packageName.toLowerCase()}/modules/${moduleName.toLowerCase()}`;
 
 if(!moduleName) return;
 mix.setPublicPath(`${publicPath}`);

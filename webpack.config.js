@@ -26,8 +26,14 @@ if(!source_name || !module_name) {
 console.log('[Webpack] Source Name: ' + source_name);
 console.log('[Webpack] Module Name: ' + capitalizeFirstLetter(module_name));
 
-const resourcePath = `./modules/${capitalizeFirstLetter(module_name)}`;
-const publicPath = `./public/themes/${source_name}/modules/${module_name.toLowerCase()}`;
+let resourcePath = `./modules/${capitalizeFirstLetter(module_name)}`;
+let publicPath = `./public/themes/${source_name}/modules/${module_name.toLowerCase()}`;
+
+if(source_name === 'frontend') {
+    resourcePath = `./packages/Frontend/modules/${capitalizeFirstLetter(module_name)}`;
+} else if(source_name === 'sellers') {
+    resourcePath = `./packages/Sellers/modules/${capitalizeFirstLetter(module_name)}`;
+}
 
 /**
  * @author: <vanhau.vo@urekamedia.vn>

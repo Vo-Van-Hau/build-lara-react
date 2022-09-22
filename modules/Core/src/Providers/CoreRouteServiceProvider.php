@@ -46,7 +46,7 @@ class CoreRouteServiceProvider extends RouteServiceProvider {
     public function boot() {
         $this->configureRateLimiting();
         $this->routes(function () {
-            Route::prefix(Config::get("module.core.backend_url"))->group(function() {
+            Route::prefix(Config::get("module.core.backend_url", "admin"))->group(function() {
                 Route::prefix("api")
                     ->namespace($this->namespace)
                     ->group(__DIR__ . "/../Routes/api.php");

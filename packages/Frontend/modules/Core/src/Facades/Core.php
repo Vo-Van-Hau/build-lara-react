@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Facades;
+namespace Frontend\Core\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-07-21
+ * @since 2022-09-21
  */
 class Core extends Facade {
 

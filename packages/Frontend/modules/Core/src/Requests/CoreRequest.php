@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Requests;
+namespace Frontend\Core\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-07-22
+ * @since 2022-09-22
  */
 class CoreRequest extends FormRequest {
 

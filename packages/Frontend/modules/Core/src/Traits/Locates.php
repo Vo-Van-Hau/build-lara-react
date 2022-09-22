@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Traits;
+namespace Frontend\Core\Traits;
 
 use File;
 use Illuminate\Support\Facades\Config;
@@ -38,9 +38,9 @@ trait Locates {
      * @return array
      */
     protected static function translation(string $locale, string $module) {
-        $path = \Modules\Core\Core::module_path() . "/{$module}/resources/lang";
+        $path = \Frontend\Core\Core::module_path() . "/{$module}/resources/lang";
         return collect(File::allFiles($path))->flatMap(function ($file) use ($locale, $module) {
-            $key = ($translation = $file->getBasename('.php'));
+            $key = ($translation = $file->getBasename(".php"));
             return [$key => __("{$module}::" . $translation, [], $locale)];
         });
     }

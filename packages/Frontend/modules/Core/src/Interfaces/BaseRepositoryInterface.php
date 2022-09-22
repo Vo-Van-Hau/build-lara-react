@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Core\Interfaces;
+namespace Frontend\Core\Interfaces;
 
-use Modules\Core\Models\ModelBase;
+use Frontend\Core\Models\ModelBase;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -11,7 +11,7 @@ use Modules\Core\Models\ModelBase;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-07-21
+ * @since 2022-09-21
  */
 interface BaseRepositoryInterface {
 

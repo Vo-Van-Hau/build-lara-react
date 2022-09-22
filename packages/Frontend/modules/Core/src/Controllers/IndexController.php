@@ -23,7 +23,7 @@ class IndexController extends Controller {
      * @return void
      */
     public function __construct() {
-        
+
     }
 
     /**

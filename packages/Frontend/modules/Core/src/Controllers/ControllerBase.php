@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Controllers;
+namespace Frontend\Core\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Core\Controllers\Traits\BasicController;

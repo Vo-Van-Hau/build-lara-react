@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ae989bbfbf57b8efe361920bcd87b51",
+    "content-hash": "0b1ab6ee067c1b1202e2dd0ab9ab1ded",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -872,6 +872,51 @@
                 }
             ],
             "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "frontend/products",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Products",
+                "reference": "a809bed721496fb91dce3cd036ef0003fa604595"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Products\\Providers\\ProductsServiceProvider",
+                        "Frontend\\Products\\Providers\\ProductsRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "ProductsFrontend": "Frontend\\Products\\Facades\\Products"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Products\\": "src/"
+                },
+                "classmap": [
+                    "database/seeders"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Products",
             "transport-options": {
                 "relative": true
             }
@@ -8614,6 +8659,7 @@
         "modules/module": 20,
         "modules/publishers": 20,
         "frontend/core": 20,
+        "frontend/products": 20,
         "sellers/core": 20
     },
     "prefer-stable": true,

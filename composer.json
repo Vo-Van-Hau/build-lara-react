@@ -29,6 +29,8 @@
         "modules/publishers": "*@dev",
 
         "frontend/core": "*@dev",
+        "frontend/products": "*@dev",
+
         "sellers/core": "*@dev"
     },
     "require-dev": {
@@ -111,11 +113,20 @@
             "url": "modules/Publishers",
             "symlink": false
         },
+
+
         {
             "type": "path",
             "url": "packages/Frontend/modules/Core",
             "symlink": false
         },
+        {
+            "type": "path",
+            "url": "packages/Frontend/modules/Products",
+            "symlink": false
+        },
+
+
         {
             "type": "path",
             "url": "packages/Sellers/modules/Core",

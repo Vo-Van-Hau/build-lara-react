@@ -61,7 +61,7 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function register() {
         /** Bind Core */
-        $this->app->bind("CoreFrontend", function ($app) {
+        $this->app->bind($this->module . $this->package, function ($app) {
             return $this->app->make("{$this->package}\\{$this->module}\\{$this->module}");
         });
         /** Bind Base to repository */
