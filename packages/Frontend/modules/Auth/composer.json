@@ -1,0 +1,35 @@
+{
+    "name": "frontend/auth",
+    "description": "Module Auth",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frontend\\Auth\\": "src/"
+        },
+        "classmap": [
+            "database/seeders"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Frontend\\Auth\\Providers\\AuthServiceProvider",
+                "Frontend\\Auth\\Providers\\AuthRouteServiceProvider"
+            ],
+            "aliases": {
+                "AuthFrontend": "Frontend\\Auth\\Facades\\AuthFrontend"
+            }
+        }
+    }
+}
+

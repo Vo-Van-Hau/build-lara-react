@@ -36,4 +36,4 @@ npm run build-by-webpack --source={resource} --module={module}
 - Add the following line to your php.ini file: 
         extension=mongodb.so OR extension=php_mongodb.dll
 2. Run the following command from your Laravel project directory in order to add the MongoDB package for Laravel:
-        composer require jenssegers/mongodb:3.8
+        composer require jenssegers/mongodb:3.8 (package: "jenssegers/mongodb": "3.8",)

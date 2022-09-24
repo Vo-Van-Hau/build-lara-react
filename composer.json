@@ -17,7 +17,6 @@
         "doctrine/dbal": "^3.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "jenssegers/mongodb": "3.8",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
@@ -29,10 +28,14 @@
         "modules/publishers": "*@dev",
 
         "frontend/core": "*@dev",
+        "frontend/auth": "*@dev",
+        "frontend/users": "*@dev",
         "frontend/products": "*@dev",
 
         "sellers/core": "*@dev",
-        "sellers/orders": "*@dev"
+        "sellers/orders": "*@dev",
+        "sellers/auth": "*@dev",
+        "sellers/users": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -124,15 +127,35 @@
         },
         {
             "type": "path",
+            "url": "packages/Frontend/modules/Auth",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "packages/Frontend/modules/Users",
+            "symlink": false
+        },
+        {
+            "type": "path",
             "url": "packages/Frontend/modules/Products",
             "symlink": false
         },
 
-        
+
 
         {
             "type": "path",
             "url": "packages/Sellers/modules/Core",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "packages/Sellers/modules/Auth",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "packages/Sellers/modules/Users",
             "symlink": false
         },
         {

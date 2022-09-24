@@ -1,0 +1,35 @@
+{
+    "name": "sellers/auth",
+    "description": "Module Auth",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sellers\\Auth\\": "src/"
+        },
+        "classmap": [
+            "database/seeders"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sellers\\Auth\\Providers\\AuthServiceProvider",
+                "Sellers\\Auth\\Providers\\AuthRouteServiceProvider"
+            ],
+            "aliases": {
+                "AuthSellers": "Sellers\\Auth\\Facades\\AuthSellers"
+            }
+        }
+    }
+}
+
