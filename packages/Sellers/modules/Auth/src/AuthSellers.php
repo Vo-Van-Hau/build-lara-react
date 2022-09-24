@@ -28,7 +28,7 @@ class AuthSellers {
      * @return string
      */
     public function get_guard() {
-        return Config::get("module.auth.guard", "backend");
+        return Config::get("packages.sellers.auth.guard", "sellers");
     }
 
     /**
