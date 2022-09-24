@@ -1,11 +1,11 @@
 <?php
 
-namespace Sellers\Auth\Middleware;
+namespace Frontend\Auth\Middleware;
 
 use Closure;
-use Sellers\Core\Helpers\Module;
+use Frontend\Core\Helpers\Module;
 use Illuminate\Http\Request;
-use Sellers\Core\Exceptions\ApiException;
+use Frontend\Core\Exceptions\ApiException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Config;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-09-23
  */
-class AuthenticateBackend {
+class AuthenticateFrontend {
 
     /**
      * Handle an incoming request.
@@ -29,12 +29,12 @@ class AuthenticateBackend {
      * @return mixed
      */
     public function handle(Request $request, Closure $next, $guard = null){
-        if (!Auth::guard("module")->check() || ($auth = request()->session()->get("auth_module")) == null) {
+        if (!Auth::guard("frontend")->check() || ($auth = request()->session()->get("auth_frontend")) == null) {
             if (strtolower($request->header("Content-Type")) == "application/json") {
                 throw new ApiException(trans("Auth::auth.the_authentication_token_was_expired"), 401, []);
             }
             else {
-                $url = Config::get("module.core.backend_url") . "/auth/login";
+                $url = Config::get("packages.frontend.core.frontend_url") . "/auth/login";
                 return redirect()->guest($url);
             }
         }

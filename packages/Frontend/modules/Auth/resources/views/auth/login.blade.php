@@ -1,5 +1,5 @@
 @php
-    use Modules\Core\Core;
+    use Frontend\Core\Core;
 @endphp
 
 <!DOCTYPE html>

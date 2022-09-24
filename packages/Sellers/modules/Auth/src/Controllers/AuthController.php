@@ -98,7 +98,7 @@ class AuthController extends ControllerBase {
                 }
             }
         }
-        return view("Auth::auth.login");
+        return view("AuthSellers::auth.login");
     }
 
      /**

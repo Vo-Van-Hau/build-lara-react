@@ -31,10 +31,10 @@ class AuthServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("module.auth.namespace", "Auth"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.frontend.auth.namespace", "AuthFrontend"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("module.auth.namespace", "Auth"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.frontend.auth.namespace", "AuthFrontend"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
