@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "613ec17c320305fb15f06650989daeec",
+    "content-hash": "20c409dffd4da10e52a26a991ca13e22",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -962,6 +962,51 @@
                 }
             ],
             "description": "Module Products",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "frontend/publishers",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Publishers",
+                "reference": "5d5c38ad8e0d4ab3ae326b64b58a6a5c6f2409ed"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Publishers\\Providers\\PublishersServiceProvider",
+                        "Frontend\\Publishers\\Providers\\PublishersRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Publishers": "Frontend\\Publishers\\Facades\\Publishers"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Publishers\\": "src/"
+                },
+                "classmap": [
+                    "database/seeders"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Publisher",
             "transport-options": {
                 "relative": true
             }
@@ -3795,6 +3840,51 @@
                 }
             ],
             "description": "Module Orders",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "sellers/publishers",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Sellers/modules/Publishers",
+                "reference": "1e09d3527379f3a2bc8551880a6a03a39532a9cb"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sellers\\Publishers\\Providers\\PublishersServiceProvider",
+                        "Sellers\\Publishers\\Providers\\PublishersRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Publishers": "Sellers\\Publishers\\Facades\\Publishers"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sellers\\Publishers\\": "src/"
+                },
+                "classmap": [
+                    "database/seeders"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Publisher",
             "transport-options": {
                 "relative": true
             }
@@ -8676,11 +8766,13 @@
         "frontend/core": 20,
         "frontend/auth": 20,
         "frontend/users": 20,
+        "frontend/publishers": 20,
         "frontend/products": 20,
         "sellers/core": 20,
-        "sellers/orders": 20,
         "sellers/auth": 20,
-        "sellers/users": 20
+        "sellers/users": 20,
+        "sellers/publishers": 20,
+        "sellers/orders": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -1,30 +1,22 @@
 <?php
 
-namespace Sellers\Users\Providers;
+namespace Sellers\Publishers\Providers;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
 
-class UsersServiceProvider extends ServiceProvider {
+class PublishersServiceProvider extends ServiceProvider {
 
     /**
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
     protected $package = "Sellers";
-    protected $module = "Users";
+    protected $module = "Publishers";
     protected $models = [
-        "Users" => [
-            "name" => "Users",
-            "status" => "active",
-        ],
-        "Groups" => [
-            "name" => "Groups",
-            "status" => "active",
-        ],
-        "Roles" => [
-            "name" => "Roles",
+        "Publishers" => [
+            "name" => "Publishers",
             "status" => "active",
         ]
     ];
@@ -39,10 +31,10 @@ class UsersServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.users.namespace", "UsersSellers"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.publishers.namespace", "PublishersSellers"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.users.namespace", "UsersSellers"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.publishers.namespace", "PublishersSellers"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
@@ -58,8 +50,8 @@ class UsersServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $this->app->bind($this->module . $this->package, function ($app) {
-            return $this->app->make("{$this->package}\\{$this->module}\\{$this->module}");
+        $this->app->bind($this->module, function ($app) {
+            return $this->app->make("Modules\\{$this->module}\\{$this->module}");
         });
         foreach ($this->models as $model) {
             if($model["status"] != "active") continue;
@@ -78,6 +70,6 @@ class UsersServiceProvider extends ServiceProvider {
     private function publishResources() {
 
         //Publish Resource
-        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/users.php")], "config");
+        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/publishers.php")], "config");
     }
 }

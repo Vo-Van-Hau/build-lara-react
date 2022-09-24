@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Core\Repositories\Eloquents;
+namespace Sellers\Core\Repositories\Eloquents;
 
-use Modules\Core\Interfaces\BaseRepositoryInterface;
-use Modules\Core\Models\ModelBase;
+use Sellers\Core\Interfaces\BaseRepositoryInterface;
+use Sellers\Core\Models\ModelBase;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,7 +16,7 @@ use Illuminate\Support\Arr;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-07-21
+ * @since 2022-09-24
  */
 class BaseRepository implements BaseRepositoryInterface {
 

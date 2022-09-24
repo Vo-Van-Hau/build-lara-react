@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Core\Models;
+namespace Sellers\Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\Models\Traits\BasicModel;
+use Sellers\Core\Models\Traits\BasicModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Auth\AuthCMS;
+use Sellers\Auth\AuthSellers;
 use Exception;
 
 /**
@@ -15,7 +15,7 @@ use Exception;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-07-21
+ * @since 2022-09-24
  */
 class ModelBase extends Model {
 

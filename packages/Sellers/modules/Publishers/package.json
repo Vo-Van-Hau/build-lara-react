@@ -1,0 +1,17 @@
+{
+    "name": "publishers",
+    "version": "1.00.000",
+    "author": [
+        {
+            "email": "vanhau.vo@urekamedia.vn",
+            "name": "vovanhau"
+        }
+    ],
+    "dependencies": {},
+    "devDependencies": {},
+    "component": {
+        "Publishers": true
+    },
+    "menu": {},
+    "status": true
+}

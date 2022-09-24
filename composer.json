@@ -30,12 +30,14 @@
         "frontend/core": "*@dev",
         "frontend/auth": "*@dev",
         "frontend/users": "*@dev",
+        "frontend/publishers": "*@dev",
         "frontend/products": "*@dev",
 
         "sellers/core": "*@dev",
-        "sellers/orders": "*@dev",
         "sellers/auth": "*@dev",
-        "sellers/users": "*@dev"
+        "sellers/users": "*@dev",
+        "sellers/publishers": "*@dev",
+        "sellers/orders": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -137,6 +139,11 @@
         },
         {
             "type": "path",
+            "url": "packages/Frontend/modules/Publishers",
+            "symlink": false
+        },
+        {
+            "type": "path",
             "url": "packages/Frontend/modules/Products",
             "symlink": false
         },
@@ -156,6 +163,11 @@
         {
             "type": "path",
             "url": "packages/Sellers/modules/Users",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "packages/Sellers/modules/Publishers",
             "symlink": false
         },
         {

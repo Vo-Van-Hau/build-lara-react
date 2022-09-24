@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Users\Models\Traits;
+namespace Sellers\Users\Models\Traits;
 
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-08-21
+ * @since 2022-09-24
  */
 trait ACL {
 
