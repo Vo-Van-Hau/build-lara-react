@@ -1,0 +1,34 @@
+{
+    "name": "frontend/home",
+    "description": "Module Home",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frontend\\Home\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Frontend\\Home\\Providers\\HomeServiceProvider",
+                "Frontend\\Home\\Providers\\HomeRouteServiceProvider"
+            ],
+            "aliases": {
+                "HomeFrontend": "Frontend\\Home\\Facades\\Home"
+            }
+        }
+    }
+}
+
+
+

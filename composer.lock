@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20c409dffd4da10e52a26a991ca13e22",
+    "content-hash": "1563529977ef2cafae946a2863b57dbb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -911,6 +911,48 @@
                 }
             ],
             "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "frontend/home",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Home",
+                "reference": "1f8723cd7968698a8d4da0f392e828bb1e90c994"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Home\\Providers\\HomeServiceProvider",
+                        "Frontend\\Home\\Providers\\HomeRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "HomeFrontend": "Frontend\\Home\\Facades\\Home"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Home\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Home",
             "transport-options": {
                 "relative": true
             }
@@ -3759,6 +3801,48 @@
                 }
             ],
             "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "sellers/dashboard",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Sellers/modules/Dashboard",
+                "reference": "0d6fd7b5fa647050f86704f1df1e56d85f6aad23"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sellers\\Dashboard\\Providers\\DashboardServiceProvider",
+                        "Sellers\\Dashboard\\Providers\\DashboardRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "OrdersSellers": "Sellers\\Dashboard\\Facades\\Dashboard"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sellers\\Dashboard\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Dashboard",
             "transport-options": {
                 "relative": true
             }
@@ -8722,11 +8806,13 @@
         "frontend/auth": 20,
         "frontend/users": 20,
         "frontend/publishers": 20,
+        "frontend/home": 20,
         "frontend/products": 20,
         "sellers/core": 20,
         "sellers/auth": 20,
         "sellers/users": 20,
         "sellers/publishers": 20,
+        "sellers/dashboard": 20,
         "sellers/orders": 20
     },
     "prefer-stable": true,
