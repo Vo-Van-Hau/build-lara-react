@@ -15,10 +15,7 @@
     "autoload": {
         "psr-4": {
             "Sellers\\Users\\": "src/"
-        },
-        "classmap": [
-            "database/seeders"
-        ]
+        }
     },
     "extra": {
         "laravel": {

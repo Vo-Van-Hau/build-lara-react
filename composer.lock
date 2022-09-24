@@ -837,7 +837,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Auth",
-                "reference": "435b3c80073f1be26f20c2a8d44c80d9174ed0f3"
+                "reference": "90b7d2fb0a8aa226329a4769cc21aa3f0c470b1a"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -857,10 +857,7 @@
             "autoload": {
                 "psr-4": {
                     "Frontend\\Auth\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -882,7 +879,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Core",
-                "reference": "287dd6362834fd194ee4bd2bfdcd98533ea815af"
+                "reference": "6161c2068c1ed5214922864ad1e32c0c16eb60aa"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -902,10 +899,7 @@
             "autoload": {
                 "psr-4": {
                     "Frontend\\Core\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -927,7 +921,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Products",
-                "reference": "a809bed721496fb91dce3cd036ef0003fa604595"
+                "reference": "8483548c0b88fb865228de3ff7171e852cf1a914"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -947,10 +941,7 @@
             "autoload": {
                 "psr-4": {
                     "Frontend\\Products\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -972,7 +963,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Publishers",
-                "reference": "5d5c38ad8e0d4ab3ae326b64b58a6a5c6f2409ed"
+                "reference": "1de2ee64d267a12d4450573af1c09a33fa4d855e"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -992,10 +983,7 @@
             "autoload": {
                 "psr-4": {
                     "Frontend\\Publishers\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -1017,7 +1005,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Users",
-                "reference": "b2e4373234f71002091328760b32ede7d152488e"
+                "reference": "5b3a6955d8d060cfaa4101e914990da48fae3f28"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -1037,10 +1025,7 @@
             "autoload": {
                 "psr-4": {
                     "Frontend\\Users\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -2238,7 +2223,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Auth",
-                "reference": "b1ead73d6fd62b3df5abb32d24a699b817a4f28f"
+                "reference": "25e4b166765be62a3d149d5e6a13ce2f9da6a94d"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2258,10 +2243,7 @@
             "autoload": {
                 "psr-4": {
                     "Modules\\Auth\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -2283,7 +2265,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Core",
-                "reference": "8785e2a62d7e90f6f51bf31c8ec04d51ec7f5256"
+                "reference": "70fc31f93a7b2bbd802b85f04a869ca146bbb86d"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2303,10 +2285,7 @@
             "autoload": {
                 "psr-4": {
                     "Modules\\Core\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -2328,7 +2307,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Module",
-                "reference": "53b6d016fd669f48e48f47381741ceed8c4a3283"
+                "reference": "0dc5bfacc150a89d8f8c996cac8e990f706f1c54"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2348,10 +2327,7 @@
             "autoload": {
                 "psr-4": {
                     "Modules\\Module\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -2373,7 +2349,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Publishers",
-                "reference": "b246c63357892c4815df9eb071b6a2fbb9bcb905"
+                "reference": "4d42120862960082e10df99b42b248b3e48ab730"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2393,10 +2369,7 @@
             "autoload": {
                 "psr-4": {
                     "Modules\\Publishers\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -2418,7 +2391,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Users",
-                "reference": "bee93d79f259ffd6c6dea55c7d1326ab1a79582b"
+                "reference": "2c3e70cb1a0392f51e595e4d0083464c22e2dd9e"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2438,10 +2411,7 @@
             "autoload": {
                 "psr-4": {
                     "Modules\\Users\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -3715,7 +3685,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Sellers/modules/Auth",
-                "reference": "3109b7e9a17e20fb13628384b8b7e9461d275274"
+                "reference": "19e626c50208adce5ba594ffbf9abbcfe82cfc75"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -3735,10 +3705,7 @@
             "autoload": {
                 "psr-4": {
                     "Sellers\\Auth\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -3760,7 +3727,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Sellers/modules/Core",
-                "reference": "fd5c4ef906a85cff56c2ad914b0e59e463377569"
+                "reference": "46da962c4709c318853b76fbe9a50927a1449211"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -3780,10 +3747,7 @@
             "autoload": {
                 "psr-4": {
                     "Sellers\\Core\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -3805,7 +3769,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Sellers/modules/Orders",
-                "reference": "5f6d191990c429843775b157bc36c4a2a6f9867e"
+                "reference": "0009f996f29912ba01948212e350e637514a1df5"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -3825,10 +3789,7 @@
             "autoload": {
                 "psr-4": {
                     "Sellers\\Orders\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -3850,7 +3811,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Sellers/modules/Publishers",
-                "reference": "1e09d3527379f3a2bc8551880a6a03a39532a9cb"
+                "reference": "0d83860eff1653aa7216219bcaec51e42c861f7a"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -3870,10 +3831,7 @@
             "autoload": {
                 "psr-4": {
                     "Sellers\\Publishers\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"
@@ -3895,7 +3853,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Sellers/modules/Users",
-                "reference": "7a10c61911b29b891487fda1f09421ff0f6916d6"
+                "reference": "6b0c2229b21679fbadd88e5d0e15a394bf6a7401"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -3915,10 +3873,7 @@
             "autoload": {
                 "psr-4": {
                     "Sellers\\Users\\": "src/"
-                },
-                "classmap": [
-                    "database/seeders"
-                ]
+                }
             },
             "license": [
                 "MIT"

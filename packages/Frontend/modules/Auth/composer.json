@@ -15,10 +15,7 @@
     "autoload": {
         "psr-4": {
             "Frontend\\Auth\\": "src/"
-        },
-        "classmap": [
-            "database/seeders"
-        ]
+        }
     },
     "extra": {
         "laravel": {
