@@ -24,6 +24,7 @@ const InjectedModuleView = ({ history, ...props }) => {
         const moduleName = reload ? modName : modName || props.moduleName;
         const controllerName = reload ? comName : comName || props.controllerName;
         if (!window.winter || !window.winter[moduleName]) {
+            // JS script
             const script = document.createElement('script');
             script.type = 'text/javascript';
             script.onload = () => {
@@ -39,8 +40,15 @@ const InjectedModuleView = ({ history, ...props }) => {
                     set_view_in_state(moduleName, controllerName);
                 }, 0);
             };
-            script.src = `${window.sparrowConfig.app.assetURL}/modules/${moduleName.toLowerCase()}/js/${"index.js"}?v=${props.version}`;
+            script.src = `${window.sparrowConfig.app.assetURL}/modules/${moduleName.toLowerCase()}/js/${'index.js'}?v=${props.version}`;
             document.getElementsByTagName('head')[0].appendChild(script);
+
+            // CSS link
+            const style = document.createElement('link');
+            style.type = 'text/css';
+            style.rel = 'stylesheet'
+            style.href = `${window.sparrowConfig.app.assetURL}/modules/${moduleName.toLowerCase()}/css/${"index.css"}?v=${props.version}`;
+            document.getElementsByTagName('head')[0].appendChild(style);
         } else {
             setModuleComponent({
                 module: null
