@@ -1,5 +1,5 @@
 import React,{ useContext, useState ,useEffect } from 'react';
-import { GroupsContext } from '../../Contexts/ProductsContext';
+import { GroupsContext } from '../../Contexts/GroupsContext';
 import Helper from '../../Helper/Helper';
 import { Drawer, Table, Button, Tooltip, Avatar, Input } from 'antd';
 import { CheckOutlined, UserOutlined } from '@ant-design/icons';

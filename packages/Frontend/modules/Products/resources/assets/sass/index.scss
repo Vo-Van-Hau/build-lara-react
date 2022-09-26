@@ -1,0 +1,19 @@
+.products_by_category_container {
+    .leftSide,
+    .rightSide {
+        background-color: #fff;
+        h5 {
+            padding: 1rem 0 0 1rem;
+        }
+    }
+    .rightSide {
+        background-color: #fff;
+        .productContainer{
+            .ant-space{
+            }
+            ul.ant-pagination{
+                padding: 1rem 0;
+            }
+        }
+    }
+}
