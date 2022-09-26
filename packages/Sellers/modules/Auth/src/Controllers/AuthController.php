@@ -71,34 +71,34 @@ class AuthController extends ControllerBase {
         if ($request->isMethod("post")) {
             $validator = $this->validate_login($request);
             if ($validator->fails()) {
-                throw new ApiException(trans("Auth::auth.invalid_credentials"), 400, $validator->getMessageBag()->toArray());
+                throw new ApiException(trans("AuthSellers::auth.invalid_credentials"), 400, $validator->getMessageBag()->toArray());
             } else {
                 $credentials = $this->get_credentials($request);
                 try {
-                    if (Auth::guard(Config::get("module.auth.guard", "module"))->attempt($credentials, $request->has("remember"))) {
+                    if (Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->attempt($credentials, $request->has("remember"))) {
                         /**
                          * @description: To log a user into the application by their ID, you may use the loginUsingId method.
                          * This method accepts the primary key of the user you wish to authenticate
                          */
-                        $id = Auth::guard(Config::get("module.auth.guard", "module"))->id(); // Get the currently authenticated user's ID...
-                        Auth::guard(Config::get("module.auth.guard", "module"))->loginUsingId($id, $request->has("remember")); // Login and "remember" the given user...
+                        $id = Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->id(); // Get the currently authenticated user's ID...
+                        Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->loginUsingId($id, $request->has("remember")); // Login and "remember" the given user...
                         if (!$this->build_session()) {
-                            throw new ApiException(trans("Auth::auth.failed"), 400, []);
+                            throw new ApiException(trans("AuthSellers::auth.failed"), 400, []);
                         }
                         return response()->json([
                                 "redirect_to" => $this->redirectTo(),
                                 "status" => true,
-                                "message" => trans("Auth::auth.login_success"),
+                                "message" => trans("AuthSellers::auth.login_success"),
                             ]);
                     } else {
-                        throw new ApiException(trans("Auth::auth.failed"), 400, []);
+                        throw new ApiException(trans("AuthSellers::auth.failed"), 400, []);
                     }
                 } catch (Exception $errors) {
                     throw new ApiException($errors->getMessage(), 500, []);
                 }
             }
         }
-        return view("Auth::auth.login");
+        return view("AuthSellers::auth.login");
     }
 
      /**

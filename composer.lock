@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20c409dffd4da10e52a26a991ca13e22",
+    "content-hash": "4bf1a9ef5cff43eebd2188550fa42c90",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -292,16 +292,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.4.4",
+            "version": "3.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "4cbbe6e4b9ef6c69d5f4c968c637476f47bb54f5"
+                "reference": "a5a58773109c0abb13e658c8ccd92aeec8d07f9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/4cbbe6e4b9ef6c69d5f4c968c637476f47bb54f5",
-                "reference": "4cbbe6e4b9ef6c69d5f4c968c637476f47bb54f5",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a5a58773109c0abb13e658c8ccd92aeec8d07f9e",
+                "reference": "a5a58773109c0abb13e658c8ccd92aeec8d07f9e",
                 "shasum": ""
             },
             "require": {
@@ -383,7 +383,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.4.4"
+                "source": "https://github.com/doctrine/dbal/tree/3.4.5"
             },
             "funding": [
                 {
@@ -399,7 +399,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-01T21:26:42+00:00"
+            "time": "2022-09-23T17:48:57+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -874,6 +874,48 @@
             }
         },
         {
+            "name": "frontend/checkout",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Checkout",
+                "reference": "178c3fe70dd4f7885c4507483a3e93d5bfee39f2"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Checkout\\Providers\\CheckoutServiceProvider",
+                        "Frontend\\Checkout\\Providers\\CheckoutRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "CheckoutFrontend": "Frontend\\Checkout\\Facades\\Checkout"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Checkout\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Checkout",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "frontend/core",
             "version": "dev-master",
             "dist": {
@@ -911,6 +953,90 @@
                 }
             ],
             "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "frontend/customer",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Customer",
+                "reference": "58026d4f940ab27cbb87238b18222eb3fcd8ad4b"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Customer\\Providers\\CustomerServiceProvider",
+                        "Frontend\\Customer\\Providers\\CustomerRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "CustomerFrontend": "Frontend\\Customer\\Facades\\Customer"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Customer\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Customer",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "frontend/home",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Home",
+                "reference": "1f8723cd7968698a8d4da0f392e828bb1e90c994"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Home\\Providers\\HomeServiceProvider",
+                        "Frontend\\Home\\Providers\\HomeRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "HomeFrontend": "Frontend\\Home\\Facades\\Home"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Home\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Home",
             "transport-options": {
                 "relative": true
             }
@@ -3759,6 +3885,48 @@
                 }
             ],
             "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "sellers/dashboard",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Sellers/modules/Dashboard",
+                "reference": "0d6fd7b5fa647050f86704f1df1e56d85f6aad23"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sellers\\Dashboard\\Providers\\DashboardServiceProvider",
+                        "Sellers\\Dashboard\\Providers\\DashboardRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "OrdersSellers": "Sellers\\Dashboard\\Facades\\Dashboard"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sellers\\Dashboard\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Dashboard",
             "transport-options": {
                 "relative": true
             }
@@ -8722,11 +8890,15 @@
         "frontend/auth": 20,
         "frontend/users": 20,
         "frontend/publishers": 20,
+        "frontend/home": 20,
         "frontend/products": 20,
+        "frontend/checkout": 20,
+        "frontend/customer": 20,
         "sellers/core": 20,
         "sellers/auth": 20,
         "sellers/users": 20,
         "sellers/publishers": 20,
+        "sellers/dashboard": 20,
         "sellers/orders": 20
     },
     "prefer-stable": true,

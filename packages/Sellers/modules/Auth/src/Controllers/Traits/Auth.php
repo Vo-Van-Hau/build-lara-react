@@ -23,8 +23,8 @@ trait Auth {
      * @return boolean
      */
     public function build_session() {
-        if (empty(\Auth::guard(Config::get("module.auth.guard", "module"))->check())) return false;
-        $user = \Auth::guard(Config::get("module.auth.guard", "module"))->getUser();
+        if (empty(\Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->check())) return false;
+        $user = \Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->getUser();
         $acl_list = array();
         if(!empty($user->roles)) {
             foreach($user->roles->acl_role as $key => $item) {
@@ -133,7 +133,7 @@ trait Auth {
             $list_users_of_groups[] = $user_gr->user_id;
         }
         $user->user_group = $list_users_of_groups;
-        request()->session()->put("auth_module", $user);
+        request()->session()->put("auth_sellers", $user);
         request()->session()->put("user", $user);
         request()->session()->save();
         return true;

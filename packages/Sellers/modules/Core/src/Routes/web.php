@@ -7,12 +7,12 @@ Route::middleware(["web"])->group(function () {
     Route::get("/", function(){
         return redirect("/" . Config::get("module.core.frontend_url"));
     });
-    // Route::controller(\Modules\Auth\Controllers\AuthController::class)->group(function () {
-    //     Route::get("/auth/login", "login");
-    // });
+    Route::controller(\Sellers\Auth\Controllers\AuthController::class)->group(function () {
+        Route::get("/auth/login", "login");
+    });
 });
 
-Route::middleware(["web"])->group(function () {
+Route::middleware(["web", "auth_sellers"])->group(function () {
     Route::controller(Sellers\Core\Controllers\IndexController::class)->group(function () {
         Route::any("/", "index");
         Route::any("/index", "index");

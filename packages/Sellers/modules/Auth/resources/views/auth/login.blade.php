@@ -1,5 +1,5 @@
 @php
-    use Modules\Core\Core;
+    use Sellers\Core\Core;
 @endphp
 
 <!DOCTYPE html>

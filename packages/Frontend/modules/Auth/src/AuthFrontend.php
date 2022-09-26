@@ -28,7 +28,7 @@ class AuthFrontend {
      * @return string
      */
     public function get_guard() {
-        return Config::get("module.auth.guard", "backend");
+        return Config::get("packages.frontend.auth.guard", "frontend");
     }
 
     /**
