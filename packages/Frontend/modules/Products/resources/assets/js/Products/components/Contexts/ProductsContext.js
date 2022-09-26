@@ -7,7 +7,7 @@ import {
 
 export const ProductsContext = createContext();
 
-const ProductsContextProvicer = ({ children, axios, history, config }) => {
+const ProductsContextProvider = ({ children, axios, history, config }) => {
 
     const [data, dispatch] = useReducer(ProductsReducer, initialState);
 
@@ -171,4 +171,4 @@ const ProductsContextProvicer = ({ children, axios, history, config }) => {
     );
 }
 
-export default ProductsContextProvicer;
+export default ProductsContextProvider;

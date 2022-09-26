@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/ListGroups';
-import GroupsContextProvicer from './components/Contexts/GroupsContext';
+import ProductDetailPage from './components/Page/ProductDetail';
+import ProductsContextProvider from '../Products/components/Contexts/ProductsContext';
 
 const ProductDetail = (props) => {
 
@@ -38,7 +38,7 @@ const ProductDetail = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<ProductDetailPage {...props}/>);
         }
     }
 
@@ -48,10 +48,9 @@ const ProductDetail = (props) => {
 
     return (
         <>
-            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <ProductsContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer> */}
-            This is Product Detail
+            </ProductsContextProvider>
         </>
     )
 }

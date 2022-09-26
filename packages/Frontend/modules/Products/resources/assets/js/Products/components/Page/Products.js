@@ -6,7 +6,7 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 const { Title, Text } = Typography;
 
-const Products = (props) => {
+const ProductsPage = (props) => {
     return (<>
         <BreadCrumb />
         <Row className='products_by_category_container'>
@@ -162,4 +162,4 @@ const ProductsByCategory = () => {
     </>
 }
 
-export default Products;
+export default ProductsPage;

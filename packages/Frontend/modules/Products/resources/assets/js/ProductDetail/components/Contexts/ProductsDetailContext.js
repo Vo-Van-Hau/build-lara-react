@@ -1,15 +1,15 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, GroupsReducer } from '../Reducers/GroupsReducer';
+import { initialState, ProductDetailReducer } from '../Reducers/ProductDetailReducer';
 import {
     GET_GROUPS, SET_USER_GROUPS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
-export const GroupsContext = createContext();
+export const ProductDetailContext = createContext();
 
-const GroupsContextProvicer = ({ children, axios, history, config }) => {
+const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
 
-    const [data, dispatch] = useReducer(GroupsReducer, initialState);
+    const [data, dispatch] = useReducer(ProductDetailReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -165,10 +165,10 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
     };
 
     return (
-        <GroupsContext.Provider value={todoContextData}>
+        <ProductDetailContext.Provider value={todoContextData}>
             { children }
-        </GroupsContext.Provider>
+        </ProductDetailContext.Provider>
     );
 }
 
-export default GroupsContextProvicer;
+export default ProductDetailContextProvicer;

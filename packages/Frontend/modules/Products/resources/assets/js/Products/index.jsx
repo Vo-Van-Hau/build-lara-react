@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/Products';
+import ProductsPage from './components/Page/Products';
 import GroupsContextProvicer from './components/Contexts/ProductsContext';
 
 const Products = (props) => {
@@ -38,7 +38,7 @@ const Products = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<ProductsPage {...props}/>);
         }
     }
 
