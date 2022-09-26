@@ -26,6 +26,8 @@
         "modules/users": "*@dev",
         "modules/module": "*@dev",
         "modules/publishers": "*@dev",
+        "modules/products": "*@dev",
+        "modules/orders": "*@dev",
 
         "frontend/core": "*@dev",
         "frontend/auth": "*@dev",
@@ -35,6 +37,7 @@
         "frontend/products": "*@dev",
         "frontend/checkout": "*@dev",
         "frontend/customer": "*@dev",
+        "frontend/shop": "*@dev",
 
         "sellers/core": "*@dev",
         "sellers/auth": "*@dev",
@@ -123,7 +126,16 @@
             "url": "modules/Publishers",
             "symlink": false
         },
-
+        {
+            "type": "path",
+            "url": "modules/Products",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "modules/Orders",
+            "symlink": false
+        },
 
 
         {
@@ -164,6 +176,11 @@
         {
             "type": "path",
             "url": "packages/Frontend/modules/Customer",
+            "symlink": false
+        },
+        {
+            "type": "path",
+            "url": "packages/Frontend/modules/Shop",
             "symlink": false
         },
 
