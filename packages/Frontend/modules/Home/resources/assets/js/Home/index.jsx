@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/ListGroups';
-import GroupsContextProvicer from './components/Contexts/GroupsContext';
+import HomePage from './components/Page/HomePage';
+import HomeContextProvicer from './components/Contexts/HomeContext';
 
 const Home = (props) => {
 
@@ -38,7 +38,7 @@ const Home = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<HomePage {...props}/>);
         }
     }
 
@@ -48,10 +48,9 @@ const Home = (props) => {
 
     return (
         <>
-            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <HomeContextProvicer axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer> */}
-            This is Home Page
+            </HomeContextProvicer>
         </>
     )
 }
