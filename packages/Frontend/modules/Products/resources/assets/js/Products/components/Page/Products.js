@@ -74,9 +74,7 @@ const Banner = () => {
 
 
     return <>
-        <Row className='home_top_banner_container'
-            justify="space-between"
-        >
+        <Row className='home_top_banner_container' justify="space-between">
             <Col >
                 <Carousel
                     autoplay arrows swipeToSlide draggable
@@ -107,7 +105,6 @@ const RightSide = () => {
         <Banner />
         <Menu items={menuItems} mode="horizontal" />
         <ProductsByCategory />
-
     </>)
 }
 
