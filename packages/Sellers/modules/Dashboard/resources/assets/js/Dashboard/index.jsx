@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/ListGroups';
+import Overview from '././components/Page/Overview';
 import GroupsContextProvicer from './components/Contexts/GroupsContext';
 
 const Dashboard = (props) => {
@@ -38,7 +38,7 @@ const Dashboard = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<Overview {...props}/>);
         }
     }
 
@@ -48,10 +48,9 @@ const Dashboard = (props) => {
 
     return (
         <>
-            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer> */}
-            This is Dashboard Page
+            </GroupsContextProvicer>
         </>
     )
 }

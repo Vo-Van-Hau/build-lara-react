@@ -1,0 +1,32 @@
+{
+    "name": "modules/shipping",
+    "description": "Module Shipping",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Shipping\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Shipping\\Providers\\ShippingServiceProvider",
+                "Modules\\Shipping\\Providers\\ShippingRouteServiceProvider"
+            ],
+            "aliases": {
+                "Shipping": "Modules\\Shipping\\Facades\\Shipping"
+            }
+        }
+    }
+}
+
