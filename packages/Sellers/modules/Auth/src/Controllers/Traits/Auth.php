@@ -15,19 +15,21 @@ use Sellers\Core\Core;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-09-23
  */
-trait Auth {
+trait Auth
+{
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo: Build session login
      * @return boolean
      */
-    public function build_session() {
+    public function build_session()
+    {
         if (empty(\Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->check())) return false;
         $user = \Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->getUser();
         $acl_list = array();
-        if(!empty($user->roles)) {
-            foreach($user->roles->acl_role as $key => $item) {
+        if (!empty($user->roles)) {
+            foreach ($user->roles->acl_role as $key => $item) {
                 if (empty($acl_list[$item->module_name])) {
                     $acl_list[$item->module_name] = [];
                 }
@@ -36,9 +38,9 @@ trait Auth {
                 }
                 $acl_list[$item->module_name][$item->component_name] = $item->getAttributes();
                 $extend_permission = $item->extend_permission;
-                if($extend_permission){
+                if ($extend_permission) {
                     $extend_permission = json_decode($extend_permission, true);
-                    foreach($extend_permission as $key => $value){
+                    foreach ($extend_permission as $key => $value) {
                         $acl_list[$item->module_name][$item->component_name][$key] = $value;
                     }
                 }
@@ -121,7 +123,8 @@ trait Auth {
         $users_of_groups = DB::connection("mysql")->table("user_group")
             ->select("user_group.user_id")
             ->join("groups", "user_group.group_id", "=", "groups.id")
-            ->whereRaw("groups.id IN (
+            ->whereRaw(
+                "groups.id IN (
                     SELECT group_id FROM user_group WHERE user_id = \"" . $user->id . "\"
                 )
                 OR groups.parent_group_id IN (

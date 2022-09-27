@@ -3,6 +3,7 @@
 namespace Modules\Orders\Controllers;
 
 use Modules\Core\Controllers\ControllerBase;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -13,10 +14,11 @@ use Modules\Core\Controllers\ControllerBase;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-09-25
  */
-class OrdersController extends ControllerBase {
+class OrdersController extends ControllerBase
+{
 
-    public function __construct() {
-
+    public function __construct()
+    {
     }
 
     /**
@@ -25,7 +27,8 @@ class OrdersController extends ControllerBase {
      * @param:
      * @return void
      */
-    public function index(){
+    public function index()
+    {
         return response()->json([], 200);
     }
 }
