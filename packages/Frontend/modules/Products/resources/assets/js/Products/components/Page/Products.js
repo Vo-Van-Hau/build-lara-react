@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { HomeOutlined } from '@ant-design/icons';
 import { Breadcrumb, Col, Row, Menu, Divider, Typography, Affix, Space, Card, Rate, Pagination } from 'antd';
 import { Carousel, Image } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
+import { ProductsContext } from '../Contexts/ProductsContext';
 const { Title, Text } = Typography;
 
 const ProductsPage = (props) => {
+    const {  setRouter } = useContext(ProductsContext);
     return (<>
         <BreadCrumb />
         <Row className='products_by_category_container'>
@@ -137,6 +139,7 @@ const ProductsByCategory = () => {
                         hoverable
                         style={{ width: 200 }}
                         cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+                        onClick={()=> setRouter('productdetail', 1)}
                     >
                         <Meta title={item.title} />
 
