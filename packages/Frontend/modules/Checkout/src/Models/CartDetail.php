@@ -50,16 +50,11 @@ class CartDetail extends ModelBase {
      * @todo
      * @return void
      */
-    public function cart() {
-        return $this->belongsTo(Carts::class, "cart_id", "id");
-    }
-
-    /**
-     * @author <hauvo1709@gmail.com>
-     * @todo
-     * @return void
-     */
     public function product() {
-        return $this->belongsTo(Product::class, "product_id", "id");
+        return $this->belongsTo(Products::class, "product_id", "id")
+        ->where([
+            "products.status" => 1,
+            "products.deleted" => 0
+        ]);
     }
 }

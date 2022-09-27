@@ -4,6 +4,8 @@ namespace Frontend\Checkout\Models;
 
 use Frontend\Core\Models\ModelBase;
 use Frontend\Checkout\Models\CartDetail;
+use Frontend\Users\Models\Users;
+use Frontend\Products\Models\Products;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -50,6 +52,23 @@ class Carts extends ModelBase {
       * @return void
       */
     public function cart_detail() {
-        return $this->hasMany(CartDetail::class, "cart_id", "id");
+        return $this->hasMany(CartDetail::class, "cart_id", "id")
+        ->where([
+            "cart_detail.status" => 1,
+            "cart_detail.deleted" => 0
+        ])->with(["product"]);
+    }
+
+    /**
+      * @author: <hauvo1709@gmail.com>
+      * @todo:
+      * @return void
+      */
+    public function user() {
+        return $this->belongsTo(Users::class, "user_id", "id")
+        ->where([
+            "users.status" => 1,
+            "users.deleted" => 0
+        ]);
     }
 }

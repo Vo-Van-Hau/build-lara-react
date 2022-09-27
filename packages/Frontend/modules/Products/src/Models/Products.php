@@ -14,4 +14,8 @@ class Products extends ModelBase {
         "status",
         "description"
     ];
+
+    /**=======================
+     *     RelationShip
+     *=======================*/
 }

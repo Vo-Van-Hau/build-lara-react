@@ -62,6 +62,23 @@ class CartsController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: get cart item
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_item(Request $request) {
+        if($request->isMethod("post")) {
+            $input = request()->all();
+            $id = !empty($input["id"]) ? intval($input["id"]) : "";
+            if(empty($id)) return $this->response_base(["status" => false], "Missing ID !!!", 200);
+            $data_json["cart"] = $this->CartsRepository->get_by_id($id);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }
 
 

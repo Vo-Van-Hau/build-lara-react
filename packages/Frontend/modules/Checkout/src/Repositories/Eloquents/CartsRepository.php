@@ -80,76 +80,12 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
      * @param int $id
-     * @param array $input
-     * @return boolean
+     * @return Illuminate\Support\Collection
      */
-    public function update($id, $input = []){
-        $existed = $this->model->find($id);
-        if(empty($existed)) return false;
-        $existed->name = $input["name"];
-        $existed->status = $input["status"];
-        $existed->parent_group_id = $input["parent_group_id"];
-        $existed->description = $input["description"];
-        return $existed->update(); // return boolean
-    }
-
-    /**
-     * @author <vanhau.vo@urekamedia.vn>
-     * @todo:
-     * @param string $name
-     * @return int
-     */
-    public function findbyname($name = ""){
-        $result = $this->model->where(["name" => $name])->count();
+    public function get_by_id($id){
+        $result = $this->model->where("id", $id)
+            ->with(["user", "cart_detail"])
+            ->first();
         return $result;
-    }
-
-    /**
-     * @author <vanhau.vo@urekamedia.vn>
-     * @todo:
-     * @param int $id
-     * @return mixed
-     */
-    public function destroy($id = null) {
-        $existed = $this->model->find($id);
-        if(empty($existed)) return false;
-        return $existed->delete();
-    }
-
-    /**
-     * @author <vanhau.vo@urekamedia.vn>
-     * @todo:
-     * @param int $id
-     * @return mixed
-     */
-    public function usersbygroup($id){
-        return $this->model->where(["id" => $id])
-        ->with(["users:id,name,username,email,avatar"])
-        ->first("id");
-    }
-
-    /**
-     * @author <vanhau.vo@urekamedia.vn>
-     * @todo: add new user to group
-     * @param int $group_id
-     * @param int $id
-     * @return boolean
-     */
-    public function storage_user_group($group_id, $id) {
-        if($id) {
-            $existed = Users::find($id);
-            $auth_id = AuthFrontend::info("id");
-            if(empty($existed)) return false;
-            $pivot[$group_id] = array(
-                "user_created_id" => $auth_id,
-                "user_updated_id" => $auth_id,
-                "created_at" => new \DateTime(),
-                "updated_at" => new \DateTime(),
-                "deleted" => 0,
-            );
-            $existed->groups()->attach($pivot);
-            return true;
-        }
-        return false;
     }
 }
