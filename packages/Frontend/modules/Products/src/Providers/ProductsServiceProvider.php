@@ -22,12 +22,12 @@ class ProductsServiceProvider extends ServiceProvider {
      */
     protected $app;
     protected $package = "Frontend";
-    protected $module = "Publishers";
+    protected $module = "Products";
     protected $models = [
-    //     "Publishers" => [
-    //         "name" => "Publishers",
-    //         "status" => "active",
-    //     ]
+        "Products" => [
+            "name" => "Products",
+            "status" => "active",
+        ]
     ];
 
     /**
@@ -63,11 +63,11 @@ class ProductsServiceProvider extends ServiceProvider {
             return $this->app->make("{$this->package}\\{$this->module}\\{$this->module}");
         });
         foreach ($this->models as $model) {
-            // if($model["status"] != "active") continue;
-            // $this->app->bind(
-            //     "Modules\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
-            //     "Modules\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
-            // );
+            if($model["status"] != "active") continue;
+            $this->app->bind(
+                "{$this->package}\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
+                "{$this->package}\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
+            );
         }
     }
 

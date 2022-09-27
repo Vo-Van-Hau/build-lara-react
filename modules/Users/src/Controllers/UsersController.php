@@ -273,7 +273,7 @@ class UsersController extends ControllerBase {
     public function get_user(Request $request) {
         if($request->isMethod("post")) {
             $input = request()->all();
-            $id = !empty($input["id"]) ? intval($input["id"]) : $id;
+            $id = !empty($input["id"]) ? intval($input["id"]) : "";
             if (empty($id)) return $this->response_base(["status" => false], "Missing ID !!!", 200);
             $data_json["user"] = $this->UsersRepository->get_by_id($id);
             return response()->json($data_json, 200);
