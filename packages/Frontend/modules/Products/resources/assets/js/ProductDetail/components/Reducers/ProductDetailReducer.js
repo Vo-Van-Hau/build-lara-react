@@ -21,7 +21,7 @@ export const initialState = {
     mouted: true
 }
 
-export const GroupsReducer = (state = initialState, action) => {
+export const ProductDetailReducer = (state = initialState, action) => {
     let { type, payload } = action;
     switch (type) {
         case GET_GROUPS:

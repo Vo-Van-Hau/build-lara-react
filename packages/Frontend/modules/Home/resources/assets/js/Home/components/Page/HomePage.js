@@ -1,9 +1,8 @@
-import '../../../../sass/index.scss'
 import React from 'react';
 import { Col, Image, Row, Tabs, Typography } from 'antd';
 import { Card, Avatar, Rate, Carousel } from "antd"
-import { Button, Space } from 'antd';
-import { Affix } from "antd";
+import { Button, Space,Affix } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from "antd/lib/card/Meta";
 
 const HomePage = (props) => {
@@ -84,18 +83,13 @@ const HomeBanner = () => {
             gutter={[10, 16]}
         >
             <Col span={14} >
-                {/* <Slider dots >
-                    {imgSrc.map((item, index) => {
-                        return <Image
-                            height={355}
-                            key={index}
-                            preview={false}
-                            style={{}}
-                            src={item.url} />
-                    })}
-                </Slider> */}
-
-                <Carousel autoplay>
+            <Carousel 
+                autoplay 
+                arrows={true} 
+                prevArrow={<LeftOutlined />} 
+                nextArrow={<RightOutlined />} 
+                swipeToSlide draggable
+                >
                     {imgSrc.map((item, index) => {
                         return <Image
                             height={355}

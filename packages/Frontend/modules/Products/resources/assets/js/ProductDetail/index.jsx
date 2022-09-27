@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ProductsPage from './components/Page/Products';
-import GroupsContextProvicer from './components/Contexts/ProductsContext';
+import ProductDetailPage from './components/Page/ProductDetail';
+import ProductsContextProvider from '../Products/components/Contexts/ProductsContext';
 
-const Products = (props) => {
+const ProductDetail = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
@@ -38,7 +38,7 @@ const Products = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ProductsPage {...props}/>);
+            default: return (<ProductDetailPage {...props}/>);
         }
     }
 
@@ -48,12 +48,11 @@ const Products = (props) => {
 
     return (
         <>
-            <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <ProductsContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer>
-           
+            </ProductsContextProvider>
         </>
     )
 }
 
-export default Products;
+export default ProductDetail;
