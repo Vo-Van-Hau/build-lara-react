@@ -28,6 +28,14 @@
         "modules/publishers": "*@dev",
         "modules/products": "*@dev",
         "modules/orders": "*@dev",
+        "modules/address": "*@dev",
+        "modules/carts": "*@dev",
+        "modules/payments": "*@dev",
+        "modules/suppliers": "*@dev",
+        "modules/currencies": "*@dev",
+        "modules/shipping": "*@dev",
+        "modules/warehouses": "*@dev",
+        "modules/contacts": "*@dev",
 
         "frontend/core": "*@dev",
         "frontend/auth": "*@dev",
@@ -105,35 +113,61 @@
             "type": "path",
             "url": "modules/Core",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "modules/Auth",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "modules/Users",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "modules/Module",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "modules/Publishers",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "modules/Products",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "modules/Orders",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Address",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Carts",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Payments",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Suppliers",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Currencies",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Shipping",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Warehouses",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Contacts",
             "symlink": false
         },
 
@@ -142,43 +176,35 @@
             "type": "path",
             "url": "packages/Frontend/modules/Core",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Auth",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Users",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Publishers",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Home",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Products",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Checkout",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Customer",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Frontend/modules/Shop",
             "symlink": false
@@ -189,28 +215,23 @@
             "type": "path",
             "url": "packages/Sellers/modules/Core",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Sellers/modules/Auth",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Sellers/modules/Users",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Sellers/modules/Publishers",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Sellers/modules/Dashboard",
             "symlink": false
-        },
-        {
+        },{
             "type": "path",
             "url": "packages/Sellers/modules/Orders",
             "symlink": false

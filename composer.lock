@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e511d2502184eb55873c2814ace559b",
+    "content-hash": "58cc0b154da6e32351c0e0b3b1a9371e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2386,6 +2386,48 @@
             "time": "2022-04-17T13:12:02+00:00"
         },
         {
+            "name": "modules/address",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Address",
+                "reference": "74f86d3cc9db97c2cfc984670c75708706a3f2b5"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Address\\Providers\\AddressServiceProvider",
+                        "Modules\\Address\\Providers\\AddressRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Address": "Modules\\Address\\Facades\\Address"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Address\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Address",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "modules/auth",
             "version": "dev-master",
             "dist": {
@@ -2428,6 +2470,90 @@
             }
         },
         {
+            "name": "modules/carts",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Carts",
+                "reference": "6865c9fd4806d356ce6d2bb375022da315b56081"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Carts\\Providers\\CartsServiceProvider",
+                        "Modules\\Carts\\Providers\\CartsRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Carts": "Modules\\Carts\\Facades\\Carts"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Carts\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Carts",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "modules/contacts",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Contacts",
+                "reference": "26fff34a094bd834a4ab47756a5055b6894d2c61"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Contacts\\Providers\\ContactsServiceProvider",
+                        "Modules\\Contacts\\Providers\\ContactsRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Contacts": "Modules\\Contacts\\Facades\\Contacts"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Contacts\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Contacts",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "modules/core",
             "version": "dev-master",
             "dist": {
@@ -2465,6 +2591,48 @@
                 }
             ],
             "description": "Module Core",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "modules/currencies",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Currencies",
+                "reference": "691305f48f8019f073fa9d3eb1ed60fbc1fb2bd3"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Currencies\\Providers\\CurrenciesServiceProvider",
+                        "Modules\\Currencies\\Providers\\CurrenciesRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Currencies": "Modules\\Currencies\\Facades\\Currencies"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Currencies\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Currencies",
             "transport-options": {
                 "relative": true
             }
@@ -2554,6 +2722,48 @@
             }
         },
         {
+            "name": "modules/payments",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Payments",
+                "reference": "a38312d028ed845647baf368c69412c66c2d990a"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Payments\\Providers\\PaymentsServiceProvider",
+                        "Modules\\Payments\\Providers\\PaymentsRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Orders": "Modules\\Payments\\Facades\\Payments"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Payments\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Payments",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "modules/products",
             "version": "dev-master",
             "dist": {
@@ -2638,6 +2848,90 @@
             }
         },
         {
+            "name": "modules/shipping",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Shipping",
+                "reference": "be566ede909c09bb4c719f48c9df626da3a94adb"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Shipping\\Providers\\ShippingServiceProvider",
+                        "Modules\\Shipping\\Providers\\ShippingRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Shipping": "Modules\\Shipping\\Facades\\Shipping"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Shipping\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Shipping",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "modules/suppliers",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Suppliers",
+                "reference": "5400a6745d3d0e8ed6b0a01e69148c2d0e85056c"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Suppliers\\Providers\\SuppliersServiceProvider",
+                        "Modules\\Suppliers\\Providers\\SuppliersRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Suppliers": "Modules\\Suppliers\\Facades\\Suppliers"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Suppliers\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Suppliers",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "modules/users",
             "version": "dev-master",
             "dist": {
@@ -2675,6 +2969,48 @@
                 }
             ],
             "description": "Module Users",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "modules/warehouses",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "modules/Warehouses",
+                "reference": "37a380f97f3a4487bc66790219cbb00fc315d777"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Warehouses\\Providers\\WarehousesServiceProvider",
+                        "Modules\\Warehouses\\Providers\\WarehousesRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Warehouses": "Modules\\Warehouses\\Facades\\Warehouses"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Warehouses\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Warehouses",
             "transport-options": {
                 "relative": true
             }
@@ -9018,6 +9354,14 @@
         "modules/publishers": 20,
         "modules/products": 20,
         "modules/orders": 20,
+        "modules/address": 20,
+        "modules/carts": 20,
+        "modules/payments": 20,
+        "modules/suppliers": 20,
+        "modules/currencies": 20,
+        "modules/shipping": 20,
+        "modules/warehouses": 20,
+        "modules/contacts": 20,
         "frontend/core": 20,
         "frontend/auth": 20,
         "frontend/users": 20,

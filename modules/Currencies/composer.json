@@ -1,0 +1,32 @@
+{
+    "name": "modules/currencies",
+    "description": "Module Currencies",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Currencies\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Currencies\\Providers\\CurrenciesServiceProvider",
+                "Modules\\Currencies\\Providers\\CurrenciesRouteServiceProvider"
+            ],
+            "aliases": {
+                "Currencies": "Modules\\Currencies\\Facades\\Currencies"
+            }
+        }
+    }
+}
+
