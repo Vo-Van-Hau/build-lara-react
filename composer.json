@@ -36,6 +36,7 @@
         "modules/shipping": "*@dev",
         "modules/warehouses": "*@dev",
         "modules/contacts": "*@dev",
+        "modules/sellers": "*@dev",
 
         "frontend/core": "*@dev",
         "frontend/auth": "*@dev",
@@ -168,6 +169,10 @@
         },{
             "type": "path",
             "url": "modules/Contacts",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "modules/Sellers",
             "symlink": false
         },
 
