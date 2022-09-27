@@ -56,7 +56,7 @@ const ShopMain = () => {
     return (
         <Row className='shop_page_main' gutter={[16, 5]}>
             <Col span={24}>
-                <Tabs
+                {/* <Tabs
                     defaultActiveKey="1"
                     onChange={onTabsChange}
                     items={[
@@ -80,7 +80,23 @@ const ShopMain = () => {
                             key: '4',
                             children: <StoreProfile />,
                         }
-                    ]} />
+                    ]} /> */}
+
+                <Tabs defaultActiveKey="1"
+                    onChange={onTabsChange}>
+                    <Tabs.TabPane tab="Shop" key="1">
+                        <ShopTab />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="All Products" key="2">
+                        <AllProductsTab />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Collection" key="3">
+                        <CollectionTab />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Store Profile" key="4">
+                        <StoreProfile />
+                    </Tabs.TabPane>
+                </Tabs>
             </Col>
         </Row>)
 }
@@ -161,168 +177,140 @@ const AllProductsTab = () => {
         { key: 2, label: 'Home & Life' },
     ];
 
-    const filterBar = [
-        {
-            label: `Popular`,
-            key: '1',
-            children:
-                <Row className="productContainer">
-                    <Col span={24}>
-                        <Space size={'middle'} wrap  >
-                            {filterData.slice(minValue, maxValue).map((item, index) => (
-                                <Card className="productItem"
-                                    key={index}
-                                    hoverable
-                                    style={{ width: 190 }}
-                                    cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
-                                    <Meta title={item.title} />
+    // const filterBar = [
+    //     {
+    //         label: `Popular`,
+    //         key: '1',
+    //     },
+    //     {
+    //         label: `Selling`,
+    //         key: '2',
+    //         children:
+    //             <Row className="productContainer">
+    //                 <Col span={24}>
+    //                     <Space size={'middle'} wrap  >
+    //                         {filterData.slice(minValue, maxValue).map((item, index) => (
+    //                             <Card className="productItem"
+    //                                 key={index}
+    //                                 hoverable
+    //                                 style={{ width: 190 }}
+    //                                 cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+    //                                 <Meta title={item.title} />
 
-                                    <div className="rating">
-                                        <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
-                                    </div>
-                                    <Text className="price" type="danger" strong>120.000 đ</Text>
-                                </Card>
-                            ))}
-                        </Space>
-                    </Col>
+    //                                 <div className="rating">
+    //                                     <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+    //                                     <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+    //                                 </div>
+    //                                 <Text className="price" type="danger" strong>120.000 đ</Text>
+    //                             </Card>
+    //                         ))}
+    //                     </Space>
+    //                 </Col>
 
-                    <Pagination defaultCurrent={1}
-                        defaultPageSize={5} //default size of page
-                        onChange={handlePaginationChange}
-                        total={filterData.length}//total number of card data available/>
-                    />
-                </Row>,
-        },
-        {
-            label: `Selling`,
-            key: '2',
-            children:
-                <Row className="productContainer">
-                    <Col span={24}>
-                        <Space size={'middle'} wrap  >
-                            {filterData.slice(minValue, maxValue).map((item, index) => (
-                                <Card className="productItem"
-                                    key={index}
-                                    hoverable
-                                    style={{ width: 190 }}
-                                    cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
-                                    <Meta title={item.title} />
+    //                 <Pagination defaultCurrent={1}
+    //                     defaultPageSize={5} //default size of page
+    //                     onChange={handlePaginationChange}
+    //                     total={filterData.length}//total number of card data available/>
+    //                 />
+    //             </Row>,
+    //     },
+    //     {
+    //         label: `New Products`,
+    //         key: '3',
+    //         children:
+    //             <Row className="productContainer">
+    //                 <Col span={24}>
+    //                     <Space size={'middle'} wrap  >
+    //                         {filterData.slice(minValue, maxValue).map((item, index) => (
+    //                             <Card className="productItem"
+    //                                 key={index}
+    //                                 hoverable
+    //                                 style={{ width: 190 }}
+    //                                 cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+    //                                 <Meta title={item.title} />
 
-                                    <div className="rating">
-                                        <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
-                                    </div>
-                                    <Text className="price" type="danger" strong>120.000 đ</Text>
-                                </Card>
-                            ))}
-                        </Space>
-                    </Col>
+    //                                 <div className="rating">
+    //                                     <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+    //                                     <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+    //                                 </div>
+    //                                 <Text className="price" type="danger" strong>120.000 đ</Text>
+    //                             </Card>
+    //                         ))}
+    //                     </Space>
+    //                 </Col>
 
-                    <Pagination defaultCurrent={1}
-                        defaultPageSize={5} //default size of page
-                        onChange={handlePaginationChange}
-                        total={filterData.length}//total number of card data available/>
-                    />
-                </Row>,
-        },
-        {
-            label: `New Products`,
-            key: '3',
-            children:
-                <Row className="productContainer">
-                    <Col span={24}>
-                        <Space size={'middle'} wrap  >
-                            {filterData.slice(minValue, maxValue).map((item, index) => (
-                                <Card className="productItem"
-                                    key={index}
-                                    hoverable
-                                    style={{ width: 190 }}
-                                    cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
-                                    <Meta title={item.title} />
+    //                 <Pagination defaultCurrent={1}
+    //                     defaultPageSize={5} //default size of page
+    //                     onChange={handlePaginationChange}
+    //                     total={filterData.length}//total number of card data available/>
+    //                 />
+    //             </Row>,
+    //     },
+    //     {
+    //         label: `Low to high price`,
+    //         key: '4',
+    //         children:
+    //             <Row className="productContainer">
+    //                 <Col span={24}>
+    //                     <Space size={'middle'} wrap  >
+    //                         {filterData.slice(minValue, maxValue).map((item, index) => (
+    //                             <Card className="productItem"
+    //                                 key={index}
+    //                                 hoverable
+    //                                 style={{ width: 190 }}
+    //                                 cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+    //                                 <Meta title={item.title} />
 
-                                    <div className="rating">
-                                        <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
-                                    </div>
-                                    <Text className="price" type="danger" strong>120.000 đ</Text>
-                                </Card>
-                            ))}
-                        </Space>
-                    </Col>
+    //                                 <div className="rating">
+    //                                     <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+    //                                     <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+    //                                 </div>
+    //                                 <Text className="price" type="danger" strong>120.000 đ</Text>
+    //                             </Card>
+    //                         ))}
+    //                     </Space>
+    //                 </Col>
 
-                    <Pagination defaultCurrent={1}
-                        defaultPageSize={5} //default size of page
-                        onChange={handlePaginationChange}
-                        total={filterData.length}//total number of card data available/>
-                    />
-                </Row>,
-        },
-        {
-            label: `Low to high price`,
-            key: '4',
-            children:
-                <Row className="productContainer">
-                    <Col span={24}>
-                        <Space size={'middle'} wrap  >
-                            {filterData.slice(minValue, maxValue).map((item, index) => (
-                                <Card className="productItem"
-                                    key={index}
-                                    hoverable
-                                    style={{ width: 190 }}
-                                    cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
-                                    <Meta title={item.title} />
+    //                 <Pagination defaultCurrent={1}
+    //                     defaultPageSize={5} //default size of page
+    //                     onChange={handlePaginationChange}
+    //                     total={filterData.length}//total number of card data available/>
+    //                 />
+    //             </Row>,
+    //     },
+    //     {
+    //         label: `Price high to low`,
+    //         key: '5',
+    //         children:
+    //             <Row className="productContainer">
+    //                 <Col span={24}>
+    //                     <Space size={'middle'} wrap  >
+    //                         {filterData.slice(minValue, maxValue).map((item, index) => (
+    //                             <Card className="productItem"
+    //                                 key={index}
+    //                                 hoverable
+    //                                 style={{ width: 190 }}
+    //                                 cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+    //                                 <Meta title={item.title} />
 
-                                    <div className="rating">
-                                        <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
-                                    </div>
-                                    <Text className="price" type="danger" strong>120.000 đ</Text>
-                                </Card>
-                            ))}
-                        </Space>
-                    </Col>
+    //                                 <div className="rating">
+    //                                     <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+    //                                     <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+    //                                 </div>
+    //                                 <Text className="price" type="danger" strong>120.000 đ</Text>
+    //                             </Card>
+    //                         ))}
+    //                     </Space>
+    //                 </Col>
 
-                    <Pagination defaultCurrent={1}
-                        defaultPageSize={5} //default size of page
-                        onChange={handlePaginationChange}
-                        total={filterData.length}//total number of card data available/>
-                    />
-                </Row>,
-        },
-        {
-            label: `Price high to low`,
-            key: '5',
-            children:
-                <Row className="productContainer">
-                    <Col span={24}>
-                        <Space size={'middle'} wrap  >
-                            {filterData.slice(minValue, maxValue).map((item, index) => (
-                                <Card className="productItem"
-                                    key={index}
-                                    hoverable
-                                    style={{ width: 190 }}
-                                    cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
-                                    <Meta title={item.title} />
-
-                                    <div className="rating">
-                                        <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
-                                    </div>
-                                    <Text className="price" type="danger" strong>120.000 đ</Text>
-                                </Card>
-                            ))}
-                        </Space>
-                    </Col>
-
-                    <Pagination defaultCurrent={1}
-                        defaultPageSize={5} //default size of page
-                        onChange={handlePaginationChange}
-                        total={filterData.length}//total number of card data available/>
-                    />
-                </Row>,
-        },
-    ]
+    //                 <Pagination defaultCurrent={1}
+    //                     defaultPageSize={5} //default size of page
+    //                     onChange={handlePaginationChange}
+    //                     total={filterData.length}//total number of card data available/>
+    //                 />
+    //             </Row>,
+    //     },
+    // ]
     const onFilterChange = (key) => {
         console.log('filter e:', key);
         //key: 1 == popular, 2 == selling sort luotmua, 3 == new, 4 == sort price asc , 5 == sort price dessc
@@ -351,11 +339,159 @@ const AllProductsTab = () => {
             </Col>
             <Col className='rightSide' span={19} offset={1}>
                 <Title level={5}>All Products <small>: {filterData.length} results</small></Title>
-                <Tabs
+                {/* <Tabs
                     defaultActiveKey="1"
                     onChange={onFilterChange}
                     items={filterBar}
-                />
+                /> */}
+                <Tabs defaultActiveKey="1"
+                    onChange={onFilterChange}>
+                    <Tabs.TabPane tab="Popular" key="1">
+                        <Row className="productContainer popular">
+                            <Col span={24}>
+                                <Space size={'middle'} wrap  >
+                                    {filterData.slice(minValue, maxValue).map((item, index) => (
+                                        <Card className="productItem"
+                                            key={index}
+                                            hoverable
+                                            style={{ width: 190 }}
+                                            cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+                                            <Meta title={item.title} />
+
+                                            <div className="rating">
+                                                <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+                                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+                                            </div>
+                                            <Text className="price" type="danger" strong>120.000 đ</Text>
+                                        </Card>
+                                    ))}
+                                </Space>
+                            </Col>
+
+                            <Pagination defaultCurrent={1}
+                                defaultPageSize={5} //default size of page
+                                onChange={handlePaginationChange}
+                                total={filterData.length}//total number of card data available/>
+                            />
+                        </Row>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Selling" key="2">
+                        <Row className="productContainer popular">
+                            <Col span={24}>
+                                <Space size={'middle'} wrap  >
+                                    {filterData.slice(minValue, maxValue).map((item, index) => (
+                                        <Card className="productItem"
+                                            key={index}
+                                            hoverable
+                                            style={{ width: 190 }}
+                                            cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+                                            <Meta title={item.title} />
+
+                                            <div className="rating">
+                                                <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+                                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+                                            </div>
+                                            <Text className="price" type="danger" strong>120.000 đ</Text>
+                                        </Card>
+                                    ))}
+                                </Space>
+                            </Col>
+
+                            <Pagination defaultCurrent={1}
+                                defaultPageSize={5} //default size of page
+                                onChange={handlePaginationChange}
+                                total={filterData.length}//total number of card data available/>
+                            />
+                        </Row>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="New Products" key="3">
+                        <Row className="productContainer new">
+                            <Col span={24}>
+                                <Space size={'middle'} wrap  >
+                                    {filterData.slice(minValue, maxValue).map((item, index) => (
+                                        <Card className="productItem"
+                                            key={index}
+                                            hoverable
+                                            style={{ width: 190 }}
+                                            cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+                                            <Meta title={item.title} />
+
+                                            <div className="rating">
+                                                <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+                                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+                                            </div>
+                                            <Text className="price" type="danger" strong>120.000 đ</Text>
+                                        </Card>
+                                    ))}
+                                </Space>
+                            </Col>
+
+                            <Pagination defaultCurrent={1}
+                                defaultPageSize={5} //default size of page
+                                onChange={handlePaginationChange}
+                                total={filterData.length}//total number of card data available/>
+                            />
+                        </Row>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Low to high price" key="4">
+                        <Row className="productContainer priceAsc">
+                            <Col span={24}>
+                                <Space size={'middle'} wrap  >
+                                    {filterData.slice(minValue, maxValue).map((item, index) => (
+                                        <Card className="productItem"
+                                            key={index}
+                                            hoverable
+                                            style={{ width: 190 }}
+                                            cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+                                            <Meta title={item.title} />
+
+                                            <div className="rating">
+                                                <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+                                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+                                            </div>
+                                            <Text className="price" type="danger" strong>120.000 đ</Text>
+                                        </Card>
+                                    ))}
+                                </Space>
+                            </Col>
+
+                            <Pagination defaultCurrent={1}
+                                defaultPageSize={5} //default size of page
+                                onChange={handlePaginationChange}
+                                total={filterData.length}//total number of card data available/>
+                            />
+                        </Row>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Price high to low" key="5">
+                        <Row className="productContainer priceDesc">
+                            <Col span={24}>
+                                <Space size={'middle'} wrap  >
+                                    {filterData.slice(minValue, maxValue).map((item, index) => (
+                                        <Card className="productItem"
+                                            key={index}
+                                            hoverable
+                                            style={{ width: 190 }}
+                                            cover={<img alt="example" src="https://salt.tikicdn.com/cache/280x280/ts/product/70/f5/d7/2ac2ab4cee62f28282807cae8a85d635.png" />}>
+                                            <Meta title={item.title} />
+
+                                            <div className="rating">
+                                                <Rate defaultValue={item.rating} style={{ fontSize: 8 }} disabled />
+                                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 10++ </small>
+                                            </div>
+                                            <Text className="price" type="danger" strong>120.000 đ</Text>
+                                        </Card>
+                                    ))}
+                                </Space>
+                            </Col>
+
+                            <Pagination defaultCurrent={1}
+                                defaultPageSize={5} //default size of page
+                                onChange={handlePaginationChange}
+                                total={filterData.length}//total number of card data available/>
+                            />
+                        </Row>
+                    </Tabs.TabPane>
+                </Tabs>
             </Col>
         </Row>
     </>)
