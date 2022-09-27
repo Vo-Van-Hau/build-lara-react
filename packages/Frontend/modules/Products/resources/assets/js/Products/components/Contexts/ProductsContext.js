@@ -7,10 +7,24 @@ import {
 
 export const ProductsContext = createContext();
 
-const ProductsContextProvider = ({ children, axios, history, config }) => {
+const ProductsContextProvider = ({ children, axios, history, config, navigate }) => {
 
     const [data, dispatch] = useReducer(ProductsReducer, initialState);
 
+
+    const setRouter = (action, id = '') => {
+        set_mouted(true);
+        let parseURL = window.sparrowConfig.app.adminPrefix ? '/' + window.sparrowConfig.app.adminPrefix : '';
+        parseURL += `/users/users`;
+        let parseACT = action ? `?action=${action}` : ``;
+        let parseKeyID = id ? `&id=${id}` : ``;
+        let nextURL = `${parseURL}${parseACT}${parseKeyID}`;
+        history.push(nextURL);
+        return navigate({
+            pathname: parseURL,
+            search: `?${createSearchParams({action, id})}`,
+        });
+    }
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: get groups
@@ -161,11 +175,11 @@ const ProductsContextProvider = ({ children, axios, history, config }) => {
         history, dispatch, get_axios, storage_group,
         get_parent_groups, update_group, destroy_group,
         get_user_by_groups, get_users, storage_user_to_group,
-        set_user_group, set_table_loading, set_mouted, get_groups
+        set_user_group, set_table_loading, set_mouted, get_groups,setRouter
     };
 
     return (
-        <ProductsContext.Provider value={todoContextData}>
+        <ProductsContext.Provider value={todoContextData} >
             { children }
         </ProductsContext.Provider>
     );
