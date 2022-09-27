@@ -48,10 +48,10 @@ const Products = (props) => {
 
     return (
         <>
-            <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </GroupsContextProvicer>
-           
+
         </>
     )
 }
