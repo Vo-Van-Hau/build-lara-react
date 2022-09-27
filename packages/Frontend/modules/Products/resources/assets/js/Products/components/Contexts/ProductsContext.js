@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from 'react';
+import { createSearchParams } from 'react-router-dom';
 import { initialState, ProductsReducer } from '../Reducers/ProductsReducer';
 import {
     GET_GROUPS, SET_USER_GROUPS,
@@ -11,11 +12,22 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
 
     const [data, dispatch] = useReducer(ProductsReducer, initialState);
 
-
-    const setRouter = (action, id = '') => {
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object}
+     * @return {void}
+     */
+    const setRouter = ({
+        action,
+        id = '',
+        module = '',
+        controller = ''
+    }) => {
         set_mouted(true);
         let parseURL = window.sparrowConfig.app.adminPrefix ? '/' + window.sparrowConfig.app.adminPrefix : '';
-        parseURL += `/users/users`;
+        if(module) parseURL += `/${module}`;
+        if(controller) parseURL += `/${controller}`;
         let parseACT = action ? `?action=${action}` : ``;
         let parseKeyID = id ? `&id=${id}` : ``;
         let nextURL = `${parseURL}${parseACT}${parseKeyID}`;
@@ -25,6 +37,7 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
             search: `?${createSearchParams({action, id})}`,
         });
     }
+
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: get groups
