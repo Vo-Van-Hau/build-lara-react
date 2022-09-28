@@ -14,7 +14,7 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
+     * @todo: get cart by user
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
@@ -23,7 +23,7 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/checkout/carts/get_item_by_user`)
+        .post(`/checkout/carts/get_cart`)
         .then((res) => {
             let { cart } = res.data;
             dispatch({ type: GET_CART, payload: cart });
@@ -31,6 +31,20 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
     }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: remove product in cart
+     * @param {number} cart_id
+     * @param {number} product_id
+     * @return {void}
+     */
+    const remove_item = (cart_id, product_id) => {
+            set_table_loading();
+            return axios
+            .get_secured()
+            .post(`/checkout/carts/remove_item`, { cart_id, product_id });
+        }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -100,7 +114,7 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
         data: {...data, config},
         history, dispatch, get_axios, storage_group,
         set_table_loading, set_mouted,
-        get_cart, setRouter
+        get_cart, setRouter, remove_item
     };
 
     return (

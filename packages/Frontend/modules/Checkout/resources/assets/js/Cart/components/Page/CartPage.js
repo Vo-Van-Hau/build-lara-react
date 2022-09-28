@@ -1,14 +1,36 @@
 import { useContext, useEffect } from 'react';
 import { CartContext } from '../Contexts/CartContextProvider';
-import { Button, Card, Col, Divider, Popconfirm, Row, Typography, Image } from 'antd';
-import { Table } from 'antd';
-import { DeleteOutlined,ShopOutlined } from '@ant-design/icons';
+import Helper from '../Helper/Helper';
+import { Button, Card, Col, Divider, Popconfirm, Row, Typography, Image, Table } from 'antd';
+import { DeleteOutlined, ShopOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
 const CartPage = (props) => {
 
-    const { data, get_cart, setRouter }  = useContext(CartContext);
+    const { data, get_cart, setRouter, remove_item, set_table_loading }  = useContext(CartContext);
+    const { loading_table } = data;
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: remove product in cart
+     * @param {number} id
+     * @return {void}
+     */
+    const remove_product = (cart_id, product_id) => {
+        return remove_item(cart_id, product_id)
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                get_cart();
+                Helper.Notification('success', '[Remove Item]', message);
+            } else {
+                Helper.Notification('error', '[Remove Item]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
 
     useEffect(() => {
         get_cart();
@@ -17,12 +39,14 @@ const CartPage = (props) => {
     return (
         <Row className="cart_page_container" gutter={[16, 16]}>
             <Col className="title" span={24}>
-                <Title level={2}  style={{marginTop:'10px'}}>Cart</Title>
+                <Title level={2} style={{marginTop:'10px'}}>Cart</Title>
             </Col>
             <Col className="left_Container" span={18}>
                 <CartTable
                     cart={data.cart ? data.cart : {}}
                     setRouter={setRouter}
+                    loading_table={loading_table}
+                    remove_product={remove_product}
                 />
             </Col>
             <Col className="right_Container" span={6}>
@@ -36,7 +60,7 @@ const CartPage = (props) => {
 
 const CartTable = (props) => {
 
-    const { cart, setRouter } = props;
+    const { cart, setRouter, loading_table, remove_product } = props;
     const { cart_detail } = cart;
     const columns = [
         {
@@ -97,8 +121,8 @@ const CartTable = (props) => {
         {
             title: '',
             dataIndex: 'key',
-            render: (key) => (
-                <Popconfirm title="Sure to delete?" >
+            render: (_, record) => (
+                <Popconfirm title='Bạn có muốn xóa?'  placement='leftTop' onConfirm={() => remove_product(cart.id, record.product.id)}>
                     <DeleteOutlined />
                 </Popconfirm>
             ),
@@ -127,6 +151,7 @@ const CartTable = (props) => {
             rowKey='id'
             columns={columns}
             dataSource={cart_detail}
+            loading={loading_table}
         />
     </>)
 }

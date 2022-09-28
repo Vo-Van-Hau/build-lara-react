@@ -86,6 +86,7 @@ class ModelBase extends Model {
      * @return bool
      */
     public function delete() {
+        $this->deleted = 1;
         $status = parent::delete();
         return $status;
     }
