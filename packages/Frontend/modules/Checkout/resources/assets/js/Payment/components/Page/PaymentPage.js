@@ -89,14 +89,14 @@ const PaymentPage = () => {
                         showArrow={false}
                         defaultActiveKey={['1']}
                         ghost>
-                        <Panel header="Watch products" style={{color:'red'}} key="1">
+                        <Panel header="Watch products" style={{ color: 'red' }} key="1">
                             {list.map((productItem, index) => {
                                 return <Fragment key={index} className='product_info'>
-                                <Row className='product_info'>
-                                    <Col span={4}><span className='product_amount'> x {productItem.quantity} | </span> </Col>
-                                    <Col span={16}><p className='product_title'>{productItem.title}</p></Col>
-                                    <Col span={3} offset={1}><b className='product_price'>{productItem.price}đ</b></Col>
-                                </Row>
+                                    <Row className='product_info'>
+                                        <Col span={4}><span className='product_amount'> x {productItem.quantity} | </span> </Col>
+                                        <Col span={16}><p className='product_title'>{productItem.title}</p></Col>
+                                        <Col span={3} offset={1}><b className='product_price'>{productItem.price}đ</b></Col>
+                                    </Row>
                                 </Fragment>
                             })}
                         </Panel>
@@ -124,7 +124,6 @@ const PaymentPage = () => {
                 <Button type='danger' size='large' block>Order</Button>
             </Col>
         </Row>
-
     </>)
 }
 

@@ -1,15 +1,15 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, ProductDetailReducer } from '../Reducers/ProductDetailReducer';
+import { initialState, GroupsReducer } from '../Reducers/GroupsReducer';
 import {
-    GET_PRODUCT_ITEM, SET_USER_GROUPS,
+    GET_GROUPS, SET_USER_GROUPS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
-export const ProductDetailContext = createContext();
+export const GroupsContext = createContext();
 
-const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
+const GroupsContextProvicer = ({ children, axios, history, config }) => {
 
-    const [data, dispatch] = useReducer(ProductDetailReducer, initialState);
+    const [data, dispatch] = useReducer(GroupsReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -18,16 +18,17 @@ const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
      * @param {string} keySearch
      * @return {void}
      */
-    const get_product_item = (values) => {
+    const get_groups = (page, keySearch) => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/products/products/get_item`, {...values})
+        .post(`/users/groups/get_list?page=${page}`, {...keySearch})
         .then((res) => {
-            console.log(res);
-            let { product } = res.data;
-            dispatch({ type: GET_PRODUCT_ITEM, payload: product });
-            })
+            let { groups } = res.data;
+            let { total, data, current_page, per_page } = groups;
+            dispatch({ type: GET_GROUPS, payload: data });
+            dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+        })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
     }
@@ -160,14 +161,14 @@ const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
         history, dispatch, get_axios, storage_group,
         get_parent_groups, update_group, destroy_group,
         get_user_by_groups, get_users, storage_user_to_group,
-        set_user_group, set_table_loading, set_mouted, get_product_item
+        set_user_group, set_table_loading, set_mouted, get_groups
     };
 
     return (
-        <ProductDetailContext.Provider value={todoContextData}>
+        <GroupsContext.Provider value={todoContextData}>
             { children }
-        </ProductDetailContext.Provider>
+        </GroupsContext.Provider>
     );
 }
 
-export default ProductDetailContextProvicer;
+export default GroupsContextProvicer;

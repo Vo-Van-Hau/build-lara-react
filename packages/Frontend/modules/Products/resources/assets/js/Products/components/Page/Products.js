@@ -101,14 +101,13 @@ const ProductsPage = (props) => {
         const numEachPage = 5   // Use a constant here to keep track of number of cards per page
 
         const productArr = [
-            { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
-
+            { id:1, img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
+            { id:2, img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
+            { id:3, img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
+            { id:4, img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
+            { id:5, img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
+            { id:6, img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
+            { id:7, img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
         ]
         const handleChange = value => {
             setMinValue((value - 1) * numEachPage);
@@ -128,7 +127,7 @@ const ProductsPage = (props) => {
                                 module: 'products',
                                 controller: 'productdetail',
                                 action: 'view',
-                                id: 1
+                                id: item.id,
                             })}
                         >
                             <Meta title={item.title} />
