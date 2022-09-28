@@ -5,6 +5,7 @@ namespace Frontend\Checkout\Controllers;
 use Illuminate\Http\Request;
 use Frontend\Core\Controllers\ControllerBase;
 use Frontend\Checkout\Interfaces\CartsRepositoryInterface;
+use Frontend\Auth\AuthFrontend;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -49,17 +50,12 @@ class CartsController extends ControllerBase {
     public function storage(Request $request) {
         if($request->isMethod("post")) {
             $input = $request->all();
-            return $input;
-            // $input["name"] = isset($input["name"]) ? $input["name"] : "";
-            // $input["status"] = isset($input["status"]) ? intval($input["status"]) : "";
-            // $input["parent_group_id"] = isset($input["parent_group_id"]) ? intval($input["parent_group_id"]) : 0;
-            // $input["description"] = isset($input["description"]) ? $input["description"] : "";
-            // $check = $this->checkUnique($input["name"]);
-            // if(!$check){
-            //     return $this->response_base(["status" => false], "Group name already exists !!!", 200);
-            // }
-            // $result = $this->GroupsRepository->store($input);
-            // if ($result) return $this->response_base(["status" => true, $result], "You storage new item successfully !!!", 200);
+            $auth_id = AuthFrontend::info("id");
+            if(!isset($auth_id)) return $this->response_base(["status" => false], "Access denied !", 200);
+            $input["product"] = isset($input["products"]) ? $input["product"] : [];
+            $input["user_id"] = $auth_id;
+            $result = $this->CartsRepository->store($input);
+            if($result) return $this->response_base(["status" => true, $result], "You storage new item successfully !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b9b3f36820ddff159779f22321ca2c1",
+    "content-hash": "6dd8307e31902482edaa9cdbb8341d48",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2391,7 +2391,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Address",
-                "reference": "74f86d3cc9db97c2cfc984670c75708706a3f2b5"
+                "reference": "8b637f5b200fe49a499e1aea1dc8d6e806d2e386"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2475,7 +2475,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Carts",
-                "reference": "6865c9fd4806d356ce6d2bb375022da315b56081"
+                "reference": "8c9b504058a627266dcd069322bd51dbc13506b8"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2517,7 +2517,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Contacts",
-                "reference": "26fff34a094bd834a4ab47756a5055b6894d2c61"
+                "reference": "442e23eaa8c733a723f866f8ed8671de76521330"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2601,7 +2601,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Currencies",
-                "reference": "691305f48f8019f073fa9d3eb1ed60fbc1fb2bd3"
+                "reference": "0226f54ff8691c5b83d97e0fd04eb41f8af45a49"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2727,7 +2727,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Payments",
-                "reference": "a38312d028ed845647baf368c69412c66c2d990a"
+                "reference": "03ce781e6c044cd64c9caf8e43ba934e4ec74628"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2853,7 +2853,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Sellers",
-                "reference": "f7036001a0fb65eeeba6218e77b52690872c8176"
+                "reference": "9f8308037868eb74fa8a7e632ab2a96cc69cbdc9"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2895,7 +2895,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Shipping",
-                "reference": "be566ede909c09bb4c719f48c9df626da3a94adb"
+                "reference": "6b4d7951a58669f30cb404adea0aed335ade4204"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2937,7 +2937,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Suppliers",
-                "reference": "5400a6745d3d0e8ed6b0a01e69148c2d0e85056c"
+                "reference": "8e811fb4b07c03e5fef9ba4688e43fc8068e0b2d"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -3021,7 +3021,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Warehouses",
-                "reference": "37a380f97f3a4487bc66790219cbb00fc315d777"
+                "reference": "92c7fa7cae3e33559da5901ed7c533c4772979f6"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -4473,6 +4473,48 @@
                 }
             ],
             "description": "Module Orders",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "sellers/products",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Sellers/modules/Products",
+                "reference": "23a7dd64d9388f2ee7c2d49609e147f82886175a"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sellers\\Products\\Providers\\ProductsServiceProvider",
+                        "Sellers\\Products\\Providers\\ProductsRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "ProductsSellers": "Sellers\\Products\\Facades\\Products"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sellers\\Products\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Products",
             "transport-options": {
                 "relative": true
             }
@@ -7564,16 +7606,16 @@
         },
         {
             "name": "laravel/sail",
-            "version": "v1.16.0",
+            "version": "v1.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "73030c18b769f27e6f6aacf7848d024fa9a55560"
+                "reference": "cd7b9b6817c871e8b85d4f42e714303ee22676da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/73030c18b769f27e6f6aacf7848d024fa9a55560",
-                "reference": "73030c18b769f27e6f6aacf7848d024fa9a55560",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/cd7b9b6817c871e8b85d4f42e714303ee22676da",
+                "reference": "cd7b9b6817c871e8b85d4f42e714303ee22676da",
                 "shasum": ""
             },
             "require": {
@@ -7620,7 +7662,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2022-08-31T16:38:14+00:00"
+            "time": "2022-09-26T13:53:59+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -9419,7 +9461,8 @@
         "sellers/users": 20,
         "sellers/publishers": 20,
         "sellers/dashboard": 20,
-        "sellers/orders": 20
+        "sellers/orders": 20,
+        "sellers/products": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

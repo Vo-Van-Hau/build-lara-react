@@ -5,7 +5,7 @@ namespace Frontend\Core\Models;
 use Illuminate\Database\Eloquent\Model;
 use Frontend\Core\Models\Traits\BasicModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Frontend\Auth\AuthCMS;
+use Frontend\Auth\AuthFrontend;
 use Exception;
 
 /**
@@ -49,20 +49,21 @@ class ModelBase extends Model {
      * @return bool
      */
     public function save(array $options = []) {
-        if (empty($this->user_created_id)) {
+        if(empty($this->user_created_id)) {
             try {
-                $this->user_created_id = AuthCMS::info("id");
+                $this->user_created_id = AuthFrontend::info("id");
             } catch (Exception $errors) {
-                $this->user_created_id = 1;
+                $this->user_created_id = 0;
             }
         }
-        if (empty($this->user_owner_id)) {
+        if(empty($this->user_owner_id)) {
             try {
-                $this->user_owner_id = AuthCMS::info("id");
+                $this->user_owner_id = AuthFrontend::info("id");
             } catch (Exception $errors) {
-                $this->user_owner_id = 1;
+                $this->user_owner_id = 0;
             }
         }
+        $this->created_at = date("Y-m-d H:i:s");
         $status = parent::save($options);
         return $status;
     }
