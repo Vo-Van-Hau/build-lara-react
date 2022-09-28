@@ -76,6 +76,48 @@ class CartsController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: get cart item
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_cart(Request $request) {
+        if($request->isMethod("post")) {
+            $auth_id = AuthFrontend::info("id");
+            if(empty($auth_id)) return $this->response_base(["status" => false], "Missing UserID !!!", 200);
+            $data_json["cart"] = $this->CartsRepository->get_by_user_id($auth_id);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: remove product in cart
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function remove_item(Request $request) {
+        if($request->isMethod("post")) {
+            $auth_id = AuthFrontend::info("id");
+            $input = $request->all();
+            $input["product_id"] = isset($input["product_id"]) ? $input["product_id"] : null;
+            $input["cart_id"] = isset($input["cart_id"]) ? $input["cart_id"] : null;
+            if(empty($auth_id) || is_null($input["product_id"]) || is_null($input["cart_id"])) {
+                return $this->response_base(["status" => false], "Missing [User, Product, Cart] ID !!!", 200);
+            }
+            $input["user_id"] = $auth_id;
+            try {
+                $result = $this->CartsRepository->remove_item($input);
+                if($result) return $this->response_base(["status" => true], "You deleted this item successfully !!!", 200);
+            } catch (\Exception $errors) {
+                return $this->response_base(["status" => false], "You have failed to delete !!!", 200);
+            }
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }
 
 

@@ -44,16 +44,19 @@ npm run build-by-webpack --source={resource} --module={module}
 21. cart_detail: php artisan migrate --path=modules\Carts\database\migrations\2022_09_26_170058_create_cart_detail_table.php
 22. product_stock: php artisan migrate --path=modules\Carts\database\migrations\2022_09_26_170720_create_product_stock_table.php
 23. currencies: php artisan migrate --path=modules\Currencies\database\migrations\2022_09_26_172605_create_currencies_table.php
-23. shipping: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_035749_create_shipping_table.php
-23. shipping_methods: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_041101_create_shipping_methods_table.php
-23. shipping_package_weight_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_041739_create_shipping_package_weight_cost_table.php
-23. shipping_package_dimensions_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_042527_create_shipping_package_dimensions_cost_table.php
-23. shipping_package_timing_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_043045_create_shipping_package_timing_cost_table.php
-23. shipping_package_zone_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_043441_create_shipping_package_zone_cost_table.php
-24. warehouses: php artisan migrate --path=modules\Warehouses\database\migrations\2022_09_27_050523_create_warehouses_table.php
-25. contact_types: php artisan migrate --path=modules\Contacts\database\migrations\2022_09_27_051441_create_contact_types_table.php
-26. feedbacks: php artisan migrate --path=modules\Contacts\database\migrations\2022_09_27_051817_create_feedbacks_table.php
-27. product_description_detail: php artisan migrate --path=modules\Products\database\migrations\2022_09_27_073158_create_product_description_detail_table.php
+24. shipping: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_035749_create_shipping_table.php
+25. shipping_methods: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_041101_create_shipping_methods_table.php
+26. shipping_package_weight_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_041739_create_shipping_package_weight_cost_table.php
+27. shipping_package_dimensions_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_042527_create_shipping_package_dimensions_cost_table.php
+28. shipping_package_timing_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_043045_create_shipping_package_timing_cost_table.php
+29. shipping_package_zone_cost: php artisan migrate --path=modules\Shipping\database\migrations\2022_09_27_043441_create_shipping_package_zone_cost_table.php
+30. warehouses: php artisan migrate --path=modules\Warehouses\database\migrations\2022_09_27_050523_create_warehouses_table.php
+31. contact_types: php artisan migrate --path=modules\Contacts\database\migrations\2022_09_27_051441_create_contact_types_table.php
+32. feedbacks: php artisan migrate --path=modules\Contacts\database\migrations\2022_09_27_051817_create_feedbacks_table.php
+33. product_description_detail: php artisan migrate --path=modules\Products\database\migrations\2022_09_27_073158_create_product_description_detail_table.php
+34. sellers: php artisan migrate --path=modules\Sellers\database\migrations\2022_09_28_093230_create_sellers_table.php
+35. customers: php artisan migrate --path=modules\Users\database\migrations\2022_09_28_111040_create_customers_table.php
+35. product_seller: php artisan migrate --path=modules\Products\database\migrations\2022_09_28_112407_create_product_seller_table.php
 
 # ------------------Stop here------------------
 ## MongoDB and Laravel Integration:

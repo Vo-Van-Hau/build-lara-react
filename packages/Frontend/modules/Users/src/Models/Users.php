@@ -12,6 +12,7 @@ use Frontend\Core\Models\Traits\BasicModel;
 use Frontend\Users\Models\Roles;
 use Frontend\Users\Models\Groups;
 use Frontend\Publishers\Models\Publishers;
+use Frontend\Customer\Models\Customer;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -98,5 +99,12 @@ class Users extends Authenticatable {
      */
     public function publishers(){
         return $this->belongsToMany(Publishers::class, "user_publisher", "user_id", "publisher_id")->wherePivot("deleted", "=", 0);
+    }
+
+    public function customer(){
+        return $this->hasOne(Customer::class, "user_id", "id")->where([
+            "customers.status" => 1,
+            "customers.deleted" => 0
+        ]);
     }
 }

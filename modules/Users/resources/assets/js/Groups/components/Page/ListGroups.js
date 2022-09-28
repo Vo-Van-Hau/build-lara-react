@@ -133,7 +133,6 @@ const ListGroups = (props) => {
     const delete_group = (record) => {
         destroy_group(record.id)
         .then((res) => {
-            console.log(res);
             let { status, message } = res.data;
             if (status) {
                 get_groups(1, {});

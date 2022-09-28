@@ -93,10 +93,39 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
      * @param int $id
      * @return Illuminate\Support\Collection
      */
-    public function get_by_id($id){
+    public function get_by_id($id) {
         $result = $this->model->where("id", $id)
             ->with(["user", "cart_detail"])
             ->first();
         return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $id
+     * @return Illuminate\Support\Collection
+     */
+    public function get_by_user_id($user_id) {
+        $result = $this->model->where("user_id", $user_id)
+            ->with(["user", "cart_detail"])
+            ->first();
+        return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function remove_item($input) {
+        $cart = $this->model->find($input["cart_id"]);
+        if(empty($cart) || empty($input["product_id"])) return false;
+        $exists = CartDetail::where([
+            "cart_id" => $cart->id,
+            "product_id" => $input["product_id"]
+        ])->first();
+        return $exists->delete();
     }
 }
