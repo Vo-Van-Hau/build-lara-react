@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Avatar, Button, Col, Image, Rate, Row, Space, Descriptions, Badge, Input, notification } from 'antd';
-import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MinusOutlined, StarFilled } from '@ant-design/icons';
 import { Breadcrumb, Typography } from 'antd';
 import Meta from "antd/lib/card/Meta";
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
@@ -8,71 +8,7 @@ import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
 const { Text } = Typography;
 
 const ProductDetailPage = (props) => {
-    return <>
-        <BreadCrumb />
-        <ProductItem id={props.id} />
-    </>
-}
-
-const BreadCrumb = () => {
-    return <>
-        <Breadcrumb style={{ padding: '12px' }}>
-            <Breadcrumb.Item style={{ cursor: 'pointer' }} >
-                <HomeOutlined />
-            </Breadcrumb.Item>
-            <Breadcrumb.Item style={{ cursor: 'pointer' }}>
-                <span>Product</span>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>Product Name</Breadcrumb.Item>
-        </Breadcrumb>
-    </>
-}
-
-const ProductItem = (props) => {
-    const {data, get_product_item } = useContext(ProductDetailContext);
-    
-    useEffect(() => {
-        get_product_item({id: props.id});
-    }, [props.id]);
-
-    return <>
-        <Row className='product_item_container' justify='space-between'>
-            <Col span={8} className='product_image_container'>
-                <Image preview={false}
-                    style={{ objectFit: 'contain', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
-                />
-            </Col>
-            <Col className='separate'></Col>
-            <Col span={15} className='product_info_container'>
-                <Row className='head'>
-                    <h4>Category:  </h4>
-                    <Badge.Ribbon text="New">
-                        <h1 className='product_title'>{data.product_item.name}</h1>
-                    </Badge.Ribbon>
-
-                    <div className="rating">
-                        <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
-                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  {data.product_item.name} </span>
-                    </div>
-
-                </Row>
-
-                <Row className='body' >
-                    <Col className='product_add' span={16}>
-                        <ProductInfo />
-                    </Col>
-                    <Col className='shop_info' span={8}>
-                        <ShopInfo />
-                    </Col>
-                </Row>
-            </Col>
-        </Row>
-
-        <ProductDescription />
-    </>
-}
-const ProductInfo = () => {
+    const { data, get_product_item } = useContext(ProductDetailContext);
     let [quantity, setQuantity] = useState(1);
 
     const handleIncrease = () => {
@@ -90,6 +26,7 @@ const ProductInfo = () => {
                 View cart and checkout
             </Button>
         );
+
         notification.success({
             message: 'Add to cart successfully!',
             placement: 'topRight',
@@ -103,80 +40,119 @@ const ProductInfo = () => {
             }
         });
     }
+    useEffect(() => {
+        get_product_item({ id: props.id });
+    }, [props.id]);
 
     return <>
-        <span className='product_price__current-price'>65.000 đ</span>
-        <span className='product_price__list-price'>65.000 đ</span>
-        <span className='product_price__discount-rate'>-32%</span>
-        <div className='product_quantity'>
-            <Button.Group>
-                <Button icon={<MinusOutlined />} type="ghost" onClick={() => handleDecrease()} />
-                <Input value={quantity} style={{ width: '60px', textAlign: 'center' }} />
-                <Button icon={<PlusOutlined />} type="ghost" onClick={() => handleIncrease()} />
-            </Button.Group>
-        </div>
-        <div className='add_to_cart'>
-            <Button type='danger' onClick={handleAddToCart} size='large' className='add_to_cart_btn' block >Add To Cart</Button>
-        </div>
+        <BreadCrumb />
+        <Row className='product_item_container' justify='space-between'>
+            <Col span={8} className='product_image_container'>
+                <Image preview={false}
+                    style={{ objectFit: 'contain', borderRadius: '3px' }}
+                    src={data.product_item.image_link}
+                />
+            </Col>
+            <Col className='separate'></Col>
+            <Col span={15} className='product_info_container'>
+                <Row className='head' >
+                    <Col span={24}><h4>Category: {data.product_item.category_id} </h4></Col>
+                    <Col span={24}><h1 className='product_title'>{data.product_item.name}</h1></Col>
+                    <Col className='rating' span={24}>
+                        <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
+                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  {data.product_item.name} </span>
+                    </Col>
+                </Row>
+
+                <Row className='body' >
+                    <Col className='product_add' span={15}>
+                        <span className='product_price__current-price'>{data.product_item.sale_price_id}</span>
+                        <span className='product_price__list-price'>{data.product_item.price}</span>
+                        <span className='product_price__discount-rate'>-32%</span>
+                        <div className='product_quantity'>
+                            <Button.Group>
+                                <Button icon={<MinusOutlined />} type="ghost" onClick={() => handleDecrease()} />
+                                <Input value={quantity} style={{ width: '60px', textAlign: 'center' }} />
+                                <Button icon={<PlusOutlined />} type="ghost" onClick={() => handleIncrease()} />
+                            </Button.Group>
+                        </div>
+                        <div className='add_to_cart'>
+                            <Button type='danger' onClick={handleAddToCart} size='large' className='add_to_cart_btn' block >Add To Cart</Button>
+                        </div>
+                    </Col>
+                    <Col className='shop_info' span={8} offset={1}>
+                        <Row gutter={[16, 16]}>
+                            <Col >
+                                <Avatar size={48} src='https://vcdn.tikicdn.com/cache/w100/ts/seller/ee/fa/a0/98f3f134f85cff2c6972c31777629aa0.png.webp' />
+                            </Col>
+                            <Col span={12}>
+                                <a>Shop Name</a>
+                            </Col>
+                            <Col span={12} className='shop_rating' >
+                                <div>4.5 / 5  <StarFilled /></div>
+                                <div></div>
+                            </Col>
+                            <Col span={12} className='shop_follow'>
+                                <div>250k+ Follow</div>
+                            </Col>
+
+                            <Space size='middle' wrap className='btn-group' style={{justifyContent: 'center'}}>
+                                <Button icon={<ShopOutlined />} size='large'>
+                                    Visit Shop
+                                </Button>
+                                <Button icon={<PlusOutlined />} size='large' >
+                                    Follow
+                                </Button>
+                            </Space>
+
+                        </Row>
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
+
+        {/* <Descriptions
+            className='product_description_container'
+            bordered
+            title="Product Description"
+            size={'middle'}
+        >
+            <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
+            <Descriptions.Item label="Company">VNG</Descriptions.Item>
+            <Descriptions.Item label="Price">18.000 VND</Descriptions.Item>
+            <Descriptions.Item label="Out of Date">22/10/2022</Descriptions.Item>
+            <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
+            <Descriptions.Item label="Official">$60.00</Descriptions.Item>
+            <Descriptions.Item label="Config Info">
+                Data disk type: MongoDB
+                <br />
+                Database version: 3.4
+                <br />
+                Package: dds.mongo.mid
+                <br />
+                Storage space: 10 GB
+                <br />
+                Replication factor: 3
+                <br />
+                Region: East China 1<br />
+            </Descriptions.Item>
+        </Descriptions> */}
+        <Row dangerouslySetInnerHTML={{__html: data.product_item.description}} />
+        
     </>
 }
-const ProductDescription = () => {
-    return <Descriptions
-        className='product_description_container'
-        bordered
-        title="Product Description"
-        size={'middle'}
-    >
-        <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-        <Descriptions.Item label="Company">VNG</Descriptions.Item>
-        <Descriptions.Item label="Price">18.000 VND</Descriptions.Item>
-        <Descriptions.Item label="Out of Date">22/10/2022</Descriptions.Item>
-        <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-        <Descriptions.Item label="Official">$60.00</Descriptions.Item>
-        <Descriptions.Item label="Config Info">
-            Data disk type: MongoDB
-            <br />
-            Database version: 3.4
-            <br />
-            Package: dds.mongo.mid
-            <br />
-            Storage space: 10 GB
-            <br />
-            Replication factor: 3
-            <br />
-            Region: East China 1<br />
-        </Descriptions.Item>
-    </Descriptions>
-}
-const ShopInfo = () => {
+
+const BreadCrumb = () => {
     return <>
-        <Row gutter={[16, 16]}>
-            <Col >
-                <Avatar size={48} src='https://vcdn.tikicdn.com/cache/w100/ts/seller/ee/fa/a0/98f3f134f85cff2c6972c31777629aa0.png.webp' />
-            </Col>
-            <Col span={12}>
-                <a>Shop Name</a>
-            </Col>
-            <Col span={12} className='shop_rating' >
-                <div>4.5 / 5  <StarOutlined /></div>
-                <div></div>
-            </Col>
-            <Col span={12} className='shop_follow'>
-                <div>250k+</div>
-                <div>Follow</div>
-
-            </Col>
-
-            <Space size={[10]} wrap className='btn-group'>
-                <Button icon={<ShopOutlined />} size='large'>
-                    Visit Shop
-                </Button>
-                <Button icon={<PlusOutlined />} size='large' >
-                    Follow
-                </Button>
-            </Space>
-
-        </Row>
+        <Breadcrumb style={{ padding: '12px' }}>
+            <Breadcrumb.Item style={{ cursor: 'pointer' }} >
+                <HomeOutlined />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item style={{ cursor: 'pointer' }}>
+                <span>Product</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>Product Name</Breadcrumb.Item>
+        </Breadcrumb>
     </>
 }
 

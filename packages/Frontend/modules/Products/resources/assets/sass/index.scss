@@ -21,7 +21,6 @@
 .product_item_container {
     background-color: #fff;
     margin: 1rem 0;
-    padding: 0 10%;
 
     .product_image_container,
     .product_info_container {
@@ -80,6 +79,7 @@
                 text-align: center;
             }
             .btn-group {
+                width: 100%;
                 button {
                     border-radius: 4px;
                     color: #1890ff;
@@ -92,11 +92,6 @@
                 }
             }
         }
-    }
-
-    .product_description_container {
-        padding: 1rem;
-        background-color: #fff;
     }
 
     .related_product_container {
@@ -122,6 +117,30 @@
         font-weight: 300;
         line-height: 32px;
         word-break: break-word;
+    }
+}
+.product_description_table {
+    width: 100%;
+    padding: 1rem;
+    background-color: #fff;
+    th {
+        padding: 1rem;
+        text-align: left;
+        background: #efefef;
+    }
+    tr {
+        border-bottom: 1px solid #efefef;
+        &:ntn-child(even) {
+            background: #cdcdcd;
+        }
+        &:ntn-child(odd) {
+            background: #fff;
+        }
+    }
+
+    td {
+        width: 80%;
+        padding: 1rem;
     }
 }
 
