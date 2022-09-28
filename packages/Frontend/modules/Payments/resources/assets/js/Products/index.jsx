@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import PaymentPage from './components/Page/PaymentPage';
-import PaymentContextProvider from './components/Contexts/PaymentContext';
+import ProductsPage from './components/Page/Products';
+import GroupsContextProvicer from './components/Contexts/ProductsContext';
 
-const Payment = (props) => {
+const Products = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
@@ -38,7 +38,7 @@ const Payment = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<PaymentPage {...props}/>);
+            default: return (<ProductsPage {...props}/>);
         }
     }
 
@@ -48,11 +48,12 @@ const Payment = (props) => {
 
     return (
         <>
-            <PaymentContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
+            <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
-            </PaymentContextProvider>
+            </GroupsContextProvicer>
+
         </>
     )
 }
 
-export default Payment;
+export default Products;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import PaymentPage from './components/Page/PaymentPage';
-import PaymentContextProvider from './components/Contexts/PaymentContext';
+import ProductDetailPage from './components/Page/ProductDetail';
+import ProductDetailContextProvicer from './components/Contexts/ProductsDetailContext';
 
-const Payment = (props) => {
+const ProductDetail = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
@@ -32,27 +32,45 @@ const Payment = (props) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get module configuration
+     * @param:
+     * @returns {void}
+     */
+     const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
      * @param:
      * @returns {void}
      */
     const render_view = () => {
         switch (action) {
-            default: return (<PaymentPage {...props}/>);
+            default: return (<ProductDetailPage {...props} id={id} />);
         }
     }
 
     useEffect(function() {
-        // get_config();
+        get_config();
+        get_action();
     }, []);
 
     return (
         <>
-            <PaymentContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
+            <ProductDetailContextProvicer axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </PaymentContextProvider>
+            </ProductDetailContextProvicer>
         </>
     )
 }
 
-export default Payment;
+export default ProductDetail;

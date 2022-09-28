@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6dd8307e31902482edaa9cdbb8341d48",
+    "content-hash": "c685b71ecb3faa5bbd86d0d8b02d59da",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1037,6 +1037,48 @@
                 }
             ],
             "description": "Module Home",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "frontend/payments",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Payments",
+                "reference": "653c8d63a09295adb4bee5eb4a65bdf9a6fdf6ec"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Payments\\Providers\\PaymentsServiceProvider",
+                        "Frontend\\Payments\\Providers\\PaymentsRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "PaymentsFrontend": "Frontend\\Payments\\Facades\\Payments"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Payments\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Payments",
             "transport-options": {
                 "relative": true
             }
@@ -9456,6 +9498,7 @@
         "frontend/checkout": 20,
         "frontend/customer": 20,
         "frontend/shop": 20,
+        "frontend/payments": 20,
         "sellers/core": 20,
         "sellers/auth": 20,
         "sellers/users": 20,

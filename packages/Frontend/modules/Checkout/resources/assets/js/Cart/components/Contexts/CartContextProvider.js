@@ -15,8 +15,6 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: get cart by user
-     * @param {string} page
-     * @param {string} keySearch
      * @return {void}
      */
     const get_cart = () => {
@@ -40,11 +38,11 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
      * @return {void}
      */
     const remove_item = (cart_id, product_id) => {
-            set_table_loading();
-            return axios
-            .get_secured()
-            .post(`/checkout/carts/remove_item`, { cart_id, product_id });
-        }
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/checkout/carts/remove_item`, { cart_id, product_id });
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>

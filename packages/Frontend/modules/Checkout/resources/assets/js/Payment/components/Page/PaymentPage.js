@@ -1,10 +1,17 @@
-import { Avatar, Button, Card, Col, Collapse, Divider, Input, List, Radio, Row, Space, Typography } from "antd"
+import { Fragment, useState, useContext, useEffect } from 'react';
+import { PaymentContext } from '../Contexts/PaymentContext';
+import { Avatar, Button, Card, Col, Collapse, Divider, Input, List, Radio, Row, Space, Typography } from 'antd';
 import { CalendarFilled } from '@ant-design/icons'
-import { Fragment, useState } from 'react';
 const { Title } = Typography;
 const { Panel } = Collapse;
 
-const PaymentPage = () => {
+const PaymentPage = (props) => {
+
+    const { data, get_cart, setRouter }  = useContext(PaymentContext);
+    const { cart, loading_table } = data;
+    const { cart_detail, user } = cart;
+    const { customer } = user;
+
     const list = [
         {
             title: 'We Will Be Happy, In Different Ways',
@@ -37,6 +44,11 @@ const PaymentPage = () => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
+
+    useEffect(function() {
+        get_cart();
+    }, []);
+
     return (<>
         <Row className='checkout_container'>
             <Col span={17} className='leftSide'>
@@ -46,15 +58,15 @@ const PaymentPage = () => {
                         <legend className='store_name'><CalendarFilled /> Package 1:Delivered on Wednesday, September 28</legend>
                         <List
                             itemLayout="horizontal"
-                            dataSource={list}
+                            dataSource={cart_detail}
                             renderItem={(item) => (
                                 <List.Item>
                                     <List.Item.Meta
-                                        avatar={<Avatar src={item.img} />}
-                                        title={item.title}
-                                        description={<>Quantity: x{item.quantity}  </>}
+                                        avatar={ <Avatar src={item.product.image_link} /> }
+                                        title={ item.product.name }
+                                        description={ <>{'Số lượng: x'}{item.product_quantity}</>}
                                     />
-                                    <div className='product_price'>{item.price} đ</div>
+                                    <div className='product_price'>{ item.product.price } đ</div>
                                 </List.Item>
                             )} />
                     </fieldset>
@@ -69,13 +81,12 @@ const PaymentPage = () => {
                         </Space>
                     </Radio.Group>
                 </section>
-
             </Col>
 
             <Col span={6} offset={1} className='rightSide'>
                 <Card className='client_info' title="Delivered to" extra={<a href="#">Change</a>}>
-                    <Title level={5}>Mai Nguyen</Title>
-                    <span className='phone_number'>0123456789</span>
+                    <Title level={5}>{ customer && customer.fullname ? customer.fullname : 'Undefined'}</Title>
+                    <span className='phone_number'>{ customer && customer.phone ? customer.phone : 'Undefined'}</span>
                     <span> <Divider type="vertical" /></span>
                     <span className='phone_number'>Thu Duc, HCM City</span>
                 </Card>

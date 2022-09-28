@@ -9,7 +9,7 @@ const { Title } = Typography;
 const CartPage = (props) => {
 
     const { data, get_cart, setRouter, remove_item, set_table_loading }  = useContext(CartContext);
-    const { loading_table } = data;
+    const { cart, loading_table } = data;
 
     /**
      * @author <hauvo1709@gmail.com>
@@ -43,7 +43,7 @@ const CartPage = (props) => {
             </Col>
             <Col className="left_Container" span={18}>
                 <CartTable
-                    cart={data.cart ? data.cart : {}}
+                    cart={cart}
                     setRouter={setRouter}
                     loading_table={loading_table}
                     remove_product={remove_product}
@@ -51,7 +51,8 @@ const CartPage = (props) => {
             </Col>
             <Col className="right_Container" span={6}>
                 <Checkout
-                     cart={data.cart ? data.cart : {}}
+                     cart={cart}
+                     setRouter={setRouter}
                 />
             </Col>
         </Row>
@@ -158,14 +159,31 @@ const CartTable = (props) => {
 
 const Checkout = (props) => {
 
-    const { cart } = props;
+    const { cart, setRouter } = props;
     const { user, cart_detail } = cart;
     const { customer } = user;
+
     let total_amount = 0;
     let discount = 0;
     cart_detail && cart_detail.forEach(function(item) {
         total_amount += (parseInt(item.product_quantity) * item.product.price)
     });
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: redirect page to payment
+     * @param:
+     * @return {void}
+     */
+    const redirect_to_payment = () => {
+        return setRouter({
+            module: 'checkout',
+            controller: 'payment',
+            action: 'view',
+            id: cart.id
+        });
+    }
+
     return (<>
         <Card className='client_info' title="Delivered to" extra={<a href="#">Change</a>}>
             <Title level={5}>{ customer && customer.fullname ? customer.fullname : 'Undefined'}</Title>
@@ -185,10 +203,10 @@ const Checkout = (props) => {
             <Divider />
             <div className='prices_item'>
                 <p className='prices_text'>Tổng tiền</p>
-                <p className='prices_value'>{ total_amount }đ <br/><span>(Đã bao gồm VAT nếu có</span></p>
+                <p className='prices_value'>{ total_amount }đ <br/><span>(Đã bao gồm VAT nếu có)</span></p>
             </div>
         </Card>
-        <Button type='danger' size='large' block>Mua Hàng</Button>
+        <><Button type='primary' size='large' danger onClick={() => redirect_to_payment()}>Mua Hàng</Button></>
     </>)
 }
 

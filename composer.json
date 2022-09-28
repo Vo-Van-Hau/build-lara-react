@@ -47,6 +47,7 @@
         "frontend/checkout": "*@dev",
         "frontend/customer": "*@dev",
         "frontend/shop": "*@dev",
+        "frontend/payments": "*@dev",
 
         "sellers/core": "*@dev",
         "sellers/auth": "*@dev",
@@ -213,6 +214,10 @@
         },{
             "type": "path",
             "url": "packages/Frontend/modules/Shop",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "packages/Frontend/modules/Payments",
             "symlink": false
         },
 

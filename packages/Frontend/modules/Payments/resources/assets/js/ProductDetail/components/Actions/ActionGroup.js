@@ -1,5 +1,5 @@
 import React,{ useContext, useState ,useEffect } from 'react';
-import { GroupsContext } from '../Contexts/PaymentContext';
+import { GroupsContext } from '../Contexts/GroupsContext';
 import Helper from '../Helper/Helper';
 import { Drawer, Button, Spin, Form, Input, Select } from 'antd';
 const { Option } = Select;

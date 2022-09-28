@@ -26,7 +26,7 @@ export const initialState = {
 
 export const CartReducer = (state = initialState, action) => {
     let { type, payload } = action;
-    switch (type) {
+    switch(type) {
         case GET_CART:
             return {...state, cart: {...payload}};
         case SET_PAGINATION:
