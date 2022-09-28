@@ -1,15 +1,15 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, GroupsReducer } from '../Reducers/GroupsReducer';
+import { initialState, CartReducer } from '../Reducers/CartReducer';
 import {
     GET_GROUPS, SET_USER_GROUPS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
-export const GroupsContext = createContext();
+export const CartContext = createContext();
 
-const GroupsContextProvicer = ({ children, axios, history, config }) => {
+const CartContextProvider = ({ children, axios, history, config }) => {
 
-    const [data, dispatch] = useReducer(GroupsReducer, initialState);
+    const [data, dispatch] = useReducer(CartReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -52,10 +52,11 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
      * @param {Object} values
      * @return {void}
      */
-    const storage_group = (values) => {
-        return axios
-        .get_secured()
-        .post(`/users/groups/storage`, {...values});
+    const storage_group = (values = {}) => {
+        // return axios
+        // .get_secured()
+        // .post(`/users/groups/storage`, {...values});
+        console.log(values);
     }
 
     /**
@@ -165,10 +166,10 @@ const GroupsContextProvicer = ({ children, axios, history, config }) => {
     };
 
     return (
-        <GroupsContext.Provider value={todoContextData}>
+        <CartContext.Provider value={todoContextData}>
             { children }
-        </GroupsContext.Provider>
+        </CartContext.Provider>
     );
 }
 
-export default GroupsContextProvicer;
+export default CartContextProvider;

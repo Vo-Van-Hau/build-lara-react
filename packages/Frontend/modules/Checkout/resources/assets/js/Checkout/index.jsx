@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/ListGroups';
-import GroupsContextProvicer from './components/Contexts/GroupsContext';
+import CheckoutPage from './components/Page/CheckoutPage';
+import CheckoutContextProvider from './components/Contexts/CheckoutContext';
 
 const Checkout = (props) => {
 
@@ -38,7 +38,7 @@ const Checkout = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<CheckoutPage {...props}/>);
         }
     }
 
@@ -48,10 +48,9 @@ const Checkout = (props) => {
 
     return (
         <>
-            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <CheckoutContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer> */}
-            This is Checkout Page
+            </CheckoutContextProvider>
         </>
     )
 }

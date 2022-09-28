@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/ListGroups';
-import GroupsContextProvicer from './components/Contexts/GroupsContext';
+import ListGroups from './components/Page/PaymentPage';
+import PaymentContextProvider from './components/Contexts/PaymentContext';
 
 const Payment = (props) => {
 
@@ -48,10 +48,9 @@ const Payment = (props) => {
 
     return (
         <>
-            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <PaymentContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer> */}
-            This is Payment Page
+            </PaymentContextProvider>
         </>
     )
 }

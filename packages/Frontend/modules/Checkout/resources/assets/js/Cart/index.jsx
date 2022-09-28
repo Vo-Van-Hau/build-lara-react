@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/ListGroups';
-import GroupsContextProvicer from './components/Contexts/GroupsContext';
+import CartPage from './components/Page/CartPage';
+import CartContextProvider from './components/Contexts/CartContextProvider';
 
 const Cart = (props) => {
 
@@ -38,7 +38,7 @@ const Cart = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<CartPage {...props}/>);
         }
     }
 
@@ -48,10 +48,9 @@ const Cart = (props) => {
 
     return (
         <>
-            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <CartContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer> */}
-            This is Cart Page
+            </CartContextProvider>
         </>
     )
 }

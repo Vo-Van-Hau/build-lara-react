@@ -1,0 +1,77 @@
+.cart_page_container{
+    background-color:#F0F2F5;
+    .left_Container{
+        .shop_name{
+            padding: 1rem;
+            background-color: #fff;
+        }
+    }
+    .right_Container{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .checkout_container{
+            .prices_item{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+    }
+    
+}
+
+.checkout_container {
+    padding: 1rem;
+    .leftSide {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        .section_container {
+            padding: 1rem 2rem;
+            background: #fff;
+            border-radius: 5px;
+        }
+    
+        fieldset {
+            padding: 1rem;
+            border: 1px solid #dddde3;
+            border-radius: 5px;
+            legend {
+                width: auto;
+                padding: 0 1rem;
+                color: #079449;
+                font-size: 14px;
+            }
+            .product_price {
+                color: #38383d;
+                font-weight: bold;
+            }
+        }
+    }
+    .rightSide {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        .checkout_container {
+            .products_collapse_header {
+                .ant-collapse-header {
+                    padding: 0;
+                }
+                .ant-collapse-header{
+                    color: red;
+                }
+            }
+            
+            .prices_item {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                .total_price {
+                    color: red;
+                }
+            }
+        }
+    }
+}
