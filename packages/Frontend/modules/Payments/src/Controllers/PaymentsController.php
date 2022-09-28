@@ -22,6 +22,23 @@ class PaymentsController extends ControllerBase {
     public function __construct(PaymentsRepositoryInterface $PaymentsRepository) {
         $this->PaymentsRepository = $PaymentsRepository;
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_list_methods(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
+            $status = isset($input["status"]) ? $input["status"] : [];
+            $data_json["payment_methods"] = $this->PaymentsRepository->get_all_methods($keyword, $status);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }
 
 

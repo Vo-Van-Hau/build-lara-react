@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c685b71ecb3faa5bbd86d0d8b02d59da",
+    "content-hash": "6869a253c65fb251824557a99794a951",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -830,6 +830,48 @@
                 }
             ],
             "time": "2020-12-29T14:50:06+00:00"
+        },
+        {
+            "name": "frontend/address",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Address",
+                "reference": "5038b30d75134afa01831a2cb29026e77b7208ec"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Address\\Providers\\AddressServiceProvider",
+                        "Frontend\\Address\\Providers\\AddressRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "AddressFrontend": "Frontend\\Address\\Facades\\Address"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Address\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Address",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "frontend/auth",
@@ -9499,6 +9541,7 @@
         "frontend/customer": 20,
         "frontend/shop": 20,
         "frontend/payments": 20,
+        "frontend/address": 20,
         "sellers/core": 20,
         "sellers/auth": 20,
         "sellers/users": 20,

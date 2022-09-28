@@ -2,7 +2,7 @@
 
 return [
 
-    "namespace"     => "PaymentsFrontend",
+    "namespace"     => "AddressFrontend",
     "version"       => "1.00.000",
 
     /*

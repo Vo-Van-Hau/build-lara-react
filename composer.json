@@ -48,6 +48,7 @@
         "frontend/customer": "*@dev",
         "frontend/shop": "*@dev",
         "frontend/payments": "*@dev",
+        "frontend/address": "*@dev",
 
         "sellers/core": "*@dev",
         "sellers/auth": "*@dev",
@@ -218,6 +219,10 @@
         },{
             "type": "path",
             "url": "packages/Frontend/modules/Payments",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "packages/Frontend/modules/Address",
             "symlink": false
         },
 

@@ -5,6 +5,7 @@ namespace Frontend\Payments\Repositories\Eloquents;
 use Frontend\Core\Repositories\Eloquents\BaseRepository;
 use Frontend\Payments\Interfaces\PaymentsRepositoryInterface;
 use Frontend\Payments\Models\Payments;
+use Frontend\Payments\Models\PaymentMethods;
 use Illuminate\Support\Facades\Config;
 use Frontend\Auth\AuthFrontend;
 
@@ -14,6 +15,7 @@ class PaymentsRepository extends BaseRepository implements PaymentsRepositoryInt
      * @var Eloquent | Model
      */
     protected $model;
+    protected $payment_methods;
 
     /**
      * @var Eloquent | Model
@@ -25,8 +27,9 @@ class PaymentsRepository extends BaseRepository implements PaymentsRepositoryInt
      * @param Model|Eloquent $model
      *
      */
-    public function __construct(Payments $model) {
+    public function __construct(Payments $model, PaymentMethods $payment_methods) {
         $this->model = $model;
+        $this->payment_methods = $payment_methods;
     }
 
     /**
@@ -49,5 +52,20 @@ class PaymentsRepository extends BaseRepository implements PaymentsRepositoryInt
     public function get_by_id($id){
         $result = $this->model->where("id", $id)->first();
         return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param string $keyword
+     * @param array $status
+     * @return Illuminate\Support\Collection
+     */
+    public function get_all_methods($keyword = "", $status = []) {
+        $result = $this->payment_methods->where(["deleted" => 0]);
+        if(!empty($status)) {
+            $result = $result->whereIn("status", $status);
+        }
+        return $result->paginate(Config::get("packages.frontend.payments.item_per_page", 10));
     }
 }
