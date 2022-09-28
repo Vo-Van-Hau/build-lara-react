@@ -1,10 +1,12 @@
 <?php
 
 namespace Frontend\Products\Controllers;
-
+use Frontend\Products\Models\Products;
 use Illuminate\Http\Request;
 use Frontend\Core\Controllers\ControllerBase;
 use Frontend\Products\Interfaces\ProductsRepositoryInterface;
+use App\Log;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -19,8 +21,12 @@ class ProductsController extends ControllerBase {
 
     protected $ProductsRepository;
 
-    public function __construct(ProductsRepositoryInterface $ProductsRepository) {
-        $this->ProductsRepository = $ProductsRepository;
+    // public function __construct(ProductsRepositoryInterface $ProductsRepository) {
+    //     $this->ProductsRepository = $ProductsRepository;
+    // }
+    public function __construct()
+    {
+        $this->ProductsRepository = new Products();
     }
 
     /**
@@ -30,13 +36,13 @@ class ProductsController extends ControllerBase {
      * @return void
      */
     public function get_list(Request $request) {
-        if($request->isMethod("post")) {
-            // $input = $request->all();
-            // $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
-            // $status = isset($input["status"]) ? $input["status"] : [];
-            // $data_json["carts"] = $this->CartsRepository->get_all($keyword, $status);
-            // return response()->json($data_json, 200);
-        }
+        //if($request->isMethod("post")) {
+            $input = $request->all();
+            $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
+            $status = isset($input["status"]) ? $input["status"] : [];
+            $data_json["carts"] = $this->ProductsRepository->get_all($keyword, $status);
+            return response()->json($data_json, 200);
+        //}
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
@@ -47,14 +53,30 @@ class ProductsController extends ControllerBase {
      * @return void
      */
     public function get_item(Request $request) {
-        if($request->isMethod("post")) {
+        // if($request->isMethod("post")) {
             $input = request()->all();
             $id = !empty($input["id"]) ? intval($input["id"]) : "";
             if(empty($id)) return $this->response_base(["status" => false], "Missing ID !!!", 200);
             $data_json["product"] = $this->ProductsRepository->get_by_id($id);
             return response()->json($data_json, 200);
-        }
+        // }
         return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    ///////////////////////////////////////////////////////////
+
+    public function create(Request $request)
+    {
+        $input = $request->all();
+        try {
+            DB::beginTransaction();
+            $Create = $this->ProductsRepository->upsert($input);
+            
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->response_base(["status" => false], "Access denied !", 200);
+        }
+        return ;
     }
 }
 
