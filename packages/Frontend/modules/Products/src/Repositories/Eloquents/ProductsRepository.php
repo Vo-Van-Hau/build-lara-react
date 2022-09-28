@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Frontend\Auth\AuthFrontend;
 use Frontend\Products\Products as ProductsProducts;
 
-class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface
-{
+class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface {
 
     /**
      * @var Eloquent | Model
@@ -40,8 +39,12 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status = [])
-    {
+    public function get_all($keyword = "", $status = []) {
+        $result = $this->model->where(["deleted" => 0]);
+        if(!empty($status)) {
+            $result = $result->whereIn("status", $status);
+        }
+        return $result->paginate(Config::get("packages.frontend.products.item_per_page", 10));
     }
 
     /**
@@ -50,8 +53,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @param int $id
      * @return Illuminate\Support\Collection
      */
-    public function get_by_id($id)
-    {
+    public function get_by_id($id) {
         $result = $this->model->where("id", $id)->first();
         return $result;
     }
@@ -67,33 +69,33 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                 return $products->response_base(["status" => false], "Access denied !", 200);
             }
             $products->name = array_get($input, 'name', $products->name);
-            
+
             $products->slug_name = array_get($input, 'slug_name', $products->slug_name);
-            
+
             $products->price = array_get($input, 'price', $products->price);
-            
+
             $products->slpr_id = array_get($input, 'slpr_id', $products->slpr_id);
-            
+
             $products->cogs = array_get($input, 'cogs', $products->cogs);
-            
+
             $products->link = array_get($input, 'link', $products->link);
-            
+
             $products->mobile_link = array_get($input, 'mobile_link', $products->mobile_link);
-            
+
             $products->image_link = array_get($input, 'image_link', $products->image_link);
-            
+
             $products->cate_id = array_get($input, 'cate_id', $products->cate_id);
-            
+
             $products->unit_pricing_measure_id = array_get($input, 'unit_pricing_measure_id', $products->unit_pricing_measure_id);
-            
+
             $products->availability = array_get($input, 'availability', $products->availability);
-            
+
             $products->availability_date = array_get($input, 'availability_date', $products->availability_date);
-            
+
             $products->expiration_date = array_get($input, 'expiration_date', $products->expiration_date);
-            
+
             $products->status = array_get($input, 'status', $products->status);
-            
+
             $products->description = array_get($input, 'description', $products->description);
 
             $products->updated_at = date("Y-m-d H:i:s", time());
