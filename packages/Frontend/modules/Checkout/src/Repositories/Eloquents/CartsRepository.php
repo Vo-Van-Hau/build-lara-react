@@ -15,6 +15,7 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
      * @var Eloquent | Model
      */
     protected $model;
+    protected $cart_detail_model;
 
     /**
      * @var Eloquent | Model
@@ -26,8 +27,9 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
      * @param Model|Eloquent $model
      *
      */
-    public function __construct(Carts $model) {
+    public function __construct(Carts $model, CartDetail $cart_detail_model) {
         $this->model = $model;
+        $this->cart_detail_model = $cart_detail_model;
     }
 
     /**
@@ -68,11 +70,20 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
      */
     public function store($input = []){
         $new = $this->model;
-        $new->name = $input["name"];
-        $new->status = $input["status"];
-        $new->parent_group_id = $input["parent_group_id"];
-        $new->description = $input["description"];
-        if($new->save()) return $new;
+        $new->user_id = $input["user_id"];
+        $new->status = 1;
+        if($new->save()) {
+            $cart_id = $new->id;
+            if(isset($input["product"])) {
+                $product = $input["product"];
+                $this->cart_detail_model->cart_id = $cart_id;
+                $this->cart_detail_model->product_id = $product["id"];
+                $this->cart_detail_model->product_quantity = $product["quantity"];
+                $this->cart_detail_model->status = 1;
+                return $this->cart_detail_model->save();
+            }
+            return false;
+        };
         return false;
     }
 

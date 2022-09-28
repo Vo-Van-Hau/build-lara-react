@@ -16,8 +16,7 @@ use Sellers\Orders\Interfaces\OrdersRepositoryInterface;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-09-23
  */
-class OrderController extends ControllerBase
-{
+class OrdersController extends ControllerBase {
 
     protected $OrdersRepository;
 
