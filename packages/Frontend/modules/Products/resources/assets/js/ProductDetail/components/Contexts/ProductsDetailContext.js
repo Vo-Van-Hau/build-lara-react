@@ -24,7 +24,6 @@ const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
         .get_secured()
         .post(`/products/products/get_item`, {...values})
         .then((res) => {
-            console.log(res);
             let { product } = res.data;
             dispatch({ type: GET_PRODUCT_ITEM, payload: product });
             })

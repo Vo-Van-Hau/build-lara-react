@@ -1,53 +1,98 @@
-
-import { Button, Card, Col, Divider, Popconfirm, Row, Typography } from "antd"
+import { useContext, useEffect } from 'react';
+import { CartContext } from '../Contexts/CartContextProvider';
+import { Button, Card, Col, Divider, Popconfirm, Row, Typography, Image } from 'antd';
 import { Table } from 'antd';
 import { DeleteOutlined,ShopOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-const CartPage = () => {
+const CartPage = (props) => {
+
+    const { data, get_cart, setRouter }  = useContext(CartContext);
+
+    useEffect(() => {
+        get_cart();
+    }, []);
+
     return (
         <Row className="cart_page_container" gutter={[16, 16]}>
             <Col className="title" span={24}>
                 <Title level={2}  style={{marginTop:'10px'}}>Cart</Title>
             </Col>
             <Col className="left_Container" span={18}>
-                <CartTable />
+                <CartTable
+                    cart={data.cart ? data.cart : {}}
+                    setRouter={setRouter}
+                />
             </Col>
             <Col className="right_Container" span={6}>
-                <Checkout />
+                <Checkout
+                     cart={data.cart ? data.cart : {}}
+                />
             </Col>
         </Row>
     )
 }
 
-const CartTable = () => {
+const CartTable = (props) => {
+
+    const { cart, setRouter } = props;
+    const { cart_detail } = cart;
     const columns = [
         {
             title: '',
             dataIndex: 'img',
-            render: (item) => <img src={item} alt='cart-item-img' />,
+            render: (_, record) => {
+                return (
+                    <><Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
+                        module: 'products',
+                        controller: 'productdetail',
+                        action: 'view',
+                        id: record.product.id
+                    })}/></>
+                )
+            },
         },
         {
-            title: 'Product',
-            dataIndex: 'title',
+            title: 'Tên sản phẩm',
             width: 300,
-            render: (text) => <a>{text}</a>,
+            render: (_, record) => {
+                return (
+                    <><a onClick={() => setRouter({
+                        module: 'products',
+                        controller: 'productdetail',
+                        action: 'view',
+                        id: record.product.id
+                    })}>{ record.product.name ? record.product.name : 'Undefined' }</a></>
+                )
+            },
         },
         {
-            title: 'Unit Price',
+            title: 'Đơn giá',
             align: 'center',
-            dataIndex: 'unitPrice',
+            render: (_, record) => {
+                return (
+                    <>{ record.product.price ? record.product.price : 'Undefined' }</>
+                )
+            }
         },
         {
-            title: 'Quantity',
+            title: 'Số lượng',
             align: 'center',
-            dataIndex: 'quantity',
+            render: (_, record) => {
+                return (
+                    <>{ record.product_quantity ? record.product_quantity : 'Undefined' }</>
+                )
+            }
         },
         {
-            title: 'Into Money',
+            title: 'Thành tiền',
             align: 'center',
-            dataIndex: 'quantity',
+            render: (_, record) => {
+                return (
+                    <>{ record.product_quantity ? (parseInt(record.product_quantity) * record.product.price)  : 'Undefined' }</>
+                )
+            }
         },
         {
             title: '',
@@ -57,36 +102,6 @@ const CartTable = () => {
                     <DeleteOutlined />
                 </Popconfirm>
             ),
-        },
-    ];
-    const data = [
-        {
-            key: '1',
-            img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-            unitPrice: 32000,
-            quantity: 1,
-        },
-        {
-            key: '2',
-            img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-            unitPrice: 32000,
-            quantity: 1,
-        },
-        {
-            key: '3',
-            img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-            unitPrice: 32000,
-            quantity: 1,
-        },
-        {
-            key: '4',
-            img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-            unitPrice: 32000,
-            quantity: 1,
         },
     ];
     const rowSelection = {
@@ -109,42 +124,48 @@ const CartTable = () => {
                 type: 'checkbox',
                 ...rowSelection,
             }}
+            rowKey='id'
             columns={columns}
-            dataSource={data}
+            dataSource={cart_detail}
         />
-    </>
-    )
+    </>)
 }
 
-const Checkout = () => {
+const Checkout = (props) => {
+
+    const { cart } = props;
+    const { user, cart_detail } = cart;
+    const { customer } = user;
+    let total_amount = 0;
+    let discount = 0;
+    cart_detail && cart_detail.forEach(function(item) {
+        total_amount += (parseInt(item.product_quantity) * item.product.price)
+    });
     return (<>
         <Card className='client_info' title="Delivered to" extra={<a href="#">Change</a>}>
-            <Title level={5}>Mai Nguyen</Title>
-            <span className='phone_number'>0123456789</span>
-            <span> <Divider type="vertical" /></span>
+            <Title level={5}>{ customer && customer.fullname ? customer.fullname : 'Undefined'}</Title>
+            <span className='phone_number'>{ customer && customer.phone ? customer.phone : 'Undefined'}</span>
+            <span> <Divider type="vertical"/></span>
             <span className='phone_number'>Thu Duc, HCM City</span>
         </Card>
-
         <Card className='checkout_container'>
             <div className='prices_item'>
-                <p className='prices_text'>Provisional</p>
-                <p className='prices_value'>0d</p>
+                <p className='prices_text'>Tạm tính</p>
+                <p className='prices_value'>{ total_amount }đ</p>
             </div>
             <div className='prices_item'>
-                <p className='prices_text'>Discount</p>
-                <p className='prices_value'>0d</p>
+                <p className='prices_text'>Giảm giá</p>
+                <p className='prices_value'>{ discount }đ</p>
             </div>
             <Divider />
             <div className='prices_item'>
-                <p className='prices_text'>Total amount</p>
-                <p className='prices_value'>0d</p>
+                <p className='prices_text'>Tổng tiền</p>
+                <p className='prices_value'>{ total_amount }đ <br/><span>(Đã bao gồm VAT nếu có</span></p>
             </div>
         </Card>
-        <Button type='danger' size='large' block>Purchase</Button>
-    </>
-    )
+        <Button type='danger' size='large' block>Mua Hàng</Button>
+    </>)
 }
-
 
 
 export default CartPage;

@@ -37,7 +37,7 @@ const Cart = (props) => {
      * @returns {void}
      */
     const render_view = () => {
-        switch (action) {
+        switch(action) {
             default: return (<CartPage {...props}/>);
         }
     }
@@ -48,7 +48,7 @@ const Cart = (props) => {
 
     return (
         <>
-            <CartContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <CartContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </CartContextProvider>
         </>

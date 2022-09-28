@@ -99,4 +99,17 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
             ->first();
         return $result;
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $id
+     * @return Illuminate\Support\Collection
+     */
+    public function get_by_user_id($user_id){
+        $result = $this->model->where("user_id", $user_id)
+            ->with(["user", "cart_detail"])
+            ->first();
+        return $result;
+    }
 }

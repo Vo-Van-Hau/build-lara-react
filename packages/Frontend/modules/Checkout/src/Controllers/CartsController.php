@@ -76,6 +76,22 @@ class CartsController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: get cart item
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_item_by_user(Request $request) {
+        if($request->isMethod("post")) {
+            $auth_id = AuthFrontend::info("id");
+            if(empty($auth_id)) return $this->response_base(["status" => false], "Missing UserID !!!", 200);
+            $data_json["cart"] = $this->CartsRepository->get_by_user_id($auth_id);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }
 
 

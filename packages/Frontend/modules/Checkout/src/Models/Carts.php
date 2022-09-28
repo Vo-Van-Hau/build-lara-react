@@ -69,6 +69,6 @@ class Carts extends ModelBase {
         ->where([
             "users.status" => 1,
             "users.deleted" => 0
-        ]);
+        ])->with(["customer"]);
     }
 }
