@@ -16,6 +16,7 @@ const HeaderSection = ({...props}) => {
      const [isModalOpen, setIsModalOpen] = useState(false);
 
      const showModal = () => {
+        console.log('show login')
          setIsModalOpen(true);
      };
  

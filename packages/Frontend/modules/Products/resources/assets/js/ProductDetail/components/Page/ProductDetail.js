@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Avatar, Button, Col, Image, Rate, Row, Space, Descriptions, Badge, Input, notification } from 'antd';
 import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { Breadcrumb, Typography } from 'antd';
 import Meta from "antd/lib/card/Meta";
+import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
 
 const { Text } = Typography;
 
 const ProductDetailPage = (props) => {
     return <>
         <BreadCrumb />
-        <ProductItem />
+        <ProductItem id={props.id} />
     </>
 }
 
@@ -27,7 +28,12 @@ const BreadCrumb = () => {
     </>
 }
 
-const ProductItem = () => {
+const ProductItem = (props) => {
+    const {data, get_product_item } = useContext(ProductDetailContext);
+    
+    useEffect(() => {
+        get_product_item({id: props.id});
+    }, [props.id]);
 
     return <>
         <Row className='product_item_container' justify='space-between'>
@@ -42,12 +48,12 @@ const ProductItem = () => {
                 <Row className='head'>
                     <h4>Category:  </h4>
                     <Badge.Ribbon text="New">
-                        <h1 className='product_title'>Combo Trọn Bộ 4 Cuốn Hackers IELTS (Listening + Reading + Speaking + Writing)</h1>
+                        <h1 className='product_title'>{data.product_item.name}</h1>
                     </Badge.Ribbon>
 
                     <div className="rating">
                         <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
-                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  Sold: 100++ </span>
+                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  {data.product_item.name} </span>
                     </div>
 
                 </Row>

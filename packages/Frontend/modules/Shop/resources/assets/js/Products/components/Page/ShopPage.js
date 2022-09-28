@@ -53,9 +53,14 @@ const ShopMain = () => {
     const onTabsChange = (key) => {
         console.log(key);
     };
-    return (
-        <Row className='shop_page_main' gutter={[16, 5]}>
-            <Col span={24}>
+    const items = [
+        { label: 'Tab 1', key: 'item-1', children: 'Content 1' }, // remember to pass the key prop
+        { label: 'Tab 2', key: 'item-2', children: 'Content 2' },
+      ];
+    return  <Tabs items={items}></Tabs>
+    // (
+        // <Row className='shop_page_main' gutter={[16, 5]}>
+        //     <Col span={24}>
                 {/* <Tabs
                     defaultActiveKey="1"
                     onChange={onTabsChange}
@@ -82,7 +87,7 @@ const ShopMain = () => {
                         }
                     ]} /> */}
 
-                <Tabs defaultActiveKey="1"
+                {/* <Tabs defaultActiveKey="1"
                     onChange={onTabsChange}>
                     <Tabs.TabPane tab="Shop" key="1">
                         <ShopTab />
@@ -96,9 +101,11 @@ const ShopMain = () => {
                     <Tabs.TabPane tab="Store Profile" key="4">
                         <StoreProfile />
                     </Tabs.TabPane>
-                </Tabs>
-            </Col>
-        </Row>)
+                </Tabs> */}
+                
+        //     </Col>
+        // </Row>
+        // )
 }
 
 const ShopTab = () => {
