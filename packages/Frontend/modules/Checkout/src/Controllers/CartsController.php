@@ -49,6 +49,7 @@ class CartsController extends ControllerBase {
     public function storage(Request $request) {
         if($request->isMethod("post")) {
             $input = $request->all();
+            return $input;
             // $input["name"] = isset($input["name"]) ? $input["name"] : "";
             // $input["status"] = isset($input["status"]) ? intval($input["status"]) : "";
             // $input["parent_group_id"] = isset($input["parent_group_id"]) ? intval($input["parent_group_id"]) : 0;
