@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6dd8307e31902482edaa9cdbb8341d48",
+    "content-hash": "6869a253c65fb251824557a99794a951",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -832,6 +832,48 @@
             "time": "2020-12-29T14:50:06+00:00"
         },
         {
+            "name": "frontend/address",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Address",
+                "reference": "5038b30d75134afa01831a2cb29026e77b7208ec"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Address\\Providers\\AddressServiceProvider",
+                        "Frontend\\Address\\Providers\\AddressRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "AddressFrontend": "Frontend\\Address\\Facades\\Address"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Address\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Address",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "frontend/auth",
             "version": "dev-master",
             "dist": {
@@ -1037,6 +1079,48 @@
                 }
             ],
             "description": "Module Home",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "frontend/payments",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Payments",
+                "reference": "653c8d63a09295adb4bee5eb4a65bdf9a6fdf6ec"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Payments\\Providers\\PaymentsServiceProvider",
+                        "Frontend\\Payments\\Providers\\PaymentsRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "PaymentsFrontend": "Frontend\\Payments\\Facades\\Payments"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Payments\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Payments",
             "transport-options": {
                 "relative": true
             }
@@ -9456,6 +9540,8 @@
         "frontend/checkout": 20,
         "frontend/customer": 20,
         "frontend/shop": 20,
+        "frontend/payments": 20,
+        "frontend/address": 20,
         "sellers/core": 20,
         "sellers/auth": 20,
         "sellers/users": 20,

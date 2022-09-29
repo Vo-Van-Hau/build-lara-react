@@ -1,10 +1,11 @@
 <?php
 
 namespace Frontend\Products\Controllers;
-
 use Illuminate\Http\Request;
 use Frontend\Core\Controllers\ControllerBase;
 use Frontend\Products\Interfaces\ProductsRepositoryInterface;
+use App\Log;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -31,11 +32,11 @@ class ProductsController extends ControllerBase {
      */
     public function get_list(Request $request) {
         if($request->isMethod("post")) {
-            // $input = $request->all();
-            // $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
-            // $status = isset($input["status"]) ? $input["status"] : [];
-            // $data_json["carts"] = $this->CartsRepository->get_all($keyword, $status);
-            // return response()->json($data_json, 200);
+            $input = $request->all();
+            $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
+            $status = isset($input["status"]) ? $input["status"] : [];
+            $data_json["carts"] = $this->ProductsRepository->get_all($keyword, $status);
+            return response()->json($data_json, 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
@@ -55,6 +56,22 @@ class ProductsController extends ControllerBase {
             return response()->json($data_json, 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    ///////////////////////////////////////////////////////////
+
+    public function create(Request $request)
+    {
+        $input = $request->all();
+        try {
+            DB::beginTransaction();
+            $Create = $this->ProductsRepository->upsert($input);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return $this->response_base(["status" => false], "Access denied !", 200);
+        }
+        return ;
     }
 }
 

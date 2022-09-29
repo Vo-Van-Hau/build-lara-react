@@ -1,0 +1,34 @@
+{
+    "name": "frontend/payments",
+    "description": "Module Payments",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frontend\\Payments\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Frontend\\Payments\\Providers\\PaymentsServiceProvider",
+                "Frontend\\Payments\\Providers\\PaymentsRouteServiceProvider"
+            ],
+            "aliases": {
+                "PaymentsFrontend": "Frontend\\Payments\\Facades\\Payments"
+            }
+        }
+    }
+}
+
+
+

@@ -1,5 +1,5 @@
 import React,{ useContext, useState ,useEffect } from 'react';
-import { GroupsContext } from '../Contexts/PaymentContext';
+import { GroupsContext } from '../Contexts/GroupsContext';
 import ListUsers from './Components/ListUsers';
 import Helper from '../Helper/Helper';
 import { Drawer, Table, Button, Avatar } from 'antd';

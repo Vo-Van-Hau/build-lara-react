@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/PaymentPage';
+import PaymentPage from './components/Page/PaymentPage';
 import PaymentContextProvider from './components/Contexts/PaymentContext';
 
 const Payment = (props) => {
@@ -38,7 +38,7 @@ const Payment = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<PaymentPage {...props}/>);
         }
     }
 
@@ -48,7 +48,7 @@ const Payment = (props) => {
 
     return (
         <>
-            <PaymentContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <PaymentContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </PaymentContextProvider>
         </>
