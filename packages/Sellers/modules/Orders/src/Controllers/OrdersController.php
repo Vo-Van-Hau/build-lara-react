@@ -6,6 +6,7 @@ use Sellers\Core\Controllers\ControllerBase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Sellers\Orders\Interfaces\OrdersRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -16,7 +17,8 @@ use Sellers\Orders\Interfaces\OrdersRepositoryInterface;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-09-23
  */
-class OrdersController extends ControllerBase {
+class OrdersController extends ControllerBase
+{
 
     protected $OrdersRepository;
 
@@ -41,10 +43,29 @@ class OrdersController extends ControllerBase {
      * @param:
      * @return void
      */
-    public function get_list()
+    public function get_list(Request $request)
     {
-        $list_order = $this->OrdersRepository->get_all();
-        dd($list_order);
-        // return response()->json($list_order, 200);
+        if ($request->isMethod("get")) {
+            $input = $request->all();
+            $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
+            $status = isset($input["status"]) ? $input["status"] : [];
+            $data_json["orders"] = $this->OrdersRepository->get_all($keyword, $status);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    public function get_item(Request $request)
+    {
+        // dd($request);
+        if ($request->isMethod("get")) {
+
+            $input = $request->all();
+            $id = !empty($input["id"]) ? intval($input["id"]) : $input["id"];
+            if (!empty($input["id"]));
+            $data_json["orders"] = $this->OrdersRepository->get_by_id($input["id"]);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 }
