@@ -1,0 +1,34 @@
+{
+    "name": "frontend/orders",
+    "description": "Module Orders",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frontend\\Orders\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Frontend\\Orders\\Providers\\OrdersServiceProvider",
+                "Frontend\\Orders\\Providers\\OrdersRouteServiceProvider"
+            ],
+            "aliases": {
+                "OrdersFrontend": "Frontend\\Orders\\Facades\\Orders"
+            }
+        }
+    }
+}
+
+
+

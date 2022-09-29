@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6869a253c65fb251824557a99794a951",
+    "content-hash": "909cbf378f460471028a108dcc0bdf41",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -837,7 +837,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Address",
-                "reference": "5038b30d75134afa01831a2cb29026e77b7208ec"
+                "reference": "7ead034b365f969bcd812764414f1801ac30d21c"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -1084,12 +1084,54 @@
             }
         },
         {
+            "name": "frontend/orders",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Orders",
+                "reference": "0e3cd80984898ee25fbcf75d16c318d4addaf2b0"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Orders\\Providers\\OrdersServiceProvider",
+                        "Frontend\\Orders\\Providers\\OrdersRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "OrdersFrontend": "Frontend\\Orders\\Facades\\Orders"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Orders\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Orders",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "frontend/payments",
             "version": "dev-master",
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Payments",
-                "reference": "653c8d63a09295adb4bee5eb4a65bdf9a6fdf6ec"
+                "reference": "bc058ba4dcb1e4b8dbe85f0c6d2652b196a72b77"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -1173,7 +1215,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Publishers",
-                "reference": "1de2ee64d267a12d4450573af1c09a33fa4d855e"
+                "reference": "6b4dc4246d00e6b7e5c2d64ec1f8c2ca24adf103"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -1186,7 +1228,7 @@
                         "Frontend\\Publishers\\Providers\\PublishersRouteServiceProvider"
                     ],
                     "aliases": {
-                        "Publishers": "Frontend\\Publishers\\Facades\\Publishers"
+                        "PublishersFrontend": "Frontend\\Publishers\\Facades\\Publishers"
                     }
                 }
             },
@@ -1210,12 +1252,54 @@
             }
         },
         {
+            "name": "frontend/shipping",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/Frontend/modules/Shipping",
+                "reference": "967790ebeb0750687e42c89a54f0623e3751f369"
+            },
+            "require": {
+                "php": "7.4.8|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Frontend\\Shipping\\Providers\\ShippingServiceProvider",
+                        "Frontend\\Shipping\\Providers\\ShippingRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "ShippingFrontend": "Frontend\\Shipping\\Facades\\Shipping"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Frontend\\Shipping\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "vovanhau",
+                    "email": "vanhau.vo@urekamedia.vn"
+                }
+            ],
+            "description": "Module Shipping",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "frontend/shop",
             "version": "dev-master",
             "dist": {
                 "type": "path",
                 "url": "packages/Frontend/modules/Shop",
-                "reference": "2cefa66d49fe002018ee5c8c48d78f647e42ff22"
+                "reference": "2ce4e98243a8c6d7fb56e3070a7bb294318868f5"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2769,7 +2853,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Orders",
-                "reference": "7dff6d34c5840b6382be096a945555d37fe242d3"
+                "reference": "3e3c51e0a5f87c6a573f2e09225537da1d928168"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -2853,7 +2937,7 @@
             "dist": {
                 "type": "path",
                 "url": "modules/Products",
-                "reference": "8280ff0378d545deefd37512d0597fbd658603ba"
+                "reference": "f8ab4d4adafad3bc723f0313586173de79b083eb"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -4567,7 +4651,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Sellers/modules/Products",
-                "reference": "23a7dd64d9388f2ee7c2d49609e147f82886175a"
+                "reference": "e1dee2f8fe70116b04120e7a73e2718bea3f4008"
             },
             "require": {
                 "php": "7.4.8|^8.0"
@@ -9542,6 +9626,8 @@
         "frontend/shop": 20,
         "frontend/payments": 20,
         "frontend/address": 20,
+        "frontend/orders": 20,
+        "frontend/shipping": 20,
         "sellers/core": 20,
         "sellers/auth": 20,
         "sellers/users": 20,

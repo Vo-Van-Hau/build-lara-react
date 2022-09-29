@@ -18,9 +18,9 @@ class CreateOrdersTable extends Migration {
             $table->string("receiver_name");
             $table->string("receiver_phone");
             $table->integer("receiver_country_id")->unsigned();
-            $table->integer("receiver_province")->unsigned();
-            $table->integer("receiver_district")->unsigned();
-            $table->integer("receiver_ward")->unsigned();
+            $table->integer("receiver_province_id")->unsigned();
+            $table->integer("receiver_district_id")->unsigned();
+            $table->integer("receiver_ward_id")->unsigned();
             $table->text("receiver_address");
             $table->double("subtotal", 8, 2, true)->unsigned()
                 ->comment("Subtotal (Shipping and other fees are not included)");

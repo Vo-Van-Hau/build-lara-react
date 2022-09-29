@@ -24,7 +24,7 @@
                 "Frontend\\Publishers\\Providers\\PublishersRouteServiceProvider"
             ],
             "aliases": {
-                "Publishers": "Frontend\\Publishers\\Facades\\Publishers"
+                "PublishersFrontend": "Frontend\\Publishers\\Facades\\Publishers"
             }
         }
     }

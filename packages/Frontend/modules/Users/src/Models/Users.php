@@ -105,6 +105,6 @@ class Users extends Authenticatable {
         return $this->hasOne(Customer::class, "user_id", "id")->where([
             "customers.status" => 1,
             "customers.deleted" => 0
-        ]);
+        ])->with("customer_address");
     }
 }

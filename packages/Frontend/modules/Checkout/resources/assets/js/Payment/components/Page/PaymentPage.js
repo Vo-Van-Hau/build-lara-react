@@ -1,13 +1,13 @@
 import { Fragment, useState, useContext, useEffect } from 'react';
 import { PaymentContext } from '../Contexts/PaymentContext';
-import { Avatar, Button, Card, Col, Collapse, Divider, Input, List, Radio, Row, Space, Typography } from 'antd';
+import { Avatar, Button, Card, Col, Collapse, Divider, List, Radio, Row, Space, Typography } from 'antd';
 import { CalendarFilled } from '@ant-design/icons'
 const { Title } = Typography;
 const { Panel } = Collapse;
 
 const PaymentPage = (props) => {
 
-    const { data, get_cart, setRouter, get_payment_methods }  = useContext(PaymentContext);
+    const { data, get_cart, setRouter, get_payment_methods, storage_order }  = useContext(PaymentContext);
     const { cart, loading_table, payment_methods } = data;
     const { cart_detail, user } = cart;
     const { customer } = user;
@@ -52,7 +52,7 @@ const PaymentPage = (props) => {
      * @return {void}
      */
     const get_order = () => {
-        
+        return storage_order();
     }
 
     useEffect(function() {
@@ -109,22 +109,27 @@ const PaymentPage = (props) => {
                 </Card>
 
                 <Card className='checkout_container'
-                    title={<>Order</>}
-                    extra={<><a href="#">Change</a></>}
+                    title={<>Đơn hàng</>}
+                    extra={<><Button type='link' onClick={() => setRouter({
+                        module: 'checkout',
+                        controller: 'cart'
+                    })}>Thay đổi</Button></>}
                 >
                     <Collapse
                         className='products_collapse_header'
                         showArrow={false}
                         defaultActiveKey={['1']}
-                        ghost>
-                        <Panel header="Watch products" style={{ color: 'red' }} key="1">
-                            {list.map((productItem, index) => {
-                                return <Fragment key={index}>
+                        ghost
+                    >
+                        <Panel header="Chi tiết đơn hàng" style={{ color: 'red' }} key="1">
+                            {cart_detail.map((item, index) => {
+                                const { product } = item;
+                                return <Fragment key={ product.id }>
                                     <div className='product_info'>
                                         <Row className='product_info'>
-                                            <Col span={4}><span className='product_amount'> x {productItem.quantity} | </span> </Col>
-                                            <Col span={16}><p className='product_title'>{productItem.title}</p></Col>
-                                            <Col span={3} offset={1}><b className='product_price'>{productItem.price}đ</b></Col>
+                                            <Col span={4}><span className='product_amount'> x {item.product_quantity} | </span> </Col>
+                                            <Col span={16}><p className='product_title'>{product.name}</p></Col>
+                                            <Col span={3} offset={1}><b className='product_price'>{product.price}đ</b></Col>
                                         </Row>
                                     </div>
                                 </Fragment>
@@ -132,28 +137,49 @@ const PaymentPage = (props) => {
                         </Panel>
                     </Collapse>
                     <Divider />
-                    <div className='prices_item'>
-                        <p className='prices_text'>Tạm tính</p>
-                        <p className='prices_value'>0d</p>
-                    </div>
-                    <div className='prices_item'>
-                        <p className='prices_text'>Phí vận chuyển</p>
-                        <p className='prices_value'>0d</p>
-                    </div>
-                    <div className='prices_item'>
-                        <p className='prices_text'>Giảm giá</p>
-                        <p className='prices_value'>0d</p>
-                    </div>
-                    <Divider />
-                    <div className='prices_item'>
-                        <p className='prices_text'>Tổng tiền <br/><span>(Đã bao gồm VAT nếu có)</span></p>
-                        <p className='prices_value total_price'>0d</p>
-                    </div>
+                    <>
+                        <Checkout
+                            cart={cart}
+                        />
+                    </>
                 </Card>
                 <Button type='primary' size='large' danger onClick={() => get_order()}>ĐẶT HÀNG</Button>
             </Col>
         </Row>
     </>)
 }
+
+const Checkout = (props) => {
+
+    const { cart } = props;
+    const { cart_detail } = cart;
+
+    let total_amount = 0;
+    let discount = 0;
+    cart_detail && cart_detail.forEach(function(item) {
+        total_amount += (parseInt(item.product_quantity) * item.product.price)
+    });
+
+    return (<>
+        <div className='prices_item'>
+            <p className='prices_text'>Tạm tính</p>
+            <p className='prices_value'>{ total_amount }đ</p>
+        </div>
+        <div className='prices_item'>
+            <p className='prices_text'>Phí vận chuyển</p>
+            <p className='prices_value'>0 đ</p>
+        </div>
+        <div className='prices_item'>
+            <p className='prices_text'>Giảm giá</p>
+            <p className='prices_value'>{ discount }đ</p>
+        </div>
+        <Divider />
+        <div className='prices_item'>
+            <p className='prices_text'>Tổng tiền <br/><span>(Đã bao gồm VAT nếu có)</span></p>
+            <p className='prices_value total_price'>{ total_amount }đ</p>
+        </div>
+    </>)
+}
+
 
 export default PaymentPage;

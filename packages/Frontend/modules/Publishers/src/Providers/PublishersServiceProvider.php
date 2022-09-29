@@ -50,15 +50,15 @@ class PublishersServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $this->app->bind($this->module, function ($app) {
-            return $this->app->make("Modules\\{$this->module}\\{$this->module}");
+        $this->app->bind($this->module . $this->package, function ($app) {
+            return $this->app->make("{$this->package}\\{$this->module}\\{$this->module}");
         });
         foreach ($this->models as $model) {
             if($model["status"] != "active") continue;
-            $this->app->bind(
-                "{$this->package}\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
-                "{$this->package}\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
-            );
+            // $this->app->bind(
+            //     "{$this->package}\\{$this->module}\Interfaces\\{$model["name"]}RepositoryInterface",
+            //     "{$this->package}\\{$this->module}\Repositories\Eloquents\\{$model["name"]}Repository"
+            // );
         }
     }
 

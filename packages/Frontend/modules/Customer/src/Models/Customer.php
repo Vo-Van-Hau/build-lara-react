@@ -3,6 +3,7 @@
 namespace Frontend\Customer\Models;
 
 use Frontend\Core\Models\ModelBase;
+use Frontend\Address\Models\CustomerAddress;
 
 class Customer extends ModelBase {
 
@@ -18,4 +19,12 @@ class Customer extends ModelBase {
     /**=======================
      *     RelationShip
      *=======================*/
+
+    public function customer_address() {
+        return $this->hasMany(CustomerAddress::class, "customer_id", "id")
+            ->where([
+                "customer_address.status" => 1,
+                "customer_address.deleted" => 0,
+            ]);
+    }
 }

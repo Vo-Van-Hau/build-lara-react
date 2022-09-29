@@ -4,6 +4,7 @@ import { initialState, PaymentReducer } from '../Reducers/PaymentReducer';
 import {
     GET_CART, GET_PAYMENT_METHODS, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
+import Helper from '../Helper/Helper';
 
 export const PaymentContext = createContext();
 
@@ -43,6 +44,34 @@ const PaymentContextProvider = ({ children, axios, history, config, navigate }) 
             let { payment_methods } = res.data;
             let { data } = payment_methods
             dispatch({ type: GET_PAYMENT_METHODS, payload: data });
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get_order
+     * @return {void}
+     */
+    const storage_order = () => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/orders/orders/storage`)
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                Helper.Notification('success', '[Order]', message);
+                setRouter({
+                    module: 'customer',
+                    controller: 'order',
+                    action: 'history',
+                    id: '#'
+                });
+            } else {
+                Helper.Notification('error', '[Order]', message);
+            }
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
@@ -103,7 +132,7 @@ const PaymentContextProvider = ({ children, axios, history, config, navigate }) 
         data: {...data, config}, setRouter,
         history, dispatch, get_axios,
         set_table_loading, set_mouted,
-        get_cart, get_payment_methods
+        get_cart, get_payment_methods, storage_order
     };
 
     return (
