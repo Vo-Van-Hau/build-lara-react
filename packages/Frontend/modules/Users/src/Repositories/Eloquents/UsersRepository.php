@@ -325,7 +325,7 @@ class UsersRepository extends BaseRepository implements UsersRepositoryInterface
     }
 
     /**
-     * @author <vanhau.vo@urekamedia.vn>
+     * @author <vanhau.vo@urekamedia.vn>    
      * @todo:
      * @param int $id
      * @return Illuminate\Support\Collection

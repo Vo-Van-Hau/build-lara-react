@@ -49,6 +49,20 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             ->paginate(Config::get("packages.sellers.orders.item_per_page", 10));
     }
 
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $id
+     * @return Illuminate\Support\Collection
+     */
+    public function get_by_id($id)
+    {
+        $result = $this->model->where("id", $id)
+            ->with("order_detail")->first();
+        return $result;
+    }
+
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
