@@ -8,9 +8,7 @@ const ContentSection = (props) => {
     const { history } = props;
     return (
         <>
-            <Content style={{
-                padding: '24px 50px'
-            }}>
+            <Content className='main_content_container'>
                 <Routes>
                     {(() => {
                         let parseURL = window.sparrowConfig.app.adminPrefix ? `/${window.sparrowConfig.app.adminPrefix}` : '';

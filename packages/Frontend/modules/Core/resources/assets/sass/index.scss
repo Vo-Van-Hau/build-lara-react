@@ -1,14 +1,14 @@
 @import "~antd/dist/antd.css";
 
-#sidebar_backend .logo {
-    padding: 16px;
-    color: #d81c80;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: 600;
-    border-bottom: 1px solid #aaa;
-    transition: all 0.2s;
-}
+// #sidebar_backend .logo {
+//     padding: 16px;
+//     color: #d81c80;
+//     text-align: center;
+//     font-size: 1.5rem;
+//     font-weight: 600;
+//     border-bottom: 1px solid #aaa;
+//     transition: all 0.2s;
+// }
 
 .header_container {
     padding: 1rem 0;
@@ -34,8 +34,16 @@
         display: flex;
     }
 }
-.footer_container {
+footer.footer_wrap_container {
     padding: 1rem;
     background: #fff;
-    padding: 1rem 8%;
+    .footer_container{
+        width: 1270px;
+        margin: 0 auto 2rem auto;
+    }
+}
+
+.main_content_container{
+    width: 1270px;
+    margin: 0 auto 2rem auto;
 }

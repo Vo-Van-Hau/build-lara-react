@@ -35,7 +35,7 @@ class ProductsController extends ControllerBase {
             $input = $request->all();
             $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
             $status = isset($input["status"]) ? $input["status"] : [];
-            $data_json["carts"] = $this->ProductsRepository->get_all($keyword, $status);
+            $data_json["products"] = $this->ProductsRepository->get_all($keyword, $status);
             return response()->json($data_json, 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);

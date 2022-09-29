@@ -15,6 +15,7 @@
         const API_URL = '{{ env("APP_API_URL") }}';
     </script>
     <title>MS Mall</title>
+    <link rel="shortcut icon" type="image/png" href="https://e7.pngegg.com/pngimages/939/682/png-clipart-pizza-hut-logo-symbol-food-mall-promotions-food-logo.png"/>
     <link href="{{ Core::mix('css/index.css', '/modules/core') }}" rel="stylesheet" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" type="text/css" rel="stylesheet">
 </head>

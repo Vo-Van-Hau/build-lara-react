@@ -48,7 +48,7 @@ const Home = (props) => {
 
     return (
         <>
-            <HomeContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <HomeContextProvicer axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </HomeContextProvicer>
         </>

@@ -9,8 +9,6 @@
     .rightSide {
         background-color: #fff;
         .productContainer {
-            .ant-space {
-            }
             ul.ant-pagination {
                 padding: 1rem 0;
             }
@@ -21,7 +19,6 @@
 .product_item_container {
     background-color: #fff;
     margin: 1rem 0;
-    padding: 0 10%;
 
     .product_image_container,
     .product_info_container {
@@ -80,6 +77,7 @@
                 text-align: center;
             }
             .btn-group {
+                width: 100%;
                 button {
                     border-radius: 4px;
                     color: #1890ff;
@@ -92,11 +90,6 @@
                 }
             }
         }
-    }
-
-    .product_description_container {
-        padding: 1rem;
-        background-color: #fff;
     }
 
     .related_product_container {
@@ -124,14 +117,36 @@
         word-break: break-word;
     }
 }
+.product_description_table {
+    width: 100%;
+    padding: 1rem;
+    background-color: #fff;
+    th {
+        padding: 1rem;
+        text-align: left;
+        background: #efefef;
+    }
+    tr {
+        border-bottom: 1px solid #efefef;
+        &:ntn-child(even) {
+            background: #cdcdcd;
+        }
+        &:ntn-child(odd) {
+            background: #fff;
+        }
+    }
+
+    td {
+        width: 80%;
+        padding: 1rem;
+    }
+}
 
 .ant-notification {
     padding: 5px 0;
     .ant-notification-notice-close {
         top: 10px;
         right: 10px;
-    }
-    .ant-notification-notice-message {
     }
     .ant-notification-notice-btn {
         display: block;
