@@ -25,7 +25,10 @@ class CartDetail extends ModelBase {
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        "cart_id", "product_id", "product_quantity",
+        "status"
+    ];
 
     /**
      * The attributes that should be hidden for serialization.

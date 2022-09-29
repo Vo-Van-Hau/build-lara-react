@@ -65,25 +65,49 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
-     * @param array $input
+     * @param mixed $input
      * @return mixed
      */
-    public function store($input = []){
-        $new = $this->model;
-        $new->user_id = $input["user_id"];
-        $new->status = 1;
-        if($new->save()) {
-            $cart_id = $new->id;
-            if(isset($input["product"])) {
-                $product = $input["product"];
-                $this->cart_detail_model->cart_id = $cart_id;
-                $this->cart_detail_model->product_id = $product["id"];
-                $this->cart_detail_model->product_quantity = $product["quantity"];
-                $this->cart_detail_model->status = 1;
-                return $this->cart_detail_model->save();
+    public function store($input = null) {
+        $cart = $this->model->firstWhere([
+            "user_id"   => $input["user_id"],
+            "ordered" => 0,
+            "status" => 1,
+            "deleted" => 0
+        ]);
+        if(empty($cart)) {
+            // Don't have an existed cart
+            $cart = $this->model;
+            $cart->user_id = $input["user_id"];
+            $cart->status = 1;
+            $cart->ordered = 0;
+            if($cart->save()) {
+                $cart_id = $cart->id;
+                if(isset($input["product_id"]) && isset($input["quantity"])) {
+                    $this->cart_detail_model->cart_id = $cart_id;
+                    $this->cart_detail_model->product_id = $input["product_id"];
+                    $this->cart_detail_model->product_quantity = $input["quantity"];
+                    $this->cart_detail_model->status = 1;
+                    return $this->cart_detail_model->save();
+                }
+                return false;
+            };
+        } else {
+            $cart_detail = $cart->cart_detail;
+            // update an existed item in cart detail
+            foreach($cart_detail as $key => $item) {
+                if($item->product_id == $input["product_id"]) {
+                    $item->product_quantity += $input["quantity"];
+                    return $item->save();
+                }
             }
-            return false;
-        };
+            // insert a new item in cart detail
+            $this->cart_detail_model->cart_id = $cart->id;
+            $this->cart_detail_model->product_id = $input["product_id"];
+            $this->cart_detail_model->product_quantity = $input["quantity"];
+            $this->cart_detail_model->status = 1;
+            return $this->cart_detail_model->save();
+        }
         return false;
     }
 
@@ -107,9 +131,13 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
      * @return Illuminate\Support\Collection
      */
     public function get_by_user_id($user_id) {
-        $result = $this->model->where("user_id", $user_id)
-            ->with(["user", "cart_detail"])
-            ->first();
+        $result = $this->model->with(["user", "cart_detail"])
+            ->firstWhere([
+                "user_id" => $user_id,
+                "status" => 1,
+                "deleted" => 0,
+                "ordered" => 0
+            ]);
         return $result;
     }
 

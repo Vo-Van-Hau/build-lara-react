@@ -1,8 +1,8 @@
 import React, { createContext, useReducer } from 'react';
 import { initialState, ProductDetailReducer } from '../Reducers/ProductDetailReducer';
 import {
-    GET_PRODUCT_ITEM, SET_USER_GROUPS,
-    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
+    GET_PRODUCT_ITEM, SET_TABLE_LOADING, MOUTED,
+    ADD_TO_CART
 } from '../Dispatch/type';
 
 export const ProductDetailContext = createContext();
@@ -26,7 +26,7 @@ const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
         .then((res) => {
             let { product } = res.data;
             dispatch({ type: GET_PRODUCT_ITEM, payload: product });
-            })
+        })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
     }
@@ -38,95 +38,21 @@ const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
      * @param {string} keySearch
      * @return {void}
      */
-    const get_parent_groups = () =>{
-        return axios
-        .get_secured()
-        .post(`/users/groups/get_parents`);
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: storage group
-     * @param {Object} values
-     * @return {void}
-     */
-    const storage_group = (values) => {
-        return axios
-        .get_secured()
-        .post(`/users/groups/storage`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: update group
-     * @param {Object} values
-     * @return {void}
-     */
-    const update_group = (values) => {
-        return axios
-        .get_secured()
-        .post(`/users/groups/update`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: destroy group
-     * @param {number} id
-     * @return {void}
-     */
-    const destroy_group = (id) => {
+    const add_to_cart = (values) => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/users/groups/destroy`, {id});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get all users in group
-     * @param {number} id
-     * @return {void}
-     */
-    const get_user_by_groups = (id) =>{
-        return axios
-        .get_secured()
-        .post(`/users/groups/get_users`, {id});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get users
-     * @param {string} page
-     * @param {string} keySearch
-     * @return {void}
-     */
-    const get_users = (page, keySearch) => {
-        return axios
-        .get_secured()
-        .post(`/users/users/get_list?page=${page}`, {...keySearch});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: storage user to group
-     * @param {Object} values
-     * @return {void}
-     */
-    const storage_user_to_group = (values) =>{
-        return axios
-        .get_secured()
-        .post(`/users/groups/storage_user_to_group`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: reset users
-     * @param {number} id
-     * @param {array} users
-     * @return {void}
-     */
-    const set_user_group = (id, users) => {
-        dispatch({ type: SET_USER_GROUPS, payload: {id, users}});
+        .post(`/checkout/carts/storage`, { ...values })
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                Helper.Notification('success', '[Thêm vào giỏ hàng]', message);
+            } else {
+                Helper.Notification('error', 'Thêm vào giỏ hàng', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
     }
 
     /**
@@ -156,10 +82,8 @@ const ProductDetailContextProvicer = ({ children, axios, history, config }) => {
 
     const todoContextData = {
         data: {...data, config},
-        history, dispatch, get_axios, storage_group,
-        get_parent_groups, update_group, destroy_group,
-        get_user_by_groups, get_users, storage_user_to_group,
-        set_user_group, set_table_loading, set_mouted, get_product_item
+        history, dispatch, get_axios, set_table_loading,
+        set_mouted, get_product_item, add_to_cart
     };
 
     return (

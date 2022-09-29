@@ -52,10 +52,12 @@ class CartsController extends ControllerBase {
             $input = $request->all();
             $auth_id = AuthFrontend::info("id");
             if(!isset($auth_id)) return $this->response_base(["status" => false], "Access denied !", 200);
-            $input["product"] = isset($input["products"]) ? $input["product"] : [];
+            $input["product_id"] = isset($input["product_id"]) ? $input["product_id"] : null;
+            $input["quantity"] = isset($input["quantity"]) ? $input["quantity"] : null;
             $input["user_id"] = $auth_id;
             $result = $this->CartsRepository->store($input);
             if($result) return $this->response_base(["status" => true, $result], "You storage new item successfully !!!", 200);
+            return $this->response_base(["status" => false], "You have false to add new item successfully !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }

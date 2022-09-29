@@ -24,6 +24,7 @@ const PaymentContextProvider = ({ children, axios, history, config, navigate }) 
         .post(`/checkout/carts/get_cart`)
         .then((res) => {
             let { cart } = res.data;
+            if(!cart) return;
             dispatch({ type: GET_CART, payload: cart });
         })
         .catch((errors) => {})
@@ -42,7 +43,7 @@ const PaymentContextProvider = ({ children, axios, history, config, navigate }) 
         .post(`/payments/payments/get_list_methods`)
         .then((res) => {
             let { payment_methods } = res.data;
-            let { data } = payment_methods
+            let { data } = payment_methods;
             dispatch({ type: GET_PAYMENT_METHODS, payload: data });
         })
         .catch((errors) => {})

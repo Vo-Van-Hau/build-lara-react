@@ -1,32 +1,48 @@
 import { useContext, useEffect, useState } from 'react';
-import { Avatar, Button, Col, Image, Rate, Row, Space, Descriptions, Badge, Input, notification } from 'antd';
+import {
+    Avatar, Button, Col, Image, Rate, Row, Space,
+    Descriptions, Badge, Input, notification, Breadcrumb, Typography
+} from 'antd';
 import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MinusOutlined, StarFilled } from '@ant-design/icons';
-import { Breadcrumb, Typography } from 'antd';
-import Meta from "antd/lib/card/Meta";
+import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
+import Helper from '../Helper/Helper';
 
 const { Text } = Typography;
 
 const ProductDetailPage = (props) => {
-    const { data, get_product_item } = useContext(ProductDetailContext);
-    let [quantity, setQuantity] = useState(1);
 
+    const { data, get_product_item, add_to_cart } = useContext(ProductDetailContext);
+    const { product_item } = data;
+    const [quantity, setQuantity] = useState(1);
+
+    /**
+     * @todo:
+     * @return {void}
+     */
     const handleIncrease = () => {
-        setQuantity(quantity + 1)
-    }
-    const handleDecrease = () => {
-        ((quantity === 0 || quantity < 0) ? quantity = 0 : setQuantity(quantity - 1))
+        setQuantity(quantity + 1);
     }
 
+    /**
+     * @todo
+     * @return {void}
+     */
+    const handleDecrease = () => {
+        ((quantity === 0 || quantity < 0) ? quantity = 0 : setQuantity(quantity - 1));
+    }
+
+    /**
+     * @todo: add product to cart
+     * @param:
+     * @return {void}
+     */
     const handleAddToCart = () => {
         window.scrollTo({ top: 0, behavior: "smooth" })
         const key = `open${Date.now()}`;
-        const btn = (
-            <Button className='viewCartBtn' type="primary" onClick={() => notification.close(key)} block>
+        const btn = (<Button className='viewCartBtn' type="primary" onClick={() => notification.close(key)} block>
                 View cart and checkout
-            </Button>
-        );
-
+            </Button>);
         notification.success({
             message: 'Add to cart successfully!',
             placement: 'topRight',
@@ -39,45 +55,57 @@ const ProductDetailPage = (props) => {
                 width: 300,
             }
         });
+        console.log();
+        add_to_cart({
+            product_id: product_item.id,
+            quantity
+        });
+        setQuantity(1);
     }
+
     useEffect(() => {
         get_product_item({ id: props.id });
     }, [props.id]);
 
-    return <>
+    return (<>
         <BreadCrumb />
         <Row className='product_item_container' justify='space-between'>
             <Col span={8} className='product_image_container'>
                 <Image preview={false}
                     style={{ objectFit: 'contain', borderRadius: '3px' }}
-                    src={data.product_item.image_link}
+                    src={product_item.image_link}
                 />
             </Col>
             <Col className='separate'></Col>
             <Col span={15} className='product_info_container'>
                 <Row className='head' >
-                    <Col span={24}><h4>Category: {data.product_item.category_id} </h4></Col>
-                    <Col span={24}><h1 className='product_title'>{data.product_item.name}</h1></Col>
+                    <Col span={24}><h4>Loại sản phẩm: {product_item.category_id} </h4></Col>
+                    <Col span={24}><h1 className='product_title'>{product_item.name}</h1></Col>
                     <Col className='rating' span={24}>
                         <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
-                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  {data.product_item.name} </span>
+                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  {product_item.name} </span>
                     </Col>
                 </Row>
 
                 <Row className='body' >
                     <Col className='product_add' span={15}>
-                        <span className='product_price__current-price'>{data.product_item.sale_price_id}</span>
-                        <span className='product_price__list-price'>{data.product_item.price}</span>
+                        <span className='product_price__current-price'>{product_item.sale_price_id}</span>
+                        <span className='product_price__list-price'>{product_item.price}</span>
                         <span className='product_price__discount-rate'>-32%</span>
                         <div className='product_quantity'>
-                            <Button.Group>
-                                <Button icon={<MinusOutlined />} type="ghost" onClick={() => handleDecrease()} />
-                                <Input value={quantity} style={{ width: '60px', textAlign: 'center' }} />
-                                <Button icon={<PlusOutlined />} type="ghost" onClick={() => handleIncrease()} />
-                            </Button.Group>
+                            <>
+                                <div>
+                                    <Text strong>Số Lượng</Text>
+                                </div>
+                                <Button.Group>
+                                    <Button icon={<MinusOutlined />} type="ghost" onClick={() => handleDecrease()} />
+                                    <Input value={quantity} style={{ width: '60px', textAlign: 'center' }} />
+                                    <Button icon={<PlusOutlined />} type="ghost" onClick={() => handleIncrease()} />
+                                </Button.Group>
+                            </>
                         </div>
                         <div className='add_to_cart'>
-                            <Button type='danger' onClick={handleAddToCart} size='large' className='add_to_cart_btn' block >Add To Cart</Button>
+                            <Button type='danger' onClick={handleAddToCart} size='large' className='add_to_cart_btn' block>Chọn Mua</Button>
                         </div>
                     </Col>
                     <Col className='shop_info' span={8} offset={1}>
@@ -137,9 +165,8 @@ const ProductDetailPage = (props) => {
                 Region: East China 1<br />
             </Descriptions.Item>
         </Descriptions> */}
-        <Row dangerouslySetInnerHTML={{__html: data.product_item.description}} />
-        
-    </>
+        <Row dangerouslySetInnerHTML={{__html: product_item.description}} />
+    </>)
 }
 
 const BreadCrumb = () => {

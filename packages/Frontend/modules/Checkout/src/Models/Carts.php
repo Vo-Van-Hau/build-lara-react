@@ -26,7 +26,9 @@ class Carts extends ModelBase {
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        "user_id", 
+    ];
 
     /**
      * The attributes that should be hidden for serialization.

@@ -70,7 +70,8 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $cart = Carts::where([
             "user_id" => $user_id,
             "deleted" => 0,
-            "status" => 1
+            "status" => 1,
+            "ordered" => 0
         ])->with([
             "cart_detail",
             "user"
@@ -144,6 +145,9 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
                     return false;
                 }
             }
+            // Change status of cart
+            $cart->ordered = 1;
+            $cart->save();
             return true;
         }
         return false;
