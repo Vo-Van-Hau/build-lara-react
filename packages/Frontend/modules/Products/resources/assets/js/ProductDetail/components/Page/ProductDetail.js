@@ -96,11 +96,11 @@ const ProductDetailPage = (props) => {
                                 <div>250k+ Follow</div>
                             </Col>
 
-                            <Space size='middle' wrap className='btn-group' style={{justifyContent: 'center'}}>
-                                <Button icon={<ShopOutlined />} size='large'>
+                            <Space wrap className='btn-group' style={{justifyContent: 'center'}}>
+                                <Button icon={<ShopOutlined />} size='middle'>
                                     Visit Shop
                                 </Button>
-                                <Button icon={<PlusOutlined />} size='large' >
+                                <Button icon={<PlusOutlined />} size='middle' >
                                     Follow
                                 </Button>
                             </Space>
