@@ -1,4 +1,4 @@
-export const GET_GROUPS      = "GET_GROUPS";
+export const GET_PRODUCTS      = "GET_PRODUCTS";
 export const SET_USER_GROUPS = "SET_USER_GROUPS";
 
 export const SET_PAGINATION         = "SET_PAGINATION";

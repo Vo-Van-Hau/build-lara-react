@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext,useEffect } from 'react';
 import { BackTop, Col, Image, Row, Tabs, Typography } from 'antd';
 import { Card, Avatar, Rate, Carousel } from "antd"
 import { Button, Space, Affix } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from "antd/lib/card/Meta";
+import { HomeContext } from '../Contexts/HomeContext';
 
 const HomePage = (props) => {
+    const { data, get_products, setRouter } = useContext(HomeContext);
+    const { products } = data;
     const { Text } = Typography;
     const categories = [
         { id: 1, name: 'Thịt, Rau Củ' },
@@ -57,6 +60,10 @@ const HomePage = (props) => {
     const handleClickTab = (e) => {
         console.log(e);
     }
+
+    useEffect(() => {
+        get_products();
+    }, []);
 
     return (<>
         <Tabs activeKey={'none'}
@@ -126,18 +133,24 @@ const HomePage = (props) => {
             <Row className="productContainer">
                 <Space size={[10, 16]} wrap style={{ width: '100%' }} justify="space-between">
 
-                    {productArr.map((item, index) => (
+                    {products.map((item, index) => (
 
                         <Card className="productItem"
-                            key={index}
+                            key={item.id}
                             hoverable
                             style={{ width: 240 }}
-                            cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+                            cover={<img alt="example" src={item.image_link} />}
+                            onClick={() => setRouter({
+                                    module: 'products',
+                                    controller: 'productdetail',
+                                    action: 'view',
+                                    id: item.id,
+                                })}
                         >
-                            <Meta title={item.title} />
+                            <Meta title={item.name} />
 
                             <div className="rating">
-                                <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled />
+                                {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
                                 <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
                             </div>
 
