@@ -17,4 +17,5 @@ interface OrdersRepositoryInterface extends BaseRepositoryInterface
 {
 
     public function get_all($keyword = "", $status = []);
+    public function get_by_id($id);
 }

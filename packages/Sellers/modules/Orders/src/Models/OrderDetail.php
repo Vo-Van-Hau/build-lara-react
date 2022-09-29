@@ -4,19 +4,19 @@ namespace Sellers\Orders\Models;
 
 use Sellers\Core\Models\ModelBase;
 
-class Orders extends ModelBase
+class OrderDetail extends ModelBase
 {
 
     protected $connection = "mysql";
-    protected $table = "orders";
+    protected $table = "order_detail";
 
     protected $fillable = [
         "name",
         "status",
-        "description",
+        "description"
     ];
     public function order_detail()
     {
-        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
+        return $this->hasMany(Orders::class, 'id', 'order_id');
     }
 }
