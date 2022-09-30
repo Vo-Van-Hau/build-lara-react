@@ -41,8 +41,8 @@ const ProductDetailPage = (props) => {
         window.scrollTo({ top: 0, behavior: "smooth" })
         const key = `open${Date.now()}`;
         const btn = (<Button className='viewCartBtn' type="primary" onClick={() => notification.close(key)} block>
-                View cart and checkout
-            </Button>);
+            View cart and checkout
+        </Button>);
         notification.success({
             message: 'Add to cart successfully!',
             placement: 'topRight',
@@ -58,8 +58,9 @@ const ProductDetailPage = (props) => {
         console.log();
         add_to_cart({
             product_id: product_item.id,
-            quantity
+            quantity,
         });
+        console.log(product_item.id,quantity)
         setQuantity(1);
     }
 
@@ -124,7 +125,7 @@ const ProductDetailPage = (props) => {
                                 <div>250k+ Follow</div>
                             </Col>
 
-                            <Space wrap className='btn-group' style={{justifyContent: 'center'}}>
+                            <Space wrap className='btn-group' style={{ justifyContent: 'center' }}>
                                 <Button icon={<ShopOutlined />} size='middle'>
                                     Visit Shop
                                 </Button>
@@ -165,7 +166,7 @@ const ProductDetailPage = (props) => {
                 Region: East China 1<br />
             </Descriptions.Item>
         </Descriptions> */}
-        <Row dangerouslySetInnerHTML={{__html: product_item.description}} />
+        <Row dangerouslySetInnerHTML={{ __html: product_item.description }} />
     </>)
 }
 
