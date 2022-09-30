@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration {
-    
+
     /**
      * Run the migrations.
      *
@@ -14,6 +14,7 @@ class CreateProductsTable extends Migration {
     public function up() {
         Schema::create("products", function (Blueprint $table) {
             $table->increments("id")->unsigned();
+            $table->integer("seller_id")->unsigned()->default(0);
             $table->string("name");
             $table->string("slug_name")->nullable();
             $table->double("price", 8, 2, true)->unsigned()

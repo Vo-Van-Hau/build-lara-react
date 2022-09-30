@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductSellerTable extends Migration {
+class CreateStoresTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class CreateProductSellerTable extends Migration {
      * @return void
      */
     public function up() {
-        return Schema::dropIfExists("product_seller");
-        // * @deprecated since 2022-09-30
-        Schema::create("product_seller", function (Blueprint $table) {
+        Schema::create("stores", function (Blueprint $table) {
             $table->increments("id")->unsigned();
-            $table->integer("product_id")->unsigned();
+            $table->string("name");
             $table->integer("seller_id")->unsigned();
-            $table->integer("status")->unsigned()->default(1);
+            $table->text("brand_logo")->nullable();
+            $table->integer("status")->unsigned()->default(0);
             $table->longText("description")->nullable()->comment("1–5,000 characters");
             $table->integer("user_created_id");
             $table->integer("user_updated_id")->nullable();
@@ -36,6 +35,6 @@ class CreateProductSellerTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists("product_seller");
+        Schema::dropIfExists("stores");
     }
 }

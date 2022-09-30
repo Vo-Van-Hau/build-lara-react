@@ -3,6 +3,7 @@
 namespace Frontend\Products\Models;
 
 use Frontend\Core\Models\ModelBase;
+use Frontend\Sellers\Models\Sellers;
 
 class Products extends ModelBase {
 
@@ -38,4 +39,21 @@ class Products extends ModelBase {
     /**=======================
      *     RelationShip
      *=======================*/
+
+     /**
+      * @author <hauvo1709@gmail.com>
+      * @todo
+      * @param
+      * @return void
+      */
+    public function seller() {
+        return $this->belongsTo(Sellers::class, 'seller_id', 'id')
+            ->with([
+                "store"
+            ])
+            ->where([
+                "sellers.status" => 1,
+                "sellers.deleted" => 0
+            ]);
+    }
 }

@@ -58,6 +58,7 @@ npm run build-by-webpack --source={resource} --module={module}
 35. customers: php artisan migrate --path=modules\Users\database\migrations\2022_09_28_111040_create_customers_table.php
 35. product_seller: php artisan migrate --path=modules\Products\database\migrations\2022_09_28_112407_create_product_seller_table.php
 36. customer_address: php artisan migrate --path=modules\Address\database\migrations\2022_09_28_183311_create_customer_address_table.php
+37. stores: php artisan migrate --path=modules\Sellers\database\migrations\2022_09_30_062957_create_stores_table.php
 
 # ------------------Stop here------------------
 ## MongoDB and Laravel Integration:

@@ -12,8 +12,10 @@ const { Text } = Typography;
 
 const ProductDetailPage = (props) => {
 
-    const { data, get_product_item, add_to_cart } = useContext(ProductDetailContext);
+    const { data, get_product_item, add_to_cart, setRouter } = useContext(ProductDetailContext);
     const { product_item } = data;
+    const { seller } = product_item;
+    const { store } = seller;
     const [quantity, setQuantity] = useState(1);
 
     /**
@@ -86,7 +88,6 @@ const ProductDetailPage = (props) => {
                         <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  {product_item.name} </span>
                     </Col>
                 </Row>
-
                 <Row className='body' >
                     <Col className='product_add' span={15}>
                         <span className='product_price__current-price'>{product_item.sale_price_id}</span>
@@ -111,10 +112,15 @@ const ProductDetailPage = (props) => {
                     <Col className='shop_info' span={8} offset={1}>
                         <Row gutter={[16, 16]}>
                             <Col >
-                                <Avatar size={48} src='https://vcdn.tikicdn.com/cache/w100/ts/seller/ee/fa/a0/98f3f134f85cff2c6972c31777629aa0.png.webp' />
+                                <Avatar size={48} src={ store.brand_logo ? store.brand_logo : '' } />
                             </Col>
                             <Col span={12}>
-                                <a>Shop Name</a>
+                                <><Button type='link' onClick={() => setRouter({
+                                    module: 'shop',
+                                    controller: 'products',
+                                    action: 'view',
+                                    id: seller.id  ? seller.id : '#'
+                                })}>{ store.name ? store.name : 'Undefined'}</Button></>
                             </Col>
                             <Col span={12} className='shop_rating' >
                                 <div>4.5 / 5  <StarFilled /></div>
@@ -125,11 +131,16 @@ const ProductDetailPage = (props) => {
                             </Col>
 
                             <Space wrap className='btn-group' style={{justifyContent: 'center'}}>
-                                <Button icon={<ShopOutlined />} size='middle'>
-                                    Visit Shop
+                                <Button icon={<ShopOutlined />} size='middle' onClick={() => setRouter({
+                                    module: 'shop',
+                                    controller: 'products',
+                                    action: 'view',
+                                    id: seller.id  ? seller.id : '#'
+                                })}>
+                                    Xem Shop
                                 </Button>
                                 <Button icon={<PlusOutlined />} size='middle' >
-                                    Follow
+                                    Theo Dõi
                                 </Button>
                             </Space>
 

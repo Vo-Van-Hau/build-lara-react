@@ -52,8 +52,11 @@ class ProductsController extends ControllerBase {
             $input = request()->all();
             $id = !empty($input["id"]) ? intval($input["id"]) : "";
             if(empty($id)) return $this->response_base(["status" => false], "Missing ID !!!", 200);
-            $data_json["product"] = $this->ProductsRepository->get_by_id($id);
-            return response()->json($data_json, 200);
+            $result = $this->ProductsRepository->get_by_id($id);
+            return $this->response_base([
+                "status" => true,
+                "product" => $result
+            ], "Get item successfully !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }

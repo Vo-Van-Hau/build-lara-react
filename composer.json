@@ -51,6 +51,7 @@
         "frontend/address": "*@dev",
         "frontend/orders": "*@dev",
         "frontend/shipping": "*@dev",
+        "frontend/sellers": "*@dev",
 
         "sellers/core": "*@dev",
         "sellers/auth": "*@dev",
@@ -233,6 +234,10 @@
         },{
             "type": "path",
             "url": "packages/Frontend/modules/Shipping",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "packages/Frontend/modules/Sellers",
             "symlink": false
         },
 

@@ -54,7 +54,9 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return Illuminate\Support\Collection
      */
     public function get_by_id($id) {
-        $result = $this->model->where("id", $id)->first();
+        $result = $this->model->where("id", $id)
+        ->with(["seller"])
+        ->first();
         return $result;
     }
 
