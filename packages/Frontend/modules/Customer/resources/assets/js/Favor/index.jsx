@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CustomerPage from './components/Page/CustomerPage';
 import CustomerContextProvider from './components/Contexts/CustomerContext';
 
-const Account = (props) => {
+const Favor = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
@@ -55,4 +55,4 @@ const Account = (props) => {
     )
 }
 
-export default Account;
+export default Favor;

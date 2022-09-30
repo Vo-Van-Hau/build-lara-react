@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ListGroups from './components/Page/ListGroups';
-import GroupsContextProvicer from './components/Contexts/GroupsContext';
+import CustomerPage from './components/Page/CustomerPage';
+import CustomerContextProvider from './components/Contexts/CustomerContext';
 
 const Customer = (props) => {
 
@@ -38,7 +38,7 @@ const Customer = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<ListGroups {...props}/>);
+            default: return (<CustomerPage {...props}/>);
         }
     }
 
@@ -48,10 +48,9 @@ const Customer = (props) => {
 
     return (
         <>
-            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <CustomerContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer> */}
-            This is Customer Page
+            </CustomerContextProvider>
         </>
     )
 }

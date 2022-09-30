@@ -66,7 +66,7 @@ const PaymentContextProvider = ({ children, axios, history, config, navigate }) 
                 Helper.Notification('success', '[Order]', message);
                 setRouter({
                     module: 'customer',
-                    controller: 'order',
+                    controller: 'orders',
                     action: 'history',
                     id: '#'
                 });
