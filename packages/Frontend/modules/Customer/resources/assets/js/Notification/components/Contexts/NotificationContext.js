@@ -1,15 +1,15 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, CustomerReducer } from '../Reducers/CustomerReducer';
+import { initialState, NotificationReducer } from '../Reducers/NotificationReducer';
 import {
     GET_GROUPS, SET_USER_GROUPS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
-export const CustomerContext = createContext();
+export const NotificationContext = createContext();
 
-const CustomerContextProvider = ({ children, axios, history, config }) => {
+const NotificationContextProvider = ({ children, axios, history, config }) => {
 
-    const [data, dispatch] = useReducer(CustomerReducer, initialState);
+    const [data, dispatch] = useReducer(NotificationReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -165,10 +165,10 @@ const CustomerContextProvider = ({ children, axios, history, config }) => {
     };
 
     return (
-        <CustomerContext.Provider value={todoContextData}>
+        <NotificationContext.Provider value={todoContextData}>
             { children }
-        </CustomerContext.Provider>
+        </NotificationContext.Provider>
     );
 }
 
-export default CustomerContextProvider;
+export default NotificationContextProvider;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import CustomerPage from './components/Page/CustomerPage';
-import CustomerContextProvider from './components/Contexts/CustomerContext';
+import AccountPage from './components/Page/AccountPage';
+import AccountContextProvider from './components/Contexts/AccountContext';
 
 const Account = (props) => {
 
@@ -38,7 +38,7 @@ const Account = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<CustomerPage {...props}/>);
+            default: return (<AccountPage {...props}/>);
         }
     }
 
@@ -48,9 +48,9 @@ const Account = (props) => {
 
     return (
         <>
-            <CustomerContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <AccountContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </CustomerContextProvider>
+            </AccountContextProvider>
         </>
     )
 }
