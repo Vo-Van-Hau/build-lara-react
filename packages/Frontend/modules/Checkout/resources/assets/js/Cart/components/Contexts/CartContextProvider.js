@@ -24,7 +24,7 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
         .post(`/checkout/carts/get_cart`)
         .then((res) => {
             let { cart } = res.data;
-            dispatch({ type: GET_CART, payload: cart });
+            if(cart) dispatch({ type: GET_CART, payload: cart });
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Frontend\Core\Controllers\ControllerBase;
 use Frontend\Orders\Interfaces\OrdersRepositoryInterface;
 use Frontend\Auth\AuthFrontend;
+use App\Jobs\SendInvoiceEmail;
+use Frontend\Users\Models\Users;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -39,7 +41,16 @@ class OrdersController extends ControllerBase {
             $input["payment_method_id"] = isset($input["payment_method_id"]) ? $input["payment_method_id"] : null;
             $input["shipping_method_id"] = isset($input["shipping_method_id"]) ? $input["shipping_method_id"] : null;
             $result = $this->OrdersRepository->store($input);
-            if($result) return $this->response_base(["status" => true], "You have ordered successfully !!!", 200);
+            if($result && is_array($result) && $result["status"]) {
+                $mail_to = "";
+                if($result["user_email"]) {
+                    $mail_to = $result["user_email"];
+                }
+                if(!empty($mail_to)) {
+                    dispatch(new \App\Jobs\SendInvoiceEmail($mail_to));
+                }
+                return $this->response_base(["status" => true], "You have ordered successfully !!!", 200);
+            }
             return $this->response_base(["status" => false], "You have failed to order !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
