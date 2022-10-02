@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import CustomerPage from './components/Page/CustomerPage';
-import CustomerContextProvider from './components/Contexts/CustomerContext';
+import NotificationPage from './components/Page/NotificationPage';
+import NotificationContextProvider from './components/Contexts/NotificationContext';
 
 const Notification = (props) => {
 
@@ -38,7 +38,7 @@ const Notification = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<CustomerPage {...props}/>);
+            default: return (<NotificationPage {...props}/>);
         }
     }
 
@@ -48,9 +48,9 @@ const Notification = (props) => {
 
     return (
         <>
-            <CustomerContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <NotificationContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </CustomerContextProvider>
+            </NotificationContextProvider>
         </>
     )
 }
