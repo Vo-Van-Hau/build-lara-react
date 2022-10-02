@@ -148,7 +148,10 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             // Change status of cart
             $cart->ordered = 1;
             $cart->save();
-            return true;
+            return [
+                "status" => true,
+                "user_email" => $cart["user"] && $cart["user"]["email"] ? $cart["user"]["email"] : false
+            ];
         }
         return false;
     }

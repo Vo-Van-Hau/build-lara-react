@@ -59,6 +59,9 @@ npm run build-by-webpack --source={resource} --module={module}
 35. product_seller: php artisan migrate --path=modules\Products\database\migrations\2022_09_28_112407_create_product_seller_table.php
 36. customer_address: php artisan migrate --path=modules\Address\database\migrations\2022_09_28_183311_create_customer_address_table.php
 37. stores: php artisan migrate --path=modules\Sellers\database\migrations\2022_09_30_062957_create_stores_table.php
+38. jobs: php artisan migrate --path=database\migrations\2022_09_30_104757_create_jobs_table.php
+39. failed_jobs: php artisan migrate --path=database\migrations\2019_08_19_000000_create_failed_jobs_table.php
+40. all-migrations: php artisan migrate 
 
 # ------------------Stop here------------------
 ## MongoDB and Laravel Integration:
