@@ -1,11 +1,12 @@
-import React from 'react';
-import { useState } from "react";
-import { Avatar, Col, Divider, Modal, Row, Typography } from "antd";
-import { Button, Form, Input, Select,Layout, Menu } from 'antd';
-import { message, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined, CreditCardOutlined, TagOutlined, HeartOutlined } from '@ant-design/icons';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { Avatar, Col, Divider, Modal, Row, Typography,
+    Button, Form, Input, Select,Layout, Menu, message, Upload
+} from 'antd';
+import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
+    CreditCardOutlined, TagOutlined, HeartOutlined, UploadOutlined
+} from '@ant-design/icons';
+import { AccountContext } from '../Contexts/AccountContext';
+import { GET_ACCOUNT } from '../Dispatch/type';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -20,6 +21,10 @@ const menuItems = [
 ];
 
 const AccountPage = () => {
+
+    const { data, get_account, set_table_loading, dispatch } = useContext(AccountContext);
+    const { account } = data;
+
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -95,6 +100,24 @@ const AccountPage = () => {
         },
     };
 
+    useEffect(() => {
+        get_account()
+        .then((res) => {
+            if(res.data.status) {
+                let { account } = res.data.data;
+                let { user } = account;
+                form.setFieldsValue({
+                    fullname: account.fullname,
+                    phone: account.phone,
+                    email: user.email ? user.email : 'Undefined'
+                });
+                dispatch({ type: GET_ACCOUNT, payload: account });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }, []);
+
     return (
         <Layout>
             <Content>
@@ -138,7 +161,7 @@ const AccountPage = () => {
                                                 </Col>
                                                 <Col span={19} >
                                                     <Form.Item name="fullname" label="Họ tên" rules={[{ required: true }]}>
-                                                        <Input defaultValue={'Thúy Mai'} />
+                                                        <Input />
                                                     </Form.Item>
 
                                                     <Form.Item name="nickname" label="Nickname">
