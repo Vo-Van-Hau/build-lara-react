@@ -67,10 +67,10 @@ class OrdersController extends ControllerBase
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
-    public function get_all()
+    public function statistics_orders_all()
     {
         $this->OrdersRepository->get_user_by_id();
-        $data_json["orders"] = $this->OrdersRepository->get_user_by_id();
+        $data_json["Statistic"] = $this->OrdersRepository->get_user_by_id();
         return response()->json($data_json, 200);
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
