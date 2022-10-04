@@ -6,6 +6,8 @@ use Sellers\Core\Repositories\Eloquents\BaseRepository;
 use Sellers\Orders\Interfaces\OrdersRepositoryInterface;
 use Sellers\Orders\Models\Orders;
 use Illuminate\Support\Facades\Config;
+use Sellers\Auth\Auth;
+use Sellers\Auth\Facades\AuthSellers;
 
 class OrdersRepository extends BaseRepository implements OrdersRepositoryInterface
 {
@@ -79,5 +81,21 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $existed->parent_group_id = $input["parent_group_id"];
         $existed->description = $input["description"];
         return $existed->update(); // return boolean
+    }
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $id
+     * @return Illuminate\Support\Collection
+     */
+    public function get_user_by_id()
+    {
+
+        $result = $this->model
+            ->with("users")->whereHas('users', function ($query) {
+                $query->where('id', AuthSellers::info("id"));
+            })->get();
+
+        return $result;
     }
 }

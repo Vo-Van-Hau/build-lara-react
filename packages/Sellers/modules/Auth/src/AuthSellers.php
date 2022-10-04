@@ -15,19 +15,23 @@ use Illuminate\Support\Facades\Route;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-09-23
  */
-class AuthSellers {
+class AuthSellers
+{
 
     /**
      * Constructor.
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: return guard
      * @return string
      */
-    public function get_guard() {
+    public function get_guard()
+    {
         return Config::get("packages.sellers.auth.guard", "sellers");
     }
 
@@ -37,7 +41,9 @@ class AuthSellers {
      * @param array $field
      * @return mixed
      */
-    public static function info($field = []) {
+    public static function info($field = [])
+    {
+
         if (empty($field)) {
             return Auth::guard((new self)->get_guard())->user();
         }
@@ -49,7 +55,8 @@ class AuthSellers {
      * @todo: get acl
      * @return void
      */
-    public static function get_acl() {
+    public static function get_acl()
+    {
         $segments = request()->segments();
         $auth = Auth::guard(Config::get("module.auth.guard", "module"))->getUser();
         $acl_list = [];

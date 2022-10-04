@@ -3,24 +3,21 @@
 namespace Sellers\Orders\Models;
 
 use Sellers\Core\Models\ModelBase;
+use Sellers\Orders\Models\Orders as ModelsOrders;
 
-class Orders extends ModelBase
+class Users extends ModelBase
 {
 
     protected $connection = "mysql";
-    protected $table = "orders";
+    protected $table = "users";
 
     protected $fillable = [
         "name",
         "status",
         "description",
     ];
-    public function order_detail()
-    {
-        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
-    }
     public function users()
     {
-        return $this->hasMany(Users::class, 'id', 'user_id');
+        return $this->hasMany(Orders::class, 'id', 'user_id');
     }
 }

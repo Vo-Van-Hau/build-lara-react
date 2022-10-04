@@ -57,15 +57,21 @@ class OrdersController extends ControllerBase
 
     public function get_item(Request $request)
     {
-        // dd($request);
         if ($request->isMethod("get")) {
-
             $input = $request->all();
             $id = !empty($input["id"]) ? intval($input["id"]) : $input["id"];
             if (!empty($input["id"]));
             $data_json["orders"] = $this->OrdersRepository->get_by_id($input["id"]);
             return response()->json($data_json, 200);
         }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    public function get_all()
+    {
+        $this->OrdersRepository->get_user_by_id();
+        $data_json["orders"] = $this->OrdersRepository->get_user_by_id();
+        return response()->json($data_json, 200);
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
 }

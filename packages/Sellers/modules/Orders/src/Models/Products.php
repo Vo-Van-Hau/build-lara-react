@@ -8,7 +8,7 @@ class Orders extends ModelBase
 {
 
     protected $connection = "mysql";
-    protected $table = "orders";
+    protected $table = "products";
 
     protected $fillable = [
         "name",
@@ -18,9 +18,5 @@ class Orders extends ModelBase
     public function order_detail()
     {
         return $this->hasMany(OrderDetail::class, 'order_id', 'id');
-    }
-    public function users()
-    {
-        return $this->hasMany(Users::class, 'id', 'user_id');
     }
 }
