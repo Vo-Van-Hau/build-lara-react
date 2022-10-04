@@ -137,7 +137,7 @@ const AccountPage = () => {
                     <Content className='customer_content_container'>
                         <Row className="account_container">
                             <Col className="page_title" span={24} align="bottom">
-                                <Title level={3}>Page Title (Account Edit)</Title>
+                                <Title level={3}>Thông tin tài khoản</Title>
                             </Col>
                             <Col className="page_container" span={24}>
                                 <Form {...layout} form={form} name="account_edit_form" requiredMark={false} onFinish={onFinish}>

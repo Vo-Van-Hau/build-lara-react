@@ -1,9 +1,15 @@
-import React from 'react';
-import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined, CreditCardOutlined, TagOutlined, HeartOutlined } from '@ant-design/icons';
-import { Avatar, Layout, Menu,Table } from 'antd';
-import { Col, Result, Row, Typography,Button,Tabs } from "antd";
-import { ShopOutlined } from '@ant-design/icons';
+import React, { useEffect, useContext, useState } from 'react';
+import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
+    CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined
+} from '@ant-design/icons';
+import { Avatar, Layout, Menu, Table, Col, Result,
+    Row, Typography, Button, Tabs, Image
+} from 'antd';
+import { OrdersContext } from '../Contexts/OrdersContext';
+
 const { Content, Footer, Sider } = Layout;
+const { Title } = Typography;
+
 
 const menuItems = [
     { key: 1, label: <a href='#' >Account</a>, icon: <UserOutlined /> },
@@ -16,67 +22,68 @@ const menuItems = [
 ];
 
 const OrdersPage = () => {
-    const { Title } = Typography;
+
+    const { data, setRouter, get_orders_history }  = useContext(OrdersContext);
+    const { orders } = data;
+
     const onTabsChange = (key) => {
         console.log(key);
     };
+
     const AllOrders = () => {
-        const columns = [
-            {
-                title: 'Order status here',
-                dataIndex: 'img',
-                render: (item) => <img src={item} alt='cart-item-img' />,
-            },
-            {
-                title: 'Product',
-                dataIndex: 'title',
-                width: 300,
-                render: (text) => <a>{text}</a>,
-            },
-            {
-                title: 'Quantity',
-                align: 'center',
-                dataIndex: 'quantity',
-            },
-            {
-                title: 'Unit Price',
-                align: 'center',
-                dataIndex: 'unitPrice',
-            },
+        return orders.map((order) => {
+            let { order_detail } = order;
+            const columns = [
+                {
+                    title: 'Giao hàng thành công',
+                    render: (_, record) => {
+                        return (
+                            <><Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
+                                module: 'products',
+                                controller: 'productdetail',
+                                action: 'view',
+                                id: record.product.id
+                            })}/></>
+                        )
+                    },
+                },{
+                    title: 'Tên sản phẩm',
+                    width: 300,
+                    render: (_, record) => {
+                        return (
+                            <a>{ record.product_name }</a>
+                        )
+                    },
+                },{
+                    title: 'Số lượng',
+                    align: 'center',
+                    dataIndex: 'quantity',
+                },{
+                    title: 'Đơn giá',
+                    align: 'center',
+                    render: (_, record) => {
+                        return (
+                            <>{ record.price }</>
+                        )
+                    }
+                },
 
-        ];
-        const data = [
-            {
-                key: '1',
-                img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-                title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-                unitPrice: 32000,
-                quantity: 1,
-            },
-            {
-                key: '2',
-                img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-                title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-                unitPrice: 32000,
-                quantity: 1,
-            },
-        ];
-        return <>
-
-            <Title level={5} className='shop_name'>
-                <ShopOutlined /> OrderID here
-            </Title>
-            <Table
-                pagination={false}
-                columns={columns}
-                dataSource={data}
-                footer={() => { return <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div> }}
-            />
-            <Row align='end'>
-                <Button type="primary" size={'large'} style={{ margin: '1rem' }} >See detail</Button>
-            </Row>
-
-        </>
+            ];
+            return (<>
+                <Title level={5} className='shop_name'>
+                    <ShopOutlined /> Mã đơn hàng: #{ order.code ? order.code : 'Undefined' }
+                </Title>
+                <Table
+                    pagination={false}
+                    columns={columns}
+                    dataSource={order_detail}
+                    footer={() => { return <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div> }}
+                />
+                <Row align='end'>
+                    <Button type="primary" size={'large'} style={{ margin: '1rem' }} >Xem chi tiết</Button>
+                </Row>
+            </>)
+            });
     };
     const Waiting = () => {
         return <Result title="No orders yet" />
@@ -148,8 +155,12 @@ const OrdersPage = () => {
     const Canceled = () => {
         return <Result title="No orders yet" />
     };
-    return (
 
+    useEffect(() => {
+        get_orders_history();
+    }, []);
+
+    return (
         <Layout>
             <Content>
                 <Layout className="customer-layout-background">
@@ -168,7 +179,7 @@ const OrdersPage = () => {
                     <Content className='customer_content_container'>
                         <Row className="orders_container">
                             <Col className="page_title" span={24} align="bottom">
-                                <Title level={3}>Page Title (Order)</Title>
+                                <Title level={3}>Đơn hàng của tôi</Title>
                             </Col>
                             <Col className="page_container" span={24}>
                                 <Tabs
@@ -177,7 +188,7 @@ const OrdersPage = () => {
                                     onChange={onTabsChange}
                                     items={[
                                         {
-                                            label: `All Orders`,
+                                            label: `Tất cả đơn hàng`,
                                             key: '1',
                                             children: <AllOrders />,
                                         },

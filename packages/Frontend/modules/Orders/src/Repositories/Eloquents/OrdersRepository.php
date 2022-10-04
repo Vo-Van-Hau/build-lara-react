@@ -155,4 +155,26 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         }
         return false;
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function get_history_by_auth($input) {
+        $user_id = $input["user_id"];
+        $order = $this->model;
+        if(empty($user_id)) return false;
+        $result = $order->where([
+            "status"  => 0,
+            "deleted" => 0,
+            "user_id" => $user_id
+        ])->with([
+            "customer",
+            "order_detail"
+        ])->get();
+        if(!empty($result)) return $result;
+        return false;
+    }
 }
