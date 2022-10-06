@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import NotificationPage from './components/Page/NotificationPage';
-import NotificationContextProvider from './components/Contexts/NotificationContext';
+import ShopPage from './components/Page/ShopPage';
+import ShopContextProvider from './components/Contexts/ShopContext';
 
-const Notification = (props) => {
+const Products = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
@@ -38,7 +38,7 @@ const Notification = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<NotificationPage {...props}/>);
+            default: return (<ShopPage {...props}/>);
         }
     }
 
@@ -48,11 +48,11 @@ const Notification = (props) => {
 
     return (
         <>
-            <NotificationContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
+            <ShopContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </NotificationContextProvider>
+            </ShopContextProvider>
         </>
     )
 }
 
-export default Notification;
+export default Products;

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Notification;
 */
 
 Route::get("/testing-notification", function() {
-    $user = \Modules\Users\Models\Users::find(1);
+    $user = \Modules\Users\Models\Users::find(6);
     if(!empty($user)) {
         $user->notify(new \App\Notifications\OrderTrackingStatus($user)); // not oke
         echo "Done";
@@ -24,7 +24,7 @@ Route::get("/testing-notification", function() {
 });
 
 Route::get("/testing-notification/user", function() {
-    $user = \Modules\Users\Models\Users::find(1);
+    $user = \Modules\Users\Models\Users::find(6);
     if(!empty($user)) {
         $notifications = $user->notifications;
         foreach($notifications as $notification) {

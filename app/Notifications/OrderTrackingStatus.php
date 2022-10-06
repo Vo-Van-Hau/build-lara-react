@@ -55,6 +55,7 @@ class OrderTrackingStatus extends Notification {
         return [
             "name"  => $this->user->name,
             "email" => $this->user->email,
+            "message" => "Your order is delivering by shipper...!"
         ];
     }
 }

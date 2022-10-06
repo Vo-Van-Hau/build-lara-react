@@ -52,6 +52,7 @@
         "frontend/orders": "*@dev",
         "frontend/shipping": "*@dev",
         "frontend/sellers": "*@dev",
+        "frontend/notifications": "*@dev",
 
         "sellers/core": "*@dev",
         "sellers/auth": "*@dev",
@@ -238,6 +239,10 @@
         },{
             "type": "path",
             "url": "packages/Frontend/modules/Sellers",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "packages/Frontend/modules/Notifications",
             "symlink": false
         },
 

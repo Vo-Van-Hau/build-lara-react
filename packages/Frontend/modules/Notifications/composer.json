@@ -1,0 +1,34 @@
+{
+    "name": "frontend/notifications",
+    "description": "Module Notifications",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frontend\\Notifications\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Frontend\\Notifications\\Providers\\NotificationsServiceProvider",
+                "Frontend\\Notifications\\Providers\\NotificationsRouteServiceProvider"
+            ],
+            "aliases": {
+                "NotificationsFrontend": "Frontend\\Notifications\\Facades\\Notifications"
+            }
+        }
+    }
+}
+
+
+
