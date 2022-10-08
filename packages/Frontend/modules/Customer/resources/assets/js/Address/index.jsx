@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import CustomerPage from './components/Page/CustomerPage';
-import CustomerContextProvider from './components/Contexts/CustomerContext';
+import AddressPage from './components/Page/AddressPage';
+import AddressContextProvider from './components/Contexts/AddressContext';
+import SideBar from '../Customer/components/Layout/Sidebar';
+import ActionAddress from './components/Actions/ActionAddress';
 
 const Address = (props) => {
 
@@ -32,25 +34,45 @@ const Address = (props) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get module configuration
+     * @param:
+     * @returns {void}
+     */
+     const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
      * @param:
      * @returns {void}
      */
     const render_view = () => {
+        console.log(action);
         switch (action) {
-            default: return (<CustomerPage {...props}/>);
+            case 'upsert': return <ActionAddress {...props}/>;
+            
+            default: return (<AddressPage {...props}/>);
         }
     }
 
     useEffect(function() {
-        // get_config();
-    }, []);
+        get_config();
+        get_action();
+    }, [props]);
 
     return (
         <>
-            <CustomerContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <AddressContextProvider axios={props.bp.axios} history={props.history} config={config} {...props} >
                 { render_view() }
-            </CustomerContextProvider>
+            </AddressContextProvider>
         </>
     )
 }

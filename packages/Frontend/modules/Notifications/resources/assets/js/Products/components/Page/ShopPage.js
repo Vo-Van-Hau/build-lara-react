@@ -24,7 +24,7 @@ const ShopHeader = () => {
                     icon={<AntDesignOutlined />} />
             </Col>
             <Col span={10} >
-                <Title level={4} style={{ color: '#fff' }}>Shop Name</Title>
+                <Title level={4} style={{ color: '#fff' }}>Tên cửa hàng</Title>
                 <img src='https://salt.tikicdn.com/ts/upload/5d/4c/f7/0261315e75127c2ff73efd7a1f1ffdf2.png' alt='official-ico' width={70} />
                 <div style={{ color: '#fff' }}>
                     <StarOutlined /> 4.5/5
@@ -34,7 +34,7 @@ const ShopHeader = () => {
             </Col>
             <Col span={3} >
                 <Button type='primary' icon={<PlusOutlined />} size='default' >
-                    Follow
+                    Lượt theo dõi
                 </Button>
             </Col>
             <Col span={10} offset={12} >
@@ -141,7 +141,7 @@ const ShopTab = () => {
                         <Meta title={item.title} />
                         <div className="rating">
                             <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled />
-                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
+                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán0: 100++ </small>
                         </div>
                         <Text className="price" type="danger" strong>120.000 đ</Text>
                     </Card>

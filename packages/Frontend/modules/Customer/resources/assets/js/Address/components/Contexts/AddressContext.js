@@ -1,15 +1,16 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, CustomerReducer } from '../Reducers/CustomerReducer';
+import { createSearchParams } from 'react-router-dom';
+import { initialState, AddressReducer } from '../Reducers/AddressReducer';
 import {
     GET_GROUPS, SET_USER_GROUPS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
-export const CustomerContext = createContext();
+export const AddressContext = createContext();
 
-const CustomerContextProvider = ({ children, axios, history, config }) => {
+const AddressContextProvider = ({ children, axios, history, config,navigate }) => {
 
-    const [data, dispatch] = useReducer(CustomerReducer, initialState);
+    const [data, dispatch] = useReducer(AddressReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -31,6 +32,26 @@ const CustomerContextProvider = ({ children, axios, history, config }) => {
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
+    }
+
+    const setRouter = ({
+        action,
+        id = '',
+        module = '',
+        controller = ''
+    }) => {
+        set_mouted(true);
+        let parseURL = window.sparrowConfig.app.adminPrefix ? '/' + window.sparrowConfig.app.adminPrefix : '';
+        if(module) parseURL += `/${module}`;
+        if(controller) parseURL += `/${controller}`;
+        let parseACT = action ? `?action=${action}` : ``;
+        let parseKeyID = id ? `&id=${id}` : ``;
+        let nextURL = `${parseURL}${parseACT}${parseKeyID}`;
+        history.push(nextURL);
+        return navigate({
+            pathname: parseURL,
+            search: `?${createSearchParams({action, id})}`,
+        });
     }
 
     /**
@@ -161,14 +182,14 @@ const CustomerContextProvider = ({ children, axios, history, config }) => {
         history, dispatch, get_axios, storage_group,
         get_parent_groups, update_group, destroy_group,
         get_user_by_groups, get_users, storage_user_to_group,
-        set_user_group, set_table_loading, set_mouted, get_groups
+        set_user_group, set_table_loading, set_mouted, get_groups,setRouter
     };
 
     return (
-        <CustomerContext.Provider value={todoContextData}>
+        <AddressContext.Provider value={todoContextData}>
             { children }
-        </CustomerContext.Provider>
+        </AddressContext.Provider>
     );
 }
 
-export default CustomerContextProvider;
+export default AddressContextProvider;
