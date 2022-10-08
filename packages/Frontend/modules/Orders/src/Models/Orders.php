@@ -29,7 +29,6 @@ class Orders extends ModelBase {
      public function order_detail() {
         return $this->hasMany(OrderDetail::class, "order_id", "id")
         ->where([
-            "order_detail.status" => 1,
             "order_detail.deleted" => 0
         ])->with(["product"]);
      }

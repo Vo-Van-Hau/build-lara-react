@@ -1,11 +1,14 @@
 import {
-    GET_GROUPS, SET_USER_GROUPS, SET_PAGINATION,
+    GET_ACCOUNT, SET_PAGINATION,
     SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const initialState = {
-    groups:[],
-    config:{
+    account: {
+        fullname: '',
+        phone: ''
+    },
+    config: {
         status: []
     },
     pagination: {
@@ -24,15 +27,8 @@ export const initialState = {
 export const AccountReducer = (state = initialState, action) => {
     let { type, payload } = action;
     switch (type) {
-        case GET_GROUPS:
-            return {...state, groups: [...payload]};
-        case SET_USER_GROUPS:
-            let {id, users} = payload;
-            let { groups } = state;
-            let index = groups.findIndex(item => item.id === id);
-            let record = groups.find(item => item.id === id);
-            groups[index] = {...record, users:[...users]};
-            return {...state, groups: [...groups]};
+        case GET_ACCOUNT:
+            return {...state, account: {...payload}};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:

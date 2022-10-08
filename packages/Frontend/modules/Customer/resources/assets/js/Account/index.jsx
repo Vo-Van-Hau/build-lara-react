@@ -48,7 +48,7 @@ const Account = (props) => {
 
     return (
         <>
-            <AccountContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <AccountContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </AccountContextProvider>
         </>

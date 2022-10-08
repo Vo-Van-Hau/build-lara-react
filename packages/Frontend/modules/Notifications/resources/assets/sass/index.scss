@@ -1,0 +1,50 @@
+.shop_page_header{
+    z-index: 1;
+    padding: 1rem ;
+    background: url('https://salt.tikicdn.com/ts/tmp/3a/0b/95/b070fdabf348d4b800aabc50bf778d2a.jpg');
+    background-attachment: fixed;
+    position: relative;
+    background-size: cover;
+
+    .shop_header_background_overlay{
+        position: absolute;
+        inset: 0px;
+        background-color: rgb(0, 0, 0);
+        opacity: 0.5;
+        pointer-events: none;
+        z-index: -3;
+    }
+
+}
+.shop_page_main{
+    margin-top: 1rem;
+    min-height: 80vh;
+    padding: 1rem;
+    background: #fff;
+
+    border-radius: 3px;
+
+    .shop_tab_container{
+        .ant-pagination{
+            padding: 1rem 0;
+        }
+        .productContainer{
+            .productItem{
+                .ant-card-body{
+                    padding: 10px;
+                    .ant-card-meta-title{
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+
+    .leftSide{
+        .ant-menu{
+            border-right: none;
+        }
+    }
+    
+}
+

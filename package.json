@@ -11,12 +11,14 @@
         "production": "mix --production",
         "build-by-webpack": "webpack --progress --config ./webpack.config.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "compile": "node build/compile"
+        "compile": "node build/compile",
+        "node-server": "nodemon node-server/index.js"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^4.0.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
+        "nodemon": "^2.0.20",
         "postcss": "^8.1.14",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.53.0",
@@ -40,6 +42,7 @@
         "babel-loader": "^8.2.5",
         "dotenv": "^16.0.1",
         "expose-loader": "^4.0.0",
+        "express": "^4.18.1",
         "history": "^5.3.0",
         "jquery": "^3.6.0",
         "moment": "^2.29.4",

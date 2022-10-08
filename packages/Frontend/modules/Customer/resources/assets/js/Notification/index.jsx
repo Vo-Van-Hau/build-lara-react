@@ -48,7 +48,7 @@ const Notification = (props) => {
 
     return (
         <>
-            <NotificationContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <NotificationContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </NotificationContextProvider>
         </>

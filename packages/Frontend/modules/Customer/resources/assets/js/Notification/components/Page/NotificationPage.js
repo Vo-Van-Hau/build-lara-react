@@ -1,10 +1,13 @@
-import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined, CreditCardOutlined, TagOutlined, HeartOutlined } from '@ant-design/icons';
-import { Avatar, Layout, Menu, Row } from 'antd';
-import { Button, Col, Result, Tabs, Typography } from "antd";
-import {GiftOutlined, NotificationOutlined, FieldTimeOutlined } from '@ant-design/icons'
-
-import React from 'react';
+import React, { useContext, useState ,useEffect} from 'react';
+import { UserOutlined, BellOutlined, ShoppingCartOutlined,
+    HomeOutlined, CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined,
+    GiftOutlined, NotificationOutlined, FieldTimeOutlined
+} from '@ant-design/icons';
+import { Avatar, Layout, Menu, Row, Button, Col, Result, Tabs, Typography } from 'antd';
+import {  } from '@ant-design/icons'
 const { Content, Footer, Sider } = Layout;
+import { NotificationContext } from '../Contexts/NotificationContext';
+const { Title } = Typography;
 
 const menuItems = [
     { key: 1, label: <a href='#' >Account</a>, icon: <UserOutlined /> },
@@ -17,7 +20,9 @@ const menuItems = [
 ];
 
 const NotificationPage = () => {
-    const { Title } = Typography;
+
+    const { data, get_notifications } = useContext(NotificationContext);
+
     const HomeNotice = () => {
         return <Result title="You don't have any notifications yet"
             extra={<Button type="primary">Continue Shopping</Button>}
@@ -41,6 +46,11 @@ const NotificationPage = () => {
             extra={<Button type="primary">Continue Shopping</Button>}
             danger />
     }
+
+    useEffect(() => {
+        get_notifications();
+    }, []);
+
     return (
         <Layout>
             <Content>

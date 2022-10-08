@@ -63,6 +63,9 @@ npm run build-by-webpack --source={resource} --module={module}
 39. failed_jobs: php artisan migrate --path=database\migrations\2019_08_19_000000_create_failed_jobs_table.php
 40. all-migrations: php artisan migrate 
 
+# Jobs
+1. php artisan queue:work --queue=sendinvoice
+
 # ------------------Stop here------------------
 ## MongoDB and Laravel Integration:
 1. The mongodb extension (Link download MongoDB driver for PHP: https://pecl.php.net/package/mongodb) is enabled in your php.ini file. 
