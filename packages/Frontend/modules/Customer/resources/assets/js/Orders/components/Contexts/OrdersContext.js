@@ -25,7 +25,6 @@ const OrdersContextProvider = ({ children, axios, history, config, navigate }) =
         .get_secured()
         .post(`/orders/orders/get_orders_history?page=${page}`, {...keySearch})
         .then((res) => {
-            console.log(res);
             let { status, data } = res.data;
             if(status) {
                 let { orders } = data;

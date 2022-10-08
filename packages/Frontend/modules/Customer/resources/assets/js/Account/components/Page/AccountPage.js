@@ -7,7 +7,7 @@ import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
 } from '@ant-design/icons';
 import { AccountContext } from '../Contexts/AccountContext';
 import { GET_ACCOUNT } from '../Dispatch/type';
-
+import SideBar from '../../../Customer/components/Layout/Sidebar';
 const { Content, Footer, Sider } = Layout;
 
 const menuItems = [
@@ -20,9 +20,9 @@ const menuItems = [
     { key: 7, label: <a href='#' >Favor Products</a>, icon: <HeartOutlined /> },
 ];
 
-const AccountPage = () => {
+const AccountPage = (props) => {
 
-    const { data, get_account, set_table_loading, dispatch } = useContext(AccountContext);
+    const { data, get_account, set_table_loading, dispatch, setRouter } = useContext(AccountContext);
     const { account } = data;
 
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -122,18 +122,7 @@ const AccountPage = () => {
         <Layout>
             <Content>
                 <Layout className="customer-layout-background">
-                    <Sider className="customer-layout-background" width={250} style={{ backgroundColor: '#fff' }} >
-                        <Row className='customer_account_container' align="middle" style={{ background: 'white', padding: '1rem', gap: '1rem' }}>
-                            <Avatar size={64} src='https://img.freepik.com/free-vector/cute-rabbit-with-duck-working-laptop-cartoon-illustration_56104-471.jpg?w=2000' />
-                            <div className='customer_account_text'>
-                                <h5>Account</h5>
-                                <h3>Thúy Mai</h3>
-                            </div>
-                        </Row>
-                        <Menu mode="inline"
-                            items={menuItems}
-                            style={{}} />
-                    </Sider>
+                    <SideBar {...props} setRouter={setRouter}/>
                     <Content className='customer_content_container'>
                         <Row className="account_container">
                             <Col className="page_title" span={24} align="bottom">

@@ -6,7 +6,7 @@ import { Avatar, Layout, Menu, Table, Col, Result,
     Row, Typography, Button, Tabs, Image
 } from 'antd';
 import { OrdersContext } from '../Contexts/OrdersContext';
-
+import SideBar from '../../../Customer/components/Layout/Sidebar';
 const { Content, Footer, Sider } = Layout;
 const { Title } = Typography;
 
@@ -21,7 +21,7 @@ const menuItems = [
     { key: 7, label: <a href='#' >Favor Products</a>, icon: <HeartOutlined /> },
 ];
 
-const OrdersPage = () => {
+const OrdersPage = (props) => {
 
     const { data, setRouter, get_orders_history }  = useContext(OrdersContext);
     const { orders } = data;
@@ -77,6 +77,7 @@ const OrdersPage = () => {
                     pagination={false}
                     columns={columns}
                     dataSource={order_detail}
+                    rowKey={'id'}
                     footer={() => { return <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div> }}
                 />
                 <Row align='end'>
@@ -164,18 +165,7 @@ const OrdersPage = () => {
         <Layout>
             <Content>
                 <Layout className="customer-layout-background">
-                    <Sider className="customer-layout-background" width={250} style={{ backgroundColor: '#fff' }} >
-                        <Row className='customer_account_container' align="middle" style={{ background: 'white', padding: '1rem', gap: '1rem' }}>
-                            <Avatar size={64} src='https://img.freepik.com/free-vector/cute-rabbit-with-duck-working-laptop-cartoon-illustration_56104-471.jpg?w=2000' />
-                            <div className='customer_account_text'>
-                                <h5>Account</h5>
-                                <h3>Thúy Mai</h3>
-                            </div>
-                        </Row>
-                        <Menu mode="inline"
-                            items={menuItems}
-                            style={{}} />
-                    </Sider>
+                    <SideBar {...props} setRouter={setRouter}/>
                     <Content className='customer_content_container'>
                         <Row className="orders_container">
                             <Col className="page_title" span={24} align="bottom">
