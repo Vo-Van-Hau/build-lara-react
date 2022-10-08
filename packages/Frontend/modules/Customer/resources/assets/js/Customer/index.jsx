@@ -48,7 +48,7 @@ const Customer = (props) => {
 
     return (
         <>
-            <CustomerContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <CustomerContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </CustomerContextProvider>
         </>

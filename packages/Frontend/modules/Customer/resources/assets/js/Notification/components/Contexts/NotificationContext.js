@@ -18,20 +18,45 @@ const NotificationContextProvider = ({ children, axios, history, config, navigat
      * @param {string} keySearch
      * @return {void}
      */
-    const get_notifications = (page, keySearch) => {
+    const get_notifications = (page = 1, keySearch = '') => {
         set_table_loading();
         return axios
         .get_secured()
         .post(`/notifications/notifications/get_notifications_by_auth?page=${page}`, {...keySearch})
         .then((res) => {
-            console.log(res);
-            // let { groups } = res.data;
-            // let { total, data, current_page, per_page } = groups;
-            // dispatch({ type: GET_GROUPS, payload: data });
-            // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            let { status, data } = res.data;
+            if(status) {
+                let { notifications } = data;
+                dispatch({ type: GET_NOTIFICATIONS, payload: notifications });
+                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
+    }
+
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: Marking notifications as read
+     * @param {string} id
+     * @return {void}
+     */
+     const mask_as_read_notification = (id) => {
+        // set_table_loading();
+        // return axios
+        // .get_secured()
+        // .post(`/notifications/notifications/get_notifications_by_auth?page=${page}`, {...keySearch})
+        // .then((res) => {
+        //     let { status, data } = res.data;
+        //     if(status) {
+        //         let { notifications } = data;
+        //         dispatch({ type: GET_NOTIFICATIONS, payload: notifications });
+        //         // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+        //     }
+        // })
+        // .catch((errors) => {})
+        // .finally(() => {set_table_loading();});
     }
 
     /**

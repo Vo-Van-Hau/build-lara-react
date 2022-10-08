@@ -12,4 +12,5 @@ return [
     |
     */
     "frontend_url" => env("APP_FRONTEND_URL", "shopping"),
+    "item_per_page" => 10,
 ];
