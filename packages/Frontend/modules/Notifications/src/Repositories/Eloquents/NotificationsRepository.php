@@ -46,4 +46,48 @@ class NotificationsRepository extends BaseRepository implements NotificationsRep
         }
         return [];
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $user_id
+     * @param int $id
+     * @return Illuminate\Support\Collection
+     */
+    public function mask_as_read_notification($user_id, $id) {
+        $user = $this->users_model->find($user_id);
+        if(!empty($user)) {
+            $notifications = $user->notifications;
+            foreach($notifications as $notification) {
+                if($notification->id == $id) {
+                    $notification->markAsRead();
+                    break;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $user_id
+     * @param int $id
+     * @return Illuminate\Support\Collection
+     */
+    public function delete_notification($user_id, $id) {
+        $user = $this->users_model->find($user_id);
+        if(!empty($user)) {
+            $notifications = $user->notifications;
+            foreach($notifications as $notification) {
+                if($notification->id == $id) {
+                    $notification->delete();
+                    break;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

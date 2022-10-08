@@ -40,9 +40,61 @@ class NotificationsController extends ControllerBase {
                 return $this->response_base([
                     "status" => true,
                     "notifications" => $result
-            ], "You have got notifications successfully !!!", 200);
+                ], "You have got notifications successfully !!!", 200);
             }
             return $this->response_base(["status" => false], "You have failed to get notifications !!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo Marking Notifications As Read
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function mask_as_read_notification(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info("id");
+            $input["id"] = isset($input["id"]) ? $input["id"] : null;
+            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            if(is_null($input["user_id"]) || is_null($input["id"])) {
+                return $this->response_base(["status" => false], "You have failed to mask as read notifications !!!", 200);
+            }
+            $result = $this->NotificationsRepository->mask_as_read_notification($input["user_id"], $input["id"]);
+            if($result) {
+                return $this->response_base([
+                    "status" => true,
+                ], "You have masked as read notifications successfully !!!", 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to mask as read notifications !!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo Marking Notifications As Read
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function delete_notification(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info("id");
+            $input["id"] = isset($input["id"]) ? $input["id"] : null;
+            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            if(is_null($input["user_id"]) || is_null($input["id"])) {
+                return $this->response_base(["status" => false], "You have failed to delete notifications !!!", 200);
+            }
+            $result = $this->NotificationsRepository->delete_notification($input["user_id"], $input["id"]);
+            if($result) {
+                return $this->response_base([
+                    "status" => true,
+                ], "You have deleted notifications successfully !!!", 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to delete notifications !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }

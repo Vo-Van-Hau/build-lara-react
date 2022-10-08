@@ -1,6 +1,6 @@
-import React, { useContext, useState ,useEffect } from 'react';
+import React, { useContext ,useEffect } from 'react';
 import { HomeOutlined, GiftOutlined, NotificationOutlined, FieldTimeOutlined } from '@ant-design/icons';
-import { Avatar, Layout, Menu, Row, Button, Col, Result, Tabs, Typography, Table, Space } from 'antd';
+import { Layout, Row, Button, Col, Result, Tabs, Typography, Table, Space, Popconfirm } from 'antd';
 import { NotificationContext } from '../Contexts/NotificationContext';
 import SideBar from '../../../Customer/components/Layout/Sidebar';
 const { Content, Footer } = Layout;
@@ -8,7 +8,9 @@ const { Title } = Typography;
 
 const NotificationPage = (props) => {
 
-    const { data, get_notifications, setRouter } = useContext(NotificationContext);
+    const { data, get_notifications, setRouter, mask_as_read_notification,
+        delete_notification
+    } = useContext(NotificationContext);
     const { notifications, loading_table } = data;
 
     /**
@@ -34,24 +36,48 @@ const NotificationPage = (props) => {
             },{
               title: 'Thao tác',
               key: 'action',
+              align: 'center',
               render: (_, record) => (
-                <Space size="middle">
-                    <Button type='link' onClick={() => maskAsRead(record)}>Đánh dấu đã đọc</Button>
-                    <Button type='link' danger>Xóa</Button>
+                <Space size='middle' align='end' direction='horizontal'>
+                    <>{ (!record.read_at) ? <Button type='link' onClick={() => maskAsRead(record)} >Đánh dấu đã đọc</Button> : <></> }</>
+                    <Popconfirm title='Bạn có muốn xóa ?' placement='leftTop' onConfirm={() => deleteNotification(record)}>
+                            <Button type='link' danger>Xóa</Button>
+                    </Popconfirm>
                 </Space>
               ),
             },
         ];
 
+        /**
+         * @author : <vanhau.vo@urekamedia.vn>
+         * @todo:
+         * @param
+         * @return
+         */
         const maskAsRead = (item) => {
-            console.log(item);
+            if(item.id) return mask_as_read_notification(item.id);
         }
 
-        return (
-            <>
-                <Table columns={columns} dataSource={notifications} loading={loading_table} rowKey='id'/>;
-            </>
-        )
+        /**
+         * @author : <vanhau.vo@urekamedia.vn>
+         * @todo:
+         * @param
+         * @return
+         */
+        const deleteNotification = (item) => {
+            if(item.id) return delete_notification(item.id);
+        }
+
+        return (<><Table
+            columns={columns}
+            dataSource={notifications}
+            loading={loading_table}
+            rowKey='id'
+            rowClassName={(record, index) => { // @return {string}
+                if(record.read_at) return `table-row-light`;
+                return `table-row-dark`;
+            }}
+        /></>)
     }
 
     const PromotionNotice = () => {

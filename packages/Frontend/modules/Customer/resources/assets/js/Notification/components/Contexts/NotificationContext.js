@@ -5,6 +5,7 @@ import {
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 import { createSearchParams } from 'react-router-dom';
+import Helper from '../Helper/Helper';
 export const NotificationContext = createContext();
 
 const NotificationContextProvider = ({ children, axios, history, config, navigate }) => {
@@ -35,7 +36,6 @@ const NotificationContextProvider = ({ children, axios, history, config, navigat
         .finally(() => {set_table_loading();});
     }
 
-
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: Marking notifications as read
@@ -43,20 +43,45 @@ const NotificationContextProvider = ({ children, axios, history, config, navigat
      * @return {void}
      */
      const mask_as_read_notification = (id) => {
-        // set_table_loading();
-        // return axios
-        // .get_secured()
-        // .post(`/notifications/notifications/get_notifications_by_auth?page=${page}`, {...keySearch})
-        // .then((res) => {
-        //     let { status, data } = res.data;
-        //     if(status) {
-        //         let { notifications } = data;
-        //         dispatch({ type: GET_NOTIFICATIONS, payload: notifications });
-        //         // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
-        //     }
-        // })
-        // .catch((errors) => {})
-        // .finally(() => {set_table_loading();});
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/notifications/notifications/mask_as_read_notification`, { id })
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                get_notifications(1, {});
+                Helper.Notification('success', '[Mask as read notification]', message);
+            } else {
+                Helper.Notification('error', '[Mask as read notification]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: Delete the notifications to remove them from the table entirely
+     * @param {string} id
+     * @return {void}
+     */
+     const delete_notification = (id) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/notifications/notifications/delete_notification`, { id })
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                get_notifications(1, {});
+                Helper.Notification('success', '[Delete notification]', message);
+            } else {
+                Helper.Notification('error', '[Delete notification]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
     }
 
     /**
@@ -111,9 +136,9 @@ const NotificationContextProvider = ({ children, axios, history, config, navigat
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config},
+        data: { ...data, config }, mask_as_read_notification,
         history, dispatch, get_axios, get_notifications,
-        set_table_loading, set_mouted, setRouter
+        set_table_loading, set_mouted, setRouter, delete_notification
     };
 
     return (
