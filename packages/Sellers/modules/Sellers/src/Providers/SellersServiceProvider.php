@@ -1,6 +1,6 @@
 <?php
 
-namespace Sellers\Products\Providers;
+namespace Sellers\Sellers\Providers;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -13,19 +13,19 @@ use Illuminate\Support\Facades\Config;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-09-22
+ * @since 2022-10-09
  */
-class ProductsServiceProvider extends ServiceProvider {
+class SellersServiceProvider extends ServiceProvider {
 
     /**
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
     protected $package = "Sellers";
-    protected $module = "Products";
+    protected $module = "Sellers";
     protected $models = [
-        "Products" => [
-            "name" => "Products",
+        "Sellers" => [
+            "name" => "Sellers",
             "status" => "active",
         ]
     ];
@@ -40,10 +40,10 @@ class ProductsServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.products.namespace", "ProductsSellers"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.sellers.namespace", "SellersSellers"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.products.namespace", "ProductsSellers"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.sellers.namespace", "SellersSellers"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
@@ -78,6 +78,6 @@ class ProductsServiceProvider extends ServiceProvider {
      */
     private function publishResources() {
         //Publish Resource
-        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/products.php")], "config");
+        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/sellers.php")], "config");
     }
 }

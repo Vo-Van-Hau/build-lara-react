@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import ListOrders from './components/Page/ListOrders';
-import OrdersContextProvicer from './components/Contexts/OrdersContext';
+import ProductsPage from './components/Page/ProductsPage';
+import ProductsContextProvider from './components/Contexts/ProductsContext';
 
-const Orders = (props) => {
+const Products = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
@@ -37,8 +37,8 @@ const Orders = (props) => {
      * @returns {void}
      */
     const render_view = () => {
-        switch(action) {
-            default: return (<ListOrders {...props}/>);
+        switch (action) {
+            default: return (<ProductsPage {...props}/>);
         }
     }
 
@@ -48,11 +48,11 @@ const Orders = (props) => {
 
     return (
         <>
-            <OrdersContextProvicer axios={props.bp.axios} history={props.history} config={config} {...props}>
+            <ProductsContextProvider axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </OrdersContextProvicer>
+            </ProductsContextProvider>
         </>
     )
 }
 
-export default Orders;
+export default Products;

@@ -24,13 +24,11 @@ const ProductsContextProvider = ({ children, axios, history, config }) => {
         .get_secured()
         .post(`/products/products/get_products_sellers?page=${page}`, {...keySearch})
         .then((res) => {
-            let { status } = res.data;
-            if(status) {
-                let { products } = res.data.data;
-                let { total, data, current_page, per_page } = products;
-                dispatch({ type: GET_PRODUCTS, payload: data });
-                dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
-            }
+            console.log(res);
+            // let { groups } = res.data;
+            // let { total, data, current_page, per_page } = groups;
+            // dispatch({ type: GET_GROUPS, payload: data });
+            // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});

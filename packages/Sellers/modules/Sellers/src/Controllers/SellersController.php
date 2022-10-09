@@ -1,6 +1,6 @@
 <?php
 
-namespace Sellers\Products\Controllers;
+namespace Sellers\Sellers\Controllers;
 
 use Sellers\Core\Controllers\ControllerBase;
 use Illuminate\Support\Facades\Config;
@@ -15,9 +15,9 @@ use Sellers\Auth\AuthSellers;
  * @license License 1.0
  * @version Release: 1.00.000
  * @link http://www.docs.v1.cayluaviet.online/
- * @since 2022-09-23
+ * @since 2022-10-09
  */
-class ProductsController extends ControllerBase {
+class SellersController extends ControllerBase {
 
     protected $ProductsRepository;
 
@@ -59,10 +59,10 @@ class ProductsController extends ControllerBase {
             if($result) {
                 return $this->response_base([
                     "status" => true,
-                    "products" => $result
-                ], "You have got products successfully !!!", 200);
+                    "orders" => $result
+                ], "You have got history successfully !!!", 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get products !!!", 200);
+            return $this->response_base(["status" => false], "You have failed to get history !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }

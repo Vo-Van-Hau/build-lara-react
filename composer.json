@@ -60,7 +60,8 @@
         "sellers/publishers": "*@dev",
         "sellers/dashboard": "*@dev",
         "sellers/orders": "*@dev",
-        "sellers/products": "*@dev"
+        "sellers/products": "*@dev",
+        "sellers/sellers": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -274,6 +275,10 @@
         },{
             "type": "path",
             "url": "packages/Sellers/modules/Products",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "packages/Sellers/modules/Sellers",
             "symlink": false
         }
     ]

@@ -1,0 +1,34 @@
+{
+    "name": "sellers/sellers",
+    "description": "Module Sellers",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vovanhau",
+            "email": "vanhau.vo@urekamedia.vn"
+        }
+    ],
+    "require": {
+        "php": "7.4.8|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sellers\\Sellers\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sellers\\Sellers\\Providers\\SellersServiceProvider",
+                "Sellers\\Sellers\\Providers\\SellersRouteServiceProvider"
+            ],
+            "aliases": {
+                "SellersSellers": "Sellers\\Sellers\\Facades\\Sellers"
+            }
+        }
+    }
+}
+
+
+

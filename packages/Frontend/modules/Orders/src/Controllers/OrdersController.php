@@ -58,7 +58,7 @@ class OrdersController extends ControllerBase {
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
-     * @todo get orders hostory
+     * @todo get orders history
      * @param \Illuminate\Support\Facades\Request $request
      * @return void
      */

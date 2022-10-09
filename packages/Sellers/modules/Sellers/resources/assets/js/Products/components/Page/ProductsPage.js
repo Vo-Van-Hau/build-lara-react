@@ -3,7 +3,7 @@ import {
     MenuFoldOutlined, SettingOutlined, SearchOutlined, MenuUnfoldOutlined,
     UploadOutlined, UserOutlined, VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Image, Input, Layout, Popconfirm, Table, Tabs, Select, Space, Button } from 'antd';
+import { Image, Input, Layout, Menu, Table, Tabs, Select, Space } from 'antd';
 import { ProductsContext } from '../Contexts/ProductsContext';
 const { Option } = Select;
 const { Header, Sider, Content } = Layout;
@@ -11,7 +11,6 @@ const { Header, Sider, Content } = Layout;
 const ProductsPage = () => {
 
     const { data, get_products } = useContext(ProductsContext);
-    const { products } = data;
 
     const [collapsed, setCollapsed] = useState(false);
     const onTabsChange = (key) => {
@@ -19,51 +18,50 @@ const ProductsPage = () => {
     };
 
     const AllProductsTab = () => {
+        const dataSource = [
+            {
+                key: '1',
+                name: 'Mike',
+                age: 32,
+                address: '10 Downing Street',
+            },
+            {
+                key: '2',
+                name: 'John',
+                age: 42,
+                address: '10 Downing Street',
+            },
+        ];
 
         const columns = [
             {
-                title: 'ID sản phẩm',
-                dataIndex: 'id'
-            },{
-                title: '',
-                render: (_, record) => {
-                    return (
-                        <><Image width={78} height={78} src={record.image_link} alt={'product-image'} onClick={() => setRouter({
-                            module: 'products',
-                            controller: 'productdetail',
-                            action: 'view',
-                            id: record.product.id
-                        })}/></>
-                    )
-                },
-            },{
-                title: 'Tên sản phẩm',
-                dataIndex: 'name',
-                key: 'name',
-            },{
-                title: 'Đơn giá',
-                dataIndex: 'price',
-                key: 'price',
-            },{
-                title: 'Thao tác',
-                dataIndex: 'actions',
-                key: 'actions',
-                width: 150,
-                render: (_, record) => {
-                    return (
-                        <Space size={5}>
-                            <Button type="link" size="small" onClick={() => {}}>Chỉnh sửa</Button>
-                            <>||</>
-                            <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => {}}>
-                                <Button type="link" size="small" danger>Xóa</Button>
-                            </Popconfirm>
-                        </Space>
-                    )
-                }
+                title: 'Product',
+                dataIndex: 'product',
+                key: 'product',
+            },
+            {
+                title: 'Sellable stock 	',
+                dataIndex: 'sellstock',
+                key: 'sellstock',
+            },
+            {
+                title: 'Selling price',
+                dataIndex: 'sellprice',
+                key: 'sellprice',
+            },
+            {
+                title: 'Profit',
+                dataIndex: 'profit',
+                key: 'profit',
+            },
+            {
+                title: 'Action',
+                dataIndex: 'action',
+                key: 'action',
             }
         ];
         return (
-            <Table columns={columns} dataSource={products} rowKey={`id`}/>
+            <Table columns={columns} />
         )
     }
 
@@ -100,15 +98,15 @@ const ProductsPage = () => {
                 onChange={onTabsChange}
                 items={[
                     {
-                        label: `Tất cả`,
+                        label: `All`,
                         key: '1',
                         children: <AllProductsTab />,
                     },{
-                        label: `Đang chờ duyệt`,
+                        label: `Selling`,
                         key: '2',
                         children: <SellingTab />,
                     },{
-                        label: `Đang bán`,
+                        label: `Out Of Stock`,
                         key: '3',
                         children: <OutStockTab />,
                     },

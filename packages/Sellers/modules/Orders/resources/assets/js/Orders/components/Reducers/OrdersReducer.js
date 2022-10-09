@@ -1,10 +1,10 @@
 import {
-    GET_PRODUCTS, SET_PAGINATION,
+    GET_GROUPS, SET_USER_GROUPS, SET_PAGINATION,
     SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const initialState = {
-    products: [],
+    orders: [],
     config:{
         status: []
     },
@@ -21,11 +21,11 @@ export const initialState = {
     mouted: true
 }
 
-export const ProductsReducer = (state = initialState, action) => {
+export const OrdersReducer = (state = initialState, action) => {
     let { type, payload } = action;
-    switch(type) {
-        case GET_PRODUCTS:
-            return {...state, products: [...payload]};
+    switch (type) {
+        case GET_GROUPS:
+            return {...state, groups: [...payload]};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:

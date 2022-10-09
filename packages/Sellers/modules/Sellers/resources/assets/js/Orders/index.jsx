@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ListOrders from './components/Page/ListOrders';
-import OrdersContextProvicer from './components/Contexts/OrdersContext';
+import ListGroups from './components/Page/ListGroups';
+import GroupsContextProvicer from './components/Contexts/GroupsContext';
 
 const Orders = (props) => {
 
@@ -37,8 +37,8 @@ const Orders = (props) => {
      * @returns {void}
      */
     const render_view = () => {
-        switch(action) {
-            default: return (<ListOrders {...props}/>);
+        switch (action) {
+            default: return (<ListGroups {...props}/>);
         }
     }
 
@@ -48,9 +48,10 @@ const Orders = (props) => {
 
     return (
         <>
-            <OrdersContextProvicer axios={props.bp.axios} history={props.history} config={config} {...props}>
+            {/* <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </OrdersContextProvicer>
+            </GroupsContextProvicer> */}
+            This is Orders Page
         </>
     )
 }

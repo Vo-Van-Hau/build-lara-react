@@ -1,36 +1,33 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, ProductsReducer } from '../Reducers/ProductsReducer';
+import { initialState, OrdersReducer } from '../Reducers/OrdersReducer';
 import {
-    GET_PRODUCTS,
+    GET_GROUPS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
-export const ProductsContext = createContext();
+export const OrdersContext = createContext();
 
-const ProductsContextProvider = ({ children, axios, history, config }) => {
+const OrdersContextProvicer = ({ children, axios, history, config, navigate }) => {
 
-    const [data, dispatch] = useReducer(ProductsReducer, initialState);
+    const [data, dispatch] = useReducer(OrdersReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
+     * @todo: get orders
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
      */
-    const get_products = (page, keySearch) => {
+    const get_orders = (page, keySearch) => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/products/products/get_products_sellers?page=${page}`, {...keySearch})
+        .post(`/users/groups/get_list?page=${page}`, {...keySearch})
         .then((res) => {
-            let { status } = res.data;
-            if(status) {
-                let { products } = res.data.data;
-                let { total, data, current_page, per_page } = products;
-                dispatch({ type: GET_PRODUCTS, payload: data });
-                dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
-            }
+            let { groups } = res.data;
+            let { total, data, current_page, per_page } = groups;
+            dispatch({ type: GET_GROUPS, payload: data });
+            dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
@@ -62,16 +59,16 @@ const ProductsContextProvider = ({ children, axios, history, config }) => {
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config}, get_products,
+        data: {...data, config},
         history, dispatch, get_axios,
-        set_table_loading, set_mouted,
+        set_table_loading, set_mouted, get_orders
     };
 
     return (
-        <ProductsContext.Provider value={todoContextData}>
+        <OrdersContext.Provider value={todoContextData}>
             { children }
-        </ProductsContext.Provider>
+        </OrdersContext.Provider>
     );
 }
 
-export default ProductsContextProvider;
+export default OrdersContextProvicer;
