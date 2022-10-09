@@ -1,15 +1,15 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, CustomerReducer } from '../Reducers/CustomerReducer';
+import { initialState, ProductsReducer } from '../Reducers/ProductsReducer';
 import {
     GET_GROUPS, SET_USER_GROUPS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
-export const CustomerContext = createContext();
+export const ProductsContext = createContext();
 
-const CustomerContextProvider = ({ children, axios, history, config }) => {
+const ProductsContextProvider = ({ children, axios, history, config }) => {
 
-    const [data, dispatch] = useReducer(CustomerReducer, initialState);
+    const [data, dispatch] = useReducer(ProductsReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -165,10 +165,10 @@ const CustomerContextProvider = ({ children, axios, history, config }) => {
     };
 
     return (
-        <CustomerContext.Provider value={todoContextData}>
+        <ProductsContext.Provider value={todoContextData}>
             { children }
-        </CustomerContext.Provider>
+        </ProductsContext.Provider>
     );
 }
 
-export default CustomerContextProvider;
+export default ProductsContextProvider;

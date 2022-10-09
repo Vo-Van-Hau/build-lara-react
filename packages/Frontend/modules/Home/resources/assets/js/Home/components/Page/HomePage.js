@@ -1,7 +1,7 @@
-import React, { useContext,useEffect } from 'react';
-import { BackTop, Col, Image, Row, Tabs, Typography } from 'antd';
-import { Card, Avatar, Rate, Carousel } from "antd"
-import { Button, Space, Affix } from 'antd';
+import React, { useContext, useEffect } from 'react';
+
+import { BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
+import { Card, Avatar, Rate ,Image, Carousel,Button, Affix  } from "antd"
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
@@ -113,7 +113,7 @@ const HomePage = (props) => {
                 <div className="sectionContainer">
                     <Row className="titleHeading">
                         <Col>
-                            <h2>Suggestion Today</h2>
+                            <h2>Sản phẩm đề xuất</h2>
                         </Col>
                     </Row>
                     <Row className="widgetContainer">
@@ -141,17 +141,17 @@ const HomePage = (props) => {
                             style={{ width: 240 }}
                             cover={<img alt="example" src={item.image_link} />}
                             onClick={() => setRouter({
-                                    module: 'products',
-                                    controller: 'productdetail',
-                                    action: 'view',
-                                    id: item.id,
-                                })}
+                                module: 'products',
+                                controller: 'productdetail',
+                                action: 'view',
+                                id: item.id,
+                            })}
                         >
                             <Meta title={item.name} />
 
                             <div className="rating">
                                 {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
+                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
                             </div>
 
                             <Text className="price" type="danger" strong>120.000 đ</Text>
