@@ -55,10 +55,8 @@ const Address = (props) => {
      * @returns {void}
      */
     const render_view = () => {
-        console.log(action);
         switch (action) {
             case 'upsert': return <ActionAddress {...props}/>;
-            
             default: return (<AddressPage {...props}/>);
         }
     }

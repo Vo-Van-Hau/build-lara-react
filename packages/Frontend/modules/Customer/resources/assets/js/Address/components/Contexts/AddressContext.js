@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { createSearchParams } from 'react-router-dom';
 import { initialState, AddressReducer } from '../Reducers/AddressReducer';
 import {
-    GET_GROUPS, SET_USER_GROUPS,
+    GET_ADDRESS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
@@ -14,21 +14,21 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
+     * @todo: get address
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
      */
-    const get_groups = (page, keySearch) => {
+    const get_address = (page, keySearch) => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/users/groups/get_list?page=${page}`, {...keySearch})
+        .post(`/address/address/get_customer_address?page=${page}`, {...keySearch})
         .then((res) => {
-            let { groups } = res.data;
-            let { total, data, current_page, per_page } = groups;
-            dispatch({ type: GET_GROUPS, payload: data });
-            dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            let { status, data, message } = res.data;
+            let { address } = data;
+            dispatch({ type: GET_ADDRESS, payload: address });
+            // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
@@ -52,104 +52,6 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
             pathname: parseURL,
             search: `?${createSearchParams({action, id})}`,
         });
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
-     * @param {string} page
-     * @param {string} keySearch
-     * @return {void}
-     */
-    const get_parent_groups = () =>{
-        return axios
-        .get_secured()
-        .post(`/users/groups/get_parents`);
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: storage group
-     * @param {Object} values
-     * @return {void}
-     */
-    const storage_group = (values) => {
-        return axios
-        .get_secured()
-        .post(`/users/groups/storage`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: update group
-     * @param {Object} values
-     * @return {void}
-     */
-    const update_group = (values) => {
-        return axios
-        .get_secured()
-        .post(`/users/groups/update`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: destroy group
-     * @param {number} id
-     * @return {void}
-     */
-    const destroy_group = (id) => {
-        set_table_loading();
-        return axios
-        .get_secured()
-        .post(`/users/groups/destroy`, {id});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get all users in group
-     * @param {number} id
-     * @return {void}
-     */
-    const get_user_by_groups = (id) =>{
-        return axios
-        .get_secured()
-        .post(`/users/groups/get_users`, {id});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get users
-     * @param {string} page
-     * @param {string} keySearch
-     * @return {void}
-     */
-    const get_users = (page, keySearch) => {
-        return axios
-        .get_secured()
-        .post(`/users/users/get_list?page=${page}`, {...keySearch});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: storage user to group
-     * @param {Object} values
-     * @return {void}
-     */
-    const storage_user_to_group = (values) =>{
-        return axios
-        .get_secured()
-        .post(`/users/groups/storage_user_to_group`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: reset users
-     * @param {number} id
-     * @param {array} users
-     * @return {void}
-     */
-    const set_user_group = (id, users) => {
-        dispatch({ type: SET_USER_GROUPS, payload: {id, users}});
     }
 
     /**
@@ -179,10 +81,8 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
 
     const todoContextData = {
         data: {...data, config},
-        history, dispatch, get_axios, storage_group,
-        get_parent_groups, update_group, destroy_group,
-        get_user_by_groups, get_users, storage_user_to_group,
-        set_user_group, set_table_loading, set_mouted, get_groups,setRouter
+        history, dispatch, get_axios, set_table_loading, set_mouted,
+        setRouter, get_address
     };
 
     return (

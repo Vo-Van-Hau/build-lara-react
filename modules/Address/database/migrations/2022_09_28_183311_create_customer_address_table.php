@@ -18,6 +18,9 @@ class CreateCustomerAddressTable extends Migration {
             $table->string("customer_name");
             $table->string("company_name")->nullable();
             $table->string("phone");
+            $table->string("geo_lat")->nullable();
+            $table->string("geo_long")->nullable();
+            $table->integer("is_verified")->default(1);
             $table->integer("area_id")->unsigned();
             $table->integer("country_id")->unsigned()->default(0);
             $table->integer("province_id")->unsigned()->default(0);

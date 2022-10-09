@@ -41,7 +41,7 @@ const NotificationPage = (props) => {
                 <Space size='middle' align='end' direction='horizontal'>
                     <>{ (!record.read_at) ? <Button type='link' onClick={() => maskAsRead(record)} >Đánh dấu đã đọc</Button> : <></> }</>
                     <Popconfirm title='Bạn có muốn xóa ?' placement='leftTop' onConfirm={() => deleteNotification(record)}>
-                            <Button type='link' danger>Xóa</Button>
+                        <Button type='link' danger>Xóa</Button>
                     </Popconfirm>
                 </Space>
               ),
