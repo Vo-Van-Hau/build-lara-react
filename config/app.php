@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'vi',
 
     /*
     |--------------------------------------------------------------------------
@@ -176,24 +176,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        /**
-         * Module Service Providers...
-         */
-        // Modules\Core\Providers\CoreServiceProvider::class,
-        // Modules\Core\Providers\CoreRouteServiceProvider::class,
-
-        // Modules\Auth\Providers\AuthServiceProvider::class,
-        // Modules\Auth\Providers\AuthRouteServiceProvider::class,
-
-        // Modules\Users\Providers\UsersServiceProvider::class,
-        // Modules\Users\Providers\UsersRouteServiceProvider::class,
-
-        // Modules\Module\Providers\ModuleServiceProvider::class,
-        // Modules\Module\Providers\ModuleRouteServiceProvider::class,
-
-        // Modules\Publishers\Providers\PublishersServiceProvider::class,
-        // Modules\Publishers\Providers\PublishersRouteServiceProvider::class,
 
         /**
          * MongoDB package for Laravel: If your Laravel project does not load dependencies automatically,

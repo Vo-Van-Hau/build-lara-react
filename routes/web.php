@@ -34,3 +34,15 @@ Route::get("/testing-notification/user", function() {
     }
     exit;
 });
+
+Route::get("/testing-language", function() {
+    $current_language_1 = Config::get("app.locale");
+    $current_language_2 = app()->getLocale();
+    $current_language_3 = \Illuminate\Support\Facades\App::currentLocale();
+    $current_language_4 = trans("OrdersFrontend::common.0");
+    if (\Illuminate\Support\Facades\App::isLocale("en")) {
+        echo "Hello Laravel";
+        \Illuminate\Support\Facades\App::setLocale("en");
+    }
+    echo $current_language_4;
+});
