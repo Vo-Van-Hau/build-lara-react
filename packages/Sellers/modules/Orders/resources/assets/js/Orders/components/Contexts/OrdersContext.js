@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from 'react';
 import { initialState, OrdersReducer } from '../Reducers/OrdersReducer';
 import {
-    GET_GROUPS,
+    GET_ORDERS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
@@ -18,15 +18,16 @@ const OrdersContextProvicer = ({ children, axios, history, config, navigate }) =
      * @param {string} keySearch
      * @return {void}
      */
-    const get_orders = (page, keySearch) => {
+    const get_orders = (page = 1, keySearch = '') => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/users/groups/get_list?page=${page}`, {...keySearch})
+        .post(`/orders/orders/get_orders_sellers?page=${page}`, {...keySearch})
         .then((res) => {
-            let { groups } = res.data;
-            let { total, data, current_page, per_page } = groups;
-            dispatch({ type: GET_GROUPS, payload: data });
+            let { orders } = res.data.data;
+            let { data, current_page, per_page, total } = orders;
+            console.log(orders);
+            dispatch({ type: GET_ORDERS, payload: data });
             dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
         })
         .catch((errors) => {})

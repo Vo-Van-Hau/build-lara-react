@@ -1,25 +1,14 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
     CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined
 } from '@ant-design/icons';
-import { Avatar, Layout, Menu, Table, Col, Result,
+import { Layout, Table, Col, Result,
     Row, Typography, Button, Tabs, Image
 } from 'antd';
 import { OrdersContext } from '../Contexts/OrdersContext';
 import SideBar from '../../../Customer/components/Layout/Sidebar';
-const { Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 const { Title } = Typography;
-
-
-const menuItems = [
-    { key: 1, label: <a href='#' >Account</a>, icon: <UserOutlined /> },
-    { key: 2, label: <a href='#' >Notifitation</a>, icon: <BellOutlined /> },
-    { key: 3, label: <a href='#' >Orders</a>, icon: <ShoppingCartOutlined /> },
-    { key: 4, label: <a href='#' >Address</a>, icon: <HomeOutlined /> },
-    { key: 5, label: <a href='#' >Payment Card</a>, icon: <CreditCardOutlined /> },
-    { key: 6, label: <a href='#' >Review Products</a>, icon: <TagOutlined /> },
-    { key: 7, label: <a href='#' >Favor Products</a>, icon: <HeartOutlined /> },
-];
 
 const OrdersPage = (props) => {
 

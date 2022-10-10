@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Config;
  * @link http://www.docs.v1.cayluaviet.online/
  * @since 2022-09-22
  */
-class OrdersServiceProvider extends ServiceProvider
-{
+class OrdersServiceProvider extends ServiceProvider {
 
     /**
      * @var \Illuminate\Foundation\Application
@@ -36,8 +35,7 @@ class OrdersServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot() {
 
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
@@ -60,8 +58,7 @@ class OrdersServiceProvider extends ServiceProvider
      * @todo: Register the service provider.
      * @return void
      */
-    public function register()
-    {
+    public function register() {
         $this->app->bind($this->module . $this->package, function ($app) {
             return $this->app->make("{$this->package}\\{$this->module}\\{$this->module}");
         });
@@ -79,9 +76,7 @@ class OrdersServiceProvider extends ServiceProvider
      * @todo: Publish resources.
      * @return void
      */
-    private function publishResources()
-    {
-
+    private function publishResources() {
         //Publish Resource
         $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/orders.php")], "config");
     }

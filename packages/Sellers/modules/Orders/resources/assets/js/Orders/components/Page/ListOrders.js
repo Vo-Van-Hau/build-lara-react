@@ -1,81 +1,78 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { OrdersContext } from '../Contexts/OrdersContext';
-import { Table, Space, Popconfirm, Input, Button, Row, Col, Tooltip } from 'antd';
-import { UsergroupAddOutlined } from '@ant-design/icons';
+import { Table, Space, Input, Button, Row, Col, Tooltip, Image, Typography } from 'antd';
+import {  } from '@ant-design/icons';
 import Helper from '../Helper/Helper';
 const { Search } = Input;
+const { Text } = Typography;
 
 const ListOrders = (props) => {
     const { data, get_orders, set_mouted } = useContext(OrdersContext);
     const { config, mouted, loading_table, pagination, orders } = data;
-    const [group, setGroup] = useState({});
-    const [viewAction, setViewAction] = useState(false);
-    const [viewUsers, setViewUsers] = useState(false);
     const [keySearch, setKeySearch] = useState({
         keyword: null,
         status: null
     });
     const columns = [
         {
-            title: 'ID',
-            dataIndex: 'id',
+            title: 'Mã đơn hàng',
             key: 'id',
-            width: 75,
             fixed: 'left',
             align: 'center',
-        },{
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            ellipsis: true,
-        },{
-            title: 'Parent',
-            dataIndex: 'parent_group',
-            key: 'parent_group',
-            width: 200,
-            ellipsis: true,
-            render: (item, record) => {
+            render: (_, record) => {
                 return (
-                    <>{item ? item.name : ''}</>
-                );
+                    <>{ `#${record.order.code}` }</>
+                )
             }
-        }, {
-            title: 'Users',
-            dataIndex: 'users',
-            key: 'users',
-            width: 150,
-            ellipsis: true,
-            render: (item, record) => {
+        },{
+            title: 'Sản phẩm',
+            dataIndex: 'product_image_link',
+            key: 'product_image_link',
+            render: (_, record) => {
                 return (
-                    <>{`${item.length} Users`}</>
-                );
-            }
-        }, {
-            title: 'Status',
+                    <>
+                        <Space size={`small`} align='center'>
+                            <Image width={78} height={78} src={record.product_image_link} alt={'product-image'} onClick={() => setRouter({
+                                module: 'products',
+                                controller: 'productdetail',
+                                action: 'view',
+                                id: record.product.id
+                            })}/>
+                            <Text strong>{ record.product_name }</Text>
+                        </Space>
+                    </>
+                )
+            },
+        },{
+            title: 'Đơn giá',
+            dataIndex: 'price',
+            key: 'price',
+            ellipsis: true,
+        },{
+            title: 'Số lượng',
+            dataIndex: 'quantity',
+            key: 'quantity',
+            ellipsis: true,
+        },{
+            title: 'Trạng thái đơn hàng',
             dataIndex: 'status',
             key: 'status',
             width: 150,
             filters: config.status,
             render: (value) => {
-                let { status } = config;
-                let text = status ? status.find(item => item.value == value): null;
                 return (
-                    <>{text ? text.text : ''}</>
-                );
+                    <><Text type='success'>Đang vận chuyển</Text></>
+                )
             }
-        }, {
-            title: 'Actions',
+        },{
+            title: 'Thao tác',
             dataIndex: 'actions',
             key: 'actions',
             width: 150,
             render: (_, record) => {
                 return (
                     <Space size={5}>
-                        <Button type="link" size="small" onClick={() => {}}>Edit</Button>
-                        <>||</>
-                        <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => {}}>
-                            <Button type="link" size="small" danger>Delete</Button>
-                        </Popconfirm>
+                        <Button type='link' size='small' onClick={() => {}}>Xem chi tiết</Button>
                     </Space>
                 )
             }
@@ -106,7 +103,7 @@ const ListOrders = (props) => {
                 title={(() => (
                     <Row gutter={[8, 8]}>
                         <Col xs={24} xl={12}>
-                            
+
                         </Col>
                         <Col xs={24} xl={12}>
                             <Search placeholder="Search by name !!!"
