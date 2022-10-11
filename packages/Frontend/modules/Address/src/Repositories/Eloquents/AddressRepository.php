@@ -6,6 +6,11 @@ use Frontend\Core\Repositories\Eloquents\BaseRepository;
 use Frontend\Address\Interfaces\AddressRepositoryInterface;
 use Frontend\Address\Models\CustomerAddress;
 use Frontend\Customer\Models\Customer;
+use Frontend\Address\Models\Areas;
+use Frontend\Address\Models\Countries;
+use Frontend\Address\Models\Provinces;
+use Frontend\Address\Models\Districts;
+use Frontend\Address\Models\Wards;
 use Illuminate\Support\Facades\Config;
 use Frontend\Auth\AuthFrontend;
 
@@ -15,7 +20,12 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      * @var Eloquent | Model
      */
     protected $customer_address_model;
-    protected $customer;
+    protected $customer_model;
+    protected $areas_model;
+    protected $countries_model;
+    protected $provinces_model;
+    protected $districts_model;
+    protected $wards_model;
 
     /**
      * @var Eloquent | Model
@@ -27,9 +37,22 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      * @param Model|Eloquent $model
      *
      */
-    public function __construct(CustomerAddress $customer_address_model, Customer $customer) {
+    public function __construct(
+        CustomerAddress $customer_address_model,
+        Customer $customer_model,
+        Areas $areas_model,
+        Countries $countries_model,
+        Provinces $provinces_model,
+        Districts $districts_model,
+        Wards $wards_model
+    ) {
         $this->customer_address_model = $customer_address_model;
-        $this->customer = $customer;
+        $this->customer_model = $customer_model;
+        $this->areas_model = $areas_model;
+        $this->countries_model = $countries_model;
+        $this->provinces_model = $provinces_model;
+        $this->districts_model = $districts_model;
+        $this->wards_model = $wards_model;
     }
 
     /**
@@ -61,7 +84,7 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      */
     public function get_customer_address($input) {
         $user_id = $input["user_id"];
-        $customer = $this->customer;
+        $customer = $this->customer_model;
         if(empty($user_id)) return false;
         $result = $customer->where([
             "status"  => 1,
@@ -131,6 +154,69 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
             }
             return $result;
         }
+        return false;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function get_areas($input) {
+        $user_id = $input["user_id"];
+        if(empty($user_id)) return false;
+        $result = $this->areas_model->where([
+            "id" => 3
+        ])->first();
+        $result["countries"] = $this->countries_model->where([
+            "area_id" => $result->id
+        ])->with([
+            "provinces" => function($query) {}
+        ])->first();
+        if(!empty($result)) {
+            $result["countries"]["distincts"] = [];
+            $result["countries"]["wards"] = [];
+            return $result;
+        };
+        return false;
+    }
+
+     /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function get_districs_by_province($input) {
+        $user_id = $input["user_id"];
+        $province_id = $input["province_id"];
+        if(empty($user_id)) return false;
+        $result = $this->districts_model->where([
+            "status" => 1,
+            "deleted" => 0,
+            "province_id" => $province_id
+        ])->get();
+        if(!empty($result)) return $result;
+        return false;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function get_wards_by_district($input) {
+        $user_id = $input["user_id"];
+        $district_id = $input["district_id"];
+        if(empty($user_id)) return false;
+        $result = $this->wards_model->where([
+            "status" => 1,
+            "deleted" => 0,
+            "district_id" => $district_id
+        ])->get();
+        if(!empty($result)) return $result;
         return false;
     }
 }

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AddressContext } from '../Contexts/AddressContext';
-import SideBar from "../../../Customer/components/Layout/Sidebar";
+import SideBar from '../../../Customer/components/Layout/Sidebar';
 import {
     Layout, Typography, Button, Checkbox,
     Select, Radio, Form, Input
@@ -12,16 +12,11 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const ActionAddress = (props) => {
-    const { data, setRouter } = useContext(AddressContext);
-    const onCityChange = (value) => {
-        console.log(value);
-    };
-    const onDistrictChange = (value) => {
-        console.log(value);
-    };
-    const onWardChange = (value) => {
-        console.log(value);
-    };
+    const { data, setRouter, get_areas, get_districs_by_province, get_wards_by_district } = useContext(AddressContext);
+    const { areas, loading_table } = data;
+    const { countries } = areas;
+    const { provinces, districts, wards } = countries;
+
     const onFinish = (values) => {
         console.log('Success:', values);
     };
@@ -29,6 +24,26 @@ const ActionAddress = (props) => {
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo:
+     * @param {number} step
+     * @param {number} id
+     * @return {void}
+     */
+    const onChangeAreas = (step = 2, value = 0) => {
+        if(step === 2) {
+            return get_districs_by_province(value);
+        } else if(step === 3) {
+            return get_wards_by_district(value);
+        }
+    };
+
+    useEffect(() => {
+        get_areas();
+    }, []);
+
     return (
         <Layout>
             <Content>
@@ -68,36 +83,39 @@ const ActionAddress = (props) => {
 
                             <Form.Item name="city" label="Thành phố / Tỉnh" rules={[{ required: true }]}>
                                 <Select
-                                    placeholder="Chọn thành phố..."
-                                    onChange={onCityChange}
+                                    placeholder="Chọn Tỉnh / Thành phố..."
+                                    onChange={(value) => onChangeAreas(2, value)}
                                     allowClear
+                                    loading={loading_table}
                                 >
-                                    <Option value="0">Hồ Chí Minh</Option>
-                                    <Option value="1">Hà Nội</Option>
-                                    <Option value="2">Hải Phòng</Option>
+                                    {provinces && provinces.map((province, _i) => {
+                                         return <Option value={ province.id } key={`${_i}`}>{ province.name }</Option>
+                                    })}
                                 </Select>
                             </Form.Item>
 
                             <Form.Item name="district" label="Quận / Huyện" rules={[{ required: true }]}>
                                 <Select
-                                    placeholder="Chọn Quận huyện"
-                                    onChange={onDistrictChange}
+                                    placeholder="Chọn Quận / Huyện"
+                                    onChange={(value) => onChangeAreas(3, value)}
                                     allowClear
+                                    loading={loading_table}
                                 >
-                                    <Option value="0">Quận 1</Option>
-                                    <Option value="1">Quận 2</Option>
-                                    <Option value="2">Quận 3</Option>
+                                    {districts && districts.map((district, _i) => {
+                                         return <Option value={ district.id } key={`${_i}`}>{ district.name }</Option>
+                                    })}
                                 </Select>
                             </Form.Item>
 
                             <Form.Item name="ward" label="Phường / Xã" rules={[{ required: true }]}>
                                 <Select
-                                    placeholder="Chọn phường / xã"
-                                    onChange={onWardChange}
+                                    placeholder="Chọn Phường / Xã"
                                     allowClear
+                                    loading={loading_table}
                                 >
-                                    <Option value="0">Phường 1</Option>
-                                    <Option value="1">Phường 2</Option>
+                                    {wards && wards.map((ward, _i) => {
+                                         return <Option value={ ward.id } key={`${_i}`}>{ ward.name }</Option>
+                                    })}
                                 </Select>
                             </Form.Item>
 
