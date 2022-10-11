@@ -48,4 +48,10 @@ class OrderController extends ControllerBase
         dd($list_order);
         // return response()->json($list_order, 200);
     }
+    public function noti_order()
+    {
+        $list_order = $this->OrdersRepository->get_all();
+        dd($list_order);
+        // return response()->json($list_order, 200);
+    }
 }

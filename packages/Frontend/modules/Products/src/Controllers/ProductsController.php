@@ -21,13 +21,13 @@ class ProductsController extends ControllerBase {
 
     protected $ProductsRepository;
 
-    // public function __construct(ProductsRepositoryInterface $ProductsRepository) {
-    //     $this->ProductsRepository = $ProductsRepository;
-    // }
-    public function __construct()
-    {
-        $this->ProductsRepository = new Products();
+    public function __construct(ProductsRepositoryInterface $ProductsRepository) {
+        $this->ProductsRepository = $ProductsRepository;
     }
+    // public function __construct()
+    // {
+    //     $this->ProductsRepository = new Products();
+    // }
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
@@ -54,7 +54,7 @@ class ProductsController extends ControllerBase {
      */
     public function get_item(Request $request) {
         // if($request->isMethod("post")) {
-            $input = request()->all();
+            $input = $request()->all();
             $id = !empty($input["id"]) ? intval($input["id"]) : "";
             if(empty($id)) return $this->response_base(["status" => false], "Missing ID !!!", 200);
             $data_json["product"] = $this->ProductsRepository->get_by_id($id);
@@ -68,15 +68,13 @@ class ProductsController extends ControllerBase {
     public function create(Request $request)
     {
         $input = $request->all();
-        try {
-            DB::beginTransaction();
-            $Create = $this->ProductsRepository->upsert($input);
-            
-        } catch (\Exception $ex) {
-            DB::rollBack();
-            return $this->response_base(["status" => false], "Access denied !", 200);
-        }
-        return ;
+        $Create = $this->upsert($input);
+        return $Create;
+    }
+
+    public function delete($id)
+    {
+        
     }
 }
 
