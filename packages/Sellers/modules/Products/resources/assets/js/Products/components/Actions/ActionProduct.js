@@ -448,7 +448,7 @@ const ActionProduct = () => {
       >
         <Row gutter={[50, 5]}>
           <Col span={12}>
-            <Form.Item name="price" label="Số lượng hàng hóa" >
+            <Form.Item name="quantity" label="Số lượng hàng hóa" >
               <InputNumber style={{ width: '100%' }} />
             </Form.Item>
 
