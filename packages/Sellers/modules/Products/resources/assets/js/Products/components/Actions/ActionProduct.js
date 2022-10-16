@@ -374,7 +374,7 @@ const ActionProduct = () => {
             <Form.Item name="size" label="Kích thước sau đóng gói (dài x rộng x cao) "  >
               <Row gutter={[5, 16]} justify='between'>
                 <Col span={8}>
-                  <Form.Item name="length ong" >
+                  <Form.Item name="length" >
                     <InputNumber addonAfter="cm" placeholder='Nhập chiều dài' />
                   </Form.Item>
                 </Col>
