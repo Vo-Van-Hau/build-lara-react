@@ -98,7 +98,7 @@ const ActionProduct = () => {
     }
 
     const onFinish = (values) => {
-      console.log(values);
+      console.log('Thông tin sản phẩm',values);
       setTab2Active(false);
       onKeyChange('2');
     };
@@ -219,7 +219,7 @@ const ActionProduct = () => {
   const Tab2 = () => {
 
     const onFinish = (values) => {
-      console.log(values);
+      console.log('Sản phẩm Identify: ',values);
       setTab3Active(false);
       onKeyChange('3');
     };
@@ -298,7 +298,7 @@ const ActionProduct = () => {
     const formRef = createRef();
 
     const onFinish = (values) => {
-      console.log(values);
+      console.log('Thông tin chi tiết: ',values);
       setTab4Active(false);
       onKeyChange('4');
     };
@@ -428,7 +428,7 @@ const ActionProduct = () => {
     const formRef = createRef();
 
     const onFinish = (values) => {
-      console.log(values);
+      console.log('Tồn kho: ',values);
       setTab4Active(false);
       onKeyChange('4');
     };
