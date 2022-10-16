@@ -195,9 +195,17 @@ const ActionProduct = () => {
 
         <Affix style={{ position: 'fixed', bottom: 0, right: 0, width: '100%', background: '#fff', boxShadow: '0px -1px 6px -2px rgba(171,171,171,0.75)' }} justify='between' align='middle' >
           <Form.Item style={{ padding: '1.5rem 2rem', marginBottom: '0', textAlign: 'right', }}  >
-            <Button htmlType="button" onClick={onReset} style={{ marginRight: '1rem' }}>
-              Reset
-            </Button>
+            <Popconfirm
+              placement="top"
+              title={'Bạn có muốn reset?'}
+              onConfirm={onReset}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button htmlType="button" style={{ marginRight: '1rem' }}>
+                Reset
+              </Button>
+            </Popconfirm>
             <Button type="primary" htmlType="submit" >
               Kế tiếp
             </Button>
@@ -261,9 +269,17 @@ const ActionProduct = () => {
 
         <Affix style={{ position: 'fixed', bottom: 0, right: 0, width: '100%', background: '#fff', boxShadow: '0px -1px 6px -2px rgba(171,171,171,0.75)' }} justify='between' align='middle' >
           <Form.Item style={{ padding: '1.5rem 2rem', marginBottom: '0', textAlign: 'right', }}  >
-            <Button htmlType="button" onClick={onReset} style={{ marginRight: '1rem' }}>
-              Reset
-            </Button>
+            <Popconfirm
+              placement="top"
+              title={'Bạn có muốn reset?'}
+              onConfirm={onReset}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button htmlType="button" style={{ marginRight: '1rem' }}>
+                Reset
+              </Button>
+            </Popconfirm>
             <Button type="primary" onClick={() => onKeyChange('1')} style={{ marginRight: '1rem' }} danger>
               Trở về
             </Button>
@@ -377,21 +393,25 @@ const ActionProduct = () => {
               </Row>
             </Form.Item>
           </Col>
-          
-          <Col span={24}>
-            <Form.Item label="Mô tả">
-              <TextArea rows={5} />
-            </Form.Item>
-          </Col>
         </Row>
 
-
+        <Form.Item label="Mô tả">
+          <TextArea rows={5} />
+        </Form.Item>
 
         <Affix style={{ position: 'fixed', bottom: 0, right: 0, width: '100%', background: '#fff', boxShadow: '0px -1px 6px -2px rgba(171,171,171,0.75)' }} justify='between' align='middle' >
           <Form.Item style={{ padding: '1.5rem 2rem', marginBottom: '0', textAlign: 'right', }}  >
-            <Button htmlType="button" onClick={onReset} style={{ marginRight: '1rem' }}>
-              Reset
-            </Button>
+            <Popconfirm
+              placement="top"
+              title={'Bạn có muốn reset?'}
+              onConfirm={onReset}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button htmlType="button" style={{ marginRight: '1rem' }}>
+                Reset
+              </Button>
+            </Popconfirm>
             <Button type="primary" onClick={() => onKeyChange('2')} style={{ marginRight: '1rem' }} danger>
               Trở về
             </Button>
@@ -452,9 +472,17 @@ const ActionProduct = () => {
 
         <Affix style={{ position: 'fixed', bottom: 0, right: 0, width: '100%', background: '#fff', boxShadow: '0px -1px 6px -2px rgba(171,171,171,0.75)' }} justify='between' align='middle' >
           <Form.Item style={{ padding: '1.5rem 2rem', marginBottom: '0', textAlign: 'right', }}  >
-            <Button htmlType="button" onClick={onReset} style={{ marginRight: '1rem' }}>
-              Reset
-            </Button>
+            <Popconfirm
+              placement="top"
+              title={'Bạn có muốn reset?'}
+              onConfirm={onReset}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button htmlType="button" style={{ marginRight: '1rem' }}>
+                Reset
+              </Button>
+            </Popconfirm>
             <Button type="primary" onClick={() => onKeyChange('3')} style={{ marginRight: '1rem' }} danger>
               Trở về
             </Button>
@@ -466,6 +494,7 @@ const ActionProduct = () => {
       </Form>
     </>)
   }
+
   return (<>
 
     <Tabs
