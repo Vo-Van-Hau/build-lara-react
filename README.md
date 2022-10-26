@@ -69,6 +69,7 @@ npm run build-by-webpack --source={resource} --module={module}
 
 # ------------------Third Party Libs Docs-----------------------
 https://github.com/lokalise/php-lokalise-api
+https://cloud.google.com/translate/docs/setup
 https://googleapis.github.io/google-cloud-php/#/docs/google-cloud/v0.153.0/translate/v2/translateclient
 
 # ------------------Stop here------------------

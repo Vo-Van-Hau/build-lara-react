@@ -49,7 +49,7 @@ Route::prefix('testing')->group(function() {
         echo $current_language_4;
     });
     Route::get("/case", function() {
-        dd(request()->getHost());
+        // dd(request()->getHost());
     });
     Route::get("/lokalise", function(Request $request) {
         $token_path = storage_path() . '/token/lokalise/_token.json';
@@ -139,9 +139,36 @@ Route::prefix('testing')->group(function() {
         }
     });
     Route::get('/google-cloud-translation', function(Request $request) {
-        $translate = new TranslateClient();
-        $result = $translate->detectLanguage('Hello world!');
-        dd($result);
+        $client_secret_path = storage_path() . '/token/google/translate-php-442595/client_secret_672693215324-760c0lcvevnaep34aa3jjio83tfvq8q2.apps.googleusercontent.com.json';
+        $service_account_key_path = storage_path() . '/token/google/translate-php-442595/translate-php-442595-1e67e5dea8c1.json';
+        if(file_exists($client_secret_path) && file_exists($service_account_key_path)) {
+            try {
+                $translate = new TranslateClient([
+                    'keyFilePath' => $service_account_key_path,
+                    'retries' => 3
+                ]);
+                $input_title = "<span>Chịu</span>";
+                $input_description = "<strong>Hello</strong>";
+                $result = [];
+                foreach(array("en", "ja") as $key => $language) {
+                    $response = $translate->translateBatch([$input_title, $input_description], [
+                        'source' => 'vi',
+                        'target' => $language
+                    ]);
+                    foreach ($response as $_key => $_response) {
+                        unset($response[$_key]);
+                        $response[$_key] = $_response['text'];
+                    }
+                    $result[$language] = $response;
+                }
+                /** */
+                // $languages = $translate->localizedLanguages();
+                dd($result);
+            }
+            catch(\Exception $exception) {
+                echo $exception->getMessage();
+            }
+        }
     });
 });
 
