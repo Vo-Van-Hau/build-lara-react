@@ -51,14 +51,14 @@ class ModelBase extends Model {
     public function save(array $options = []) {
         if (empty($this->user_created_id)) {
             try {
-                $this->user_created_id = AuthCMS::info("id");
+                $this->user_created_id = AuthSellers::info("id");
             } catch (Exception $errors) {
                 $this->user_created_id = 1;
             }
         }
         if (empty($this->user_owner_id)) {
             try {
-                $this->user_owner_id = AuthCMS::info("id");
+                $this->user_owner_id = AuthSellers::info("id");
             } catch (Exception $errors) {
                 $this->user_owner_id = 1;
             }

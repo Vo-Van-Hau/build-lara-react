@@ -66,4 +66,48 @@ class ProductsController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo store new product
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function store(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $auth_id = AuthSellers::info("id");
+            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $result = $this->ProductsRepository->store($input);
+            if($result) {
+                return $this->response_base([
+                    "status" => true,
+                    "id" => $result
+                ], "You have added a new product successfully !!!", 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to add a new product !!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo get all product categories
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_product_categories(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $result = $this->ProductsRepository->get_categories($input);
+            if($result) {
+                return $this->response_base([
+                    "status" => true,
+                    "categories" => $result
+                ], "You have got data successfully !!!", 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to get data !!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }
