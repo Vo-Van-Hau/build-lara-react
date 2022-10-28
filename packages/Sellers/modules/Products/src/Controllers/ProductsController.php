@@ -69,6 +69,30 @@ class ProductsController extends ControllerBase {
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
+     * @todo get list products
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_item(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $input['id'] = isset($input['id']) ? $input['id'] : 0;
+            $result = $this->ProductsRepository->get_item($input);
+            if($result) {
+                return $this->response_base([
+                    'status' => true,
+                    'item' => $result
+                ], 'You have got item successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to get item !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
      * @todo store new product
      * @param \Illuminate\Support\Facades\Request $request
      * @return void
@@ -86,6 +110,29 @@ class ProductsController extends ControllerBase {
                 ], "You have added a new product successfully !!!", 200);
             }
             return $this->response_base(["status" => false], "You have failed to add a new product !!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo update an existed product
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function update(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $auth_id = AuthSellers::info("id");
+            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $input['id'] = isset( $input['id']) ? $input['id'] : 0;
+            $result = $this->ProductsRepository->update($input['id'], $input);
+            if($result) {
+                return $this->response_base([
+                    "status" => true,
+                ], "You have updated an existed product successfully !!!", 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to update an existed product !!!", 200);
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }

@@ -70,7 +70,7 @@ class ModelBase extends Model {
     public function update(array $attributes = [], array $options = []) {
         if (empty($this->user_updated_id)) {
             try {
-                $this->user_updated_id = AuthCMS::info("id");
+                $this->user_updated_id = AuthSellers::info("id");
             } catch (Exception $errors) {
                 $this->user_updated_id = 1;
             }

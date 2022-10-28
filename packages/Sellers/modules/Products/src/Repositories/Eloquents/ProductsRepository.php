@@ -72,23 +72,6 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
-     * @param int $id
-     * @param array $input
-     * @return boolean
-     */
-    public function update($id, $input = []) {
-        $existed = $this->model->find($id);
-        if (empty($existed)) return false;
-        $existed->name = $input["name"];
-        $existed->status = $input["status"];
-        $existed->parent_group_id = $input["parent_group_id"];
-        $existed->description = $input["description"];
-        return $existed->update(); // return boolean
-    }
-
-    /**
-     * @author <vanhau.vo@urekamedia.vn>
-     * @todo:
      * @param array $input
      * @return mixed
      */
@@ -105,7 +88,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             "deleted" => 0,
             "seller_id" => $seller->id
         ])->with([
-            "stock"
+            'product_stock'
         ])->paginate(10);
         if(empty($existed)) return false;
         return $existed;
@@ -229,5 +212,151 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         } else {
             return false;
         }
+    }
+
+     /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param int $id
+     * @param array $input
+     * @return mixed
+     */
+    public function update($id, $input = []) {
+        $user_id = $input["user_id"];
+        $seller = $this->sellers_model->where([
+            "status" => 1,
+            "deleted" => 0,
+            "user_id" => $user_id
+        ])->first();
+        if(is_null($user_id) || is_null($seller)) return false;
+        $name = isset($input["name"]) ? $input["name"] : "";
+        $seller_id = isset($seller->id) ? $seller->id : 0;
+        $slug_name = Str::slug($name);
+        $price = isset($input["price"]) ? $input["price"] : 0;
+        $sale_price_id = 0;
+        $cogs = $price;
+        $mobile_link = "";
+        $image_link = "";
+        $category_id = isset($input["category_id"]) ? $input["category_id"] : 0;
+        $currency_id = 1;
+        $availability = "in_stock";
+        $availability_date = date("Y-m-d H:i:s");
+        $expiration_date = date("Y-m-d H:i:s");
+        $status = 0;
+        $description = isset($input["description"]) ? $input["description"] : "";
+        $colors = "";
+        foreach($input["color"] ?? [] as $key => $_colors) {
+            if($key == count($input["color"] ?? []) - 1) {
+                $colors .= $_colors;
+            } else {
+                $colors .= $_colors . "-";
+            }
+        }
+        $existed = $this->model->find($id);
+        if(empty($existed)) return false;
+        $existed->name = $name;
+        $existed->slug_name = $slug_name;
+        $existed->price = $price;
+        $existed->sale_price_id = $sale_price_id;
+        $existed->cogs = $cogs;
+        $existed->mobile_link = $mobile_link;
+        $existed->image_link = $image_link;
+        $existed->category_id = $category_id;
+        $existed->currency_id = $currency_id;
+        $existed->availability = $availability;
+        $existed->availability_date = $availability_date;
+        $existed->expiration_date = $expiration_date;
+        $existed->status = $status;
+        $existed->description = $description;
+        if($existed->update()) {
+            $product_id = $existed->id;
+            // Update Product
+            $link = Config::get("app.url", "") . "/shopping/products/productdetail?action=view&id=" . $product_id;
+            $mobile_link = str_replace(request()->getHost(), "m.".request()->getHost(), Config::get("app.url", "") . "/shopping/products/productdetail?action=view&id=" . $product_id);
+            $existed->link = $link;
+            $existed->mobile_link = $mobile_link;
+            $existed->update();
+            // Product Identifiers
+            $existed = $this->product_identifiers_model->where([
+                'product_id' => $product_id,
+                'status' => 1
+            ])->first();
+            if(!empty($existed)) {
+                $existed->brand = isset($input["brand"]) ? $input["brand"] : "";
+                $existed->supplier_id = isset($input["supplier_id"]) ? $input["supplier_id"] : 0;
+                $existed->sku = isset($input["sku"]) ? $input["sku"] : "";
+                $existed->gtin = isset($input["gtin"]) ? $input["gtin"] : "";
+                $existed->mpn = isset($input["mpn"]) ? $input["mpn"] : "";
+                $existed->status = 1;
+                $existed->update();
+            }
+            // Product Description Detail
+            $existed = $this->product_description_detail_model->where([
+                'product_id' => $product_id,
+                'status' => 1
+            ])->first();
+            if(!empty($existed)) {
+                $existed->condition = isset($input["condition"]) ? $input["condition"] : "new";
+                $existed->color = $colors;
+                $existed->for_adult = isset($input["for_adult"]) ? $input["for_adult"] : 1;
+                $existed->weight = isset($input["weight"]) ? $input["weight"] : 0;
+                $existed->width = isset($input["width"]) ? $input["width"] : 0;
+                $existed->height = isset($input["height"]) ? $input["height"] : 0;
+                $existed->length = isset($input["length"]) ? $input["length"] : 0;
+                $existed->gender = isset($input["gender"]) ? $input["gender"] : 0;
+                $existed->size_type = isset($input["size_type"]) ? $input["size_type"] : "all";
+                $existed->size = isset($input["size"]) ? $input["size"] : "";
+                $existed->material = isset($input["material"]) ? $input["material"] : 0;
+                $existed->update();
+            }
+            // Product Stock
+            $existed = $this->product_stock_model->where([
+                'product_id' => $product_id,
+                'status' => 1
+            ])->first();
+            if(!empty($existed)) {
+                $existed->warehouse_id = 0;
+                $existed->product_quantity = isset($input["quantity"]) ? $input["quantity"] : 0;
+                $existed->status = 1;
+                $existed->update();
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return mixed
+     */
+    public function get_item($input) {
+        $user_id = $input["user_id"];
+        $seller = $this->sellers_model->where([
+            "status" => 1,
+            "deleted" => 0,
+            "user_id" => $user_id
+        ])->first();
+        if(is_null($user_id) || is_null($seller)) return false;
+        $existed = $this->model->where([
+            // "status" => 1,
+            "deleted" => 0,
+            "seller_id" => $seller->id,
+            'id' => $input['id']
+        ])->with([
+            'product_stock' => function ($query) {
+
+            },
+            'product_identifiers' => function ($query) {
+
+            },
+            'product_description_detail' => function ($query) {
+
+            }
+        ])->first();
+        if(empty($existed)) return false;
+        return $existed;
     }
 }

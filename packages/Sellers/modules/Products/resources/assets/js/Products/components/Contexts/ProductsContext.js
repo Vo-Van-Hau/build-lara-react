@@ -2,9 +2,10 @@ import React, { createContext, useReducer } from 'react';
 import { initialState, ProductsReducer } from '../Reducers/ProductsReducer';
 import { createSearchParams } from 'react-router-dom';
 import {
-    GET_PRODUCTS, GET_PRODUCT_CATEGORIES,
+    GET_PRODUCTS, GET_PRODUCT_CATEGORIES, GET_ITEM,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
+import Helper from '../Helper/Helper';
 
 export const ProductsContext = createContext();
 
@@ -29,9 +30,31 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
             if(status) {
                 let { products } = res.data.data;
                 let { total, data, current_page, per_page } = products;
-                console.log(data)
                 dispatch({ type: GET_PRODUCTS, payload: data });
-                dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+                dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get product item
+     * @param {number} id
+     * @return {void}
+     */
+    const get_product_item = (id) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/products/products/get_item`, { id })
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { data } = res.data;
+                let { item } = data;
+                dispatch({ type: GET_ITEM, payload: item });
             }
         })
         .catch((errors) => {})
@@ -82,6 +105,29 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
                     action: '#',
                     id: '#'
                 });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: update an existed product
+     * @param {array} data
+     * @return {void}
+     */
+    const update = (data) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/products/products/update`, {...data})
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                Helper.Notification('success', '[Update Users]', message);
+            } else {
+                Helper.Notification('error', '[Storage Users]', message);
             }
         })
         .catch((errors) => {})
@@ -141,8 +187,8 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
 
     const todoContextData = {
         data: {...data, config}, get_products, get_product_categories,
-        history, dispatch, get_axios, store, setRouter,
-        set_table_loading, set_mouted,
+        history, dispatch, get_axios, store, setRouter, update,
+        set_table_loading, set_mouted, get_product_item
     };
 
     return (
