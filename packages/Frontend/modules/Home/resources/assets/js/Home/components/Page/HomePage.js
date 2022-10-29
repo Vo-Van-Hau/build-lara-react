@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 
 import { BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
-import { Card, Avatar, Rate ,Image, Carousel,Button, Affix  } from "antd"
+import { Card, Avatar, Rate, Image, Carousel, Button, Affix } from "antd"
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
@@ -39,6 +39,21 @@ const HomePage = (props) => {
         { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
         { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
         { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
+    ]
+    const categoriesArr = [
+        { img: 'https://static.vecteezy.com/system/resources/previews/003/717/164/non_2x/women-fashion-pink-flat-design-long-shadow-glyph-icon-luxury-clothes-and-accessories-female-shoes-apparel-details-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg', title: 'Quần Áo' },
+        { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvach0GUaLjVFTsZQC1SmGaTv2vgmmkU79bXKEWSlGMryz4vFUgvPJ-Y3Sxtz7Xf-PYRw&usqp=CAU', title: 'SALE' },
+        { img: 'https://static.vecteezy.com/system/resources/previews/003/769/924/original/electronics-and-accessories-pink-flat-design-long-shadow-glyph-icon-smartphone-and-laptop-computers-and-devices-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg', title: 'Đồ Gia Dụng' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
+        { img: 'https://joeschmoe.io/api/v1/random', title: 'Just For You' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/7d/8a/6e/d8b76e2c43cbd06b7e1aa3ab8c54df64.png.webp', title: 'Market Center' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/41/99/9a/8898607d7fca4b79775a708c57a8152f.png.webp', title: 'Sale 50%' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
+        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
+
     ]
     const productArr = [
         { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
@@ -105,6 +120,77 @@ const HomePage = (props) => {
                 <Image preview={false}
                     style={{ objectFit: 'contain', borderRadius: '3px' }}
                     src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                />
+            </Col>
+        </Row>
+        <Row className='home_group_banner_container'
+            justify="space-between"
+            gutter={[10, 20]}
+            style={{ padding: '1rem 0' }}
+        >
+            <Col flex="1">
+                <Image preview={false}
+                    style={{ objectFit: 'cover', borderRadius: '3px' }}
+                    src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                />
+            </Col>
+            <Col flex="3">
+                <Image preview={false}
+                    height={'100%'}
+                    style={{ objectFit: 'cover', borderRadius: '3px' }}
+                    src={'https://salt.tikicdn.com/cache/w1080/ts/banner/26/ea/9c/c3710ec037706052a7a2da56c4a66901.png.webp'}
+                />
+            </Col>
+            <Col flex="1">
+                <Image preview={false}
+                    style={{ objectFit: 'cover', borderRadius: '3px' }}
+                    src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                />
+            </Col>
+        </Row>
+        <Row className="categories_block_container">
+            <Space size={[10, 16]} wrap
+                style={{
+                    width: '100%', padding: '1rem',
+                    justifyContent: 'space-between',
+                    backgroundColor: '#fff'
+                }} >
+                {categoriesArr.map((item, index) => (
+                    <Button key={index} align='center' block style={{ height: '80px' }}>
+                        <Avatar src={item.img} size={48} />
+                        <p>{item.title}</p>
+                    </Button>
+                ))}
+            </Space>
+
+        </Row>
+        <Row className='ads_banners_container'
+            justify="space-between"
+            gutter={[10, 20]}
+            style={{ padding: '1rem 0' }}
+        >
+            <Col span={6}>
+                <Image preview={false}
+                    style={{ objectFit: 'cover', borderRadius: '3px' }}
+                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/d6/86/61/2bd493a55e955d6b70afe7ba5d0c8bdd.png.webp'}
+                />
+            </Col>
+            <Col span={6}>
+                <Image preview={false}
+                    style={{ objectFit: 'cover', borderRadius: '3px' }}
+                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/40/7b/ec/c74769be66862263dc3d95ed92e73cfd.png.webp'}
+                />
+            </Col>
+            <Col span={6}>
+                <Image preview={false}
+                    style={{ objectFit: 'cover', borderRadius: '3px' }}
+                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/f2/cb/06/5b1f4c52c2a4e312919e32470ccd2554.png.webp'}
+                />
+            </Col>
+            <Col span={6}>
+                <Image preview={false}
+                    style={{ objectFit: 'cover', borderRadius: '3px' }}
+                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/63/67/34/84a791b2a02dcc9f1ce93df1414ca207.png.webp'}
                 />
             </Col>
         </Row>
