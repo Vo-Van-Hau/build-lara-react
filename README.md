@@ -62,9 +62,15 @@ npm run build-by-webpack --source={resource} --module={module}
 38. jobs: php artisan migrate --path=database\migrations\2022_09_30_104757_create_jobs_table.php
 39. failed_jobs: php artisan migrate --path=database\migrations\2019_08_19_000000_create_failed_jobs_table.php
 40. all-migrations: php artisan migrate 
+41. product_categories: php artisan migrate --path=modules\Products\database\migrations\2022_10_21_051701_create_product_categories_table.php
 
 # Jobs
 1. php artisan queue:work --queue=sendinvoice
+
+# ------------------Third Party Libs Docs-----------------------
+https://github.com/lokalise/php-lokalise-api
+https://cloud.google.com/translate/docs/setup
+https://googleapis.github.io/google-cloud-php/#/docs/google-cloud/v0.153.0/translate/v2/translateclient
 
 # ------------------Stop here------------------
 ## MongoDB and Laravel Integration:

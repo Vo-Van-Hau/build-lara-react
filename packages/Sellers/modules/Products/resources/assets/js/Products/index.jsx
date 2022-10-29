@@ -63,11 +63,11 @@ const Products = (props) => {
     useEffect(function() {
         get_action();
         // get_config();
-    }, []);
+    }, [props]);
 
     return (
         <>
-            <ProductsContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <ProductsContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </ProductsContextProvider>
         </>

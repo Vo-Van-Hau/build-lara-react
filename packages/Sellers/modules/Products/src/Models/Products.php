@@ -3,6 +3,7 @@
 namespace Sellers\Products\Models;
 
 use Sellers\Core\Models\ModelBase;
+use Sellers\Products\Models\ProductStock;
 
 class Products extends ModelBase {
 
@@ -14,4 +15,18 @@ class Products extends ModelBase {
         "status",
         "description"
     ];
+
+    /**=======================
+     *     RelationShip
+     *=======================*/
+    /**
+      * @author: <hauvo1709@gmail.com>
+      * @todo:
+      * @return void
+      */
+    public function stock() {
+        return $this->hasOne(ProductStock::class, "product_id", "id")->where([
+            "product_stock.status" => 1
+        ]);
+    }
 }

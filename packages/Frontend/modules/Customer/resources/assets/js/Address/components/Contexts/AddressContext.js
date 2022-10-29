@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import { createSearchParams } from 'react-router-dom';
 import { initialState, AddressReducer } from '../Reducers/AddressReducer';
 import {
-    GET_ADDRESS,
+    GET_ADDRESS, GET_AREAS, GET_DISTRICTS, GET_WARDS,
     SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
@@ -29,6 +29,74 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
             let { address } = data;
             dispatch({ type: GET_ADDRESS, payload: address });
             // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get areas
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+    const get_areas = (page, keySearch) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/get_areas?page=${page}`, {...keySearch})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { areas } = res.data.data;
+                dispatch({ type: GET_AREAS, payload: areas });
+                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get districts
+     * @param {number} province_id
+     * @return {void}
+     */
+    const get_districs_by_province = (province_id = 0) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/get_districs_by_province`, {province_id})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { districts } = res.data.data;
+                dispatch({ type: GET_DISTRICTS, payload: districts });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+     /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get wards
+     * @param {number} district_id
+     * @return {void}
+     */
+    const get_wards_by_district = (district_id = 0) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/get_wards_by_district`, {district_id})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { wards } = res.data.data;
+                dispatch({ type: GET_WARDS, payload: wards });
+            }
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
@@ -82,7 +150,8 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
     const todoContextData = {
         data: {...data, config},
         history, dispatch, get_axios, set_table_loading, set_mouted,
-        setRouter, get_address
+        setRouter, get_address, get_areas, get_districs_by_province,
+        get_wards_by_district
     };
 
     return (

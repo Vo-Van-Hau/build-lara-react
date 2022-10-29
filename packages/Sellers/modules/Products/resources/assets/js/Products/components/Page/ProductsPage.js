@@ -45,6 +45,11 @@ const ProductsPage = () => {
                 dataIndex: 'price',
                 key: 'price',
             },{
+                title: 'Số lượng tồn kho',
+                render: (_, record) => {
+                    return (<>{ record.stock && record.stock.product_quantity ? record.stock.product_quantity : 'Undefined'}</>)
+                }
+            },{
                 title: 'Thao tác',
                 dataIndex: 'actions',
                 key: 'actions',
