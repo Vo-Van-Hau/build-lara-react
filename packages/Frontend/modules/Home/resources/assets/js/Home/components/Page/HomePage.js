@@ -246,6 +246,9 @@ const HomePage = (props) => {
                     ),
                     )}
                 </Space>
+                <Button type="primary" danger>
+                    Xem thêm
+                </Button>
             </Row>
         </>
         <BackTop />
