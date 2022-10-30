@@ -23,22 +23,23 @@ const CoreContextProvicer = ({ children, axios, history }) => {
      */
     const get_module = () => {
         return api
-            .get_secured()
-            .get(
-                `${window.sparrowConfig.app.backendURL}/api/core/core/get_module`
-            )
-            .then(res => {
-                let { language, menus, modules, config } = res.data;
-                dispatch({
-                    type: GET_MODULE,
-                    payload: {
-                        config,
-                        menus,
-                        modules,
-                        language
-                    }
-                });
+        .get_secured()
+        .get(
+            `${window.sparrowConfig.app.backendURL}/api/core/core/get_module`
+        )
+        .then(res => {
+            let { language, menus, modules, config } = res.data;
+            console.log(res);
+            dispatch({
+                type: GET_MODULE,
+                payload: {
+                    config,
+                    menus,
+                    modules,
+                    language
+                }
             });
+        });
     };
 
     /**

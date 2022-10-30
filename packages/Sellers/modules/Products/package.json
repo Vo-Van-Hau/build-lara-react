@@ -1,5 +1,5 @@
 {
-    "name": "orders",
+    "name": "products",
     "version": "1.00.000",
     "author": [
         {
@@ -10,6 +10,23 @@
     "dependencies": {},
     "devDependencies": {},
     "component": {},
-    "menu": {},
+    "menu": {
+        "Products": {
+            "name": "Products",
+            "icon": "fas fa-user",
+            "controller": "Users",
+            "group": "systems",
+            "position": 2,
+            "child": [
+                {
+                    "name": "View Products",
+                    "link": "\/products\/products",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Products"
+                }
+            ]
+        }
+    },
     "status": true
 }

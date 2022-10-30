@@ -10,7 +10,7 @@ const { Header, Sider, Content } = Layout;
 
 const ProductsPage = () => {
 
-    const { data, get_products } = useContext(ProductsContext);
+    const { data, get_products, setRouter } = useContext(ProductsContext);
     const { products } = data;
 
     const [collapsed, setCollapsed] = useState(false);
@@ -47,7 +47,7 @@ const ProductsPage = () => {
             },{
                 title: 'Số lượng tồn kho',
                 render: (_, record) => {
-                    return (<>{ record.stock && record.stock.product_quantity ? record.stock.product_quantity : 'Undefined'}</>)
+                    return (<>{ record.product_stock && record.product_stock.product_quantity ? record.product_stock.product_quantity : 'Undefined'}</>)
                 }
             },{
                 title: 'Thao tác',
@@ -57,10 +57,15 @@ const ProductsPage = () => {
                 render: (_, record) => {
                     return (
                         <Space size={5}>
-                            <Button type="link" size="small" onClick={() => {}}>Chỉnh sửa</Button>
+                            <Button type="link" size="small" onClick={() => setRouter({
+                                module: 'products',
+                                controller: 'products',
+                                action: 'upsert',
+                                id: record.id
+                            })}>Edit</Button>
                             <>||</>
                             <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => {}}>
-                                <Button type="link" size="small" danger>Xóa</Button>
+                                <Button type="link" size="small" danger>Delete</Button>
                             </Popconfirm>
                         </Space>
                     )

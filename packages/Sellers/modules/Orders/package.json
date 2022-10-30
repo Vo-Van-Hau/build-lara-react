@@ -10,6 +10,23 @@
     "dependencies": {},
     "devDependencies": {},
     "component": {},
-    "menu": {},
+    "menu": {
+        "Orders": {
+            "name": "Orders",
+            "icon": "fas fa-user",
+            "controller": "Users",
+            "group": "systems",
+            "position": 3,
+            "child": [
+                {
+                    "name": "View Orders",
+                    "link": "\/orders\/orders",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Orders"
+                }
+            ]
+        }
+    },
     "status": true
 }

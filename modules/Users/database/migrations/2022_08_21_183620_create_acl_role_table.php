@@ -17,6 +17,7 @@ class CreateAclRoleTable extends Migration {
         Schema::create("acl_role", function (Blueprint $table) {
             $table->increments("id");
             $table->integer("role_id");
+            $table->string('package_name')->nullable();
             $table->string("module_name");
             $table->string("component_name");
             $table->integer("edit")->default(0)->nullable(true);

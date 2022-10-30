@@ -61,20 +61,25 @@ class ProductsController extends ControllerBase {
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
 
-    ///////////////////////////////////////////////////////////
-
-    public function create(Request $request)
-    {
-        $input = $request->all();
-        try {
-            DB::beginTransaction();
-            $Create = $this->ProductsRepository->upsert($input);
-
-        } catch (\Exception $ex) {
-            DB::rollBack();
-            return $this->response_base(["status" => false], "Access denied !", 200);
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo get all product categories
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_product_categories(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $result = $this->ProductsRepository->get_categories($input);
+            if($result) {
+                return $this->response_base([
+                    "status" => true,
+                    "categories" => $result
+                ], "You have got data successfully !!!", 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to get data !!!", 200);
         }
-        return ;
+        return $this->response_base(["status" => false], "Access denied !", 200);
     }
 }
 

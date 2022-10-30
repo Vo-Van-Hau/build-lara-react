@@ -4,7 +4,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 if (!function_exists("app_url")) {
-    function app_url() {
+    function app_url() { 
         if(app()->runningInConsole()){
             return env("APP_URL", "http://localhost");
         }

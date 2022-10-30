@@ -83,7 +83,7 @@ class Core {
     public static function config() {
         return [
             "app" => [
-                "name" => Config::get("app.name", "MS Mall SellerS"),
+                "name" => "Fanthbol Sellers",
                 "version" => Config::get('module.core.version', "0.00.000"),
                 "baseURL" => url(""),
                 "backendURL" => self::backendURL(),

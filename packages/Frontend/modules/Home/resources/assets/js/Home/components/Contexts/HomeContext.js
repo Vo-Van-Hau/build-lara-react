@@ -14,23 +14,34 @@ const HomeContextProvicer = ({ children, axios, history, config,navigate }) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
+     * @todo: get product categories
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
      */
-    // const get_categories = () => {
-    //     set_table_loading();
-    //     return axios
-    //     .get_secured()
-    //     .post(`/home/home/get_categories`)
-    //     .then((res) => {
-    //         let { products_categories } = res.data;
-    //         dispatch({ type: GET_PRODUCT_CATEGORIES, payload: products_categories });
-    //     })
-    //     .catch((errors) => {})
-    //     .finally(() => {set_table_loading();});
-    // }
+     const get_product_categories = (page, keySearch) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/products/products/get_product_categories?page=${page}`, {...keySearch})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { categories } = res.data.data;
+                dispatch({ type: GET_PRODUCT_CATEGORIES, payload: categories });
+                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object}
+     * @return {void}
+     */
     const setRouter = ({
         action,
         id = '',
@@ -92,8 +103,8 @@ const HomeContextProvicer = ({ children, axios, history, config,navigate }) => {
 
     const todoContextData = {
         data: {...data, config},
-        history, setRouter, dispatch, get_axios, set_table_loading, 
-        set_mouted, get_products
+        history, setRouter, dispatch, get_axios, set_table_loading,
+        set_mouted, get_products, get_product_categories
     };
 
     return (
