@@ -10,6 +10,23 @@
     "dependencies": {},
     "devDependencies": {},
     "component": {},
-    "menu": {},
+    "menu": {
+        "Dashboard": {
+            "name": "Dashboard",
+            "icon": "fas fa-user",
+            "controller": "Overview",
+            "group": "systems",
+            "position": 1,
+            "child": [
+                {
+                    "name": "Overview",
+                    "link": "\/dashboard\/dashboard",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Overview"
+                }
+            ]
+        }
+    },
     "status": true
 }

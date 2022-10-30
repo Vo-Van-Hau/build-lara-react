@@ -19,15 +19,15 @@ const HeaderSection = ({...props}) => {
         console.log('show login')
          setIsModalOpen(true);
      };
- 
+
      const handleCancel = () => {
          setIsModalOpen(false);
      };
- 
+
      // const confirm = () => {
      //     message.info('Clicked on Yes.');
      // };
- 
+
      return (<>
          <header className='main_header_container'>
              <Row className='header_container' justify="center"  >
@@ -35,11 +35,11 @@ const HeaderSection = ({...props}) => {
                      <Link to="/shopping/home/home" > <Image preview={false} width={120} height={120} src="/images/msmall-icon.png"  /></Link>
                      {/* <Image preview={false} width={129} height={18} src="https://salt.tikicdn.com/ts/brickv2og/70/07/62/9a90de2324bda05df7ff137972de1c70.png" /> */}
                  </Col>
- 
+
                  <Col className='formSearch_container' span={12} >
                      <Search placeholder="Search..." enterButton={<SearchOutlined />} size="large" />
                  </Col>
- 
+
                  <Col className='header_account_container' >
                      <UserOutlined style={{ color: '#fff', fontSize: '32px' }} />
                      <div className='user_itemText'>
@@ -48,7 +48,7 @@ const HeaderSection = ({...props}) => {
                          </Button>
                      </div>
                  </Col>
- 
+
                  <Col className='header_cart_container' >
                      <Badge count={1} >
                          <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }} />
@@ -61,7 +61,7 @@ const HeaderSection = ({...props}) => {
                  </Col>
              </Row>
          </header>
- 
+
          <Modal className='login_popup_container'
              open={isModalOpen}
              footer={null}
@@ -76,7 +76,7 @@ const HeaderSection = ({...props}) => {
                          wrapperCol={{ span: 16, }}
                          initialValues={{ remember: true, }}
                          autoComplete="off"  >
- 
+
                          <Form.Item label="Username" name="username"
                              rules={[{
                                  required: true,
@@ -84,7 +84,7 @@ const HeaderSection = ({...props}) => {
                              }]} >
                              <Input />
                          </Form.Item>
- 
+
                          <Form.Item label="Password" name="password"
                              rules={[{
                                  required: true,
@@ -93,13 +93,13 @@ const HeaderSection = ({...props}) => {
                          >
                              <Input.Password />
                          </Form.Item>
- 
+
                          <Form.Item wrapperCol={{ offset: 8, span: 16, }} >
                              <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
                                  Submit
                              </Button>
                          </Form.Item>
- 
+
                      </Form>
                  </Col>
                  <Col className='rightside' span={8} >

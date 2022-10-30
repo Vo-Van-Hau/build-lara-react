@@ -22,10 +22,10 @@ const Login = ({ history, ...props }) => {
         setLoadingStatus(true);
         let data = await login(values);
         setLoadingStatus(false);
-        if (data.error !== null) {
+        if(data.error !== null) {
             setError(data.error);
         }
-        if (data.redirect_to) {
+        if(data.redirect_to) {
             window.location.replace(data.redirect_to);
         }
     };

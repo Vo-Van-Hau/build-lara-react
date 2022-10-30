@@ -47,7 +47,7 @@ const FooterSection = ({...props}) => {
             </Col>
             <Col className='footer_section' flex={1}>
                 <Title level={5}>Phương thức thanh toán </Title>
-                <Row classname='payment' gutter={[0, 16]} wrap>
+                <Row className='payment' gutter={[0, 16]} wrap>
                     <Col className='icon' span={5}>
                         <Avatar className='icon-visa' size={34}  src="../images/icon-visa.png" alt='icon-visa'/>
                     </Col>
@@ -57,7 +57,7 @@ const FooterSection = ({...props}) => {
                     <Col className='icon' span={5}>
                         <Avatar className='icon-atm' size={34}  src="../images/icon-atm.png" alt='icon-atm'/>
                     </Col>
-                    
+
                     <Col className='icon' span={5}>
                         <Avatar className='icon-momo' size={34}  src="../images/icon-momo.png" alt='icon-momo'/>
                     </Col>
@@ -72,13 +72,13 @@ const FooterSection = ({...props}) => {
             </Col>
             <Col className='footer_section' flex={1}>
                 <Title level={5}>Kết nối với chúng tôi</Title>
-                <Row classname='payment' gutter={[5, 16]} wrap>
+                <Row className='payment' gutter={[5, 16]} wrap>
                     <Col className='icon' >
                         <Avatar size={34}  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Facebook-icon-1.png/640px-Facebook-icon-1.png" alt='icon-facebook'/>
                     </Col>
                     <Col className='icon' >
                         <Avatar size={34}  src="https://img.freepik.com/premium-vector/youtube-background-youtube-icon-social-media-icons-realistic-logo-vector-zaporizhzhia-ukraine-may-10-2021_399089-1047.jpg" alt='icon-youtube'/>
-                       
+
                     </Col>
                     <Col className='icon' >
                         <Avatar size={34}  src="https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Zalo-App-Rec.png" alt='icon-zalo'/>

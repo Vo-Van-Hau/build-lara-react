@@ -1,11 +1,11 @@
 import {
-    SET_PAGINATION, 
+    SET_PAGINATION,
     GET_PRODUCT_CATEGORIES,GET_PRODUCTS,
     SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const initialState = {
-    product_categories:[],
+    product_categories: [],
     products: [],
     config:{
         status: []

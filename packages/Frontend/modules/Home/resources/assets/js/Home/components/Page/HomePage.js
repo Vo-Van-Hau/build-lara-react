@@ -1,30 +1,17 @@
 import React, { useContext, useEffect } from 'react';
 
-import { BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
-import { Card, Avatar, Rate ,Image, Carousel,Button, Affix  } from "antd"
+import {
+    BackTop, Col, Row, Space, Tabs, Typography, List, Avatar, Image, Carousel,Button, Affix, Card,
+
+} from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
 
 const HomePage = (props) => {
-    const { data, get_products, setRouter } = useContext(HomeContext);
-    const { products } = data;
+    const { data, get_products, setRouter, get_product_categories } = useContext(HomeContext);
+    const { products, mouted, product_categories } = data;
     const { Text } = Typography;
-    const categories = [
-        { id: 1, name: 'Thịt, Rau Củ' },
-        { id: 2, name: 'Bách Hóa' },
-        { id: 3, name: 'Nhà Cửa' },
-        { id: 4, name: 'Điện Tử' },
-        { id: 5, name: 'Thiết Bị Số' },
-        { id: 6, name: 'Điện Thoại' },
-        { id: 7, name: 'Mẹ & Bé' },
-        { id: 8, name: 'Loại 8' },
-        { id: 9, name: 'Loại 9' },
-        { id: 10, name: 'Loại 10' },
-        { id: 11, name: 'Loại 11' },
-        { id: 12, name: 'Loại 12' },
-        { id: 13, name: 'Loại 13' },
-    ]
     const imgSrc = [
         { id: 1, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/29/2c/4c/b8c757ba06d448ce3d2ec0bee3d75fa3.png.webp' },
         { id: 2, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/e5/db/cc/32b6b4268331a9ed46479ab0da46ae82.png.webp' },
@@ -62,52 +49,97 @@ const HomePage = (props) => {
     }
 
     useEffect(() => {
-        get_products();
+        if(mouted) {
+            get_products();
+            get_product_categories();
+        }
     }, []);
 
     return (<>
-        <Tabs activeKey={'none'}
-            tabPosition={'top'}
-            onTabClick={(e) => handleClickTab(e)}
-            style={{ padding: '0px 5px' }}
-            items={categories.map((item, index) => {
-                return {
-                    label: item.name,
-                    key: item.id,
-                    disabled: index === categories.length,
-                };
-            })}
-        />
-        <Row className='home_top_banner_container'
-            justify="space-between"
-            gutter={[10, 16]}
+        <Space
+            direction="vertical"
+            size="middle"
+            style={{
+            display: 'flex',
+            }}
         >
-            <Col span={14} >
-                <Carousel
-                    autoplay
-                    arrows={true}
-                    prevArrow={<LeftOutlined />}
-                    nextArrow={<RightOutlined />}
-                    swipeToSlide draggable
-                >
-                    {imgSrc.map((item, index) => {
-                        return <Image
-                            height={355}
-                            key={index}
-                            preview={false}
-                            style={contentStyle}
-                            src={item.url} />
+            <Card title="Card" size="small">
+                <Tabs activeKey={'none'}
+                    tabPosition={'top'}
+                    onTabClick={(e) => handleClickTab(e)}
+                    style={{ padding: '0px 5px' }}
+                    items={product_categories.map((item, index) => {
+                        return {
+                            label: item.label,
+                            key: item.value,
+                            disabled: index === product_categories.length,
+                        };
                     })}
-                </Carousel>
-            </Col>
-
-            <Col span={10}>
-                <Image preview={false}
-                    style={{ objectFit: 'contain', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
                 />
-            </Col>
-        </Row>
+            </Card>
+            <Card title="Danh mục sản phẩm" size="small">
+                <List
+                    itemLayout="vertical"
+                    size="large"
+                    grid={{
+                        gutter: 24,
+                        column: 9,
+                    }}
+                    dataSource={product_categories}
+                    renderItem={(item) => (
+                        <List.Item style={{padding: 0}}>
+                            <Row>
+                                <Col span={24}>
+                                    <Avatar
+                                        size={{
+                                            xs: 24,
+                                            sm: 32,
+                                            md: 40,
+                                            lg: 64,
+                                            xl: 64,
+                                            xxl: 100,
+                                        }}
+                                        src={ item.icon_link }
+                                        circle='circle'/>
+                                </Col>
+                                <Col span={24}>{ item.label }</Col>
+                            </Row>
+                        </List.Item>
+                    )}
+                />
+            </Card>
+            <Card title="Card" size="small">
+                <Row className='home_top_banner_container'
+                    justify="space-between"
+                    gutter={[10, 16]}
+                >
+                    <Col span={14} >
+                        <Carousel
+                            autoplay
+                            arrows={true}
+                            prevArrow={<LeftOutlined />}
+                            nextArrow={<RightOutlined />}
+                            swipeToSlide draggable
+                        >
+                            {imgSrc.map((item, index) => {
+                                return <Image
+                                    height={355}
+                                    key={index}
+                                    preview={false}
+                                    style={contentStyle}
+                                    src={item.url} />
+                            })}
+                        </Carousel>
+                    </Col>
+                    <Col span={10}>
+                        <Image preview={false}
+                            style={{ objectFit: 'contain', borderRadius: '3px' }}
+                            src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                        />
+                    </Col>
+                </Row>
+            </Card>
+        </Space>
         <>
             <Affix offsetTop={0}>
                 <div className="sectionContainer">
@@ -129,12 +161,9 @@ const HomePage = (props) => {
                     </Row>
                 </div>
             </Affix>
-
             <Row className="productContainer">
                 <Space size={[10, 16]} wrap style={{ width: '100%' }} justify="space-between">
-
                     {products.map((item, index) => (
-
                         <Card className="productItem"
                             key={item.id}
                             hoverable
@@ -148,23 +177,18 @@ const HomePage = (props) => {
                             })}
                         >
                             <Meta title={item.name} />
-
                             <div className="rating">
                                 {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
                                 <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
                             </div>
-
                             <Text className="price" type="danger" strong>120.000 đ</Text>
-
                         </Card>
-                    ),
-                    )}
+                    ))}
                 </Space>
             </Row>
         </>
         <BackTop />
-    </>
-    );
+    </>);
 }
 
 export default HomePage;
