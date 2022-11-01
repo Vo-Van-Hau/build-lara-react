@@ -39,7 +39,7 @@ const CartPage = (props) => {
     return (
         <Row className="cart_page_container" gutter={[16, 16]}>
             <Col className="title" span={24}>
-                <Title level={2} style={{marginTop:'10px'}}>Cart</Title>
+                <Title level={2} style={{marginTop:'10px'}}>GIỎ HÀNG</Title>
             </Col>
             <Col className="left_Container" span={18}>
                 <CartTable
@@ -77,8 +77,7 @@ const CartTable = (props) => {
                     })}/></>
                 )
             },
-        },
-        {
+        },{
             title: 'Tên sản phẩm',
             width: 300,
             render: (_, record) => {
@@ -91,8 +90,7 @@ const CartTable = (props) => {
                     })}>{ record.product.name ? record.product.name : 'Undefined' }</a></>
                 )
             },
-        },
-        {
+        },{
             title: 'Đơn giá',
             align: 'center',
             render: (_, record) => {
@@ -100,8 +98,7 @@ const CartTable = (props) => {
                     <>{ record.product.price ? record.product.price : 'Undefined' }</>
                 )
             }
-        },
-        {
+        },{
             title: 'Số lượng',
             align: 'center',
             render: (_, record) => {
@@ -109,8 +106,7 @@ const CartTable = (props) => {
                     <>{ record.product_quantity ? record.product_quantity : 'Undefined' }</>
                 )
             }
-        },
-        {
+        },{
             title: 'Thành tiền',
             align: 'center',
             render: (_, record) => {
@@ -118,8 +114,7 @@ const CartTable = (props) => {
                     <>{ record.product_quantity ? (parseInt(record.product_quantity) * record.product.price)  : 'Undefined' }</>
                 )
             }
-        },
-        {
+        },{
             title: '',
             dataIndex: 'key',
             render: (_, record) => (
@@ -185,7 +180,7 @@ const Checkout = (props) => {
     }
 
     return (<>
-        <Card className='client_info' title="Delivered to" extra={<a href="#">Change</a>}>
+        <Card className='client_info' title="Giao tới" extra={<a href="#">Thay đổi</a>}>
             <Title level={5}>{ customer && customer.fullname ? customer.fullname : 'Undefined'}</Title>
             <span className='phone_number'>{ customer && customer.phone ? customer.phone : 'Undefined'}</span>
             <span> <Divider type="vertical"/></span>
@@ -209,6 +204,5 @@ const Checkout = (props) => {
         <><Button type='primary' size='large' danger onClick={() => redirect_to_payment()}>Mua Hàng</Button></>
     </>)
 }
-
 
 export default CartPage;

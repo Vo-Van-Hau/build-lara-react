@@ -97,7 +97,7 @@ const HeaderSection = ({ ...props }) => {
                     </Badge>
                     <div className='user_itemText'>
                         <Button type="text" style={{ color: '#fff' }} >
-                            Cart
+                            Giỏ Hàng
                         </Button>
                     </div>
                 </Col>

@@ -40,13 +40,21 @@ const ProductDetailPage = (props) => {
      * @return {void}
      */
     const handleAddToCart = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" })
+        window.scrollTo({ top: 0, behavior: "smooth" });
         const key = `open${Date.now()}`;
-        const btn = (<Button className='viewCartBtn' type="primary" onClick={() => notification.close(key)} block>
-            View cart and checkout
+        const btn = (<Button className='viewCartBtn' type="primary" onClick={() => {
+            notification.close(key);
+            setRouter({
+                module: 'checkout',
+                controller: 'cart',
+                action: 'view',
+                id: seller.id  ? seller.id : '#'
+            });
+        }} block>
+            {`Xem giỏ hàng và thanh toán`}
         </Button>);
         notification.success({
-            message: 'Add to cart successfully!',
+            message: `Thêm vào giỏ hàng thành công!`,
             placement: 'topRight',
             top: 80,
             duration: 5,
@@ -97,7 +105,7 @@ const ProductDetailPage = (props) => {
                 </Row>
                 <Row className='body' >
                     <Col className='product_add' span={15}>
-                        <span className='product_price__current-price'>{product_item.sale_price_id}</span>
+                        <span className='product_price__current-price'>{product_item.price}</span>
                         <span className='product_price__list-price'>{product_item.price}</span>
                         <span className='product_price__discount-rate'>-32%</span>
                         <div className='product_quantity'>
