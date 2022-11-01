@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import {
-    Avatar, Button, Col, Image, Rate, Row, Space,
-    Descriptions, Badge, Input, notification, Breadcrumb, Typography
+    Avatar, Button, Col, Image, Rate, Row, Space, Card,
+    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider
 } from 'antd';
 import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MinusOutlined, StarFilled } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
@@ -31,7 +31,7 @@ const ProductDetailPage = (props) => {
      * @return {void}
      */
     const handleDecrease = () => {
-        ((quantity === 0 || quantity < 0) ? quantity = 0 : setQuantity(quantity - 1));
+        ((quantity === 0 || quantity < 0 || quantity === 1) ? quantity = 1 : setQuantity(quantity - 1));
     }
 
     /**
@@ -57,12 +57,10 @@ const ProductDetailPage = (props) => {
                 width: 300,
             }
         });
-        console.log();
         add_to_cart({
             product_id: product_item.id,
             quantity,
         });
-        console.log(product_item.id,quantity)
         setQuantity(1);
     }
 
@@ -71,7 +69,15 @@ const ProductDetailPage = (props) => {
     }, [props.id]);
 
     return (<>
-        <BreadCrumb />
+        <><Breadcrumb style={{ padding: '12px' }}>
+                <Breadcrumb.Item style={{ cursor: 'pointer' }} >
+                    <HomeOutlined />
+                </Breadcrumb.Item>
+                <Breadcrumb.Item style={{ cursor: 'pointer' }}>
+                    <span>Sản phẩm</span>
+                </Breadcrumb.Item>
+                <Breadcrumb.Item>{ product_item.name }</Breadcrumb.Item>
+        </Breadcrumb></>
         <Row className='product_item_container' justify='space-between'>
             <Col span={8} className='product_image_container'>
                 <Image preview={false}
@@ -82,11 +88,11 @@ const ProductDetailPage = (props) => {
             <Col className='separate'></Col>
             <Col span={15} className='product_info_container'>
                 <Row className='head' >
-                    <Col span={24}><h4>Loại sản phẩm: {product_item.category_id} </h4></Col>
+                    <Col span={24}><h4>Loại sản phẩm: {product_item.category ? product_item.category.title : ``} </h4></Col>
                     <Col span={24}><h1 className='product_title'>{product_item.name}</h1></Col>
                     <Col className='rating' span={24}>
                         <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
-                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>  {product_item.name} </span>
+                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>{ product_item.name }</span>
                     </Col>
                 </Row>
                 <Row className='body' >
@@ -118,23 +124,23 @@ const ProductDetailPage = (props) => {
                             <Col span={12}>
                                 <><Button type='link' onClick={() => setRouter({
                                     module: 'shop',
-                                    controller: 'products',
+                                    controller: 'shop',
                                     action: 'view',
                                     id: seller.id  ? seller.id : '#'
                                 })}>{ store.name ? store.name : 'Undefined'}</Button></>
                             </Col>
-                            <Col span={12} className='shop_rating' >
+                            <Col span={12} className='shop_rating'>
                                 <div>4.5 / 5  <StarFilled /></div>
                                 <div></div>
                             </Col>
                             <Col span={12} className='shop_follow'>
-                                <div>250k+ Follow</div>
+                                <div>250k+ Theo dõi</div>
                             </Col>
 
                             <Space wrap className='btn-group' style={{justifyContent: 'center'}}>
                                 <Button icon={<ShopOutlined />} size='middle' onClick={() => setRouter({
                                     module: 'shop',
-                                    controller: 'products',
+                                    controller: 'shop',
                                     action: 'view',
                                     id: seller.id  ? seller.id : '#'
                                 })}>
@@ -150,89 +156,50 @@ const ProductDetailPage = (props) => {
                 </Row>
             </Col>
         </Row>
-
-        {/* <Descriptions
-            className='product_description_container'
-            bordered
-            title="Product Description"
-            size={'middle'}
-        >
-            <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-            <Descriptions.Item label="Company">VNG</Descriptions.Item>
-            <Descriptions.Item label="Price">18.000 VND</Descriptions.Item>
-            <Descriptions.Item label="Out of Date">22/10/2022</Descriptions.Item>
-            <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-            <Descriptions.Item label="Official">$60.00</Descriptions.Item>
-            <Descriptions.Item label="Config Info">
-                Data disk type: MongoDB
-                <br />
-                Database version: 3.4
-                <br />
-                Package: dds.mongo.mid
-                <br />
-                Storage space: 10 GB
-                <br />
-                Replication factor: 3
-                <br />
-                Region: East China 1<br />
-            </Descriptions.Item>
-        </Descriptions> */}
         <Row dangerouslySetInnerHTML={{ __html: product_item.description }} />
+        <RelatedProduct />
     </>)
 }
 
-const BreadCrumb = () => {
+const RelatedProduct = () => {
+    const productArr = [
+        { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
+
+    ]
     return <>
-        <Breadcrumb style={{ padding: '12px' }}>
-            <Breadcrumb.Item style={{ cursor: 'pointer' }} >
-                <HomeOutlined />
-            </Breadcrumb.Item>
-            <Breadcrumb.Item style={{ cursor: 'pointer' }}>
-                <span>Product</span>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>Product Name</Breadcrumb.Item>
-        </Breadcrumb>
+        <Row className='related_product_container'>
+            <Col span={24} >
+                <h3 className='section_title'> Related Product </h3>
+                <Slider className='related_product_slider' slidesToShow={5}  >
+                    {productArr.map((item, index) => {
+                        return (
+                            <Card className="productItem"
+                                key={index}
+                                hoverable
+                                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"  />}
+                            >
+                                <Meta title={item.title} />
+                                <div className="rating">
+                                    <Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} />
+                                    <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++</small>
+                                </div>
+
+                                <Text strong className="price" type="danger">120.000 đ</Text>
+
+                            </Card>
+                        )
+                    })}
+                </Slider>
+
+            </Col>
+        </Row>
     </>
 }
-
-// const RelatedProduct = () => {
-//     const productArr = [
-//         { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-//         { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-//         { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-//         { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-//         { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-//         { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-//         { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
-
-//     ]
-//     return <>
-//         <Row className='related_product_container'>
-//             <Col span={24} >
-//                 <h3 className='section_title'> Related Product </h3>
-//                 <Slider className='related_product_slider' slidesToShow={5}  >
-//                     {productArr.map((item, index) => (
-//                         <Card className="productItem"
-//                             key={index}
-//                             hoverable
-//                             cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"  />}
-//                         >
-//                             <Meta title={item.title} />
-//                             <div className="rating">
-//                                 <Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} />
-//                                 <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++</small>
-//                             </div>
-
-//                             <Text strong className="price" type="danger">120.000 đ</Text>
-
-//                         </Card>
-//                     ),
-//                     )}
-//                 </Slider>
-
-//             </Col>
-//         </Row>
-//     </>
-// }
 
 export default ProductDetailPage;

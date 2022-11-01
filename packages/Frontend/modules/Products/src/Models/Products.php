@@ -7,6 +7,7 @@ use Frontend\Sellers\Models\Sellers;
 use Frontend\Products\Models\ProductStock;
 use Frontend\Products\Models\ProductIdentifiers;
 use Frontend\Products\Models\ProductDescriptionDetail;
+use Frontend\Products\Models\ProductCaterory;
 
 class Products extends ModelBase {
 
@@ -59,12 +60,13 @@ class Products extends ModelBase {
                 'sellers.deleted' => 0
             ]);
     }
-/**
-      * @author: <hauvo1709@gmail.com>
-      * @todo:
-      * @return void
-      */
-      public function product_stock() {
+
+    /**
+    * @author: <hauvo1709@gmail.com>
+    * @todo:
+    * @return void
+    */
+    public function product_stock() {
         return $this->hasOne(ProductStock::class, 'product_id', 'id')->where([
             'product_stock.status' => 1
         ]);
@@ -89,6 +91,18 @@ class Products extends ModelBase {
     public function product_description_detail() {
         return $this->hasOne(ProductDescriptionDetail::class, 'product_id', 'id')->where([
             'product_description_detail.status' => 1
+        ]);
+    }
+
+    /**
+    * @author: <hauvo1709@gmail.com>
+    * @todo:
+    * @return void
+    */
+    public function category() {
+        return $this->belongsTo(ProductCaterory::class, 'category_id', 'id')->where([
+            'product_categories.status' => 1,
+            'product_categories.deleted' => 0
         ]);
     }
 }

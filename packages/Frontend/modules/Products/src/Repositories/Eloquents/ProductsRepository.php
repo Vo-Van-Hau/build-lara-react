@@ -64,7 +64,14 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     public function get_by_id($id) {
         $result = $this->model->where("id", $id)
-        ->with(["seller"])
+        ->with([
+            'seller' => function($query) {
+
+            },
+            'category' => function($query) {
+
+            }
+        ])
         ->first();
         return $result;
     }
