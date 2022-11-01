@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Frontend\Auth\AuthFrontend;
 use Frontend\Products\Products as ProductsProducts;
 use Frontend\Products\Models\ProductCaterory;
+use Sellers\Sellers\Models\Sellers;
 
 class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface {
 
@@ -18,6 +19,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     protected $model;
     protected ProductCaterory $product_category_model;
+    protected Sellers $sellers_model;
 
     /**
      * @var Eloquent | Model
@@ -31,10 +33,12 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     public function __construct(
         Products $model,
-        ProductCaterory $product_category_model
+        ProductCaterory $product_category_model,
+        Sellers $sellers_model
     ) {
         $this->model = $model;
         $this->product_category_model = $product_category_model;
+        $this->sellers_model = $sellers_model;
     }
 
     /**
@@ -86,5 +90,30 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             ])->select("title as label", "id as value")->get();
         }
         return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return mixed
+     */
+    public function get_products_sellers($input) {
+        $seller_id = $input['seller_id'];
+        $seller = $this->sellers_model->where([
+            'status' => 1,
+            'deleted' => 0,
+            'id' => $seller_id
+        ])->first();
+        if(empty($seller_id) || empty($seller)) return false;
+        $existed = $this->model->where([
+            // "status" => 1,
+            'deleted' => 0,
+            'seller_id' => $seller->id
+        ])->with([
+            'product_stock'
+        ])->paginate(10);
+        if(empty($existed)) return false;
+        return $existed;
     }
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ShopPage from './components/Page/ShopPage';
 import ShopContextProvider from './components/Contexts/ShopContext';
 
-const Products = (props) => {
+const Shop = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
@@ -30,6 +30,22 @@ const Products = (props) => {
         .catch((errors) => {});
     }
 
+     /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get module configuration
+     * @param:
+     * @returns {void}
+     */
+      const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
@@ -37,22 +53,23 @@ const Products = (props) => {
      * @returns {void}
      */
     const render_view = () => {
-        switch (action) {
-            default: return (<ShopPage {...props}/>);
+        switch(action) {
+            default: return (<ShopPage {...props} keyID={id}/>);
         }
     }
 
     useEffect(function() {
-        // get_config();
-    }, []);
+        get_config();
+        get_action();
+    }, [props]);
 
     return (
         <>
-            <ShopContextProvider axios={props.bp.axios} history={props.history} config={config}>
+            <ShopContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
                 { render_view() }
             </ShopContextProvider>
         </>
     )
 }
 
-export default Products;
+export default Shop;

@@ -81,6 +81,28 @@ class ProductsController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo get list products
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_products_sellers(Request $request) {
+        if($request->isMethod("post")) {
+            $input = $request->all();
+            $input['seller_id'] = isset($input['seller_id']) ? $input['seller_id'] : 0;
+            $result = $this->ProductsRepository->get_products_sellers($input);
+            if($result) {
+                return $this->response_base([
+                    "status" => true,
+                    "products" => $result
+                ], "You have got products successfully !!!", 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to get products !!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }
 
 
