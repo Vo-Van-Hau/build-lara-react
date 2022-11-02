@@ -29,6 +29,12 @@ class Customer extends ModelBase {
             ->where([
                 "customer_address.status" => 1,
                 "customer_address.deleted" => 0,
+            ])->with([
+                "area:id,name,type",
+                "country:id,name,type",
+                "province:id,name,type",
+                "district:id,name,type",
+                "ward:id,name,type"
             ]);
     }
 

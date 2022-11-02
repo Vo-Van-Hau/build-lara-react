@@ -157,12 +157,31 @@ const Checkout = (props) => {
     const { cart, setRouter } = props;
     const { user, cart_detail } = cart;
     const { customer } = user;
+    const { customer_address } = customer;
 
     let total_amount = 0;
     let discount = 0;
     cart_detail && cart_detail.forEach(function(item) {
         total_amount += (parseInt(item.product_quantity) * item.product.price)
     });
+
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo
+     * @param {array} customer_address
+     * @return {Object}
+     */
+    const getDefaultDeliveryTo = (customer_address = []) => {
+        if(customer_address && Array.isArray(customer_address) && customer_address.length > 0) {
+            let result = customer_address.find((item, _i) => {
+                return item.is_default === 1;
+            });
+            return result ? result : false;
+        }
+        return false;
+    }
+
+    const defaultDeliveryTo = getDefaultDeliveryTo(customer_address);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -181,10 +200,17 @@ const Checkout = (props) => {
 
     return (<>
         <Card className='client_info' title="Giao tới" extra={<a href="#">Thay đổi</a>}>
-            <Title level={5}>{ customer && customer.fullname ? customer.fullname : 'Undefined'}</Title>
-            <span className='phone_number'>{ customer && customer.phone ? customer.phone : 'Undefined'}</span>
+            <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : 'Undefined'}</Title>
+            <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : 'Undefined'}</span>
             <span> <Divider type="vertical"/></span>
-            <span className='phone_number'>Thu Duc, HCM City</span>
+            <span className='address'>
+                {
+                    (defaultDeliveryTo && defaultDeliveryTo.address && defaultDeliveryTo.ward && defaultDeliveryTo.district && defaultDeliveryTo.province)
+                    ? `${defaultDeliveryTo.address || ''}, ${defaultDeliveryTo.ward.name || ''},
+                    ${defaultDeliveryTo.district.type || ''} ${defaultDeliveryTo.district.name || ''},
+                    ${defaultDeliveryTo.province.type || ''} ${defaultDeliveryTo.province.name || ''}` : ''
+                }
+            </span>
         </Card>
         <Card className='checkout_container'>
             <div className='prices_item'>

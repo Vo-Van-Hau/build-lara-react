@@ -6,7 +6,11 @@ import {
 export const initialState = {
     cart: {
         cart_detail: [],
-        user: {}
+        user: {
+            customer: {
+                customer_address: [],
+            }
+        }
     },
     config:{
         status: []
