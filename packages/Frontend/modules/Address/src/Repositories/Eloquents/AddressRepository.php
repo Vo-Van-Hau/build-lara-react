@@ -219,4 +219,62 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
         if(!empty($result)) return $result;
         return false;
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function save_new_customer_address($input) {
+        $user_id = $input['user_id'];
+        $customer = $this->customer_model;
+        if(empty($user_id)) return false;
+        $customer = $customer->where([
+            'status'  => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
+        ])->first();
+        if(!empty($customer)) {
+            $is_default = isset($input['is_default']) ? $input['is_default'] : 0;
+            $check = $this->customer_address_model;
+            $check = $check->where([
+                'customer_id' => $customer->id,
+                'status'  => 1,
+                'deleted' => 0,
+            ])->count();
+            if(empty($check)) {
+                $is_default = 1;
+            }
+            $new = $this->customer_address_model;
+            $new->customer_id = $customer->id;
+            $new->customer_name = isset($input['customer_name']) ? $input['customer_name'] : '';
+            $new->company_name = isset($input['company_name']) ? $input['company_name'] : '';
+            $new->phone = isset($input['phone']) ? $input['phone'] : '';
+            $new->area_id = 3;
+            $new->country_id = 1;
+            $new->province_id = isset($input['province_id']) ? $input['province_id'] : 0;
+            $new->district_id = isset($input['district_id']) ? $input['district_id'] : 0;
+            $new->ward_id = isset($input['ward_id']) ? $input['ward_id'] : 0;
+            $new->address = isset($input['address']) ? $input['address'] : '';
+            $new->delivery_address_type = isset($input['address']) ? $input['delivery_address_type'] : '';
+            $new->is_default = $is_default;
+            $new->status = 1;
+            if($new->save()) {
+                if(!empty($is_default)) {
+                    $query = $this->customer_address_model;
+                    $query->where([
+                        'status' => 1,
+                        'deleted' => 0,
+                        'customer_id' => $customer->id,
+                    ])->where('id', '!=', $new->id)->update([
+                        'is_default' => 0,
+                    ]);
+                }
+                return true;
+            };
+            return false;
+        }
+        return false;
+    }
 }

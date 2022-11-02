@@ -12,11 +12,13 @@ const { Title, Text, Link } = Typography;
 const AddressPage = (props) => {
 
     const { data, setRouter, get_address } = useContext(AddressContext);
-    const { address } = data;
+    const { address, mouted } = data;
 
     useEffect(function() {
-        get_address();
-    }, []);
+        if(mouted) {
+            get_address(1, {});
+        }
+    }, [props]);
 
     return (
         <Layout>

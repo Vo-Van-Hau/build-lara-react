@@ -12,13 +12,22 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const ActionAddress = (props) => {
-    const { data, setRouter, get_areas, get_districs_by_province, get_wards_by_district } = useContext(AddressContext);
-    const { areas, loading_table } = data;
+    const {
+        data, setRouter, get_areas, get_districs_by_province, get_wards_by_district,
+        save_address
+    } = useContext(AddressContext);
+    const { areas, loading_table, mouted } = data;
     const { countries } = areas;
     const { provinces, districts, wards } = countries;
 
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo
+     * @param {Objtec} values
+     * @return {void}
+     */
     const onFinish = (values) => {
-        console.log('Success:', values);
+        save_address(values);
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -41,8 +50,10 @@ const ActionAddress = (props) => {
     };
 
     useEffect(() => {
-        get_areas();
-    }, []);
+        if(mouted) {
+            get_areas();
+        }
+    }, [props]);
 
     return (
         <Layout>
@@ -57,7 +68,7 @@ const ActionAddress = (props) => {
                             onFinishFailed={onFinishFailed}
                             autoComplete="off"
                         >
-                            <Form.Item label="Họ và tên" name="fullname" placeholder="Nhập họ và tên..."
+                            <Form.Item label="Họ và tên" name="customer_name" placeholder="Nhập họ và tên..."
                                 rules={[{
                                     required: true,
                                     message: 'Hãy nhập Họ và Tên!',
@@ -65,7 +76,7 @@ const ActionAddress = (props) => {
                                 <Input />
                             </Form.Item>
 
-                            <Form.Item label="Công ty" name="company" placeholder="Nhập công ty..."
+                            <Form.Item label="Công ty" name="company_name" placeholder="Nhập công ty..."
                                 rules={[{
                                     required: true,
                                     message: 'Hãy nhập Công ty!',
@@ -81,7 +92,7 @@ const ActionAddress = (props) => {
                                 <Input />
                             </Form.Item>
 
-                            <Form.Item name="city" label="Thành phố / Tỉnh" rules={[{ required: true }]}>
+                            <Form.Item name="province_id" label="Thành phố / Tỉnh" rules={[{ required: true }]}>
                                 <Select
                                     placeholder="Chọn Tỉnh / Thành phố..."
                                     onChange={(value) => onChangeAreas(2, value)}
@@ -94,7 +105,7 @@ const ActionAddress = (props) => {
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item name="district" label="Quận / Huyện" rules={[{ required: true }]}>
+                            <Form.Item name="district_id" label="Quận / Huyện" rules={[{ required: true }]}>
                                 <Select
                                     placeholder="Chọn Quận / Huyện"
                                     onChange={(value) => onChangeAreas(3, value)}
@@ -107,7 +118,7 @@ const ActionAddress = (props) => {
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item name="ward" label="Phường / Xã" rules={[{ required: true }]}>
+                            <Form.Item name="ward_id" label="Phường / Xã" rules={[{ required: true }]}>
                                 <Select
                                     placeholder="Chọn Phường / Xã"
                                     allowClear
@@ -119,19 +130,18 @@ const ActionAddress = (props) => {
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item label="Địa chỉ" name="address" placeholder="Nhập địa chỉ..."  >
+                            <Form.Item label="Địa chỉ" name="address" placeholder="Nhập địa chỉ...">
                                 <TextArea showCount maxLength={100} style={{ height: 120 }} />
                             </Form.Item>
 
-
-                            <Form.Item name="addressType" label="Loại địa chỉ">
+                            <Form.Item name="delivery_address_type" label="Loại địa chỉ">
                                 <Radio.Group>
-                                    <Radio value="1">Nhà / Chung cư</Radio>
-                                    <Radio value="2">Cơ quan / Công ty</Radio>
+                                    <Radio value="house">Nhà / Chung cư</Radio>
+                                    <Radio value="company">Cơ quan / Công ty</Radio>
                                 </Radio.Group>
                             </Form.Item>
 
-                            <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+                            <Form.Item name="is_default" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
                                 <Checkbox>Đặt làm địa chỉ mặc định</Checkbox>
                             </Form.Item>
 
