@@ -277,4 +277,36 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
         }
         return false;
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function delete_customer_address($input) {
+        $user_id = $input['user_id'];
+        $id = isset($input['id']) ? $input['id'] : 0;
+        $customer = $this->customer_model;
+        if(empty($user_id)) return false;
+        $customer = $customer->where([
+            'status'  => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
+        ])->first();
+        if(!empty($customer) && !empty($id)) {
+            $existed = $this->customer_address_model->find($id);
+            $is_default = $existed->is_default;
+            if(!empty($existed)) {
+                // If address isn't default, so remove it.
+                if(empty($is_default)) {
+                    if($existed->delete()) return true;
+                    return false;
+                }
+                return false;
+            }
+            return false;
+        }
+        return false;
+    }
 }

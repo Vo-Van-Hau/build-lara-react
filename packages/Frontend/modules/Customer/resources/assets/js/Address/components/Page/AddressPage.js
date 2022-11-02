@@ -11,8 +11,20 @@ const { Title, Text, Link } = Typography;
 
 const AddressPage = (props) => {
 
-    const { data, setRouter, get_address } = useContext(AddressContext);
+    const { data, setRouter, get_address, delete_address } = useContext(AddressContext);
     const { address, mouted } = data;
+
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo:
+     * @param {Objtec} item
+     * @return {void}
+     */
+    const removeAddress = (item) => {
+        if(item.id) {
+            return delete_address(item.id);
+        }
+    }
 
     useEffect(function() {
         if(mouted) {
@@ -58,7 +70,7 @@ const AddressPage = (props) => {
                                                     <Popover content={`Thay đổi địa chỉ giao hàng`} title={`Bạn có muốn thay đổi ?`}>
                                                         <Button type='link'>Chỉnh sửa</Button>
                                                     </Popover>
-                                                    { item.is_default === 1 ? `` : <Popconfirm title='Bạn có muốn xóa ?' placement='leftTop' onConfirm={() => {}}>
+                                                    { item.is_default === 1 ? `` : <Popconfirm title='Bạn có muốn xóa ?' placement='leftTop' onConfirm={() => removeAddress(item)}>
                                                     <Button type='primary' danger style={{ marginLeft: 16 }}>Xóa</Button></Popconfirm> }
                                                 </Col>
                                             </Row>

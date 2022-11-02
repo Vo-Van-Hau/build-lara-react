@@ -132,6 +132,30 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         .finally(() => {set_table_loading();});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: delete an existed address
+     * @param {number} id
+     * @return {void}
+     */
+    const delete_address = (id) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/delete_address`, {id})
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                get_address(1, {});
+                Helper.Notification('success', '[Delete an existed address]', message);
+            } else {
+                Helper.Notification('error', '[Delete an existed address]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
     const setRouter = ({
         action,
         id = '',
@@ -181,7 +205,7 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         data: {...data, config},
         history, dispatch, get_axios, set_table_loading, set_mouted,
         setRouter, get_address, get_areas, get_districs_by_province,
-        get_wards_by_district, save_address
+        get_wards_by_district, save_address, delete_address,
     };
 
     return (
