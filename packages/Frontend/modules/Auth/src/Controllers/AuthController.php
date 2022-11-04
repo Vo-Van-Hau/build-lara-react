@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Frontend\Core\Exceptions\ApiException;
 use Frontend\Users\Interfaces\UsersRepositoryInterface;
+use Frontend\Auth\AuthFrontend;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -26,10 +27,10 @@ class AuthController extends ControllerBase {
 
     use Locates, AuthTrait;
 
-    protected $usersRepository;
+    protected $UsersRepository;
 
-    public function __construct(UsersRepositoryInterface $usersRepository) {
-        $this->usersRepository = $usersRepository;
+    public function __construct(UsersRepositoryInterface $UsersRepository) {
+        $this->UsersRepository = $UsersRepository;
     }
 
     /**
@@ -130,7 +131,7 @@ class AuthController extends ControllerBase {
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    protected function get_credentials(Request $request){
+    protected function get_credentials(Request $request) {
         $login = request()->input("email");
         $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? "email" : "username";
         return [
@@ -146,5 +147,28 @@ class AuthController extends ControllerBase {
      */
     protected function redirectTo() {
         return Core::backendURL() . "/home";
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return void
+     */
+    public function authenticate_user(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->UsersRepository->get_by_id($input['user_id']);
+            if($result) {
+                $result['is_login'] = true;
+                return $this->response_base([
+                    'status' => true,
+                    'user' => $result
+                ], 'You have got user successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to get user !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 }
