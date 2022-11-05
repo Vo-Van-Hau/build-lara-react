@@ -48,12 +48,12 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status = []) {
-        $result = $this->model->where(["deleted" => 0]);
+    public function get_all($keyword = '', $status = []) {
+        $result = $this->model->where(['deleted' => 0]);
         if(!empty($status)) {
-            $result = $result->whereIn("status", $status);
+            $result = $result->whereIn('status', $status);
         }
-        return $result->paginate(Config::get("packages.frontend.products.item_per_page", 10));
+        return $result->paginate(Config::get('packages.frontend.products.item_per_page', 10));
     }
 
     /**
@@ -63,7 +63,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return Illuminate\Support\Collection
      */
     public function get_by_id($id) {
-        $result = $this->model->where("id", $id)
+        $result = $this->model->where('id', $id)
         ->with([
             'seller' => function($query) {
 
@@ -84,18 +84,41 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     public function get_categories() {
         $result = $this->product_category_model->where([
-            "parent_id" => 0,
-            "deleted" => 0,
-            "status" => 1
-        ])->select("title as label", "id as value", "icon_link")->get();
+            'parent_id' => 0,
+            'deleted' => 0,
+            'status' => 1
+        ])->select('title as label', 'id as key', 'id as value', 'icon_link')->get();
         foreach($result as $key => $item) {
             $id = $item->value;
             $item->children = $this->product_category_model->where([
-                "parent_id" => $id,
-                "deleted" => 0,
-                "status" => 1
-            ])->select("title as label", "id as value")->get();
+                'parent_id' => $id,
+                'deleted' => 0,
+                'status' => 1
+            ])->select('title as label', 'id as key', 'id as value', 'icon_link')->get();
         }
+        return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $data
+     * @return mixed
+     */
+    public function get_category_by_id($data) {
+        $id = isset($data['id']) ? $data['id'] : 0;
+        $result = $this->product_category_model->where([
+            'deleted' => 0,
+            'status' => 1
+        ])->select('title', 'title as label', 'id as value', 'icon_link')->find($id);
+        // foreach($result as $key => $item) {
+        //     $id = $item->value;
+        //     $item->children = $this->product_category_model->where([
+        //         'parent_id' => $id,
+        //         'deleted' => 0,
+        //         'status' => 1
+        //     ])->select('title as label', 'id as value')->get();
+        // }
         return $result;
     }
 
@@ -114,7 +137,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ])->first();
         if(empty($seller_id) || empty($seller)) return false;
         $existed = $this->model->where([
-            // "status" => 1,
+            // 'status' => 1,
             'deleted' => 0,
             'seller_id' => $seller->id
         ])->with([
@@ -122,5 +145,21 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ])->paginate(10);
         if(empty($existed)) return false;
         return $existed;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $data
+     * @return mixed
+     */
+    public function get_products_by_category($data) {
+        $category_id = isset($data['category_id']) ? $data['category_id'] : 0;
+        $result = $this->model->where([
+            'status' => 1,
+            'deleted' => 0,
+            'category_id' => $category_id
+        ])->get();
+        return $result;
     }
 }

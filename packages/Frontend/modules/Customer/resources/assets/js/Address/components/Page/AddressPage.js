@@ -26,6 +26,23 @@ const AddressPage = (props) => {
         }
     }
 
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo:
+     * @param {Objtec} item
+     * @return {void}
+     */
+    const editAddress = (item) => {
+        if(item.id) {
+            return setRouter({
+                module: 'customer',
+                controller: 'address',
+                action: 'upsert',
+                id: item.id
+            });
+        }
+    }
+
     useEffect(function() {
         if(mouted) {
             get_address(1, {});
@@ -68,7 +85,7 @@ const AddressPage = (props) => {
                                                 </Col>
                                                 <Col span={4}>
                                                     <Popover content={`Thay đổi địa chỉ giao hàng`} title={`Bạn có muốn thay đổi ?`}>
-                                                        <Button type='link'>Chỉnh sửa</Button>
+                                                        <Button type='link' onClick={() => editAddress(item)}>Chỉnh sửa</Button>
                                                     </Popover>
                                                     { item.is_default === 1 ? `` : <Popconfirm title='Bạn có muốn xóa ?' placement='leftTop' onConfirm={() => removeAddress(item)}>
                                                     <Button type='primary' danger style={{ marginLeft: 16 }}>Xóa</Button></Popconfirm> }

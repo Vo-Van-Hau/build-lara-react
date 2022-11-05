@@ -1,11 +1,13 @@
 import {
-    GET_PRODUCTS, SET_PAGINATION,
-    SET_TABLE_LOADING, MOUTED
+    GET_PRODUCTS, SET_PAGINATION, GET_PRODUCT_CATEGORIES,
+    SET_TABLE_LOADING, MOUTED, GET_PRODUCT_CATEGORY,
 } from '../Dispatch/type';
 
 export const initialState = {
     products: [],
-    config:{
+    product_categories: [],
+    product_category: {},
+    config: {
         status: []
     },
     pagination: {
@@ -26,6 +28,10 @@ export const ProductsReducer = (state = initialState, action) => {
     switch (type) {
         case GET_PRODUCTS:
             return {...state, products: [...payload]};
+        case GET_PRODUCT_CATEGORIES:
+            return {...state, product_categories: [...payload]};
+        case GET_PRODUCT_CATEGORY:
+            return {...state, product_category: {...payload}};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:

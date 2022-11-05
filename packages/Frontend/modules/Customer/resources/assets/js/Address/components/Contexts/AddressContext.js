@@ -3,7 +3,7 @@ import { createSearchParams } from 'react-router-dom';
 import { initialState, AddressReducer } from '../Reducers/AddressReducer';
 import {
     GET_ADDRESS, GET_AREAS, GET_DISTRICTS, GET_WARDS,
-    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
+    SET_PAGINATION, SET_TABLE_LOADING, MOUTED, GET_ITEM
 } from '../Dispatch/type';
 import Helper from '../Helper/Helper';
 
@@ -34,6 +34,26 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         .finally(() => {set_table_loading();});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get address item
+     * @param {number} id
+     * @return {void}
+     */
+     const get_item = (id) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/get_item`, {id})
+        .then((res) => {
+            let { status, data, message } = res.data;
+            let { item } = data;
+            dispatch({ type: GET_ITEM, payload: item });
+            return res;
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: get areas
@@ -112,7 +132,7 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/address/address/save_new`, {...data})
+        .post(`/address/address/save`, {...data})
         .then((res) => {
             let { status, message } = res.data;
             if(status) {
@@ -123,9 +143,9 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
                     action: '#',
                     id: '#',
                 });
-                Helper.Notification('success', '[Save a new address]', message);
+                Helper.Notification('success', '[Save address]', message);
             } else {
-                Helper.Notification('error', '[Save a new address]', message);
+                Helper.Notification('error', '[Save address]', message);
             }
         })
         .catch((errors) => {})
@@ -205,7 +225,7 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         data: {...data, config},
         history, dispatch, get_axios, set_table_loading, set_mouted,
         setRouter, get_address, get_areas, get_districs_by_province,
-        get_wards_by_district, save_address, delete_address,
+        get_wards_by_district, save_address, delete_address, get_item,
     };
 
     return (

@@ -7,10 +7,10 @@ import Meta from 'antd/lib/card/Meta';
 import { ProductsContext } from '../Contexts/ProductsContext';
 const { Title, Text } = Typography;
 
-const ProductsPage = (props) => {
+const ProductsPage = ({keyID, ...props}) => {
 
-    const { setRouter, data, get_products } = useContext(ProductsContext);
-    const { products } = data;
+    const { setRouter, data, get_products, get_product_categories } = useContext(ProductsContext);
+    const { products, mouted, product_categories } = data;
 
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(5);
@@ -29,27 +29,10 @@ const ProductsPage = (props) => {
         textAlign: 'center',
         background: '#364d79',
     };
-    const productArr = [
-        { id: 1, img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-        { id: 2, img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-        { id: 3, img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-        { id: 4, img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-        { id: 5, img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-        { id: 6, img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-        { id: 7, img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
-    ]
     const handleChange = value => {
         setMinValue((value - 1) * numEachPage);
         setMaxValue(value * numEachPage);
     };
-    const menuItems = [
-        { key: 1, label: 'Thịt, Rau Củ' },
-        { key: 2, label: 'Bách Hóa' },
-        { key: 3, label: 'Nhà Cửa' },
-        { key: 4, label: 'Điện Tử' },
-        { key: 5, label: 'Thiết Bị Số' },
-        { key: 6, label: 'Điện Thoại' },
-    ];
 
     const menuRightItems = [
         { key: 1, label: 'Popular' },
@@ -60,7 +43,10 @@ const ProductsPage = (props) => {
     ];
 
     useEffect(() => {
-        get_products();
+        if(mouted) {
+            get_products();
+            get_product_categories();
+        }
     }, []);
 
     return (<>
@@ -69,16 +55,16 @@ const ProductsPage = (props) => {
                 <HomeOutlined />
             </Breadcrumb.Item>
             <Breadcrumb.Item style={{ cursor: 'pointer' }}>
-                <span>Products</span>
+                <span>Sản phẩm</span>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>Products</Breadcrumb.Item>
+            <Breadcrumb.Item>Sản phẩm gợi ý</Breadcrumb.Item>
         </Breadcrumb>
         <Row className='products_by_category_container' gutter={24}>
             <Col className='leftSide' span={5}>
                 <Affix className='fixBar' offsetTop={0}>
                     <div>
-                        <Title level={5}>Product Category</Title>
-                        <Menu items={menuItems} />
+                        <Title level={5}>Danh sách thể loại</Title>
+                        <Menu items={product_categories} />
                         <Divider />
                     </div>
                 </Affix>
@@ -105,12 +91,12 @@ const ProductsPage = (props) => {
                 <Menu items={menuRightItems} mode="horizontal" />
                 <Row className="productContainer">
                     <Space size={[20, 16]} wrap style={{ width: '100%' }} >
-                        {productArr.slice(minValue, maxValue).map((item, index) => (
+                        {products.slice(minValue, maxValue).map((item, index) => (
                             <Card className="productItem"
                                 key={index}
                                 hoverable
                                 style={{ width: 200 }}
-                                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+                                cover={<img alt={item.slug_name} src={item.image_link} />}
                                 onClick={() => setRouter({
                                     module: 'products',
                                     controller: 'productdetail',
@@ -118,26 +104,24 @@ const ProductsPage = (props) => {
                                     id: item.id,
                                 })}
                             >
-                                <Meta title={item.title} />
+                                <Meta title={item.name} />
 
                                 <div className="rating">
                                     <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled />
                                     <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
                                 </div>
 
-                                <Text className="price" type="danger" strong>120.000 đ</Text>
+                                <Text className="price" type="danger" strong>{item.price} đ</Text>
                             </Card>
                         ),
                         )}
                     </Space>
-
                     <Pagination
                         defaultCurrent={1}
                         defaultPageSize={5} //default size of page
                         onChange={handleChange}
-                        total={productArr.length}//total number of card data available/>
+                        total={products.length}//total number of card data available/>
                     />
-
                 </Row>
             </Col>
         </Row>

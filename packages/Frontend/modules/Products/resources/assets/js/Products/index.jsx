@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductsPage from './components/Page/Products';
+import ProductsByCategoryPage from './components/Page/ProductsByCategoryPage';
 import GroupsContextProvicer from './components/Contexts/ProductsContext';
 
 const Products = (props) => {
@@ -32,19 +33,36 @@ const Products = (props) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get action
+     * @param:
+     * @returns {void}
+     */
+     const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
      * @param:
      * @returns {void}
      */
     const render_view = () => {
-        switch (action) {
+        switch(action) {
+            case 'bycategory': return (<ProductsByCategoryPage keyID={id} {...props}/>)
             default: return (<ProductsPage {...props}/>);
         }
     }
 
     useEffect(function() {
-        // get_config();
-    }, []);
+        get_config();
+        get_action();
+    }, [props]);
 
     return (
         <>

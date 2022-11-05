@@ -2,7 +2,8 @@ import React, { createContext, useReducer } from 'react';
 import { createSearchParams } from 'react-router-dom';
 import { initialState, ProductsReducer } from '../Reducers/ProductsReducer';
 import {
-    GET_PRODUCTS, SET_TABLE_LOADING, MOUTED
+    GET_PRODUCTS, SET_TABLE_LOADING, MOUTED, GET_PRODUCT_CATEGORIES,
+    GET_PRODUCT_CATEGORY,
 } from '../Dispatch/type';
 
 export const ProductsContext = createContext();
@@ -39,7 +40,7 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
+     * @todo: get products by options
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
@@ -60,55 +61,75 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
+     * @todo: get products by category
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
      */
-    const get_parent_groups = () =>{
-        return axios
-        .get_secured()
-        .post(`/users/groups/get_parents`);
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: storage group
-     * @param {Object} values
-     * @return {void}
-     */
-    const storage_group = (values) => {
-        return axios
-        .get_secured()
-        .post(`/users/groups/storage`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: update group
-     * @param {Object} values
-     * @return {void}
-     */
-    const update_group = (values) => {
-        return axios
-        .get_secured()
-        .post(`/users/groups/update`, {...values});
-    }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: destroy group
-     * @param {number} id
-     * @return {void}
-     */
-    const destroy_group = (id) => {
+    const get_products_by_category = (data) => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/users/groups/destroy`, {id});
+        .post(`/products/products/get_products_by_category`, {...data})
+        .then((res) => {
+            let { data, status } = res.data;
+            if(status) {
+                let { products } = data;
+                dispatch({ type: GET_PRODUCTS, payload: products });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
     }
 
-   
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get product categories
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+     const get_product_categories = (page, keySearch) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/products/products/get_product_categories?page=${page}`, {...keySearch})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { categories } = res.data.data;
+                dispatch({ type: GET_PRODUCT_CATEGORIES, payload: categories });
+                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get product category
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+     const get_product_category = (data) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/products/products/get_product_category`, {...data})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { item } = res.data.data;
+                dispatch({ type: GET_PRODUCT_CATEGORY, payload: item });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: set table loading...
@@ -135,11 +156,9 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config},
-        history, dispatch, get_axios, storage_group,
-        get_products,
-        get_parent_groups, update_group, destroy_group, 
-        set_table_loading, set_mouted, setRouter
+        data: {...data, config}, get_product_categories, get_products_by_category,
+        history, dispatch, get_axios, get_products, get_product_category,
+        set_table_loading, set_mouted, setRouter,
     };
 
     return (
