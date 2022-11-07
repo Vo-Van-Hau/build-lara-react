@@ -246,8 +246,8 @@ const HomePage = (props) => {
                     ),
                     )}
                 </Space>
-                <Row justify='center'>
-                    <Button type="primary" style={{margin:'1rem 0'}} danger>
+                <Row align='center'>
+                    <Button span={24} type="primary" style={{margin:'1rem 0'}} danger>
                         Xem thêm
                     </Button>
                 </Row>

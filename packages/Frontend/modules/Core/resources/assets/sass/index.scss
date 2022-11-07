@@ -10,9 +10,13 @@
 //     transition: all 0.2s;
 // }
 
-.header_container {
-    padding: 1rem 0;
+.main_header_container{
     background: rgb(26, 148, 255);
+}
+.header_container {
+    width: 1270px;
+    margin: 0 auto 0 auto;
+    padding: 0 0;
     align-items: center;
     .logo_container {
         display: flex;

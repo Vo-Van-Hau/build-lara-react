@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Dropdown } from 'antd';
+import { Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Dropdown, Menu } from 'antd';
 import { UserOutlined, SearchOutlined, ShoppingCartOutlined, DownOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -24,6 +24,43 @@ const HeaderSection = ({ ...props }) => {
          setIsModalOpen(false);
      };
 
+     const accountdropdown = (
+        <Menu
+            items={[
+                {
+                    key: '1',
+                    label: (
+                        <Link to='/shopping/account/account'>Thông báo</Link>
+                    )
+                },
+                {
+                    key: '2',
+                    label: (
+                        <Link to='/seller'>Đơn hàng của tôi</Link>
+                    )
+                },
+                {
+                    key: '3',
+                    label: (
+                        <Link to=''>Tài khoản của tôi</Link>
+                    )
+                },
+                {
+                    key: '4',
+                    label: (
+                        <Link to=''>Đăng xuất</Link>
+                    )
+                },
+            ]}
+
+            style={{
+                width:'200px',
+                padding: '1rem .5rem'
+            }}
+
+        />
+        );
+
      // const confirm = () => {
      //     message.info('Clicked on Yes.');
      // };
@@ -43,9 +80,11 @@ const HeaderSection = ({ ...props }) => {
                  <Col className='header_account_container' >
                      <UserOutlined style={{ color: '#fff', fontSize: '32px' }} />
                      <div className='user_itemText'>
-                         <Button type="text" style={{ color: '#fff' }} onClick={showModal} >
-                             Login / SignUp
-                         </Button>
+                        <Dropdown overlay={accountdropdown} placement="bottom"  arrow>
+                            <Button type="text" style={{ color: '#fff' }}  >
+                                Login / SignUp
+                            </Button>
+                        </Dropdown>
                      </div>
                  </Col>
 
@@ -55,7 +94,7 @@ const HeaderSection = ({ ...props }) => {
                      </Badge>
                      <div className='user_itemText'>
                          <Button type="text" style={{ color: '#fff' }} >
-                             Cart
+                             Giỏ hàng
                          </Button>
                      </div>
                  </Col>
