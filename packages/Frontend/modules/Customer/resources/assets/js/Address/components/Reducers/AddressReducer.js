@@ -1,11 +1,12 @@
 import {
     GET_ADDRESS, GET_AREAS, GET_DISTRICTS,
-    SET_PAGINATION, GET_WARDS,
+    SET_PAGINATION, GET_WARDS, GET_ITEM,
     SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const initialState = {
     address: [],
+    item: {},
     areas: {
         countries: {
             provinces: [],
@@ -45,6 +46,8 @@ export const AddressReducer = (state = initialState, action) => {
             var areas = state.areas;
             areas.countries.wards = payload;
             return {...state, areas: {...areas}};
+        case GET_ITEM:
+            return {...state, item: {...payload}};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:

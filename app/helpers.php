@@ -3,31 +3,130 @@
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-if (!function_exists("app_url")) {
-    function app_url() { 
+if(!function_exists('app_url')) {
+    function app_url() {
         if(app()->runningInConsole()){
-            return env("APP_URL", "http://localhost");
+            return env('APP_URL', 'http://localhost');
         }
         $url = request()->root();
-        $url = str_replace(["http://","https://"], "", $url);
-        $list_url = env("APP_MULTI_URL", "");
+        $url = str_replace(['http://","https://'], '', $url);
+        $list_url = env('APP_MULTI_URL', '');
         $list_url = explode("|", $list_url);
         if(($index = array_search($url, $list_url)) !== false){
             // && env("APP_ENV") == "production"
             $url = $list_url[$index];
 
-            return "https://" . $url;
+            return 'https://' . $url;
         }
-        return env("APP_URL", "http://localhost");
+        return env('APP_URL', 'http://localhost');
     }
 }
 
-if(!function_exists("change_boolean")) {
+if(!function_exists('change_boolean')) {
     function change_boolean($value = null) {
-        if($value == "false" || $value == "0" || $value == "undefined") return false;
+        if($value == 'false' || $value == '0' || $value == 'undefined') return false;
         return true;
     }
 }
+if(!function_exists('get_time_ago')) {
+    /**
+     * @param string $time -> type: seconds
+     */
+    function get_time_ago($time) {
+
+        $time_ago = $time;
+        $cur_time = time();
+        $time_elapsed = $cur_time - $time_ago;
+        $seconds = $time_elapsed ;
+
+        $minutes    = round($time_elapsed / 60 );
+        $hours      = round($time_elapsed / 3600);
+        $days       = round($time_elapsed / 86400 );
+        $weeks      = round($time_elapsed / 604800);
+        $months     = round($time_elapsed / 2600640 );
+        $years      = round($time_elapsed / 31207680 );
+
+        // Seconds
+        if($seconds <= 60){
+            // return "Mới cập nhật";
+            return trans('common.1543');
+        } elseif($minutes <= 60) {
+            // Minutes
+            // if($minutes == 1) {
+            // 	// return "1 phút trước";
+            // 	return trans('common.1544', [
+            // 		'key' => '1'
+            // 	]);
+            // } else {
+            // 	// return $minutes." phút trước";
+            // 	return trans('common.1544', [
+            // 		'key' => $minutes
+            // 	]);
+            // }
+            return trans('common.1544', [
+                'key1' => $minutes
+            ]);
+        } elseif($hours <= 24) {
+            // Hours
+            // if($hours == 1) {
+            // 	// return "1 giờ trước";
+            // 	return trans('common.1545', [
+            // 		'key1' => '1'
+            // 	]);
+            // } else {
+            // 	// return $hours." giờ trước";
+            // 	return trans('common.1545', [
+            // 		'key1' => $hours
+            // 	]);
+            // }
+            return trans('common.1545', [
+                'key1' => $hours
+            ]);
+        } elseif($days <= 7) {
+            // Days
+            if($days == 1) {
+                // return "Hôm qua";
+                return trans('common.1546');
+            } else {
+                // return $days." ngày trước";
+                return trans('common.1547', [
+                    'key1' => $days
+                ]);
+            }
+        } elseif($weeks <= 4.3) {
+            // Weeks
+            /*if($weeks==1){
+                return "Cách đây 1 tuần";
+            }
+            else{
+                return "Cách đây $weeks tuần";
+            }*/
+            return ": " . date('d/m/Y', $time);
+        } elseif($months <= 12) {
+            // Months
+            /*if($months==1){
+                return "Cách đây 1 tháng";
+            }
+            else{
+                return "Cách đây $months tháng";
+            }*/
+            return ": " . date('d/m/Y', $time);
+        } else {
+            // Years
+            /*if($years==1){
+                return "Cách đây 1 năm";
+            }
+            else{
+                return "Cách đây $years năm";
+             }*/
+            return ": " . date('d/m/Y', $time);
+        }
+        return '';
+    }
+}
+
+
+//----------------------------------------Not Approve - Overview later----------------------------------------
 if (!function_exists('array_add')) {
     /**
      * Add an element to an array using "dot" notation if it doesn't exist.

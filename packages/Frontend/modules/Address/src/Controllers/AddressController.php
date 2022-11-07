@@ -118,6 +118,73 @@ class AddressController extends ControllerBase {
         }
         return $this->response_base(["status" => false], "Access denied !", 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo save customer-address
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function save(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->AddressRepository->save_customer_address($input);
+            if(!empty($result)) {
+                return $this->response_base([
+                    'status' => true,
+                ], 'You have saved address successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to save address !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo delete an existed customer-address
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function delete_address(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->AddressRepository->delete_customer_address($input);
+            if(!empty($result)) {
+                return $this->response_base([
+                    'status' => true,
+                ], 'You have deleted an existed address successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to delete an existed address !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo get address item
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_item(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->AddressRepository->get_by_id($input);
+            if(!empty($result)) {
+                return $this->response_base([
+                    'status' => true,
+                    'item' => $result,
+                ], 'You have got item successfully !!!', 200);
+            }
+            return $this->response_base(["status" => false], "You have failed to get item !!!", 200);
+        }
+        return $this->response_base(["status" => false], "Access denied !", 200);
+    }
 }
 
 

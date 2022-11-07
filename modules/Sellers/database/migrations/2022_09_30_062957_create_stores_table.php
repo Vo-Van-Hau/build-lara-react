@@ -27,6 +27,13 @@ class CreateStoresTable extends Migration {
             $table->integer("deleted")->default(0);
             $table->dateTime("deleted_at")->nullable();
         });
+        if(Schema::hasTable('stores')) {
+            if(!Schema::hasColumn('stores', 'joined_date')) {
+                Schema::table('stores', function(Blueprint $table) {
+                    $table->timestamp('joined_date');
+                });
+            }
+        }
     }
 
     /**

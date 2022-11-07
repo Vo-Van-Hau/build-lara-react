@@ -11,14 +11,27 @@ const { Content, Footer, Sider } = Layout;
 const { TextArea } = Input;
 const { Option } = Select;
 
-const ActionAddress = (props) => {
-    const { data, setRouter, get_areas, get_districs_by_province, get_wards_by_district } = useContext(AddressContext);
-    const { areas, loading_table } = data;
+const ActionAddress = ({keyID, ...props}) => {
+    const {
+        data, setRouter, get_areas, get_districs_by_province, get_wards_by_district,
+        save_address, get_item,
+    } = useContext(AddressContext);
+    const { areas, loading_table, mouted } = data;
     const { countries } = areas;
     const { provinces, districts, wards } = countries;
+    const [form] = Form.useForm();
 
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo
+     * @param {Objtec} values
+     * @return {void}
+     */
     const onFinish = (values) => {
-        console.log('Success:', values);
+        if(keyID) {
+            values.keyID = keyID;
+        }
+        save_address(values);
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -41,8 +54,29 @@ const ActionAddress = (props) => {
     };
 
     useEffect(() => {
-        get_areas();
-    }, []);
+        if(mouted) {
+            get_areas();
+            if(keyID) {
+                get_item(keyID).then((res) => {
+                    let { status, data, message } = res.data;
+                    let { item } = data;
+                    onChangeAreas(2, item.province_id);
+                    onChangeAreas(3, item.district_id);
+                    form.setFieldsValue({
+                        customer_name: item.customer_name,
+                        company_name: item.company_name,
+                        phone: item.phone,
+                        address: item.address,
+                        delivery_address_type: item.delivery_address_type,
+                        province_id: item.province_id,
+                        district_id: item.district_id,
+                        ward_id: item.ward_id,
+                        is_default: item.is_default,
+                    });
+                });
+            }
+        }
+    }, [keyID]);
 
     return (
         <Layout>
@@ -56,23 +90,23 @@ const ActionAddress = (props) => {
                             onFinish={onFinish}
                             onFinishFailed={onFinishFailed}
                             autoComplete="off"
+                            form={form}
+                            loading={true}
                         >
-                            <Form.Item label="Họ và tên" name="fullname" placeholder="Nhập họ và tên..."
+                            <Form.Item label="Họ và tên" name="customer_name" placeholder="Nhập họ và tên..."
                                 rules={[{
                                     required: true,
                                     message: 'Hãy nhập Họ và Tên!',
                                 },]}>
                                 <Input />
                             </Form.Item>
-
-                            <Form.Item label="Công ty" name="company" placeholder="Nhập công ty..."
+                            <Form.Item label="Công ty" name="company_name" placeholder="Nhập công ty..."
                                 rules={[{
                                     required: true,
                                     message: 'Hãy nhập Công ty!',
                                 }]}>
                                 <Input />
                             </Form.Item>
-
                             <Form.Item label="Số điện thoại" name="phone" placeholder="Nhập số điện thoại..."
                                 rules={[{
                                     required: true,
@@ -80,8 +114,7 @@ const ActionAddress = (props) => {
                                 },]}>
                                 <Input />
                             </Form.Item>
-
-                            <Form.Item name="city" label="Thành phố / Tỉnh" rules={[{ required: true }]}>
+                            <Form.Item name="province_id" label="Thành phố / Tỉnh" rules={[{ required: true }]}>
                                 <Select
                                     placeholder="Chọn Tỉnh / Thành phố..."
                                     onChange={(value) => onChangeAreas(2, value)}
@@ -94,7 +127,7 @@ const ActionAddress = (props) => {
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item name="district" label="Quận / Huyện" rules={[{ required: true }]}>
+                            <Form.Item name="district_id" label="Quận / Huyện" rules={[{ required: true }]}>
                                 <Select
                                     placeholder="Chọn Quận / Huyện"
                                     onChange={(value) => onChangeAreas(3, value)}
@@ -107,7 +140,7 @@ const ActionAddress = (props) => {
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item name="ward" label="Phường / Xã" rules={[{ required: true }]}>
+                            <Form.Item name="ward_id" label="Phường / Xã" rules={[{ required: true }]}>
                                 <Select
                                     placeholder="Chọn Phường / Xã"
                                     allowClear
@@ -118,31 +151,26 @@ const ActionAddress = (props) => {
                                     })}
                                 </Select>
                             </Form.Item>
-
-                            <Form.Item label="Địa chỉ" name="address" placeholder="Nhập địa chỉ..."  >
+                            <Form.Item label="Địa chỉ" name="address" placeholder="Nhập địa chỉ...">
                                 <TextArea showCount maxLength={100} style={{ height: 120 }} />
                             </Form.Item>
-
-
-                            <Form.Item name="addressType" label="Loại địa chỉ">
+                            <Form.Item name="delivery_address_type" label="Loại địa chỉ">
                                 <Radio.Group>
-                                    <Radio value="1">Nhà / Chung cư</Radio>
-                                    <Radio value="2">Cơ quan / Công ty</Radio>
+                                    <Radio value="house">Nhà / Chung cư</Radio>
+                                    <Radio value="company">Cơ quan / Công ty</Radio>
                                 </Radio.Group>
                             </Form.Item>
-
-                            <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+                            <Form.Item name="is_default" valuePropName="checked" wrapperCol={{ offset: 8, span: 0 }}>
                                 <Checkbox>Đặt làm địa chỉ mặc định</Checkbox>
                             </Form.Item>
-
                             <Form.Item
                                 wrapperCol={{
                                     offset: 8,
-                                    span: 16,
+                                    span: 0,
                                 }}
                             >
                                 <Button type="primary" htmlType="submit">
-                                    Thêm địa chỉ
+                                    {keyID ? `Cập nhật địa chỉ` : `Thêm địa chỉ`}
                                 </Button>
                             </Form.Item>
                         </Form>

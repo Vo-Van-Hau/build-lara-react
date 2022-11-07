@@ -9,13 +9,15 @@ import ContentSection from './ContentSection';
  * @param {Object} props
  * @returns
  */
-const MasterLayout = ({ history, ...props }) => {
+const MasterLayout = (props) => {
+
+    const { history } = props;
 
     return (
         <>
             <Layout>
                 <Layout className="site-layout" style={{}}>
-                    <HeaderSection />
+                    <HeaderSection {...props}/>
                     <ContentSection history={history}/>
                     <FooterSection />
                 </Layout>

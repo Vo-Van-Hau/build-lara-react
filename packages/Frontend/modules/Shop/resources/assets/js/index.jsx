@@ -1,4 +1,4 @@
-import Products from './Products';
+import Shop from './Shop';
 
-export default Products;
-export { Products as products }
+export default Shop;
+export { Shop as shop }

@@ -7,8 +7,13 @@ export const initialState = {
     product_item: {
         seller: {
             store: {
-
+                name: '',
+                brand_logo: ''
             }
+        },
+        category: {
+            id: 0,
+            title: '',
         }
     },
     config:{

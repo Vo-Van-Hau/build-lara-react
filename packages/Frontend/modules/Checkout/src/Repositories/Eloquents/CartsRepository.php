@@ -138,7 +138,56 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
                 "deleted" => 0,
                 "ordered" => 0
             ]);
-        return $result;
+        if(!empty($result)) {
+            if(!empty($result["user"]) && !empty($result["user"]['customer'] && $result['user']['customer']['customer_address'])) {
+                foreach($result['user']['customer']['customer_address'] as $key => $address) {
+                    if(!is_null($address["province"])) {
+                        switch($address["province"]["type"]) {
+                            case "province":
+                                $address["province"]["type"] = trans("AddressFrontend::common.0");
+                                break;
+                            case "city":
+                                $address["province"]["type"] = trans("AddressFrontend::common.1");
+                                break;
+                            default: $address["province"]["type"] = trans("AddressFrontend::common.0");
+                        }
+                    }
+                    if(!is_null($address["district"])) {
+                        switch($address["district"]["type"]) {
+                            case "district":
+                                $address["district"]["type"] = trans("AddressFrontend::common.2");
+                                break;
+                            case "city":
+                                $address["district"]["type"] = trans("AddressFrontend::common.1");
+                                break;
+                            case "district_city":
+                                $address["district"]["type"] = trans("AddressFrontend::common.4");
+                                break;
+                            case "town":
+                                $address["district"]["type"] = trans("AddressFrontend::common.3");
+                                break;
+                            default: $address["district"]["type"] = trans("AddressFrontend::common.2");
+                        }
+                    }
+                    if(!is_null($address["ward"])) {
+                        switch($address["ward"]["type"]) {
+                            case "ward":
+                                $address["ward"]["type"] = trans("AddressFrontend::common.6");
+                                break;
+                            case "commune":
+                                $address["ward"]["type"] = trans("AddressFrontend::common.5");
+                                break;
+                            case "town":
+                                $address["ward"]["type"] = trans("AddressFrontend::common.7");
+                                break;
+                            default: $address["ward"]["type"] = trans("AddressFrontend::common.6");
+                        }
+                    }
+                }
+            }
+            return $result;
+        }
+        return false;
     }
 
     /**

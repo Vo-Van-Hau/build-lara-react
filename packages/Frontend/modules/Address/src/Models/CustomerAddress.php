@@ -14,7 +14,7 @@ class CustomerAddress extends ModelBase {
     protected $connection = "mysql";
     protected $table = "customer_address";
 
-    protected $fillable = [];
+    protected $fillable = ['id'];
 
     /**=======================
      *     RelationShip

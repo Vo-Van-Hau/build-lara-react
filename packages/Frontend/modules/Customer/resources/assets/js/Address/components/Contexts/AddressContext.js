@@ -3,8 +3,9 @@ import { createSearchParams } from 'react-router-dom';
 import { initialState, AddressReducer } from '../Reducers/AddressReducer';
 import {
     GET_ADDRESS, GET_AREAS, GET_DISTRICTS, GET_WARDS,
-    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
+    SET_PAGINATION, SET_TABLE_LOADING, MOUTED, GET_ITEM
 } from '../Dispatch/type';
+import Helper from '../Helper/Helper';
 
 export const AddressContext = createContext();
 
@@ -28,12 +29,31 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
             let { status, data, message } = res.data;
             let { address } = data;
             dispatch({ type: GET_ADDRESS, payload: address });
-            // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get address item
+     * @param {number} id
+     * @return {void}
+     */
+     const get_item = (id) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/get_item`, {id})
+        .then((res) => {
+            let { status, data, message } = res.data;
+            let { item } = data;
+            dispatch({ type: GET_ITEM, payload: item });
+            return res;
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: get areas
@@ -102,6 +122,60 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         .finally(() => {set_table_loading();});
     }
 
+     /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: save new address
+     * @param {array} data
+     * @return {void}
+     */
+    const save_address = (data) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/save`, {...data})
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                get_address(1, {});
+                setRouter({
+                    module: 'customer',
+                    controller: 'address',
+                    action: '#',
+                    id: '#',
+                });
+                Helper.Notification('success', '[Save address]', message);
+            } else {
+                Helper.Notification('error', '[Save address]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: delete an existed address
+     * @param {number} id
+     * @return {void}
+     */
+    const delete_address = (id) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/delete_address`, {id})
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                get_address(1, {});
+                Helper.Notification('success', '[Delete an existed address]', message);
+            } else {
+                Helper.Notification('error', '[Delete an existed address]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
     const setRouter = ({
         action,
         id = '',
@@ -151,7 +225,7 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         data: {...data, config},
         history, dispatch, get_axios, set_table_loading, set_mouted,
         setRouter, get_address, get_areas, get_districs_by_province,
-        get_wards_by_district
+        get_wards_by_district, save_address, delete_address, get_item,
     };
 
     return (

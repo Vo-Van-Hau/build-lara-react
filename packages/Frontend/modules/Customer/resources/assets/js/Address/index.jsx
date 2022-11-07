@@ -56,7 +56,7 @@ const Address = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            case 'upsert': return <ActionAddress {...props}/>;
+            case 'upsert': return <ActionAddress keyID={id} {...props}/>;
             default: return (<AddressPage {...props}/>);
         }
     }

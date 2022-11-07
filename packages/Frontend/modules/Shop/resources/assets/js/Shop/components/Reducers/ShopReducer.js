@@ -1,11 +1,17 @@
 import {
-    GET_GROUPS, SET_USER_GROUPS, SET_PAGINATION,
-    SET_TABLE_LOADING, MOUTED
+    SET_PAGINATION, SET_TABLE_LOADING, MOUTED, GET_SELLER_PRODUCTS,
+    GET_SHOP,
 } from '../Dispatch/type';
 
 export const initialState = {
-    groups:[],
-    config:{
+    products: [],
+    shop: {
+        store: {
+            name: '',
+            joined_date: '00/00/0000'
+        }
+    },
+    config: {
         status: []
     },
     pagination: {
@@ -23,16 +29,11 @@ export const initialState = {
 
 export const ShopReducer = (state = initialState, action) => {
     let { type, payload } = action;
-    switch (type) {
-        case GET_GROUPS:
-            return {...state, groups: [...payload]};
-        case SET_USER_GROUPS:
-            let {id, users} = payload;
-            let { groups } = state;
-            let index = groups.findIndex(item => item.id === id);
-            let record = groups.find(item => item.id === id);
-            groups[index] = {...record, users:[...users]};
-            return {...state, groups: [...groups]};
+    switch(type) {
+        case GET_SELLER_PRODUCTS:
+            return {...state, products: [...payload]};
+        case GET_SHOP:
+            return {...state, shop: {...payload}};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:

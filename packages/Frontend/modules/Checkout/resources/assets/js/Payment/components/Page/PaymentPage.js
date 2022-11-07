@@ -11,34 +11,26 @@ const PaymentPage = (props) => {
     const { cart, loading_table, payment_methods } = data;
     const { cart_detail, user } = cart;
     const { customer } = user;
+    const { customer_address } = customer;
 
-    const list = [
-        {
-            title: 'We Will Be Happy, In Different Ways',
-            img: 'https://salt.tikicdn.com/cache/96x96/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            quantity: '3',
-            price: 20000,
-        },
-        {
-            title: 'We Will Be Happy, In Different Ways',
-            img: 'https://salt.tikicdn.com/cache/96x96/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            quantity: '3',
-            price: 20000,
-        },
-        {
-            title: 'We Will Be Happy, In Different Ways',
-            img: 'https://salt.tikicdn.com/cache/96x96/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            quantity: '3',
-            price: 20000,
-        },
-        {
-            title: 'We Will Be Happy, In Different Ways',
-            img: 'https://salt.tikicdn.com/cache/96x96/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-            quantity: '3',
-            price: 20000,
-        },
-    ];
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo
+     * @param {array} customer_address
+     * @return {Object}
+     */
+     const getDefaultDeliveryTo = (customer_address = []) => {
+        if(customer_address && Array.isArray(customer_address) && customer_address.length > 0) {
+            let result = customer_address.find((item, _i) => {
+                return item.is_default === 1;
+            });
+            return result ? result : false;
+        }
+        return false;
+    }
+
     const [value, setValue] = useState(1);
+    const defaultDeliveryTo = getDefaultDeliveryTo(customer_address);
 
     const onChange = (e) => {
         console.log('radio checked', e.target.value);
@@ -101,11 +93,18 @@ const PaymentPage = (props) => {
                 </section>
             </Col>
             <Col span={6} offset={1} className='rightSide'>
-                <Card className='client_info' title="Delivered to" extra={<a href="#">Change</a>}>
-                    <Title level={5}>{ customer && customer.fullname ? customer.fullname : 'Undefined'}</Title>
-                    <span className='phone_number'>{ customer && customer.phone ? customer.phone : 'Undefined'}</span>
+                <Card className='client_info' title="Giao tới" extra={<a href="#">Thay đổi</a>}>
+                    <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : 'Undefined'}</Title>
+                    <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : 'Undefined'}</span>
                     <span> <Divider type="vertical" /></span>
-                    <span className='phone_number'>Thu Duc, HCM City</span>
+                    <span className='address'>
+                        {
+                            (defaultDeliveryTo && defaultDeliveryTo.address && defaultDeliveryTo.ward && defaultDeliveryTo.district && defaultDeliveryTo.province)
+                            ? `${defaultDeliveryTo.address || ''}, ${defaultDeliveryTo.ward.name || ''},
+                            ${defaultDeliveryTo.district.type || ''} ${defaultDeliveryTo.district.name || ''},
+                            ${defaultDeliveryTo.province.type || ''} ${defaultDeliveryTo.province.name || ''}` : ''
+                        }
+                    </span>
                 </Card>
 
                 <Card className='checkout_container'

@@ -47,25 +47,36 @@ const FooterSection = ({...props}) => {
             </Col>
             <Col className='footer_section' flex={1}>
                 <Title level={5}>Phương thức thanh toán </Title>
-                <Row className='payment' gutter={[0, 16]} wrap>
-                    <Col className='icon' span={5}>
+                <Row className='payment' gutter={[5, 15]} wrap>
+                    <Col className='icon' >
+                        <Avatar className='icon-visa' size={34}  src="../images/icon-cash.png" alt='icon-cash'/>
+                    </Col>
+                    <Col className='icon' >
                         <Avatar className='icon-visa' size={34}  src="../images/icon-visa.png" alt='icon-visa'/>
                     </Col>
-                    <Col className='icon' span={5}>
+                    <Col className='icon' >
                         <Avatar className='icon-mastercard' size={34}  src="../images/icon-mastercard.png" alt='icon-mastercard'/>
                     </Col>
-                    <Col className='icon' span={5}>
-                        <Avatar className='icon-atm' size={34}  src="../images/icon-atm.png" alt='icon-atm'/>
-                    </Col>
-
-                    <Col className='icon' span={5}>
+                    <Col className='icon' >
                         <Avatar className='icon-momo' size={34}  src="../images/icon-momo.png" alt='icon-momo'/>
-                    </Col>
-                    <Col className='icon' span={5}>
+                    </Col> 
+                </Row>
+                <Row className='payment' gutter={[0, 16]} wrap>
+                    <Col className='icon' >
                         <Avatar className='icon-zalopay' size={34}  src="../images/icon-zalopay.png" alt='icon-zalopay'/>
                     </Col>
-                    <Col className='icon' span={5}>
-                        <Avatar className='icon-atm' size={34}  src="../images/icon-atm.png" alt='icon-atm'/>
+                    <Col className='icon' >
+                        <Avatar className='icon-atm' size={34}  src="../images/icon-paypal.png" alt='icon-paypal'/>
+                    </Col>
+                    
+                    <Col className='icon' >
+                        <Avatar className='icon-momo' size={34}  src="../images/icon-momo.png" alt='icon-momo'/>
+                    </Col>
+                    <Col className='icon'>
+                        <Avatar className='icon-zalopay' size={34}  src="../images/icon-zalopay.png" alt='icon-zalopay'/>
+                    </Col>
+                    <Col className='icon' >
+                        <Avatar className='icon-atm' size={34}  src="../images/icon-paypal.png" alt='icon-paypal'/>
                     </Col>
 
                 </Row>
