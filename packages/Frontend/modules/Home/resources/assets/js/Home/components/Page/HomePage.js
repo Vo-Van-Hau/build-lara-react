@@ -246,9 +246,11 @@ const HomePage = (props) => {
                     ),
                     )}
                 </Space>
-                <Button type="primary" danger>
-                    Xem thêm
-                </Button>
+                <Row justify='center'>
+                    <Button type="primary" style={{margin:'1rem 0'}} danger>
+                        Xem thêm
+                    </Button>
+                </Row>
             </Row>
         </>
         <BackTop />
