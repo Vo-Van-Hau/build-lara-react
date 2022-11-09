@@ -260,7 +260,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $existed->sale_price_id = $sale_price_id;
         $existed->cogs = $cogs;
         $existed->mobile_link = $mobile_link;
-        $existed->image_link = $image_link;
+        // $existed->image_link = $image_link;
         $existed->category_id = $category_id;
         $existed->currency_id = $currency_id;
         $existed->availability = $availability;

@@ -15,6 +15,7 @@ class CreateOrderDetailTable extends Migration {
         Schema::create("order_detail", function (Blueprint $table) {
             $table->increments("id")->unsigned();
             $table->integer("order_id")->unsigned();
+            $table->integer("order_tracking_status_id")->unsigned()->default(1);
             $table->integer("product_id")->unsigned();
             $table->string("product_name");
             $table->text("product_image_link");

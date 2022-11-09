@@ -9,13 +9,13 @@ use Sellers\Products\Models\ProductDescriptionDetail;
 
 class Products extends ModelBase {
 
-    protected $connection = "mysql";
-    protected $table = "products";
+    protected $connection = 'mysql';
+    protected $table = 'products';
 
     protected $fillable = [
-        "name",
-        "status",
-        "description"
+        'name',
+        'status',
+        'description'
     ];
 
     /**=======================
@@ -27,8 +27,8 @@ class Products extends ModelBase {
       * @return void
       */
     public function product_stock() {
-        return $this->hasOne(ProductStock::class, "product_id", "id")->where([
-            "product_stock.status" => 1
+        return $this->hasOne(ProductStock::class, 'product_id', 'id')->where([
+            'product_stock.status' => 1
         ]);
     }
 
@@ -38,8 +38,8 @@ class Products extends ModelBase {
     * @return void
     */
     public function product_identifiers() {
-        return $this->hasOne(ProductIdentifiers::class, "product_id", "id")->where([
-            "product_identifiers.status" => 1
+        return $this->hasOne(ProductIdentifiers::class, 'product_id', 'id')->where([
+            'product_identifiers.status' => 1
         ]);
     }
 
@@ -49,8 +49,8 @@ class Products extends ModelBase {
     * @return void
     */
     public function product_description_detail() {
-        return $this->hasOne(ProductDescriptionDetail::class, "product_id", "id")->where([
-            "product_description_detail.status" => 1
+        return $this->hasOne(ProductDescriptionDetail::class, 'product_id', 'id')->where([
+            'product_description_detail.status' => 1
         ]);
     }
 }

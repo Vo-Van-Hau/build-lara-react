@@ -6,7 +6,9 @@ use Sellers\Core\Repositories\Eloquents\BaseRepository;
 use Sellers\Orders\Interfaces\OrdersRepositoryInterface;
 use Sellers\Orders\Models\Orders;
 use Sellers\Orders\Models\OrderDetail;
+use Sellers\Orders\Models\OrderTrackingStatus;
 use Sellers\Sellers\Models\Sellers;
+use Sellers\Products\Models\Products;
 use Illuminate\Support\Facades\Config;
 
 class OrdersRepository extends BaseRepository implements OrdersRepositoryInterface {
@@ -17,6 +19,8 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
     protected $model;
     protected $order_detail_model;
     protected $sellers_model;
+    protected Products $products_model;
+    protected OrderTrackingStatus $order_tracking_status_model;
 
     /**
      * @var Eloquent | Model
@@ -28,10 +32,15 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @param Model|Eloquent $model
      *
      */
-    public function __construct(Orders $model, OrderDetail $order_detail_model, Sellers $sellers_model) {
+    public function __construct(
+        Orders $model, OrderDetail $order_detail_model, Sellers $sellers_model, Products $products_model,
+        OrderTrackingStatus $order_tracking_status_model
+    ) {
         $this->model = $model;
         $this->order_detail_model = $order_detail_model;
         $this->sellers_model = $sellers_model;
+        $this->products_model = $products_model;
+        $this->order_tracking_status_model = $order_tracking_status_model;
     }
 
     /**
@@ -94,15 +103,26 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             "user_id" => $user_id
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
-        $order_detail = $this->order_detail_model;
-        $order_detail_list = $order_detail->with([
-            "product" => function($query) use ($seller) {
-                $query->where([
-                    "seller_id" => $seller->id
-                ]);
-            },
-            "order:id,code"
-        ])->paginate(Config::get("packages.sellers.orders.per_page_item", 10));
-        return $order_detail_list;
+        $order_detail_list = $this->order_detail_model->join('orders', 'orders.id', '=', 'order_detail.order_id')
+        ->join('products', 'order_detail.product_id', '=', 'products.id')
+        ->where([
+            'products.seller_id' => $seller->id
+        ])
+        ->selectRaw('order_detail.*')
+        ->get();
+        $orders_list = [];
+        foreach($order_detail_list as $key => $order_detail) {
+            $order_detail['product'] = $this->products_model->find($order_detail['product_id']);
+            $order_detail['order_tracking_status'] = $this->order_tracking_status_model->find($order_detail['order_tracking_status_id']);
+            $orders_list[$order_detail['order_id']]['order_detail'][] = $order_detail;
+        }
+        foreach($orders_list as $key => $_order) {
+            $order = $this->model->find($key);
+            if(!empty($order)) {
+                $order['order_detail'] = $_order['order_detail'];
+                $result[] = $order;
+            }
+        }
+        return $result ?? [];
     }
 }

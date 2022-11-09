@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ListOrders from './components/Page/ListOrders';
+import OrderDetail from './components/Page/OrderDetail';
 import OrdersContextProvicer from './components/Contexts/OrdersContext';
 
 const Orders = (props) => {
@@ -30,6 +31,22 @@ const Orders = (props) => {
         .catch((errors) => {});
     }
 
+        /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get action
+     * @param:
+     * @returns {void}
+     */
+    const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
@@ -38,13 +55,15 @@ const Orders = (props) => {
      */
     const render_view = () => {
         switch(action) {
-            default: return (<ListOrders {...props}/>);
+            case 'viewdetail': return (<OrderDetail {...props} keyID={id}/>)
+            default: return (<ListOrders {...props} keyID={id}/>);
         }
     }
 
     useEffect(function() {
-        // get_config();
-    }, []);
+        get_config();
+        get_action();
+    }, [props]);
 
     return (
         <>

@@ -167,7 +167,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $order = $this->model;
         if(empty($user_id)) return false;
         $result = $order->where([
-            "status"  => 0,
+            // "status"  => 0,
             "deleted" => 0,
             "user_id" => $user_id
         ])->with([
