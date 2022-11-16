@@ -106,7 +106,7 @@ const HeaderSection = (props) => {
                 )}
                 style={{ padding: 8, }}
             />
-            <Row justify="center" style={{ padding: 8, }}> 
+            <Row justify="center" style={{ padding: 8, }}>
                 <Button type="primary" danger size='small'> Xem thêm </Button>
             </Row>
             <Divider style={{ margin: 0, }} />
@@ -305,13 +305,13 @@ const HeaderSection = (props) => {
                 </Col>
 
                 <Col className='formSearch_container' span={12} >
-                    <Search placeholder="Tìm sản phẩm, danh mục hay thương hiệu mong muốn ..."
+                    {/* <Search placeholder="Tìm sản phẩm, danh mục hay thương hiệu mong muốn ..."
                         enterButton={<><Space>
                                 <SearchOutlined />
                                 <Text><span style={{color: '#FFFFFF'}}>Tìm Kiếm</span></Text>
                             </Space></>}
                         size="large"
-                    />
+                    /> */}
                     <Cascader
                         dropdownRender={dropdownSearchbar}
                         onChange={onChange}

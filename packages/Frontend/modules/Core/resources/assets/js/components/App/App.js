@@ -1,6 +1,40 @@
 import { useContext, useEffect } from 'react';
+import i18n from 'i18next';
+import { initReactI18next, useTranslation } from 'react-i18next';
 import RoutesWeb from '../../routes/RoutesWeb';
 import { CoreContext } from '../Contexts/CoreContext';
+
+/**
+ * i18next configuration
+ */
+// the translations
+// (tip move them in a JSON file and import them,
+// or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
+const resources_i18n = {
+    en: {
+        translation: {
+            "Welcome to React": "Welcome to React and react-i18next"
+        }
+    },
+    fr: {
+        translation: {
+            "Welcome to React": "Bienvenue à React et react-i18next"
+        }
+    }
+};
+i18n
+.use(initReactI18next) // passes i18n down to react-i18next
+.init({
+    // the translations
+    // (tip move them in a JSON file and import them,
+    // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
+    resources: resources_i18n,
+    lng: 'en', // if you're using a language detector, do not define the lng option
+    fallbackLng: 'en',
+    interpolation: {
+        escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+    }
+});
 
 /**
  * @author: <vanhau.vo@urekamedia.vn>
@@ -13,6 +47,7 @@ const App = (props) => {
     const { data, get_module, get_user } = useContext(CoreContext);
     const {} = props;
     const { mouted } = data;
+    const { t } = useTranslation();
 
     useEffect(() => {
         if(mouted) {
@@ -22,7 +57,7 @@ const App = (props) => {
     }, [props]);
 
     return RoutesWeb({
-        data, get_user
+        data, get_user, t, i18n
     });
 };
 

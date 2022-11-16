@@ -70,7 +70,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
             ])->update($data_updated);
             $data_updated = [
                 'email' => isset($data['email']) ? trim($data['email']) : '',
-                'name' => isset($data['name']) ? trim($data['name']) : '',
+                'name' => isset($data['fullname']) ? trim($data['fullname']) : '',
             ];
             $affected = Users::where([
                 'id' => $user_id,
