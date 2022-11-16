@@ -27,7 +27,7 @@ class CreateOrdersTable extends Migration {
             $table->double("total_amount", 8, 2, true)->unsigned()->comment("Total amount");
             $table->integer("item_quantity")->comment("Number of products in cart");
             $table->float("discount", 8, 2, true)->unsigned()->default(0);
-            $table->integer("user_id")->unsigned()->comment("Customer ID");
+            $table->integer("user_id")->unsigned()->comment("User ID");
             $table->integer("shipping_id")->unsigned()->comment("Shipping Detail");
             $table->integer("payment_method_id")->unsigned()->comment("Payment method");
             $table->integer("contact_type_id")->unsigned()->comment("Contact type to contact with customer");
@@ -35,6 +35,7 @@ class CreateOrdersTable extends Migration {
             $table->integer("shipping_method_id")->unsigned()->comment("Shipping method");
             $table->integer("transporter_id")->unsigned()->nullable()->comment("Transporters");
             $table->dateTime("delivery_date")->nullable();
+            $table->timestamp("order_date")->useCurrent();
             $table->integer("status")->unsigned()->default(0)->comment("unpaid -> 0, paid -> 1");
             $table->longText("description")->nullable()->comment("1–5,000 characters");
             $table->integer("user_created_id");

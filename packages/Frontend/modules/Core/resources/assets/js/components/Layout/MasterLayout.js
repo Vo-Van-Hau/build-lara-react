@@ -18,7 +18,7 @@ const MasterLayout = (props) => {
             <Layout>
                 <Layout className="site-layout" style={{}}>
                     <HeaderSection {...props}/>
-                    <ContentSection history={history}/>
+                    <ContentSection history={history} {...props}/>
                     <FooterSection />
                 </Layout>
             </Layout>

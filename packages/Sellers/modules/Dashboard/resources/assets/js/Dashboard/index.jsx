@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Overview from '././components/Page/Overview';
-import GroupsContextProvicer from './components/Contexts/GroupsContext';
+import DashboardContextProvicer from './components/Contexts/DashboardContext';
 
 const Dashboard = (props) => {
 
@@ -30,6 +30,22 @@ const Dashboard = (props) => {
         .catch((errors) => {});
     }
 
+     /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get action
+     * @param:
+     * @returns {void}
+     */
+    const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
@@ -38,19 +54,20 @@ const Dashboard = (props) => {
      */
     const render_view = () => {
         switch (action) {
-            default: return (<Overview {...props}/>);
+            default: return (<Overview {...props} keyID={id}/>);
         }
     }
 
     useEffect(function() {
-        // get_config();
-    }, []);
+        get_config();
+        get_action();
+    }, [props]);
 
     return (
         <>
-            <GroupsContextProvicer axios={props.bp.axios} history={props.history} config={config}>
+            <DashboardContextProvicer axios={props.bp.axios} history={props.history} config={config}>
                 { render_view() }
-            </GroupsContextProvicer>
+            </DashboardContextProvicer>
         </>
     )
 }

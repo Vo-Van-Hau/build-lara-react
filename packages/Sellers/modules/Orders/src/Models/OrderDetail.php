@@ -8,13 +8,13 @@ use Sellers\Products\Models\Products;
 
 class OrderDetail extends ModelBase {
 
-    protected $connection = "mysql";
-    protected $table = "order_detail";
+    protected $connection = 'mysql';
+    protected $table = 'order_detail';
 
     protected $fillable = [
-        "name",
-        "status",
-        "description"
+        'name',
+        'status',
+        'description'
     ];
 
     /**=======================
@@ -27,9 +27,9 @@ class OrderDetail extends ModelBase {
      * @return Illuminate\Support\Collection
      */
     public function order() {
-        return $this->belongsTo(Orders::class, "order_id", "id")
+        return $this->belongsTo(Orders::class, 'order_id', 'id')
         ->where([
-            "orders.deleted" => 0
+            'orders.deleted' => 0
         ]);
     }
 
@@ -39,10 +39,10 @@ class OrderDetail extends ModelBase {
      * @return Illuminate\Support\Collection
      */
     public function product() {
-        return $this->belongsTo(Products::class, "product_id", "id")
+        return $this->belongsTo(Products::class, 'product_id', 'id')
         ->where([
-            "products.deleted" => 0,
-            "products.status" => 1
+            'products.deleted' => 0,
+            'products.status' => 1
         ]);
     }
 }

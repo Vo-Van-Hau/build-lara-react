@@ -10,6 +10,8 @@ use Sellers\Orders\Models\OrderTrackingStatus;
 use Sellers\Sellers\Models\Sellers;
 use Sellers\Products\Models\Products;
 use Illuminate\Support\Facades\Config;
+use Carbon\Carbon;
+use DateTime;
 
 class OrdersRepository extends BaseRepository implements OrdersRepositoryInterface {
 
@@ -113,7 +115,9 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $orders_list = [];
         foreach($order_detail_list as $key => $order_detail) {
             $order_detail['product'] = $this->products_model->find($order_detail['product_id']);
-            $order_detail['order_tracking_status'] = $this->order_tracking_status_model->find($order_detail['order_tracking_status_id']);
+            $order_detail['order_tracking_status'] = $this->order_tracking_status_model
+            ->select('id', 'title', 'tag_name')
+            ->find($order_detail['order_tracking_status_id']);
             $orders_list[$order_detail['order_id']]['order_detail'][] = $order_detail;
         }
         foreach($orders_list as $key => $_order) {
@@ -124,5 +128,105 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             }
         }
         return $result ?? [];
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return mixed
+     */
+    public function get_orders_sellers_overview($input) {
+        $user_id = $input['user_id'];
+        $seller = $this->sellers_model->where([
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
+        ])->first();
+        if(is_null($user_id) || is_null($seller)) return false;
+        $order_detail_list = $this->order_detail_model->join('orders', 'orders.id', '=', 'order_detail.order_id')
+        ->join('products', 'order_detail.product_id', '=', 'products.id')
+        ->where([
+            'products.seller_id' => $seller->id
+        ])
+        ->selectRaw('order_detail.*')
+        ->get();
+        $result = array();
+        $orders_list = [];
+        foreach($order_detail_list as $key => $order_detail) {
+            $order_detail['product'] = $this->products_model->find($order_detail['product_id']);
+            $order_detail['order_tracking_status'] = $this->order_tracking_status_model
+            ->select('id', 'title', 'tag_name')
+            ->find($order_detail['order_tracking_status_id']);
+            $orders_list[$order_detail['order_id']]['order_detail'][] = $order_detail;
+        }
+        foreach($orders_list as $key => $_order) {
+            $order = $this->model->find($key);
+            if(!empty($order)) {
+                $order['order_detail'] = $_order['order_detail'];
+                $result[] = $order;
+            }
+        }
+        $orders_in_year = array();
+        $current_year = date('Y');
+        for($m = 1; $m <= 12; $m++) {
+            $start_date = (new DateTime($current_year . '-' . $m . '-' . '01'))->format('Y-m-d 00:00:00');
+            $end_date = date('Y-m-t 23:59:59', strtotime($start_date));
+            $orders_in_year[] = $this->get_orders_sellers_by_date($start_date, $end_date, $input);
+        }
+        $result = [
+            'data' => $result,
+            'total' => count($orders_list),
+            'orders_in_year' => $orders_in_year,
+        ];
+        return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param string $start_date
+     * @param string $end_date
+     * @param array $input
+     * @return mixed
+     */
+    public function get_orders_sellers_by_date($start_date, $end_date, $input = []) {
+        $user_id = $input['user_id'];
+        $seller = $this->sellers_model->where([
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
+        ])->first();
+        if(is_null($user_id) || is_null($seller)) return false;
+        $condition = "orders.order_date BETWEEN '{$start_date}' AND '{$end_date}'";
+        $order_detail_list = $this->order_detail_model->join('orders', 'orders.id', '=', 'order_detail.order_id')
+        ->join('products', 'order_detail.product_id', '=', 'products.id')
+        ->where([
+            'products.seller_id' => $seller->id
+        ])
+        ->whereRaw($condition)
+        ->selectRaw('order_detail.*')
+        ->get();
+        $result = array();
+        $orders_list = [];
+        foreach($order_detail_list as $key => $order_detail) {
+            $order_detail['product'] = $this->products_model->find($order_detail['product_id']);
+            $order_detail['order_tracking_status'] = $this->order_tracking_status_model
+            ->select('id', 'title', 'tag_name')
+            ->find($order_detail['order_tracking_status_id']);
+            $orders_list[$order_detail['order_id']]['order_detail'][] = $order_detail;
+        }
+        foreach($orders_list as $key => $_order) {
+            $order = $this->model->find($key);
+            if(!empty($order)) {
+                $order['order_detail'] = $_order['order_detail'];
+                $result[] = $order;
+            }
+        }
+        $result = [
+            'data' => $result,
+            'total' => count($orders_list),
+        ];
+        return $result;
     }
 }

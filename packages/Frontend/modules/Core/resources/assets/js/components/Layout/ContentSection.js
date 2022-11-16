@@ -5,7 +5,9 @@ import ModuleView from '../Module/ModuleView';
 const { Content }  = Layout;
 
 const ContentSection = (props) => {
+
     const { history } = props;
+    
     return (
         <>
             <Content className='main_content_container'>
@@ -29,4 +31,5 @@ const ContentSection = (props) => {
         </>
     )
 }
+
 export default ContentSection;

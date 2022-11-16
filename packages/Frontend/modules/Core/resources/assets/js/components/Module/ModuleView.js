@@ -35,6 +35,7 @@ const ModuleView = ({ history, ...props }) => {
             history={history}
             searchParams={searchParams}
             navigate={navigate}
+            {...props}
         />
     ) : <>There's nothing here!</>;
 

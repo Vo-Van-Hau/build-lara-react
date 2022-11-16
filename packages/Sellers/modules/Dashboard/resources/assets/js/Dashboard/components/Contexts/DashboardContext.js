@@ -1,42 +1,36 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, AccountReducer } from '../Reducers/AccountReducer';
-import {
-    GET_ACCOUNT,
-    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
-} from '../Dispatch/type';
 import { createSearchParams } from 'react-router-dom';
+import { initialState, DashboardReducer } from '../Reducers/DashboardReducer';
+import {
+    SET_PAGINATION, SET_TABLE_LOADING, MOUTED, GET_OVERVIEW,
+} from '../Dispatch/type';
 
-export const AccountContext = createContext();
+export const DashboardContext = createContext();
 
-const AccountContextProvider = ({ children, axios, history, config, navigate }) => {
+const DashboardContextProvicer = ({ children, axios, history, config, nagivation }) => {
 
-    const [data, dispatch] = useReducer(AccountReducer, initialState);
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get account info
-     * @param {string} page
-     * @param {string} keySearch
-     * @return {void}
-     */
-    const get_account = () => {
-        set_table_loading();
-        return axios
-        .get_secured()
-        .post(`/customer/customer/get_by_auth`);
-    }
+    const [data, dispatch] = useReducer(DashboardReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: update account
-     * @param {array} data
+     * @todo: get overview
+     * @param {Object} data
      * @return {void}
      */
-    const update_account = (data) => {
+    const get_overview = (data) => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/customer/customer/update_account`, {...data});
+        .post(`/dashboard/dashboard/get_overview`, {...data})
+        .then((res) => {
+            let { status, data } = res.data;
+            if(status) {
+                let { overview } = data;
+                dispatch({ type: GET_OVERVIEW, payload: overview });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
     }
 
     /**
@@ -91,16 +85,15 @@ const AccountContextProvider = ({ children, axios, history, config, navigate }) 
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config},
+        data: {...data, config}, get_overview,
         history, dispatch, get_axios, set_table_loading, set_mouted,
-        get_account, setRouter, update_account
     };
 
     return (
-        <AccountContext.Provider value={todoContextData}>
+        <DashboardContext.Provider value={todoContextData}>
             { children }
-        </AccountContext.Provider>
+        </DashboardContext.Provider>
     );
 }
 
-export default AccountContextProvider;
+export default DashboardContextProvicer;

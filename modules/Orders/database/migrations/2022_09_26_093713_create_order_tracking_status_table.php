@@ -19,6 +19,7 @@ class CreateOrderTrackingStatusTable extends Migration {
                     "[pending, awaiting payment, awaiting fulfillment, awaiting shipment, awaiting pickup, partially shipped, completed,
                     shipped, cancelled, declined, refunded, disputed, manual verification required, partially refunded.]"
                 );
+            $table->string('tag_name')->nullable();
             $table->integer("status")->unsigned();
             $table->longText("description")->nullable()->comment("1–5,000 characters");
             $table->integer("user_created_id");

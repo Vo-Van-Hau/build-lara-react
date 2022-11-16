@@ -21,7 +21,6 @@ if(!function_exists('app_url')) {
         return env('APP_URL', 'http://localhost');
     }
 }
-
 if(!function_exists('change_boolean')) {
     function change_boolean($value = null) {
         if($value == 'false' || $value == '0' || $value == 'undefined') return false;
@@ -124,7 +123,16 @@ if(!function_exists('get_time_ago')) {
         return '';
     }
 }
-
+if(!function_exists('get_string_between')) {
+    function get_string_between($string = '', $start, $end) {
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if($ini === 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
+    }
+}
 
 //----------------------------------------Not Approve - Overview later----------------------------------------
 if (!function_exists('array_add')) {

@@ -25,11 +25,13 @@ const OrdersContextProvicer = ({ children, axios, history, config, navigate }) =
         .get_secured()
         .post(`/orders/orders/get_orders_sellers?page=${page}`, {...keySearch})
         .then((res) => {
-            let { orders } = res.data.data;
-            // let { data, current_page, per_page, total } = orders;
-            console.log(orders);
-            dispatch({ type: GET_ORDERS, payload: orders });
-            // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            const { status } = res.data;
+            if(status) {
+                let { orders } = res.data.data;
+                // let { data, current_page, per_page, total } = orders;
+                dispatch({ type: GET_ORDERS, payload: orders ? orders : [] });
+                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});

@@ -1,8 +1,8 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, Fragment } from 'react';
 import { OrdersContext } from '../Contexts/OrdersContext';
 import {
     Table, Space, Input, Button, Row, Col, Content, SideBar, Typography,
-    Layout, Result, Tabs, Image
+    Layout, Result, Tabs, Image, Tag
 } from 'antd';
 import { ShopOutlined } from '@ant-design/icons';
 import Helper from '../Helper/Helper';
@@ -35,45 +35,45 @@ const ListOrders = (props) => {
     };
 
     const AllOrders = () => {
-        return orders.map((order) => {
+        return orders.map((order, index) => {
+
             let { order_detail } = order;
+
             const columns = [
                 {
                     title: 'Giao hàng thành công',
                     render: (_, record) => {
                         return (
-                            <><Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
-                                module: 'products',
-                                controller: 'productdetail',
-                                action: 'view',
-                                id: record.product.id
-                            })}/></>
+                            <><Space align="end">
+                                <Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
+                                    module: 'products',
+                                    controller: 'productdetail',
+                                    action: 'view',
+                                    id: record.product.id
+                                })}/>
+                                    <div>
+                                        <Text><Text strong>Tên sản phẩm:</Text> { record.product_name }</Text><br/>
+                                        <Text><Text strong>Giá bán:</Text> { record.price }</Text><br/>
+                                        <Text><Text strong>Số lượng:</Text> x{ record.quantity }</Text><br/>
+                                    </div>
+                            </Space></>
                         )
                     },
                 },{
-                    title: 'Tên sản phẩm',
-                    width: 300,
-                    render: (_, record) => {
-                        return (
-                            <a>{ record.product_name }</a>
-                        )
-                    },
-                },{
-                    title: 'Số lượng',
-                    align: 'center',
-                    dataIndex: 'quantity',
-                },{
-                    title: 'Đơn giá',
+                    title: 'Trạng thái đơn hàng',
                     align: 'center',
                     render: (_, record) => {
+                        let { order_tracking_status } = record;
+                        let { title, tag_name } = order_tracking_status;
                         return (
-                            <>{ record.price }</>
+                            <><Tag color={tag_name}>{ title }</Tag></>
                         )
                     }
                 },
 
             ];
-            return (<>
+
+            return (<Fragment key={index}>
                 <Title level={5} className='shop_name'>
                     <ShopOutlined /> Mã đơn hàng: #{ order.code ? order.code : 'Undefined' }
                 </Title>
@@ -87,7 +87,7 @@ const ListOrders = (props) => {
                 <Row align='end'>
                     <Button type="primary" size={'large'} style={{ margin: '1rem' }} >Xem chi tiết</Button>
                 </Row>
-            </>)
+            </Fragment>)
             });
     };
     const Waiting = () => {

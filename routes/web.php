@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Google\Cloud\Translate\V2\TranslateClient;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -169,6 +170,19 @@ Route::prefix('testing')->group(function() {
                 echo $exception->getMessage();
             }
         }
+    });
+    Route::get('date', function() {
+        $data = [];
+        $current_year = date('Y');
+        for($m = 1; $m <= 12; $m++) {
+            $start_date = (new DateTime($current_year . '-' . $m . '-' . '01'))->format('Y-m-d 00:00:00');
+            $end_date = date('Y-m-t 23:59:59', strtotime($start_date));
+            $data[$m] = [
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+            ];
+        }
+        dd($data);
     });
 });
 

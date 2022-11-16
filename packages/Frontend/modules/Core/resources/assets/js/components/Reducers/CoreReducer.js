@@ -15,6 +15,12 @@ export const initialState = {
     },
     user: {
         is_login: false,
+        customer: {
+            fullname: '',
+            phone: '',
+        },
+        avatar: '',
+        email: '',
     },
     access_user: false,
     siderBar: {

@@ -31,20 +31,42 @@ class CustomerController extends ControllerBase {
      * @return void
      */
     public function get_by_auth(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthFrontend::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
-            $result = $this->CustomerRepository->get_by_user_id($input["user_id"]);
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->CustomerRepository->get_by_user_id($input['user_id']);
             if($result) {
                 return $this->response_base([
-                    "status" => true,
-                    "account" => $result
-            ], "You have got account information successfully !!!", 200);
+                    'status' => true,
+                    'account' => $result
+            ], 'You have got account information successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get information !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get information !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo update account
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function update_account(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->CustomerRepository->update_account($input);
+            if($result) {
+                return $this->response_base([
+                    'status' => true,
+            ], 'You have updated information successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to update information !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 }
 

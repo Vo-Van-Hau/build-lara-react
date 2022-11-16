@@ -55,6 +55,7 @@ class CoreRouteServiceProvider extends RouteServiceProvider {
                     ->group(__DIR__ . "/../Routes/web.php");
             });
         });
+        Route::pattern('id', '[a-zA-z0-9-]+');
     }
 
     /**

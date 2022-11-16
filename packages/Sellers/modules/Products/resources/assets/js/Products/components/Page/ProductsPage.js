@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-    MenuFoldOutlined, SettingOutlined, SearchOutlined, MenuUnfoldOutlined,
-    UploadOutlined, UserOutlined, VideoCameraOutlined,
+    CloseOutlined, CheckOutlined
 } from '@ant-design/icons';
-import { Image, Input, Layout, Popconfirm, Table, Tabs, Select, Space, Button } from 'antd';
+import { Image, Input, Layout, Popconfirm, Table, Tabs, Select, Space, Button, Typography, Switch  } from 'antd';
 import { ProductsContext } from '../Contexts/ProductsContext';
 const { Option } = Select;
-const { Header, Sider, Content } = Layout;
+const { Text, Title } = Typography;
+const { Content } = Layout;
 
 const ProductsPage = () => {
 
     const { data, get_products, setRouter } = useContext(ProductsContext);
-    const { products } = data;
+    const { products, loading_table } = data;
 
     const [collapsed, setCollapsed] = useState(false);
     const onTabsChange = (key) => {
@@ -22,32 +22,77 @@ const ProductsPage = () => {
 
         const columns = [
             {
-                title: 'ID sản phẩm',
-                dataIndex: 'id'
+                title: 'Sản phẩm',
+                render: (_, record) => {
+                    return (<>
+                        <Space>
+                            <><Image width={78} height={78} src={record.image_link} alt={'product-image'} onClick={() => setRouter({
+                                module: 'products',
+                                controller: 'productdetail',
+                                action: 'view',
+                                id: record.product.id
+                            })}/></>
+                             <div>
+                                <Text><Text strong>Tên sản phẩm:</Text> { record.name ? record.name : '' }</Text><br/>
+                                <Text><Text strong>Mã sản phẩm:</Text> { record.price }</Text><br/>
+                                <Text><Text strong>ID:</Text> { record.id }</Text><br/>
+                                <Text><Text strong>SKU:</Text> { record.product_identifiers ? record.product_identifiers.sku : `` }</Text><br/>
+                            </div>
+                        </Space>
+                    </>)
+                }
             },{
-                title: '',
+                title: 'Giá bán',
                 render: (_, record) => {
                     return (
-                        <><Image width={78} height={78} src={record.image_link} alt={'product-image'} onClick={() => setRouter({
-                            module: 'products',
-                            controller: 'productdetail',
-                            action: 'view',
-                            id: record.product.id
-                        })}/></>
+                        <><Text>{ record.price_format ? record.price_format : `` }</Text></>
                     )
                 },
             },{
-                title: 'Tên sản phẩm',
-                dataIndex: 'name',
-                key: 'name',
+                title: 'Phí Fanthbol thu',
+                render: (_, record) => {
+                    let FanthbolFee = record.price * (11 / 100);
+                    return (<>
+                        { record.price ? new Intl.NumberFormat().format(FanthbolFee) : ``}
+                    </>)
+                }
             },{
-                title: 'Đơn giá',
-                dataIndex: 'price',
-                key: 'price',
+                title: 'Lợi nhuận',
+                render: (_, record) => {
+                    let FanthbolFee = record.price * (11 / 100);
+                    return (<>
+                        { record.price ? new Intl.NumberFormat().format(record.price - FanthbolFee) : ``}
+                    </>)
+                }
             },{
-                title: 'Số lượng tồn kho',
+                title: 'Tồn kho',
                 render: (_, record) => {
                     return (<>{ record.product_stock && record.product_stock.product_quantity ? record.product_stock.product_quantity : 'Undefined'}</>)
+                }
+            },{
+                title: 'Ngày tạo',
+                render: (_, record) => {
+                    return (<>{ record.created_date && record.created_date.date && record.created_date.time ?
+                        <Space
+                            direction="vertical"
+                            align="center"
+                            size="small"
+                        >
+                            <Text>{record.created_date.date}</Text>
+                            <Text>{record.created_date.time}</Text>
+                        </Space> :
+                    ''}</>)
+                }
+            },{
+                title: 'Trạng thái',
+                render: (_, record) => {
+                    return (<>
+                        <Switch
+                            checkedChildren={`Bật`}
+                            unCheckedChildren={`Tắt`}
+                            defaultChecked
+                        />
+                    </>)
                 }
             },{
                 title: 'Thao tác',
@@ -62,10 +107,10 @@ const ProductsPage = () => {
                                 controller: 'products',
                                 action: 'upsert',
                                 id: record.id
-                            })}>Edit</Button>
+                            })}>Sửa</Button>
                             <>||</>
                             <Popconfirm title="Sure to delete?" placement="leftTop" onConfirm={() => {}}>
-                                <Button type="link" size="small" danger>Delete</Button>
+                                <Button type="link" size="small" danger>Xóa</Button>
                             </Popconfirm>
                         </Space>
                     )
@@ -73,7 +118,7 @@ const ProductsPage = () => {
             }
         ];
         return (
-            <Table columns={columns} dataSource={products} rowKey={`id`}/>
+            <Table columns={columns} dataSource={products} rowKey={`id`} loading={loading_table}/>
         )
     }
 
@@ -99,7 +144,7 @@ const ProductsPage = () => {
     );
 
     useEffect(function() {
-        get_products();
+        get_products(1, {});
     }, []);
 
     return (<>

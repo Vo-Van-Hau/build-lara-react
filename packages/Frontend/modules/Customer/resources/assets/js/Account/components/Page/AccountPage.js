@@ -1,29 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Avatar, Col, Divider, Modal, Row, Typography,
-    Button, Form, Input, Select,Layout, Menu, message, Upload
+import { Avatar, Col, Divider, Modal, Row, Typography, Space, DatePicker,
+    Button, Form, Input, Select, Layout, Radio, message, Upload
 } from 'antd';
-import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
-    CreditCardOutlined, TagOutlined, HeartOutlined, UploadOutlined
+import {
+    UploadOutlined,
 } from '@ant-design/icons';
 import { AccountContext } from '../Contexts/AccountContext';
 import { GET_ACCOUNT } from '../Dispatch/type';
 import SideBar from '../../../Customer/components/Layout/Sidebar';
-const { Content, Footer, Sider } = Layout;
-
-const menuItems = [
-    { key: 1, label: <a href='#' >Account</a>, icon: <UserOutlined /> },
-    { key: 2, label: <a href='#' >Notifitation</a>, icon: <BellOutlined /> },
-    { key: 3, label: <a href='#' >Orders</a>, icon: <ShoppingCartOutlined /> },
-    { key: 4, label: <a href='#' >Address</a>, icon: <HomeOutlined /> },
-    { key: 5, label: <a href='#' >Payment Card</a>, icon: <CreditCardOutlined /> },
-    { key: 6, label: <a href='#' >Review Products</a>, icon: <TagOutlined /> },
-    { key: 7, label: <a href='#' >Favor Products</a>, icon: <HeartOutlined /> },
-];
+import Helper from '../Helper/Helper';
+import moment from 'moment';
+const { Content, Footer } = Layout;
 
 const AccountPage = (props) => {
-
-    const { data, get_account, set_table_loading, dispatch, setRouter } = useContext(AccountContext);
-    const { account } = data;
+    const { get_user } = props;
+    const { user } = props.data;
+    const { data, dispatch, setRouter, update_account } = useContext(AccountContext);
+    const { } = data;
 
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -45,8 +38,7 @@ const AccountPage = (props) => {
     };
     const tailLayout = {
         wrapperCol: {
-            offset: 10,
-            span: 12,
+            // span: 12,
         },
     };
 
@@ -72,8 +64,25 @@ const AccountPage = (props) => {
         }
     };
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} values
+     * @return
+     */
     const onFinish = (values) => {
-        console.log(values);
+        let date_of_birth = Helper.formatTime(values.date_of_birth, 'YYYY-MM-DD');
+        values.date_of_birth = date_of_birth;
+        update_account(values).then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                dispatch({ type: GET_ACCOUNT, payload: {...user, ...values} });
+                get_user();
+                Helper.Notification('success', '[Cập nhật tài khoản]', message);
+            } else {
+                Helper.Notification('error', '[Cập nhật tài khoản]', message);
+            }
+        });
     };
 
     const onReset = () => {
@@ -101,22 +110,23 @@ const AccountPage = (props) => {
     };
 
     useEffect(() => {
-        get_account()
-        .then((res) => {
-            if(res.data.status) {
-                let { account } = res.data.data;
-                let { user } = account;
-                form.setFieldsValue({
-                    fullname: account.fullname,
-                    phone: account.phone,
-                    email: user.email ? user.email : 'Undefined'
-                });
-                dispatch({ type: GET_ACCOUNT, payload: account });
+        if(user) {
+            dispatch({ type: GET_ACCOUNT, payload: user });
+            if(user.is_login) {
+                if(user.customer) {
+                    let customer = user.customer;
+                    form.setFieldsValue({
+                        fullname: customer.fullname,
+                        phone: customer.phone,
+                        email: user.email ? user.email : '',
+                        gender: customer.gender ? customer.gender : 'unisex',
+                        date_of_birth: customer.date_of_birth ? moment(customer.date_of_birth) : moment(),
+                        nickname: customer.nickname ? customer.nickname : '',
+                    });
+                }
             }
-        })
-        .catch((errors) => {})
-        .finally(() => {set_table_loading();});
-    }, []);
+        }
+    }, [props]);
 
     return (
         <Layout>
@@ -135,13 +145,18 @@ const AccountPage = (props) => {
                                             <Title level={5}>Thông tin cá nhân</Title>
                                             <Row style={{ marginBottom: '1rem' }}>
                                                 <Col className="customer_avatar_col" span={5}>
-                                                    <Avatar className="customer_avatar" onClick={() => setPreviewOpen(true)} size={100} src='https://img.freepik.com/free-vector/cute-rabbit-with-duck-working-laptop-cartoon-illustration_56104-471.jpg?w=2000' />
+                                                    <Avatar
+                                                        className="customer_avatar"
+                                                        onClick={() => setPreviewOpen(true)}
+                                                        size={100}
+                                                        src={user.avatar ? user.avatar : ``}
+                                                    />
                                                     <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
                                                         <img alt="avatar_review"
                                                             style={{
                                                                 width: '100%',
                                                             }}
-                                                            src='https://img.freepik.com/free-vector/cute-rabbit-with-duck-working-laptop-cartoon-illustration_56104-471.jpg?w=2000'
+                                                            src={user.avatar ? user.avatar : ``}
                                                         />
                                                     </Modal>
                                                     <Upload {...uploadProps} className='customer_avatar_upload_btn'>
@@ -152,22 +167,20 @@ const AccountPage = (props) => {
                                                     <Form.Item name="fullname" label="Họ tên" rules={[{ required: true }]}>
                                                         <Input />
                                                     </Form.Item>
-
                                                     <Form.Item name="nickname" label="Nickname">
                                                         <Input />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
-                                            <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
-                                                <Select
-                                                    placeholder="Select a option and change input text above"
-                                                    onChange={onGenderChange}
-                                                    allowClear
-                                                >
-                                                    <Option value="male">male</Option>
-                                                    <Option value="female">female</Option>
-                                                    <Option value="other">other</Option>
-                                                </Select>
+                                            <Form.Item label={`Ngày sinh`} rules={[{ required: true }]} name='date_of_birth'>
+                                                <DatePicker placeholder={`Chọn ngày sinh`}/>
+                                            </Form.Item>
+                                            <Form.Item name="gender" label={`Giới tính`} rules={[{ required: true }]}>
+                                                <Radio.Group value={`male`}>
+                                                    <Radio value={`male`}>Nam</Radio>
+                                                    <Radio value={`female`}>Nữ</Radio>
+                                                    <Radio value={`unisex`}>Khác</Radio>
+                                                </Radio.Group>
                                             </Form.Item>
                                             <Form.Item
                                                 noStyle
@@ -180,6 +193,11 @@ const AccountPage = (props) => {
                                                         </Form.Item>
                                                     ) : null
                                                 }
+                                            </Form.Item>
+                                            <Form.Item {...tailLayout}>
+                                                <Button type="primary" htmlType="submit">
+                                                    Lưu thay đổi
+                                                </Button>
                                             </Form.Item>
                                         </Col>
                                         <Col span={1}>
@@ -195,17 +213,7 @@ const AccountPage = (props) => {
                                             </Form.Item>
                                         </Col>
                                     </Row>
-
-                                    <Form.Item {...tailLayout}>
-                                        <Button type="primary" htmlType="submit">
-                                            Submit
-                                        </Button>
-                                        <Button htmlType="button" onClick={onReset}>
-                                            Reset
-                                        </Button>
-                                    </Form.Item>
                                 </Form>
-
                             </Col>
                         </Row>
                     </Content>

@@ -22,7 +22,7 @@ const App = (props) => {
     }, [props]);
 
     return RoutesWeb({
-        data
+        data, get_user
     });
 };
 

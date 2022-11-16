@@ -1,0 +1,13 @@
+.site-statistic-card {
+    padding: 12px;
+    background: #ececec;
+    .site-statistic-box-container {
+        padding: 16px;
+        .site-statistic-box {
+            border: 1px solid #000000;
+            border-radius: 8px;
+            padding: 14px;
+            box-shadow: 8px 8px #57606f;
+        }
+    }
+}

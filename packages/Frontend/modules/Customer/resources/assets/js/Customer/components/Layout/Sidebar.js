@@ -8,14 +8,15 @@ const { Sider } = Layout;
 
 const SideBar = (props) => {
     const {  bp, setRouter } = props;
+    const { user } = props.data;
     const { axios } = bp;
     const [data, setData] = useState({
-        account: {
-            fullname: '',
-            phone: '',
-            user: {
-                avatar: '',
-                email: '',
+        user: {
+            avatar: '',
+            email: '',
+            customer: {
+                fullname: '',
+                phone: '',
             }
         }
     });
@@ -77,27 +78,24 @@ const SideBar = (props) => {
         .post(`/customer/customer/get_by_auth`);
     }
 
-
     useEffect(() => {
-        get_account()
-        .then((res) => {
-            if(res.data.status) {
-                let { account } = res.data.data;
-                setData({...data, account});
+        if(user) {
+            if(user.is_login) {
+                if(user.customer) {
+                    setData({...data, user: {...user}});
+                }
             }
-        })
-        .catch((errors) => {})
-        .finally(() => {});
-    }, []);
+        }
+    }, [props]);
 
     return (
         <Sider className="customer-layout-background" width={250} style={{ backgroundColor: '#fff' }} >
             <Row className='customer_account_container' align="middle" style={{ background: 'white', padding: '1rem', gap: '1rem' }}>
-                <Avatar size={64} src={data.account.user.avatar ? data.account.user.avatar : 'https://salt.tikicdn.com/desktop/img/avatar.png'} />
+                <Avatar size={64} src={data.user.avatar ? data.user.avatar : ``} />
                 <div className='customer_account_text'>
                     <h5>Tài khoản của</h5>
                     <h3>
-                        { data.account.fullname ? data.account.fullname : 'Loading' }
+                        { data.user.customer.fullname ? data.user.customer.fullname : 'Loading...' }
                     </h3>
                 </div>
             </Row>

@@ -2,6 +2,9 @@
 
 namespace Sellers\Products\Repositories\Eloquents;
 
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use Sellers\Core\Repositories\Eloquents\BaseRepository;
 use Sellers\Products\Interfaces\ProductsRepositoryInterface;
 use Sellers\Products\Models\Products;
@@ -10,8 +13,8 @@ use Sellers\Products\Models\ProductDescriptionDetail;
 use Sellers\Products\Models\ProductStock;
 use Sellers\Products\Models\ProductCaterory;
 use Sellers\Sellers\Models\Sellers;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
+use Sellers\Orders\Models\Orders;
+use Sellers\Orders\Models\OrderDetail;
 
 class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface {
 
@@ -75,6 +78,51 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @param array $input
      * @return mixed
      */
+    public function get_products_sellers_overview($input) {
+        $user_id = $input['user_id'];
+        $seller = $this->sellers_model->where([
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
+        ])->first();
+        if(is_null($user_id) || is_null($seller)) return false;
+        $existed = $this->model->where([
+            // "status" => 1,
+            'deleted' => 0,
+            'seller_id' => $seller->id
+        ])->with([
+            'product_stock' => function ($query) {
+
+            },
+            'product_identifiers' => function ($query) {
+
+            },
+            'product_description_detail' => function ($query) {
+
+            }
+        ]);
+        if(empty($existed)) return false;
+        $result = [
+            'data' => $existed->get(),
+            'total' => $existed->count(),
+        ];
+        if(!empty($result['data'])) {
+            foreach($result['data'] as $key => $item) {
+                $order_detai = OrderDetail::where([
+                    'product_id' => $item['id'],
+                ])->get();
+                $result['data'][$key]['count_orders'] = count($order_detai);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return mixed
+     */
     public function get_products_sellers($input) {
         $user_id = $input["user_id"];
         $seller = $this->sellers_model->where([
@@ -88,8 +136,28 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             "deleted" => 0,
             "seller_id" => $seller->id
         ])->with([
-            'product_stock'
-        ])->paginate(10);
+            'product_stock' => function ($query) {
+
+            },
+            'product_identifiers' => function ($query) {
+
+            },
+            'product_description_detail' => function ($query) {
+
+            }
+        ])
+        ->paginate(10);
+        if(!empty($existed)) {
+            foreach($existed as $item) {
+                if(!empty($item->created_at)) {
+                    $item->created_date = [
+                        'date' => date_format(date_create($item->created_at), 'd-m-Y'),
+                        'time' => date_format(date_create($item->created_at), 'H:i:s'),
+                    ];
+                }
+                $item->price_format = number_format($item->price, 3, ',', '.');
+            }
+        }
         if(empty($existed)) return false;
         return $existed;
     }

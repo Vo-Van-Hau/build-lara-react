@@ -42,7 +42,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status = []){
+    public function get_all($keyword = '', $status = []){
 
     }
 
@@ -53,7 +53,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @return Illuminate\Support\Collection
      */
     public function get_by_id($id) {
-        $result = $this->model->where("id", $id)->first();
+        $result = $this->model->where('id', $id)->first();
         return $result;
     }
 
@@ -64,24 +64,24 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @return Illuminate\Support\Collection
      */
     public function store($input) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $new = $this->model;
         if(empty($user_id)) return false;
         $cart = Carts::where([
-            "user_id" => $user_id,
-            "deleted" => 0,
-            "status" => 1,
-            "ordered" => 0
+            'user_id' => $user_id,
+            'deleted' => 0,
+            'status' => 1,
+            'ordered' => 0
         ])->with([
-            "cart_detail",
-            "user"
+            'cart_detail',
+            'user'
         ])->first();
         if(empty($cart)) return false;
-        $cart_detail = isset($cart["cart_detail"]) ? $cart["cart_detail"] : [];
-        $customer = isset($cart["user"]["customer"]) ? $cart["user"]["customer"] : null;
-        $customer_address = isset($customer["customer_address"]) ? $customer["customer_address"] : null;
+        $cart_detail = isset($cart['cart_detail']) ? $cart['cart_detail'] : [];
+        $customer = isset($cart['user']['customer']) ? $cart['user']['customer'] : null;
+        $customer_address = isset($customer['customer_address']) ? $customer['customer_address'] : null;
         foreach($customer_address as $key => $address) {
-            if($address["is_default"] == 1) {
+            if($address['is_default'] == 1) {
                 $customer_delivery = $address;
                 break;
             }
@@ -92,13 +92,13 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $total_amount = 0;
         $discount = 0;
         foreach($cart_detail as $key => $item) {
-            $product = $item["product"];
-            $quantity = $item["product_quantity"];
-            $total_amount += ($product["price"] * $quantity);
+            $product = $item['product'];
+            $quantity = $item['product_quantity'];
+            $total_amount += ($product['price'] * $quantity);
         }
         $subtotal = $total_amount;
         // Delivery information
-        $new->code = date("YmdHis") . "-" . substr($customer_delivery->phone, -3);
+        $new->code = date('YmdHis') . '-' . substr($customer_delivery->phone, -3);
         $new->receiver_name = $customer_delivery->customer_name;
         $new->receiver_phone = $customer_delivery->phone;
         $new->receiver_country_id = $customer_delivery->country_id;
@@ -112,32 +112,32 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $new->total_amount = $total_amount;
         $new->item_quantity = count($cart_detail);
         $new->discount = $discount;
-        $new->user_id = $customer["id"];
+        $new->user_id = $customer['id'];
         // Shipping information
         $new->shipping_id = 0;
         // Payment information
-        // $new->payment_method_id = $input["payment_method_id"];
+        // $new->payment_method_id = $input['payment_method_id'];
         $new->payment_method_id = 1;
         //
         $new->order_tracking_status_id = 1;
-        // $new->shipping_method_id = $input["shipping_method_id"]
+        // $new->shipping_method_id = $input['shipping_method_id']
         $new->shipping_method_id = 1;
         $new->transporter_id = 0;
-        $new->delivery_date = date("Y-m-d", strtotime("+7 days"));
+        $new->delivery_date = date('Y-m-d', strtotime('+7 days'));
         $new->status = 0;
         if($new->save()) {
             $order_id = $new->id;
             foreach($cart_detail as $key => $item) {
-                $product = $item["product"];
-                $quantity = $item["product_quantity"];
+                $product = $item['product'];
+                $quantity = $item['product_quantity'];
                 try {
                     OrderDetail::create([
-                        "order_id" => $order_id,
-                        "product_id" => $product["id"],
-                        "product_name" => $product["name"],
-                        "product_image_link" => $product["image_link"],
-                        "quantity" => $quantity,
-                        "price" => $product["price"]
+                        'order_id' => $order_id,
+                        'product_id' => $product['id'],
+                        'product_name' => $product['name'],
+                        'product_image_link' => $product['image_link'],
+                        'quantity' => $quantity,
+                        'price' => $product['price']
                     ]);
                 }
                 catch (\Exception $errors) {
@@ -149,8 +149,8 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             $cart->ordered = 1;
             $cart->save();
             return [
-                "status" => true,
-                "user_email" => $cart["user"] && $cart["user"]["email"] ? $cart["user"]["email"] : false
+                'status' => true,
+                'user_email' => $cart['user'] && $cart['user']['email'] ? $cart['user']['email'] : false
             ];
         }
         return false;
@@ -163,16 +163,16 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @return Illuminate\Support\Collection
      */
     public function get_history_by_auth($input) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $order = $this->model;
         if(empty($user_id)) return false;
         $result = $order->where([
-            // "status"  => 0,
-            "deleted" => 0,
-            "user_id" => $user_id
+            // 'status'  => 0,
+            'deleted' => 0,
+            'user_id' => $user_id
         ])->with([
-            "customer",
-            "order_detail"
+            'customer',
+            'order_detail'
         ])->get();
         if(!empty($result)) return $result;
         return false;
