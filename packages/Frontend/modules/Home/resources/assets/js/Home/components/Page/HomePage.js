@@ -2,7 +2,8 @@ import React, { useContext, useEffect } from 'react';
 
 import { BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
 import { Card, Avatar, Rate, Image, Carousel, Button, Affix } from "antd"
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined,SearchOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
 
@@ -246,9 +247,9 @@ const HomePage = (props) => {
                     ),
                     )}
                 </Space>
-                <Button type="primary" danger>
-                    Xem thêm
-                </Button>
+                <Row justify="center" style={{ padding: 8, }}> 
+                    <Button type="primary"> Xem thêm </Button>
+                </Row>
             </Row>
         </>
         <BackTop />
