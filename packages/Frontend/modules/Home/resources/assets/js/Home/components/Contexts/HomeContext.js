@@ -62,7 +62,14 @@ const HomeContextProvicer = ({ children, axios, history, config,navigate }) => {
         });
     }
 
-    const get_products = () => {
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get product 
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+    const get_products = (page, keySearch) => {
         set_table_loading();
         return axios
         .get_secured()

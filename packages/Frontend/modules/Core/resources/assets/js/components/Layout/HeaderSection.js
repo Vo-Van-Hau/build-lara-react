@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Dropdown } from 'antd';
-import { Cascader, Divider, Menu, List } from 'antd';
+import {
+    Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
+    Cascader, Divider, Menu, List, Avatar
+} from 'antd';
 import { UserOutlined, SearchOutlined, ShoppingCartOutlined, DownOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -78,7 +80,7 @@ const HeaderSection = (props) => {
         ];
 
         return (<>
-            <Dropdown menu={accountdropdown} placement="bottom" arrow>
+            {/* <Dropdown menu={accountdropdown} placement="bottom" arrow>
                 <>
                 <Row justify='center' align='center' style={{justify: 'center', align: 'center'}}>
                         <Col span={24} style={{padding: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}><Text level={4}><span style={{color: '#FFFFFF'}}>Tài khoản</span></Text></Col>
@@ -86,7 +88,28 @@ const HeaderSection = (props) => {
                 </Row>
                 <DownOutlined />
                 </>
-            </Dropdown>
+            </Dropdown> */}
+            <Popover content={() => {
+                return (<><List
+                        itemLayout="horizontal"
+                        dataSource={[
+                            'Racing car sprays burning fuel into crowd.',
+                            'Japanese princess to wed commoner.',
+                            'Australian walks 100km after outback crash.',
+                            'Man charged over missing wedding girl.',
+                            'Los Angeles battles huge wildfires.',
+                        ]}
+                        renderItem={(item) => (
+                            <List.Item>
+                                <Typography.Text mark>[ITEM]</Typography.Text> {item}
+                            </List.Item>
+                        )}
+                    /></>)
+            }} title="Title" trigger="hover" placement="bottom">
+                <>
+                    Hover
+                </>
+            </Popover>
         </>)
     }
 
@@ -301,23 +324,21 @@ const HeaderSection = (props) => {
             <Row className='header_container' justify="center"  >
                 <Col className='logo_container' >
                     <Link to="/shopping/home/home" > <Image preview={false} width={60} height={60} src="/images/msmall-icon.png" /></Link>
-                    {/* <Image preview={false} width={129} height={18} src="https://salt.tikicdn.com/ts/brickv2og/70/07/62/9a90de2324bda05df7ff137972de1c70.png" /> */}
                 </Col>
 
                 <Col className='formSearch_container' span={12} >
-                    {/* <Search placeholder="Tìm sản phẩm, danh mục hay thương hiệu mong muốn ..."
-                        enterButton={<><Space>
-                                <SearchOutlined />
-                                <Text><span style={{color: '#FFFFFF'}}>Tìm Kiếm</span></Text>
-                            </Space></>}
-                        size="large"
-                    /> */}
                     <Cascader
                         dropdownRender={dropdownSearchbar}
                         onChange={onChange}
                         placeholder="Tìm sản phẩm, danh mục hay thương hiệu mong muốn ..."
                         showSearch={{ filterSearchbar }}
-                        suffixIcon={<SearchOutlined />} size="large"
+                        suffixIcon={
+                            <><Space>
+                                <SearchOutlined />
+                                <Text><span style={{}}>Tìm Kiếm</span></Text>
+                            </Space></>
+                        }
+                        size="large"
                         onSearch={(value) => console.log(value)}
                         style={{ width: '100%' }}
                     />

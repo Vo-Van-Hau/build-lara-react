@@ -1,31 +1,14 @@
 import React, { useContext, useEffect } from 'react';
-
-import { BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
-import { Card, Avatar, Rate, Image, Carousel, Button, Affix } from "antd"
+import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
 import { LeftOutlined, RightOutlined,SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
 
 const HomePage = (props) => {
-    const { data, get_products, setRouter } = useContext(HomeContext);
-    const { products } = data;
+    const { data, get_products, setRouter, get_product_categories } = useContext(HomeContext);
+    const { products, mouted, product_categories } = data;
     const { Text } = Typography;
-    const categories = [
-        { id: 1, name: 'Thịt, Rau Củ' },
-        { id: 2, name: 'Bách Hóa' },
-        { id: 3, name: 'Nhà Cửa' },
-        { id: 4, name: 'Điện Tử' },
-        { id: 5, name: 'Thiết Bị Số' },
-        { id: 6, name: 'Điện Thoại' },
-        { id: 7, name: 'Mẹ & Bé' },
-        { id: 8, name: 'Loại 8' },
-        { id: 9, name: 'Loại 9' },
-        { id: 10, name: 'Loại 10' },
-        { id: 11, name: 'Loại 11' },
-        { id: 12, name: 'Loại 12' },
-        { id: 13, name: 'Loại 13' },
-    ]
     const imgSrc = [
         { id: 1, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/29/2c/4c/b8c757ba06d448ce3d2ec0bee3d75fa3.png.webp' },
         { id: 2, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/e5/db/cc/32b6b4268331a9ed46479ab0da46ae82.png.webp' },
@@ -56,16 +39,7 @@ const HomePage = (props) => {
         { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
 
     ]
-    const productArr = [
-        { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
 
-    ]
     const contentStyle = {
         height: '160px',
         color: '#fff',
@@ -73,24 +47,27 @@ const HomePage = (props) => {
         textAlign: 'center',
         background: '#364d79',
     };
+
     const handleClickTab = (e) => {
         console.log(e);
     }
 
     useEffect(() => {
-        get_products();
+        if(mouted) {
+            get_products(1, {});
+            get_product_categories(1, {});
+        }
     }, []);
 
-    return (<>
-        <Tabs activeKey={'none'}
+    return (
+        <><Tabs activeKey={'none'}
             tabPosition={'top'}
             onTabClick={(e) => handleClickTab(e)}
             style={{ padding: '0px 5px' }}
-            items={categories.map((item, index) => {
+            items={product_categories.map((item, index) => {
                 return {
-                    label: item.name,
-                    key: item.id,
-                    disabled: index === categories.length,
+                    label: item.label,
+                    key: item.key,
                 };
             })}
         />
@@ -150,20 +127,23 @@ const HomePage = (props) => {
             </Col>
         </Row>
         <Row className="categories_block_container">
-            <Space size={[10, 16]} wrap
+            <Space size={[10, 16]}
                 style={{
                     width: '100%', padding: '1rem',
-                    justifyContent: 'space-between',
                     backgroundColor: '#fff'
-                }} >
-                {categoriesArr.map((item, index) => (
-                    <Button key={index} align='center' block style={{ height: '80px' }}>
-                        <Avatar src={item.img} size={48} />
-                        <p>{item.title}</p>
-                    </Button>
-                ))}
+                }}
+            >
+                <Row gutter={[16, 16]}>
+                    {product_categories.map((item, index) => (
+                        <Col span={3} key={item.value}>
+                            <Button align='center' block style={{ height: '80px', borderRadius: 6 }}>
+                                <Avatar src={item.icon_link} size={48} />
+                                <p>{item.label}</p>
+                            </Button>
+                        </Col>
+                    ))}
+                </Row>
             </Space>
-
         </Row>
         <Row className='ads_banners_container'
             justify="space-between"
@@ -216,45 +196,51 @@ const HomePage = (props) => {
                     </Row>
                 </div>
             </Affix>
-
             <Row className="productContainer">
-                <Space size={[10, 16]} wrap style={{ width: '100%' }} justify="space-between">
-
-                    {products.map((item, index) => (
-
-                        <Card className="productItem"
-                            key={item.id}
-                            hoverable
-                            style={{ width: 240 }}
-                            cover={<img alt="example" src={item.image_link} />}
-                            onClick={() => setRouter({
-                                module: 'products',
-                                controller: 'productdetail',
-                                action: 'view',
-                                id: item.id,
-                            })}
-                        >
-                            <Meta title={item.name} />
-
-                            <div className="rating">
-                                {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
-                            </div>
-
-                            <Text className="price" type="danger" strong>120.000 đ</Text>
-
-                        </Card>
-                    ),
-                    )}
+                <Space size={[10, 16]} style={{ width: '100%' }}>
+                     <Row gutter={[16, 16]}>
+                        {products.map((item, index) => (
+                            <Col span={4} key={item.id}>
+                                <Card className="productItem"
+                                    hoverable
+                                    cover={<img
+                                        alt={item.name ? item.name : ``}
+                                        style={{ height: 189, width: 165, objectFit: `contain`}}
+                                        src={item.image_link}
+                                    />}
+                                    onClick={() => setRouter({
+                                        module: 'products',
+                                        controller: 'productdetail',
+                                        action: 'view',
+                                        id: item.id,
+                                    })}
+                                    style={{padding: 12}}
+                                >
+                                    <Meta title={item.name ? item.name : ``} />
+                                    <div className="rating">
+                                        {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                                    </div>
+                                    <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
                 </Space>
-                <Row justify="center" style={{ padding: 8, }}> 
-                    <Button type="primary"> Xem thêm </Button>
+                <Row justify="center" style={{ padding: 8, width: '100%'}}>
+                    <Col span={10}></Col>
+                    <Col span={4}>
+                        <div style={{}}>
+                            <div style={{ padding: 24, }}>
+                                <Button type="primary" style={{width: '100%', borderRadius: 6}} size={`large`}>Xem thêm</Button>
+                            </div>
+                        </div>
+                    </Col>
+                    <Col span={10}></Col>
                 </Row>
             </Row>
         </>
-        <BackTop />
-    </>
-    );
+        <BackTop /></>);
 }
 
 export default HomePage;
