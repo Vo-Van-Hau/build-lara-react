@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
     Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
-    Cascader, Divider, Menu, List, Avatar
+    Cascader, Divider, Menu, List, Avatar, Tag
 } from 'antd';
-import { UserOutlined, SearchOutlined, ShoppingCartOutlined, DownOutlined } from '@ant-design/icons';
+import {
+    UserOutlined, SearchOutlined, ShoppingCartOutlined, BellOutlined, LogoutOutlined, InboxOutlined
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 const { Text } = Typography;
@@ -55,29 +57,6 @@ const HeaderSection = (props) => {
 
         const { data, history } = props;
         const { user } = data;
-        const accountdropdown = [
-            {
-                key: '1',
-                label: (
-                    <Link to='/shopping/account/account'>Thông báo</Link>
-                )
-            },{
-                key: '2',
-                label: (
-                    <Link to='/seller'>Đơn hàng của tôi</Link>
-                )
-            },{
-                key: '3',
-                label: (
-                    <Link to=''>Tài khoản của tôi</Link>
-                )
-            },{
-                key: '4',
-                label: (
-                    <Link to=''>Đăng xuất</Link>
-                )
-            },
-        ];
 
         return (<>
             {/* <Dropdown menu={accountdropdown} placement="bottom" arrow>
@@ -91,24 +70,58 @@ const HeaderSection = (props) => {
             </Dropdown> */}
             <Popover content={() => {
                 return (<><List
-                        itemLayout="horizontal"
-                        dataSource={[
-                            'Racing car sprays burning fuel into crowd.',
-                            'Japanese princess to wed commoner.',
-                            'Australian walks 100km after outback crash.',
-                            'Man charged over missing wedding girl.',
-                            'Los Angeles battles huge wildfires.',
-                        ]}
-                        renderItem={(item) => (
-                            <List.Item>
-                                <Typography.Text mark>[ITEM]</Typography.Text> {item}
-                            </List.Item>
-                        )}
-                    /></>)
-            }} title="Title" trigger="hover" placement="bottom">
-                <>
-                    Hover
-                </>
+                    itemLayout="horizontal"
+                    dataSource={[{
+                            key: '1',
+                            label: (
+                                <><Space align="center">
+                                    <InboxOutlined />
+                                    <Link to='/shopping/customer/orders?action=history&id=%23'>Đơn hàng của tôi</Link>
+                                </Space></>
+                            )
+                        },{
+                            key: '2',
+                            label: (
+                                <><Space align="center">
+                                    <BellOutlined />
+                                    <Link to='/shopping/customer/notification'>Thông báo của tôi</Link>
+                                </Space></>
+                            )
+                        },{
+                            key: '3',
+                            label: (
+                                <><Space align="center">
+                                    <UserOutlined />
+                                    <Link to='/shopping/customer/account'>Tài khoản của tôi</Link>
+                                </Space></>
+                            )
+                        },{
+                            key: '4',
+                            label: (
+                                <><Space align="center">
+                                    <LogoutOutlined />
+                                    <Link to=''>Thoát tài khoản</Link>
+                                </Space></>
+                            )
+                        }
+                    ]}
+                    renderItem={(item) => (
+                        <List.Item>
+                            <Button type="text" size={`middle`}>
+                                {item.label}
+                            </Button>
+                        </List.Item>
+                    )}
+                /></>)
+            }} title="" trigger="hover" placement="bottom">
+                <><Row justify='center' align='center' style={{justify: 'center', align: 'center'}}>
+                    <Col span={24} style={{padding: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <Text level={4}><span style={{color: '#FFFFFF'}}>Tài khoản</span></Text>
+                    </Col>
+                    <Col span={24} style={{padding: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <Tag color="#87d068" style={{marginRight: 0}}>{ user.name ? user.name : '' }</Tag>
+                    </Col>
+                </Row></>
             </Popover>
         </>)
     }
@@ -322,45 +335,43 @@ const HeaderSection = (props) => {
     return (<>
         <header className='main_header_container'>
             <Row className='header_container' justify="center"  >
-                <Col className='logo_container' >
+                <Col className='logo_container' span={2}>
                     <Link to="/shopping/home/home" > <Image preview={false} width={60} height={60} src="/images/msmall-icon.png" /></Link>
                 </Col>
-
-                <Col className='formSearch_container' span={12} >
+                <Col className='formSearch_container' span={16} >
                     <Cascader
                         dropdownRender={dropdownSearchbar}
                         onChange={onChange}
                         placeholder="Tìm sản phẩm, danh mục hay thương hiệu mong muốn ..."
                         showSearch={{ filterSearchbar }}
                         suffixIcon={
-                            <><Space>
-                                <SearchOutlined />
-                                <Text><span style={{}}>Tìm Kiếm</span></Text>
-                            </Space></>
+                            <><Button icon={<SearchOutlined />} type="primary">
+                                <Text strong style={{color: '#FFFFFF'}}><span style={{}}>Tìm Kiếm</span></Text>
+                            </Button></>
                         }
                         size="large"
                         onSearch={(value) => console.log(value)}
                         style={{ width: '100%' }}
                     />
                 </Col>
-
-                <Col className='header_account_container' >
+                <Col className='header_account_container' span={3}>
                     <Space
                         direction="horizontal"
                         size="small"
                         style={{
                             display: 'flex',
                         }}
-                        align="center"
+                        align="end"
                     >
-                        <UserOutlined style={{ color: '#fff', fontSize: '32px' }} />
-                        <div className='user_itemText'>
-                            {is_login ? <AccountBox {...props}/> : <AuthenticatedBox {...props}/>}
-                        </div>
+                        {/* <div> */}
+                            <UserOutlined style={{ color: '#fff', fontSize: '32px' }} />
+                            <div className='user_itemText'>
+                                {is_login ? <AccountBox {...props}/> : <AuthenticatedBox {...props}/>}
+                            </div>
+                        {/* </div> */}
                     </Space>
                 </Col>
-
-                <Col className='header_cart_container'>
+                <Col className='header_cart_container' span={3}>
                     <Badge count={1} >
                         <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }} />
                     </Badge>
