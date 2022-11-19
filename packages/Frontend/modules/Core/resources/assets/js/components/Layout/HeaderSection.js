@@ -323,7 +323,12 @@ const HeaderSection = (props) => {
         <header className='main_header_container'>
             <Row className='header_container' justify="center"  >
                 <Col className='logo_container' >
-                    <Link to="/shopping/home/home" > <Image preview={false} width={60} height={60} src="/images/msmall-icon.png" /></Link>
+                    <Link to="/shopping/home/home" > 
+                        <Image preview={false} width={60} height={60} src="/images/msmall-icon.png" alt='logo-ms' />
+                    </Link>
+                    <Link to="/shopping/home/home" > 
+                        <Image preview={false} width={60} height={60} src="/images/msmall-icon.png" alt='logo-ms' />
+                    </Link>
                 </Col>
 
                 <Col className='formSearch_container' span={12} >
