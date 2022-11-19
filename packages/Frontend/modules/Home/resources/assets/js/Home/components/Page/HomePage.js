@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
-import { LeftOutlined, RightOutlined,SearchOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined, SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
@@ -53,17 +53,18 @@ const HomePage = (props) => {
     }
 
     useEffect(() => {
-        if(mouted) {
+        if (mouted) {
             get_products(1, {});
             get_product_categories(1, {});
         }
     }, []);
 
     return (
-        <><Tabs activeKey={'none'}
+        <>
+        <Tabs activeKey={'none'}
             tabPosition={'top'}
             onTabClick={(e) => handleClickTab(e)}
-            style={{ padding: '0px 5px' }}
+            style={{ padding: '0px 5px', fontWeight: 500 }}
             items={product_categories.map((item, index) => {
                 return {
                     label: item.label,
@@ -126,12 +127,82 @@ const HomePage = (props) => {
                 />
             </Col>
         </Row>
+        <Row className="titleHeading">
+            <Col span={22}>
+                <h2>Thương hiệu chính hãng</h2>
+            </Col>
+            <Col span={2} className='more-btn'>
+                <Typography.Link type="primary" >Xem thêm</Typography.Link>
+            </Col>
+        </Row>
+        <Row className="productContainer">
+        <Col span={24}>
+            <Carousel
+                slidesToShow={2}
+                autoplay
+                arrows={true}
+                prevArrow={<LeftOutlined />}
+                nextArrow={<RightOutlined />}
+                swipeToSlide draggable
+                >
+                {imgSrc.map((item, index) => {
+                    return <Image
+                        height={355}
+                        key={index}
+                        preview={false}
+                        style={contentStyle}
+                        src={item.url} />
+                })}
+            </Carousel>    
+        </Col>
+        <Col span={24}>
+            <Carousel
+                slide
+                slidesToShow={5}
+                arrows={true}
+                prevArrow={<LeftOutlined />}
+                nextArrow={<RightOutlined />}
+                swipeToSlide draggable
+            >
+                {products.map((item, index) => (
+                    <Card key={item.id} className="productItem slider"
+                        hoverable
+                        cover={<img
+                            alt={item.name ? item.name : `product-img`}
+                            style={{ padding:10,height: '200px', width: '100%', objectFit: 'contain' }}
+                            src={item.image_link}
+                        />}
+                        onClick={() => setRouter({
+                            module: 'products',
+                            controller: 'productdetail',
+                            action: 'view',
+                            id: item.id,
+                        })}
+                        style={{ padding: 12, marginLeft:5 }}
+                    >
+                        <Meta title={item.name ? item.name : ``} />
+                        <div className="rating">
+                            {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                        </div>
+                        <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
+                    </Card>
+                    ))}
+            </Carousel>
+        </Col>
+        </Row>
+        <Row className="titleHeading">
+            <Col>
+                <h2>Danh mục sản phẩm</h2>
+            </Col>
+        </Row>
         <Row className="categories_block_container">
-            <Space size={[10, 16]}
-                style={{
+        
+            <Space size={[10, 16]} 
+                    style={{
                     width: '100%', padding: '1rem',
                     backgroundColor: '#fff'
-                }}
+                    }}
             >
                 <Row gutter={[16, 16]}>
                     {product_categories.map((item, index) => (
@@ -198,14 +269,14 @@ const HomePage = (props) => {
             </Affix>
             <Row className="productContainer">
                 <Space size={[10, 16]} style={{ width: '100%' }}>
-                     <Row gutter={[16, 16]}>
+                    <Row gutter={[16, 16]}>
                         {products.map((item, index) => (
                             <Col span={4} key={item.id}>
                                 <Card className="productItem"
                                     hoverable
                                     cover={<img
                                         alt={item.name ? item.name : ``}
-                                        style={{ height: 189, width: 165, objectFit: `contain`}}
+                                        style={{ height: 189, width: 165, objectFit: `contain` }}
                                         src={item.image_link}
                                     />}
                                     onClick={() => setRouter({
@@ -214,7 +285,7 @@ const HomePage = (props) => {
                                         action: 'view',
                                         id: item.id,
                                     })}
-                                    style={{padding: 12}}
+                                    style={{ padding: 12 }}
                                 >
                                     <Meta title={item.name ? item.name : ``} />
                                     <div className="rating">
@@ -227,12 +298,12 @@ const HomePage = (props) => {
                         ))}
                     </Row>
                 </Space>
-                <Row justify="center" style={{ padding: 8, width: '100%'}}>
+                <Row justify="center" style={{ padding: 8, width: '100%' }}>
                     <Col span={10}></Col>
                     <Col span={4}>
-                        <div style={{}}>
+                        <div>
                             <div style={{ padding: 24, }}>
-                                <Button type="primary" style={{width: '100%', borderRadius: 6}} size={`large`}>Xem thêm</Button>
+                                <Button type="primary" style={{ width: '100%', borderRadius: 6 }} size={`large`}>Xem thêm</Button>
                             </div>
                         </div>
                     </Col>
@@ -240,7 +311,12 @@ const HomePage = (props) => {
                 </Row>
             </Row>
         </>
-        <BackTop /></>);
+        <BackTop>
+            <div className="ant-back-top-inner">
+                <Image width={65} height={65} src='/images/totop.png' alt='totop' preview={false} />
+            </div>
+        </BackTop>
+        </>);
 }
 
 export default HomePage;
