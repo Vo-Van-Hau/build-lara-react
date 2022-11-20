@@ -11,14 +11,22 @@ import { CoreContext } from '../Contexts/CoreContext';
 // (tip move them in a JSON file and import them,
 // or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
 const resources_i18n = {
-    en: {
+    vi: {
         translation: {
-            "Welcome to React": "Welcome to React and react-i18next"
+            "Welcome to React": "Bienvenue à React et react-i18next",
+            appName: 'Fanthbol Shopping'
         }
     },
-    fr: {
+    en: {
         translation: {
-            "Welcome to React": "Bienvenue à React et react-i18next"
+            "Welcome to React": "Welcome to React and react-i18next",
+            appName: 'Fanthbol Shopping'
+        }
+    },
+    ja: {
+        translation: {
+            "Welcome to React": "Bienvenue à React et react-i18next",
+            appName: 'Fanthbol Shopping'
         }
     }
 };
@@ -44,8 +52,8 @@ i18n
  */
 const App = (props) => {
 
-    const { data, get_module, get_user } = useContext(CoreContext);
-    const {} = props;
+    const { data, get_module, get_user, setRouter } = useContext(CoreContext);
+    const { history } = props;
     const { mouted } = data;
     const { t } = useTranslation();
 
@@ -57,7 +65,7 @@ const App = (props) => {
     }, [props]);
 
     return RoutesWeb({
-        data, get_user, t, i18n
+        data, get_user, t, i18n, setRouter, history
     });
 };
 

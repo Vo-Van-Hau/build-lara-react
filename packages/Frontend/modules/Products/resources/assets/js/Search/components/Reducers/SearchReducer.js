@@ -1,11 +1,12 @@
 import {
-    GET_GROUPS, SET_USER_GROUPS, SET_PAGINATION,
-    SET_TABLE_LOADING, MOUTED
+    GET_PRODUCTS, SET_PAGINATION, GET_PRODUCT_CATEGORIES,
+    SET_TABLE_LOADING, MOUTED, GET_PRODUCT_CATEGORY,
 } from '../Dispatch/type';
 
 export const initialState = {
-    groups:[],
-    config:{
+    products: [],
+    product_categories: [],
+    config: {
         status: []
     },
     pagination: {
@@ -21,18 +22,13 @@ export const initialState = {
     mouted: true
 }
 
-export const GroupsReducer = (state = initialState, action) => {
+export const SearchReducer = (state = initialState, action) => {
     let { type, payload } = action;
     switch (type) {
-        case GET_GROUPS:
-            return {...state, groups: [...payload]};
-        case SET_USER_GROUPS:
-            let {id, users} = payload;
-            let { groups } = state;
-            let index = groups.findIndex(item => item.id === id);
-            let record = groups.find(item => item.id === id);
-            groups[index] = {...record, users:[...users]};
-            return {...state, groups: [...groups]};
+        case GET_PRODUCTS:
+            return {...state, products: [...payload]};
+        case GET_PRODUCT_CATEGORIES:
+            return {...state, product_categories: [...payload]};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
         Cascader, Divider, Menu, List, Avatar, Tag, Drawer } from 'antd';
-import {UserOutlined, SearchOutlined, ShoppingCartOutlined, 
+import {UserOutlined, SearchOutlined, ShoppingCartOutlined,
         BellOutlined, LogoutOutlined, InboxOutlined} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const { Search } = Input;
 
 const HeaderSection = (props) => {
 
-    const { data, history } = props;
+    const { data, navigate, setRouter, searchParams } = props;
     const { user } = data;
     const { is_login } = user;
 
@@ -20,6 +20,9 @@ const HeaderSection = (props) => {
      * @returns {Object}
      */
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [keySearch, setKeySearch] = useState({
+        q: ''
+    });
 
     const showModal = () => {
         console.log('show login')
@@ -136,7 +139,7 @@ const HeaderSection = (props) => {
         {id:4, name:'Sách từ vựng', url:'https://salt.tikicdn.com/cache/280x280/ts/product/95/86/73/5f76f984dd5640086e5060bac4148e59.jpg'},
         {id:5, name:'Máy massage', url:'https://salt.tikicdn.com/cache/280x280/ts/product/7a/ed/59/210ee12be5f63ff380768f68266eb7a0.jpg'},
         {id:6, name:'Đèn pin siêu sáng', url:'https://salt.tikicdn.com/cache/280x280/ts/product/c0/9f/3f/c6576e6a39f4b4ce3e9814cb8803e9cc.jpg'}
-        
+
     ];
     const searchPopularCategory = [
         {id:1, name:'Bách hóa online', url:'https://image.voso.vn/users/vosoimage/images/0f53ee50010327a8f71eeead5d90900a?t%5B0%5D=maxSize%3Awidth%3D150%2Cheight%3D150&t%5B1%5D=compress%3Alevel%3D100&accessToken=e6ebd93f1d65ed458cd77dd62eb3e5e8a7921215c9405420c7f7c6a8b8ea363a'},
@@ -147,72 +150,84 @@ const HeaderSection = (props) => {
         {id:6, name:'Thời trang nữ', url:'https://image.voso.vn/users/vosoimage/images/8399296911e4aceca8743c20a58de7b7?t%5B0%5D=maxSize%3Awidth%3D150%2Cheight%3D150&t%5B1%5D=compress%3Alevel%3D100&accessToken=247ec1fc59ff7964b263d9ff65229226750e9291adaea94f78a3e6a0e2237fd8'},
         {id:7, name:'Sức khỏe - Làm đẹp', url:'https://image.voso.vn/users/vosoimage/images/2dd47ec6a5f0d7c10c34d3e140ef70d0?t%5B0%5D=maxSize%3Awidth%3D150%2Cheight%3D150&t%5B1%5D=compress%3Alevel%3D100&accessToken=0690f46f348fce1191779ef644e48d694ccaf4c90e625fc25badd10c6ee8a272'},
         {id:8, name:'Mẹ và bé', url:'https://image.voso.vn/users/vosoimage/images/66921592c67ea8d4b8ad2d4c10a2497a?t%5B0%5D=maxSize%3Awidth%3D150%2Cheight%3D150&t%5B1%5D=compress%3Alevel%3D100&accessToken=7781915a3aa7cd0cbbd5fa8b4688a416f45130de5c15995a841dc4b929c2ad86'},
-        
+
     ];
     const dropdownSearchbar = () => (
-    <div className='dropdown-searchbar' >
-        <Menu>
-       {
-        searchRecent && searchRecent.map((item)=>  (
-            <Menu.Item> 
-                <Typography.Text mark>[<SearchOutlined />]</Typography.Text> {item}
-            </Menu.Item>
-        ))
-       }
-        </Menu>;
-        <Row justify="center" style={{ paddingBottom: 8, }}>
-            <Button type="primary" size='middle'> Xem thêm </Button>
-        </Row>
-        <Divider style={{ margin: 0, }} />
-        <div style={{ padding: 8, }} >
-            <h5>Tìm kiếm phổ biến </h5>
-            <Row gutter={[8, 10]}>
+        <div className='dropdown-searchbar' >
+            <Menu>
                 {
-                    searchPopular && searchPopular.map(item => {
-                        return(
-                            <Col span={8} >
-                            <Link style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} >
-                                <Image
-                                    width={45}
-                                    height={45}
-                                    src={item.url}
-                                    preview={false}
-                                />
-                                <span style={{ marginLeft: '5px' }}>{item.name}</span>
-                            </Link>
-                        </Col>
-                        )
-                    })
+                    searchRecent && searchRecent.map((item, index)=>  (
+                        <Menu.Item key={index}>
+                            <Typography.Text mark>[<SearchOutlined />]</Typography.Text> {item}
+                        </Menu.Item>
+                    ))
                 }
+            </Menu>;
+            <Row justify="center" style={{ paddingBottom: 8, }}>
+                <Button type="primary" size='middle'> Xem thêm </Button>
             </Row>
-        </div>
+            <Divider style={{ margin: 0, }} />
+            <div style={{ padding: 8, }} >
+                <h5>Tìm kiếm phổ biến </h5>
+                <Row gutter={[8, 10]}>
+                    {
+                        searchPopular && searchPopular.map((item, index) => {
+                            return (
+                                <Col span={8} key={index}>
+                                    <Link style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} >
+                                        <Image
+                                            width={45}
+                                            height={45}
+                                            src={item.url}
+                                            preview={false}
+                                        />
+                                        <span style={{ marginLeft: '5px' }}>{item.name}</span>
+                                    </Link>
+                                </Col>
+                            )
+                        })
+                    }
+                </Row>
+            </div>
 
-        <Divider style={{ margin: 0, }} />
-        <div style={{ padding: 8, }} >
-            <h5>Danh mục nổi bật </h5>
-            <Row gutter={[8, 16]}>
-                {
-                    searchPopularCategory && searchPopularCategory.map((item)=>{
-                        return(
-                        <Col span={6}>
-                            <Link to='' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <Image
-                                    width={60}
-                                    height={60}
-                                    src={item.url}
-                                    preview={false}
-                                />
-                                <span>{item.name}</span>
-                            </Link>
-                        </Col>
-                        )
-                    })
-                }
-            </Row>
+            <Divider style={{ margin: 0, }} />
+            <div style={{ padding: 8, }} >
+                <h5>Danh mục nổi bật </h5>
+                <Row gutter={[8, 16]}>
+                    {
+                        searchPopularCategory && searchPopularCategory.map((item, index)=>{
+                            return (
+                                <Col span={6} key={index}>
+                                    <Link to='' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                        <Image
+                                            width={60}
+                                            height={60}
+                                            src={item.url}
+                                            preview={false}
+                                        />
+                                        <span>{item.name}</span>
+                                    </Link>
+                                </Col>
+                            )
+                        })
+                    }
+                </Row>
+            </div>
         </div>
-    </div>
     );
-    const filterSearchbar = (inputValue, path) => path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
+
+    /**
+     *
+     * @param {*} inputValue
+     * @param {*} path
+     */
+    const filterSearchbar = (inputValue, path) => {
+        path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
+    };
+
+    /**
+     *
+     */
     const onChange = (value, selectedOptions) => {
         console.log(value, selectedOptions);
     };
@@ -223,13 +238,38 @@ const HeaderSection = (props) => {
      * @param {Object} props
      * @returns
      */
-        const [open, setOpen] = useState(false);
-        const showDrawer = () => {
-            setOpen(true);
-        };
-        const onClose = () => {
-            setOpen(false);
-        };
+    const [open, setOpen] = useState(false);
+    const showDrawer = () => {
+        setOpen(true);
+    };
+    const onClose = () => {
+        setOpen(false);
+    };
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: Search products by key
+     * @param {string} key
+     * @return {void}
+     */
+    const handleSearchProducts = () => {
+        setRouter({
+            module: 'products',
+            controller: 'search',
+            action: 'view',
+            q: keySearch.q ? keySearch.q : ``,
+        }, navigate);
+    }
+
+    useEffect(() => {
+        if(searchParams.get('q')) {
+            setKeySearch({
+                ...keySearch,
+                q: searchParams.get('q').trim()
+            });
+        }
+    }, [props]);
+
     return (<>
         <header className='main_header_container'>
             <Row className='header_container' justify="center"  >
@@ -240,16 +280,18 @@ const HeaderSection = (props) => {
                     <Cascader
                         dropdownRender={dropdownSearchbar}
                         onChange={onChange}
-                        placeholder="Tìm sản phẩm, danh mục hay thương hiệu mong muốn ..."
+                        placeholder={keySearch.q ? keySearch.q.trim() : `Tìm sản phẩm, danh mục hay thương hiệu mong muốn ...`}
                         showSearch={{ filterSearchbar }}
                         suffixIcon={
-                            <Button className='searchSubmit' icon={<SearchOutlined />} type="primary">
+                            <Button className='searchSubmit' icon={<SearchOutlined />} type="primary" onClick={() => handleSearchProducts()}>
                                 Tìm Kiếm
                             </Button>
                         }
                         size="large"
-                        onSearch={(value) => console.log(value)}
+                        onSearch={(value) => setKeySearch({...keySearch, q: value})}
                         style={{ width: '100%' }}
+                        removeIcon={``}
+                        expandIcon={<SearchOutlined />}
                     />
                 </Col>
                 <Col className='header_account_container' span={3}>

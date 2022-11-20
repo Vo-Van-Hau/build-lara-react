@@ -6,8 +6,6 @@ const { Content }  = Layout;
 
 const ContentSection = (props) => {
 
-    const { history } = props;
-    
     return (
         <>
             <Content className='main_content_container'>
@@ -18,7 +16,7 @@ const ContentSection = (props) => {
                             <Route path='/' element={<><Outlet /></>}>
                                 <Route
                                     path={`${parseURL}/:moduleName/:controllerName`}
-                                    element={<ModuleView history={history} {...props}/>}
+                                    element={<ModuleView {...props}/>}
                                 />
                                 <Route path='*'>
                                     <>Page not found !!!</>

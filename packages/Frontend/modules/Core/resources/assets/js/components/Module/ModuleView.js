@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import _ from 'lodash';
 import { CoreContext } from '../Contexts/CoreContext';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import InjectedModuleView from '../PluginInjection/InjectedModuleView';
 import helper from '../../helpers/helper';
 
@@ -14,11 +14,9 @@ import helper from '../../helpers/helper';
 const ModuleView = ({ history, ...props }) => {
 
     const { data } = useContext(CoreContext);
-    const {} = props;
+    const { navigate, searchParams } = props;
     const { modules } = data;
     const { capitalize_first_letter } = helper;
-    const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
     const { moduleName, controllerName } = useParams();
 
     if (!modules) return null;

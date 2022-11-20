@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from 'react';
+import { createSearchParams } from 'react-router-dom';
 import { initialState, CoreReducer } from '../Reducers/CoreReducer';
-import { GET_MODULE, SET_TABLE_LOADING, GET_USER } from '../Dispatch/type';
+import { GET_MODULE, SET_TABLE_LOADING, GET_USER, MOUTED } from '../Dispatch/type';
 import api from '../../helpers/api';
 
 export const CoreContext = createContext();
@@ -67,6 +68,44 @@ const CoreContextProvider = ({ children, axios, history }) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object}
+     * @return {void}
+     */
+    const setRouter = ({
+        action,
+        id = '',
+        module = '',
+        controller = '',
+        q = ''
+    }, navigate) => {
+        set_mouted(true);
+        let parseURL = window.sparrowConfig.app.adminPrefix ? '/' + window.sparrowConfig.app.adminPrefix : '';
+        if(module) parseURL += `/${module}`;
+        if(controller) parseURL += `/${controller}`;
+        let parseACT = action ? `?action=${action}` : ``;
+        let parseKeyID = id ? `&id=${id}` : ``;
+        let parseQ = q ? `&q=${q}` : ``;
+        let nextURL = `${parseURL}${parseACT}${parseKeyID}${parseQ}`;
+        history.push(nextURL);
+        return navigate({
+            pathname: parseURL,
+            search: `?${createSearchParams({action, id, q})}`,
+        });
+    }
+
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return {void}
+     */
+     const set_mouted = (values) => {
+        dispatch({ type: MOUTED, payload: values});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: set table loading...
      * @return {void}
      */
@@ -85,7 +124,7 @@ const CoreContextProvider = ({ children, axios, history }) => {
     };
 
     const todoContextData = {
-        data, get_user,
+        data, get_user, setRouter,
         dispatch,
         get_axios,
         get_module

@@ -1,40 +1,15 @@
 import React, { createContext, useReducer } from 'react';
 import { createSearchParams } from 'react-router-dom';
-import { initialState, HomeReducer } from '../Reducers/HomeReducer';
+import { initialState, SearchReducer } from '../Reducers/SearchReducer';
 import {
-    GET_PRODUCT_CATEGORIES, GET_PRODUCTS,
-    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
+    GET_PRODUCTS, SET_TABLE_LOADING, MOUTED, GET_PRODUCT_CATEGORIES
 } from '../Dispatch/type';
 
-export const HomeContext = createContext();
+export const SearchContext = createContext();
 
-const HomeContextProvicer = ({ children, axios, history, config, navigate }) => {
+const SearchContextProvider = ({ children, axios, history, config, navigate }) => {
 
-    const [data, dispatch] = useReducer(HomeReducer, initialState);
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get product categories
-     * @param {string} page
-     * @param {string} keySearch
-     * @return {void}
-     */
-     const get_product_categories = (page, keySearch) => {
-        set_table_loading();
-        return axios
-        .get_secured()
-        .post(`/products/products/get_product_categories?page=${page}`, {...keySearch})
-        .then((res) => {
-            let { status } = res.data;
-            if(status) {
-                let { categories } = res.data.data;
-                dispatch({ type: GET_PRODUCT_CATEGORIES, payload: categories });
-                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
-            }
-        })
-        .catch((errors) => {})
-        .finally(() => {set_table_loading();});
-    }
+    const [data, dispatch] = useReducer(SearchReducer, initialState);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -64,20 +39,46 @@ const HomeContextProvicer = ({ children, axios, history, config, navigate }) => 
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get product
+     * @todo: get products by options
+     * @param {Object} data
+     * @return {void}
+     */
+     const get_products = (data) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/products/products/get_by_options`, {...data})
+        .then((res) => {
+            const {status} = res.data;
+            if(status) {
+                let { products } = res.data.data;
+                let { data } = products;
+                dispatch({ type: GET_PRODUCTS, payload: data });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get product categories
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
      */
-    const get_products = (page, keySearch) => {
+     const get_product_categories = (page, keySearch) => {
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/products/products/get_list`)
+        .post(`/products/products/get_product_categories?page=${page}`, {...keySearch})
         .then((res) => {
-            let { products } = res.data;
-            let { data } = products;
-            dispatch({ type: GET_PRODUCTS, payload: data });
+            let { status } = res.data;
+            if(status) {
+                let { categories } = res.data.data;
+                dispatch({ type: GET_PRODUCT_CATEGORIES, payload: categories });
+                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
@@ -109,16 +110,16 @@ const HomeContextProvicer = ({ children, axios, history, config, navigate }) => 
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config},
-        history, setRouter, dispatch, get_axios, set_table_loading,
-        set_mouted, get_products, get_product_categories
+        data: {...data, config}, get_product_categories,
+        history, dispatch, get_axios, get_products,
+        set_table_loading, set_mouted, setRouter,
     };
 
     return (
-        <HomeContext.Provider value={todoContextData}>
+        <SearchContext.Provider value={todoContextData} >
             { children }
-        </HomeContext.Provider>
+        </SearchContext.Provider>
     );
 }
 
-export default HomeContextProvicer;
+export default SearchContextProvider;

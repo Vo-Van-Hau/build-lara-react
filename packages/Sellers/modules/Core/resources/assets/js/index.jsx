@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client';
 import { Index }                    from './components/ViewDefault/Index';
 import CoreContextProvicer          from './components/Contexts/CoreContext';
 import App                          from './components/App/App';
+import { history } from './routes/RoutesWeb';
 
 window.React = React;
 window.winter = typeof window.winter === 'object' ? window.winter : {};
@@ -18,7 +19,7 @@ if (document.getElementById('root')) {
     root.render(
         <CoreContextProvicer history={history}>
             <Suspense fallback={() => (<><span>Loading...</span></>)}>
-                <App history={history} />
+                <App history={history}/>
             </Suspense>
         </CoreContextProvicer>
     );
