@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { HomeOutlined } from '@ant-design/icons';
-import { Breadcrumb, Col, Row, Menu, Divider, Typography, Affix, Space, Card, Rate, Pagination } from 'antd';
+import { Breadcrumb, Col, Row, Menu, Divider, Typography, Affix, Space, Card, Rate, Pagination, Button, Form, Checkbox, InputNumber, List } from 'antd';
 import { Carousel, Image } from 'antd';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined ,CaretUpOutlined,CaretDownOutlined,StarFilled} from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductsContext } from '../Contexts/ProductsContext';
 const { Title, Text } = Typography;
@@ -11,7 +11,9 @@ const ProductsPage = ({keyID, ...props}) => {
 
     const { setRouter, data, get_products, get_product_categories } = useContext(ProductsContext);
     const { products, mouted, product_categories } = data;
-
+    const [isShowAll1, showAll1] = useState(false);
+    const [isShowAll2, showAll2] = useState(false);
+    const [isShowAll3, showAll3] = useState(false);
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(5);
     const numEachPage = 5   // Use a constant here to keep track of number of cards per page
@@ -42,6 +44,39 @@ const ProductsPage = ({keyID, ...props}) => {
         { key: 5, label: 'Price high to low' },
     ];
 
+    const onCheckChange = (e) => {
+        console.log(`checked = ${e.target.checked}`);
+    };
+    const itemToRender = (item, showAll, maxItem = 3) => {
+        item.sort((a, b) => b.primary - a.primary);
+        if (showAll) return item;
+        return item.slice(0, maxItem);
+      };
+    const placeOfSaleList = [
+        {place:'Hồ Chí Minh'},
+        {place:'Hà Nội'},
+        {place:'Hải Phòng'},
+        {place:'Thái Nguyên'}
+    ]
+    const rate = [
+        'Từ 5 sao',
+        'Từ 4 sao',
+        'Từ 3 sao'
+    ]
+    const trademark=[
+        {name:'Samsung'},
+        {name:'LG'},
+        {name:'Samsung'},
+        {name:'LG'},
+        {name:'Panasonic'}
+    ]
+    const supplier=[
+        {name:'Trường Thiên Long'},
+        {name:'Điện máy Gia Khang'},
+        {name:'Trường Thiên Long'},
+        {name:'Điện máy Gia Khang'},
+        {name:'Điện máy Liên Minh'}
+    ]
     useEffect(() => {
         if(mouted) {
             get_products();
@@ -61,13 +96,83 @@ const ProductsPage = ({keyID, ...props}) => {
         </Breadcrumb>
         <Row className='products_by_category_container' gutter={24}>
             <Col className='leftSide' span={5}>
-                <Affix className='fixBar' offsetTop={0}>
+                {/* <Affix className='fixBar' offsetTop={0}> */}
                     <div>
-                        <Title level={5}>Danh sách thể loại</Title>
-                        <Menu items={product_categories} />
+                        {/* <Title level={5}>Danh sách thể loại</Title>
+                        <Menu items={product_categories} /> */}
+                        <Title level={5}>Nơi bán</Title>
+                            <List
+                                itemLayout="horizontal"
+                                dataSource={itemToRender(placeOfSaleList, isShowAll1)}
+                                loadMore={
+                                    <Button type="link" icon={isShowAll1?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll1(!isShowAll1)}>
+                                    {isShowAll1 ? `Thu gọn` : `Xem thêm `}
+                                    </Button>}
+                                renderItem={(item,index) => (
+                                    <List.Item key={index}>
+                                        <Checkbox onChange={onCheckChange} >{item.place}</Checkbox>
+                                    </List.Item>
+                                )} 
+                            />
                         <Divider />
+                        <Title level={5}>Thương hiệu</Title>
+                            <List
+                                itemLayout="horizontal"
+                                dataSource={itemToRender(trademark, isShowAll2)}
+                                loadMore={
+                                    <Button type="link" icon={isShowAll2?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll2(!isShowAll2)}>
+                                    {isShowAll2 ? `Thu gọn` : `Xem thêm `}
+                                    </Button>}
+                                renderItem={(item,index) => (
+                                    <List.Item key={index}>
+                                        <Checkbox >{item.name}</Checkbox>
+                                    </List.Item>
+                                )}
+                            />
+                        <Divider />
+                        <Title level={5}>Nhà cung cấp</Title>
+                            <List
+                                itemLayout="horizontal"
+                                dataSource={itemToRender(supplier, isShowAll3)}
+                                loadMore={
+                                    <Button type="link" icon={isShowAll3?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll3(!isShowAll3)}>
+                                    {isShowAll3 ? `Thu gọn` : `Xem thêm `}
+                                    </Button>}
+                                renderItem={(item,index) => (
+                                    <List.Item key={index}>
+                                        <Checkbox >{item.name}</Checkbox>
+                                    </List.Item>
+                                )}
+                            />
+                        <Divider />
+                        <Title level={5}>Đánh giá</Title>
+                            <List
+                                itemLayout="horizontal"
+                                dataSource={itemToRender(rate)}
+                                renderItem={(item,index) => (
+                                    <List.Item key={index}>
+                                        <Checkbox >{item} <StarFilled /></Checkbox>
+                                    </List.Item>
+                                )}
+                            />
+                        <Divider />
+                        <Title level={5}>Giá</Title>
+                        <Button>Dưới 5.000.000đ</Button>
+                        <Button>Từ 5.000.000đ - 15.000.000đ</Button>
+                        <Button>Trên17.500.000đ</Button>
+                        <Space>
+                            <Form.Item label="Từ" name="priceMin">
+                                <InputNumber defaultValue={0} />
+                            </Form.Item> -
+                            <Form.Item label="đến" name="priceMax">
+                                <InputNumber defaultValue={0} />
+                            </Form.Item>
+                        </Space>
+                        <Button type="primary">Tìm</Button>
+                        <Divider />
+                        
                     </div>
-                </Affix>
+               
             </Col>
             <Col className='rightSide' span={19}>
                 <Title level={5}>Product Category Name</Title>

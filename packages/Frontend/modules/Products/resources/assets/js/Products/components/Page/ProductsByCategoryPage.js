@@ -62,6 +62,7 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
         { key: 5, label: 'Price high to low' },
     ];
 
+
     useEffect(() => {
         if(mouted) {
             get_products_by_category({keyID});
@@ -90,6 +91,7 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
                             // onClick={({ item, key, keyPath, domEvent }) => getProductsByCategory({ item, key, keyPath, domEvent })}
                         />
                         <Divider />
+                       
                     </div>
                 </Affix>
             </Col>

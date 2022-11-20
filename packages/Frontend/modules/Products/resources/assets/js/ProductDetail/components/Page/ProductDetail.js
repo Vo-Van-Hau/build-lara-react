@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import {
-    Avatar, Button, Col, Image, Rate, Row, Space, Card,
+    Avatar, Button, Col, Image, Rate, Row, Space, Card,Carousel,
     Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider
 } from 'antd';
-import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MinusOutlined, StarFilled } from '@ant-design/icons';
+import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, 
+        MinusOutlined, StarFilled,LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
 import Helper from '../Helper/Helper';
@@ -48,7 +49,7 @@ const ProductDetailPage = (props) => {
                 module: 'checkout',
                 controller: 'cart',
                 action: 'view',
-                id: seller.id  ? seller.id : '#'
+                id: seller.id ? seller.id : '#'
             });
         }} block>
             {`Xem giỏ hàng và thanh toán`}
@@ -72,19 +73,67 @@ const ProductDetailPage = (props) => {
         setQuantity(1);
     }
 
+    /** */
+    const RelatedProduct = () => {
+        const productArr = [
+            { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
+            { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
+            { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
+            { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
+            { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
+            { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
+            { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
+
+        ]
+        return <>
+            <Row className='related_product_container'>
+                <Col span={24} >
+                    <h3 className='section_title'> Sản phẩm liên quan </h3>
+                    <Carousel
+                    autoplay
+                    arrows={true}
+                    prevArrow={<LeftOutlined />}
+                    nextArrow={<RightOutlined />}
+                    slidesToShow={5}
+                    swipeToSlide draggable
+                    >
+                        {productArr.map((item, index) => {
+                            return (
+                                <Card className="productItem"
+                                    key={index}
+                                    hoverable
+                                    cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+                                >
+                                    <Meta title={item.title} />
+                                    <div className="rating">
+                                        <Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} />
+                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++</small>
+                                    </div>
+
+                                    <Text strong className="price" type="danger">120.000 đ</Text>
+
+                                </Card>
+                            )
+                        })}
+                    </Carousel>
+                </Col>
+            </Row>
+        </>
+    }
+
     useEffect(() => {
         get_product_item({ id: props.id });
     }, [props.id]);
 
     return (<>
         <><Breadcrumb style={{ padding: '12px' }}>
-                <Breadcrumb.Item style={{ cursor: 'pointer' }} >
-                    <HomeOutlined />
-                </Breadcrumb.Item>
-                <Breadcrumb.Item style={{ cursor: 'pointer' }}>
-                    <span>Sản phẩm</span>
-                </Breadcrumb.Item>
-                <Breadcrumb.Item>{ product_item.name }</Breadcrumb.Item>
+            <Breadcrumb.Item style={{ cursor: 'pointer' }} >
+                <HomeOutlined />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item style={{ cursor: 'pointer' }}>
+                <span>Sản phẩm</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>{product_item.name}</Breadcrumb.Item>
         </Breadcrumb></>
         <Row className='product_item_container' justify='space-between'>
             <Col span={8} className='product_image_container'>
@@ -100,7 +149,7 @@ const ProductDetailPage = (props) => {
                     <Col span={24}><h1 className='product_title'>{product_item.name}</h1></Col>
                     <Col className='rating' span={24}>
                         <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
-                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>{ product_item.name }</span>
+                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>{product_item.name}</span>
                     </Col>
                 </Row>
                 <Row className='body' >
@@ -127,15 +176,15 @@ const ProductDetailPage = (props) => {
                     <Col className='shop_info' span={8} offset={1}>
                         <Row gutter={[16, 16]}>
                             <Col >
-                                <Avatar size={48} src={ store.brand_logo ? store.brand_logo : '' } />
+                                <Avatar size={48} src={store.brand_logo ? store.brand_logo : ''} />
                             </Col>
                             <Col span={12}>
                                 <><Button type='link' onClick={() => setRouter({
                                     module: 'shop',
                                     controller: 'shop',
                                     action: 'view',
-                                    id: seller.id  ? seller.id : '#'
-                                })}>{ store.name ? store.name : 'Undefined'}</Button></>
+                                    id: seller.id ? seller.id : '#'
+                                })}>{store.name ? store.name : 'Undefined'}</Button></>
                             </Col>
                             <Col span={12} className='shop_rating'>
                                 <div>4.5 / 5  <StarFilled /></div>
@@ -145,12 +194,12 @@ const ProductDetailPage = (props) => {
                                 <div>250k+ Theo dõi</div>
                             </Col>
 
-                            <Space wrap className='btn-group' style={{justifyContent: 'center'}}>
+                            <Space wrap className='btn-group' style={{ justifyContent: 'center' }}>
                                 <Button icon={<ShopOutlined />} size='middle' onClick={() => setRouter({
                                     module: 'shop',
                                     controller: 'shop',
                                     action: 'view',
-                                    id: seller.id  ? seller.id : '#'
+                                    id: seller.id ? seller.id : '#'
                                 })}>
                                     Xem Shop
                                 </Button>
@@ -164,50 +213,32 @@ const ProductDetailPage = (props) => {
                 </Row>
             </Col>
         </Row>
-        <Row dangerouslySetInnerHTML={{ __html: product_item.description }} />
+
+        <Row className='product_detail_container'>
+            <Col span={24}>
+                <h3>Thông tin chi tiết</h3>
+            </Col>
+            <Col span={24} className='table_detail_container'>
+                <Descriptions column={24} bordered>
+                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Thương hiệu">Glucosamin</Descriptions.Item>
+                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Xuất xứ">Việt Nam</Descriptions.Item>
+                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Hạn sử dụng">-</Descriptions.Item>
+                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Mô tả ngắn">Trong chiết xuất cây Móng Quỷ, có chứa Harpagoside - hoạt chất có tính ứng dụng cao trong y học, giúp giảm đau, giúp giảm viêm nhờ ức chế hoạt động của enzyms phá huỷ sụn khớp hiệu quả. Ngoài ra, Harpagoside còn giúp bảo vệ, tái tạo sụn khớp nhờ đảm bảo quá trình tổng hợp Collagen của sụn...</Descriptions.Item>
+                </Descriptions>
+            </Col>
+        </Row>
+        <Row className='product_description_container'>
+            <Col span={24}>
+                <h3>Mô tả sản phẩm</h3>
+            </Col>
+            <Col span={24}>
+                <p className='description_txt' dangerouslySetInnerHTML={{ __html: product_item.description }}></p>
+            </Col>
+        </Row>
         <RelatedProduct />
     </>)
 }
 
-const RelatedProduct = () => {
-    const productArr = [
-        { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
 
-    ]
-    return <>
-        <Row className='related_product_container'>
-            <Col span={24} >
-                <h3 className='section_title'> Related Product </h3>
-                <Slider className='related_product_slider' slidesToShow={5}  >
-                    {productArr.map((item, index) => {
-                        return (
-                            <Card className="productItem"
-                                key={index}
-                                hoverable
-                                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"  />}
-                            >
-                                <Meta title={item.title} />
-                                <div className="rating">
-                                    <Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} />
-                                    <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++</small>
-                                </div>
-
-                                <Text strong className="price" type="danger">120.000 đ</Text>
-
-                            </Card>
-                        )
-                    })}
-                </Slider>
-
-            </Col>
-        </Row>
-    </>
-}
 
 export default ProductDetailPage;
