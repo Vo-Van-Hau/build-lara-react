@@ -2,8 +2,8 @@
 
 return [
 
-    "namespace"     => "ProductsFrontend",
-    "version"       => "1.00.000",
+    'namespace'     => 'ProductsFrontend',
+    'version'       => '1.00.000',
 
     /*
     |--------------------------------------------------------------------------
@@ -11,6 +11,6 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    "frontend_url" => env("APP_FRONTEND_URL", "shopping"),
-    "item_per_page" => 10
+    'frontend_url' => env('APP_FRONTEND_URL', 'shopping'),
+    'item_per_page' => 10
 ];

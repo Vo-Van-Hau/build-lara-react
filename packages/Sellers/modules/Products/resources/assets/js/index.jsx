@@ -1,6 +1,4 @@
-import Orders from './Orders';
 import Products from './Products';
 
-export default Orders;
-export { Orders as orders }
+export default Products;
 export { Products as products }

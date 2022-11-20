@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import ProductsPage from './components/Page/Products';
-import ProductsByCategoryPage from './components/Page/ProductsByCategoryPage';
-import ProductsContextProvider from './components/Contexts/ProductsContext';
+import SearchPage from './components/Page/Search';
+import SearchContextProvider from './components/Contexts/SearchContext';
 
-const Products = (props) => {
+const Search = (props) => {
 
     const [config, setConfig] = useState({
         status: [],
     });
     const [action, setAction] = useState('index');
     const [id, setId] = useState('');
+    const [q, setQ] = useState('');
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -41,10 +41,12 @@ const Products = (props) => {
         const searchParams = props.searchParams;
         let params = {
             action: searchParams.get('action') || 'index',
-            id: searchParams.get('id') || ''
+            id: searchParams.get('id') || '',
+            q: searchParams.get('q') || '',
         }
         setAction(params.action);
         setId(params.id);
+        setQ(params.q);
     }
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -54,8 +56,8 @@ const Products = (props) => {
      */
     const render_view = () => {
         switch(action) {
-            case 'bycategory': return (<ProductsByCategoryPage keyID={id} {...props}/>)
-            default: return (<ProductsPage {...props}/>);
+            case 'view': return (<SearchPage keyID={id} q={q} {...props}/>)
+            default: return (<SearchPage keyID={id} q={q} {...props}/>);
         }
     }
 
@@ -66,12 +68,12 @@ const Products = (props) => {
 
     return (
         <>
-            <ProductsContextProvider axios={props.bp.axios} history={props.history} config={config} {...props}>
+            <SearchContextProvider axios={props.bp.axios} config={config} {...props}>
                 { render_view() }
-            </ProductsContextProvider>
+            </SearchContextProvider>
 
         </>
     )
 }
 
-export default Products;
+export default Search;

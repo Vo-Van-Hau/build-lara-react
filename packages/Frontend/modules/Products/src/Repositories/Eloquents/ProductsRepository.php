@@ -162,4 +162,23 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ])->get();
         return $result;
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $data
+     * @return mixed
+     */
+    public function search_products($data) {
+        $q = isset($data['q']) ? $data['q'] : '';
+        if(empty($q)) return false;
+        $condition = 'products.name LIKE "%' . $q . '%"';
+        $result = $this->model->whereRaw($condition)
+        ->where([
+            'status' => 1,
+            'deleted' => 0
+        ])
+        ->paginate(50);
+        return $result;
+    }
 }

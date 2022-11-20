@@ -8,16 +8,20 @@ import { CoreContext } from '../Contexts/CoreContext';
  * @param {*} param0
  * @returns {void}
  */
-const App = ({ history, ...props }) => {
+const App = (props) => {
+
+    const { history } = props;
 
     const { data, get_module } = useContext(CoreContext);
     const {} = props;
 
     useEffect(() => {
         get_module();
-    }, []);
+    }, [props]);
 
-    return RoutesWeb();
+    return RoutesWeb({
+        data, history
+    });
 };
 
 export default App;

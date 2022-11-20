@@ -153,7 +153,7 @@ const HomePage = (props) => {
                         style={contentStyle}
                         src={item.url} />
                 })}
-            </Carousel>    
+            </Carousel>
         </Col>
         <Col span={24}>
             <Carousel
@@ -197,8 +197,8 @@ const HomePage = (props) => {
             </Col>
         </Row>
         <Row className="categories_block_container">
-        
-            <Space size={[10, 16]} 
+
+            <Space size={[10, 16]}
                     style={{
                     width: '100%', padding: '1rem',
                     backgroundColor: '#fff'
@@ -269,7 +269,7 @@ const HomePage = (props) => {
             </Affix>
             <Row className="productContainer">
                 <Space size={[10, 16]} style={{ width: '100%' }}>
-                    <Row gutter={[16, 16]}>
+                    <Row gutter={[8, 8]}>
                         {products.map((item, index) => (
                             <Col span={4} key={item.id}>
                                 <Card className="productItem"
@@ -286,13 +286,17 @@ const HomePage = (props) => {
                                         id: item.id,
                                     })}
                                     style={{ padding: 12 }}
+                                    bodyStyle={{padding: 0}}
                                 >
-                                    <Meta title={item.name ? item.name : ``} />
-                                    <div className="rating">
-                                        {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                                    <div>
+                                        {/* <Meta title={item.name ? item.name : ``} style={{fontWeight: 400}}/> */}
+                                        <Text style={{fontWeight: 400}} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                        <div className="rating">
+                                            {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                                        </div>
+                                        <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
                                     </div>
-                                    <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
                                 </Card>
                             </Col>
                         ))}

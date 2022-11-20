@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 import HeaderSection from './HeaderSection';
 import FooterSection from './FooterSection';
 import ContentSection from './ContentSection';
-
+import { useNavigate, useSearchParams } from 'react-router-dom';
 /**
  * @author: <vanhau.vo@urekamedia.vn>
  * @todo:
@@ -11,15 +11,16 @@ import ContentSection from './ContentSection';
  */
 const MasterLayout = (props) => {
 
-    const { history } = props;
+    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     return (
         <>
             <Layout>
                 <Layout className="site-layout" style={{}}>
-                    <HeaderSection {...props}/>
-                    <ContentSection history={history} {...props}/>
-                    <FooterSection />
+                    <HeaderSection {...props} navigate={navigate} searchParams={searchParams}/>
+                    <ContentSection {...props} navigate={navigate} searchParams={searchParams}/>
+                    <FooterSection {...props} navigate={navigate} searchParams={searchParams}/>
                 </Layout>
             </Layout>
         </>
