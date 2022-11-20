@@ -262,7 +262,7 @@ const HeaderSection = (props) => {
     }
 
     useEffect(() => {
-        if(searchParams.get('q').trim()) {
+        if(searchParams.get('q')) {
             setKeySearch({
                 ...keySearch,
                 q: searchParams.get('q').trim()
