@@ -98,6 +98,14 @@ footer.footer_wrap_container {
       display: flex !important;
       align-items: center;
       justify-content: center;
+      transition:  .2s ease-in-out;
+
+      &:hover{
+        background: rgb(158 148 148 / 70%);
+        color: #fff;
+        opacity: 1;
+        transition:  .2s ease-in-out;
+      }
 
   }
 
@@ -225,7 +233,10 @@ main.ant-layout-content {
         }
 
         .productItem.slider{
-            margin: 15px 0;
+            margin: 15px ;
+        }
+        .productSlider{
+            margin: 20px 0 15px;
         }
     }
 }
@@ -322,7 +333,6 @@ main.ant-layout-content {
 .product_item_container {
     background-color: #fff;
     margin: 1rem 0;
-    padding: 0 10%;
 
     .product_image_container,
     .product_info_container {
@@ -587,48 +597,26 @@ main.ant-layout-content {
 // }
 
 //Products Module
-.product_description_table {
+.product_detail_container {
     width: 100%;
     padding: 1rem;
     background-color: #fff;
-    th {
-        padding: 1rem;
-        text-align: left;
-        background: #efefef;
-    }
-    tr {
-        border-bottom: 1px solid #efefef;
-        &:ntn-child(even) {
-            background: #cdcdcd;
-        }
-        &:ntn-child(odd) {
-            background: #fff;
-        }
-    }
-
-    td {
-        width: 80%;
-        padding: 1rem;
+    
+}
+.product_description_container{
+    background-color: #fff;
+    padding: 20px;
+    margin: 50px 0;
+    .description_txt{
+        font-size: 16px;
     }
 }
+.related_product_container{
+    background-color: #fff;
+    padding: 20px;
+    margin: 50px 0;
+}
 .product_item_container {
-
-    .related_product_container {
-        margin: 1rem 0;
-        background-color: #fff;
-        .section_title {
-            padding: 1rem;
-        }
-
-        .related_product_slider {
-            .carousel-track {
-                .carousel-item {
-                    padding: 1rem;
-                }
-            }
-        }
-    }
-
     h1.product_title {
         margin: 0px 0px 4px;
         color: rgb(36, 36, 36);
@@ -638,6 +626,13 @@ main.ant-layout-content {
         word-break: break-word;
     }
 }
+
+.products_by_category_container{
+    ul.ant-list-items> .ant-list-item {
+        border-bottom:none !important;
+    }
+}
+
 
 //Publishers Module
 

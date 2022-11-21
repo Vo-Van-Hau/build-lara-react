@@ -136,7 +136,7 @@ const HomePage = (props) => {
             </Col>
         </Row>
         <Row className="productContainer">
-        <Col span={24}>
+        <Col span={24} className='bannerSlider'>
             <Carousel
                 slidesToShow={2}
                 autoplay
@@ -155,7 +155,7 @@ const HomePage = (props) => {
                 })}
             </Carousel>
         </Col>
-        <Col span={24}>
+        <Col span={24} className="productSlider">
             <Carousel
                 slide
                 slidesToShow={5}
@@ -165,7 +165,7 @@ const HomePage = (props) => {
                 swipeToSlide draggable
             >
                 {products.map((item, index) => (
-                    <Card key={item.id} className="productItem slider"
+                    <Card key={item.id} className="productItem"
                         hoverable
                         cover={<img
                             alt={item.name ? item.name : `product-img`}
