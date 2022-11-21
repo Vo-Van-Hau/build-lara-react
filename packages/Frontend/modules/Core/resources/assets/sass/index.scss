@@ -222,6 +222,24 @@ main.ant-layout-content {
         background: #fff;
         padding: 1rem;
         .productItem {
+            position: relative;
+            overflow: hidden;
+            .productItem-btn-group{
+                background: #fff;
+                position: absolute;
+                top: 0;
+                right: 0;
+                transform: translateX(35px);
+                transition: transform linear .2s;
+            }
+
+            &:hover {
+                .productItem-btn-group{
+                transform: translateX(0);
+                transition: transform linear .2s;
+                }
+            }
+
             p {
                 margin: 0;
             }
@@ -670,13 +688,32 @@ main.ant-layout-content {
         }
         .productContainer{
             .productItem{
+                position: relative;
+                overflow: hidden;
+                &:hover {
+                    .productItem-btn-group{
+                      transform: translateX(0);
+                      transition: transform linear .2s;
+                    }
+                  }
+
                 .ant-card-body{
                     padding: 10px;
                     .ant-card-meta-title{
                         font-size: 14px;
                     }
                 }
+
+                .productItem-btn-group{
+                    background: #fff;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    transform: translateX(35px);
+                    transition: transform linear .2s;
+                  }
             }
+            
         }
     }
 
