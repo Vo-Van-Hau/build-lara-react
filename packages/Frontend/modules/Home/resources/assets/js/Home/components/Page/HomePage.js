@@ -217,9 +217,14 @@ const HomePage = (props) => {
                     }}
                 >
                     <Row gutter={[16, 16]}>
-                        {product_categories.map((item, index) => (
+                        {product_categories.map((item) => (
                             <Col span={3} key={item.value}>
-                                <Button align='center' block style={{ height: '80px', borderRadius: 6 }}>
+                                <Button align='center' block style={{ height: '80px', borderRadius: 6 }} onClick={() => setRouter({
+                                    module: 'products',
+                                    controller: 'products',
+                                    action: 'bycategory',
+                                    id: item.value ? item.value : 0
+                                })}>
                                     <Avatar src={item.icon_link} size={48} />
                                     <p>{item.label}</p>
                                 </Button>
@@ -330,7 +335,7 @@ const HomePage = (props) => {
                         <Col span={4}>
                             <div>
                                 <div style={{ padding: 24, }}>
-                                    <Button type="primary" style={{ width: '100%', borderRadius: 6 }} size={`large`}>Xem thêm</Button>
+                                    <Button type="primary" style={{ width: '100%', borderRadius: 4 }} size={`large`}>Xem thêm</Button>
                                 </div>
                             </div>
                         </Col>
