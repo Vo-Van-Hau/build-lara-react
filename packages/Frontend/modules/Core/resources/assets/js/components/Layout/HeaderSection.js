@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
-        Cascader, Divider, Menu, List, Avatar, Tag, Drawer } from 'antd';
-import {UserOutlined, SearchOutlined, ShoppingCartOutlined,
-        BellOutlined, LogoutOutlined, InboxOutlined} from '@ant-design/icons';
+        Cascader, Divider, Menu, List, Alert, Tag, Drawer } from 'antd';
+import {
+    UserOutlined, SearchOutlined, ShoppingCartOutlined, CloseCircleOutlined, UpOutlined,
+    BellOutlined, LogoutOutlined, InboxOutlined, HistoryOutlined, DownOutlined
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { useLocalStorage } from '../Hooks/LocalStorageHook';
 
 const { Text } = Typography;
 const { Search } = Input;
@@ -11,8 +14,11 @@ const { Search } = Input;
 const HeaderSection = (props) => {
 
     const { data, navigate, setRouter, searchParams } = props;
-    const { user } = data;
+    const { user, config } = data;
     const { is_login } = user;
+    const { app } = config;
+    const { baseURL, adminPrefix } = app;
+    const [searchKeywordHistory, setSearchKeywordHistory] = useLocalStorage('search-keyword', []);
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -21,7 +27,16 @@ const HeaderSection = (props) => {
      */
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [keySearch, setKeySearch] = useState({
-        q: ''
+        q: '',
+        showResult: {
+            start: 0,
+            end: 3,
+        },
+        search_history_expand_button: {
+            label: `Xem thêm`,
+            is_expand: true,
+            icon: <DownOutlined />
+        },
     });
 
     const showModal = () => {
@@ -126,12 +141,6 @@ const HeaderSection = (props) => {
         </>)
     }
 
-    /** Dropdown Searchbar*/
-    const searchRecent = [
-        'Racing car sprays burning fuel into crowd.',
-        'Japanese princess to wed commoner.',
-        'Australian walks 100km after outback crash.',
-    ];
     const searchPopular = [
         {id:1, name:'Bia Tiger bạc', url:'https://salt.tikicdn.com/cache/280x280/ts/product/45/e9/11/a61363ae49fc2cca3626fb70f2d0724c.jpg'},
         {id:2, name:'Rượu vang', url:'https://salt.tikicdn.com/cache/280x280/ts/product/17/7b/0c/84668ec248ed95d532f915afb913c108.jpg'},
@@ -152,69 +161,141 @@ const HeaderSection = (props) => {
         {id:8, name:'Mẹ và bé', url:'https://image.voso.vn/users/vosoimage/images/66921592c67ea8d4b8ad2d4c10a2497a?t%5B0%5D=maxSize%3Awidth%3D150%2Cheight%3D150&t%5B1%5D=compress%3Alevel%3D100&accessToken=7781915a3aa7cd0cbbd5fa8b4688a416f45130de5c15995a841dc4b929c2ad86'},
 
     ];
-    const dropdownSearchbar = () => (
-        <div className='dropdown-searchbar' >
-            <Menu>
-                {
-                    searchRecent && searchRecent.map((item, index)=>  (
-                        <Menu.Item key={index}>
-                            <Typography.Text mark>[<SearchOutlined />]</Typography.Text> {item}
-                        </Menu.Item>
-                    ))
-                }
-            </Menu>;
-            <Row justify="center" style={{ paddingBottom: 8, }}>
-                <Button type="primary" size='middle'> Xem thêm </Button>
-            </Row>
-            <Divider style={{ margin: 0, }} />
-            <div style={{ padding: 8, }} >
-                <h5>Tìm kiếm phổ biến </h5>
-                <Row gutter={[8, 10]}>
-                    {
-                        searchPopular && searchPopular.map((item, index) => {
-                            return (
-                                <Col span={8} key={index}>
-                                    <Link style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} >
-                                        <Image
-                                            width={45}
-                                            height={45}
-                                            src={item.url}
-                                            preview={false}
-                                        />
-                                        <span style={{ marginLeft: '5px' }}>{item.name}</span>
-                                    </Link>
-                                </Col>
-                            )
-                        })
-                    }
-                </Row>
-            </div>
 
-            <Divider style={{ margin: 0, }} />
-            <div style={{ padding: 8, }} >
-                <h5>Danh mục nổi bật </h5>
-                <Row gutter={[8, 16]}>
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param {*} key
+     * @return {void}
+     */
+    const clearHistoryKeySearch = (key = '') => {
+        let existed = searchKeywordHistory.filter((item) => {
+            if(item.title) {
+                return item.title.toLowerCase() !== key.toLowerCase();
+            }
+        }) || [];
+        setSearchKeywordHistory(existed);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param {*} key
+     * @return {void}
+     */
+    const viewMoreHistoryKeySearch = (start = 0, end = 3) => {
+        const { search_history_expand_button,  showResult } = keySearch;
+        const { label, is_expand } = search_history_expand_button;
+        if(is_expand) {
+            setKeySearch({
+                ...keySearch,
+                showResult: {
+                    ...showResult, start, end
+                },
+                search_history_expand_button: {
+                    label: `Thu gọn`,
+                    is_expand: false,
+                    icon: <UpOutlined />,
+                }
+            });
+        } else {
+            setKeySearch({
+                ...keySearch,
+                showResult: {
+                    ...showResult,
+                    end: 3,
+                },
+                search_history_expand_button: {
+                    label: `Xem thêm`,
+                    is_expand: true,
+                    icon: <DownOutlined />,
+                }
+            });
+        }
+    }
+
+    /**
+     * @author:
+     * @todo
+     * @param
+     * @return
+     */
+    const SearchAutocomplete = () => {
+
+        const menuSearchHistory = searchKeywordHistory.slice(keySearch.showResult.start, keySearch.showResult.end).map((item, index) => {
+            return {
+                label: <>
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Link to={item.url ? item.url : ``}><HistoryOutlined /> {item.title ? item.title : ``}</Link>
+                        <Button type="text" icon={<CloseCircleOutlined />} onClick={() => clearHistoryKeySearch(item.title)}/>
+                    </div>
+                </>,
+                key: `item-${index}`,
+            }
+        });
+
+        return (
+            <><div className='dropdown-searchbar' >
+                <Menu items={menuSearchHistory} />
+                <Row justify="center" style={{ paddingBottom: 8, }}>
                     {
-                        searchPopularCategory && searchPopularCategory.map((item, index)=>{
-                            return (
-                                <Col span={6} key={index}>
-                                    <Link to='' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <Image
-                                            width={60}
-                                            height={60}
-                                            src={item.url}
-                                            preview={false}
-                                        />
-                                        <span>{item.name}</span>
-                                    </Link>
-                                </Col>
-                            )
-                        })
+                        searchKeywordHistory.length <= 0 ?
+                        <Alert message="Lịch sử tìm kiếm chưa có" type="info" showIcon style={{ width: '100%' }}/> :
+                        searchKeywordHistory.length > 3 ?
+                        <Button type="text" size='middle' onClick={() => viewMoreHistoryKeySearch(0, 10)} icon={keySearch.search_history_expand_button.icon}>
+                            { keySearch.search_history_expand_button.label }
+                        </Button> : <></>
                     }
                 </Row>
-            </div>
-        </div>
-    );
+                <Divider style={{ margin: 0, }} />
+                <div style={{ padding: 8, }} >
+                    <h5>Tìm kiếm phổ biến </h5>
+                    <Row gutter={[8, 10]}>
+                        {
+                            searchPopular && searchPopular.map((item, index) => {
+                                return (
+                                    <Col span={8} key={index}>
+                                        <Link style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} >
+                                            <Image
+                                                width={45}
+                                                height={45}
+                                                src={item.url}
+                                                preview={false}
+                                            />
+                                            <span style={{ marginLeft: '5px' }}>{item.name}</span>
+                                        </Link>
+                                    </Col>
+                                )
+                            })
+                        }
+                    </Row>
+                </div>
+                <Divider style={{ margin: 0, }} />
+                <div style={{ padding: 8, }} >
+                    <h5>Danh mục nổi bật </h5>
+                    <Row gutter={[8, 16]}>
+                        {
+                            searchPopularCategory && searchPopularCategory.map((item, index)=>{
+                                return (
+                                    <Col span={6} key={index}>
+                                        <Link to='' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                            <Image
+                                                width={60}
+                                                height={60}
+                                                src={item.url}
+                                                preview={false}
+                                            />
+                                            <span>{item.name}</span>
+                                        </Link>
+                                    </Col>
+                                )
+                            })
+                        }
+                    </Row>
+                </div>
+            </div></>
+        )
+    };
 
     /**
      *
@@ -259,6 +340,22 @@ const HeaderSection = (props) => {
             action: 'view',
             q: keySearch.q ? keySearch.q : ``,
         }, navigate);
+        /**
+         *
+         */
+        let searchKeywordHistory_temp = searchKeywordHistory;
+        let is_saved = searchKeywordHistory_temp.find((item) => {
+            return item.title.toLowerCase() === keySearch.q.toLowerCase();
+        });
+        if(!is_saved) {
+            searchKeywordHistory_temp.unshift({
+                title: keySearch.q ? keySearch.q : ``,
+                type: 'keyword',
+                url: `/${adminPrefix}/products/search?action=view&id=&q=${keySearch.q ? keySearch.q : ''}`,
+            });
+            if(searchKeywordHistory_temp.length > 10) searchKeywordHistory_temp.pop();
+            setSearchKeywordHistory(searchKeywordHistory_temp);
+        }
     }
 
     useEffect(() => {
@@ -278,7 +375,7 @@ const HeaderSection = (props) => {
                 </Col>
                 <Col className='formSearch_container' span={16} >
                     <Cascader
-                        dropdownRender={dropdownSearchbar}
+                        dropdownRender={SearchAutocomplete}
                         onChange={onChange}
                         placeholder={keySearch.q ? keySearch.q.trim() : `Tìm sản phẩm, danh mục hay thương hiệu mong muốn ...`}
                         showSearch={{ filterSearchbar }}

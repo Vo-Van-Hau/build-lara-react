@@ -7,5 +7,6 @@ export default {
      */
     capitalize_first_letter(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    },
+    
 }
