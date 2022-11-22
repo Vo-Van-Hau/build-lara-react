@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography } from 'antd';
-import { LeftOutlined, RightOutlined, SearchOutlined } from '@ant-design/icons';
+import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip } from 'antd';
+import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
@@ -61,265 +61,288 @@ const HomePage = (props) => {
 
     return (
         <>
-        <Tabs activeKey={'none'}
-            tabPosition={'top'}
-            onTabClick={(e) => handleClickTab(e)}
-            style={{ padding: '0px 5px', fontWeight: 500 }}
-            items={product_categories.map((item, index) => {
-                return {
-                    label: item.label,
-                    key: item.key,
-                };
-            })}
-        />
-        <Row className='home_top_banner_container'
-            justify="space-between"
-            gutter={[10, 16]}
-        >
-            <Col span={14} >
-                <Carousel
-                    autoplay
-                    arrows={true}
-                    prevArrow={<LeftOutlined />}
-                    nextArrow={<RightOutlined />}
-                    swipeToSlide draggable
-                >
-                    {imgSrc.map((item, index) => {
-                        return <Image
-                            height={355}
-                            key={index}
-                            preview={false}
-                            style={contentStyle}
-                            src={item.url} />
-                    })}
-                </Carousel>
-            </Col>
-
-            <Col span={10}>
-                <Image preview={false}
-                    style={{ objectFit: 'contain', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
-                />
-            </Col>
-        </Row>
-        <Row className='home_group_banner_container'
-            justify="space-between"
-            gutter={[10, 20]}
-            style={{ padding: '1rem 0' }}
-        >
-            <Col flex="1">
-                <Image preview={false}
-                    style={{ objectFit: 'cover', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
-                />
-            </Col>
-            <Col flex="3">
-                <Image preview={false}
-                    height={'100%'}
-                    style={{ objectFit: 'cover', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w1080/ts/banner/26/ea/9c/c3710ec037706052a7a2da56c4a66901.png.webp'}
-                />
-            </Col>
-            <Col flex="1">
-                <Image preview={false}
-                    style={{ objectFit: 'cover', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
-                />
-            </Col>
-        </Row>
-        <Row className="titleHeading">
-            <Col span={22}>
-                <h2>Thương hiệu chính hãng</h2>
-            </Col>
-            <Col span={2} className='more-btn'>
-                <Typography.Link type="primary" >Xem thêm</Typography.Link>
-            </Col>
-        </Row>
-        <Row className="productContainer">
-        <Col span={24} className='bannerSlider'>
-            <Carousel
-                slidesToShow={2}
-                autoplay
-                arrows={true}
-                prevArrow={<LeftOutlined />}
-                nextArrow={<RightOutlined />}
-                swipeToSlide draggable
-                >
-                {imgSrc.map((item, index) => {
-                    return <Image
-                        height={355}
-                        key={index}
-                        preview={false}
-                        style={contentStyle}
-                        src={item.url} />
+            <Tabs activeKey={'none'}
+                tabPosition={'top'}
+                onTabClick={(e) => handleClickTab(e)}
+                style={{ padding: '0px 5px', fontWeight: 500 }}
+                items={product_categories.map((item, index) => {
+                    return {
+                        label: item.label,
+                        key: item.key,
+                    };
                 })}
-            </Carousel>
-        </Col>
-        <Col span={24} className="productSlider">
-            <Carousel
-                slide
-                slidesToShow={5}
-                arrows={true}
-                prevArrow={<LeftOutlined />}
-                nextArrow={<RightOutlined />}
-                swipeToSlide draggable
+            />
+            <Row className='home_top_banner_container'
+                justify="space-between"
+                gutter={[10, 16]}
             >
-                {products.map((item, index) => (
-                    <Card key={item.id} className="productItem"
-                        hoverable
-                        cover={<img
-                            alt={item.name ? item.name : `product-img`}
-                            style={{ padding:10,height: '200px', width: '100%', objectFit: 'contain' }}
-                            src={item.image_link}
-                        />}
-                        onClick={() => setRouter({
-                            module: 'products',
-                            controller: 'productdetail',
-                            action: 'view',
-                            id: item.id,
-                        })}
-                        style={{ padding: 12, marginLeft:5 }}
+                <Col span={14} >
+                    <Carousel
+                        autoplay
+                        arrows={true}
+                        prevArrow={<LeftOutlined />}
+                        nextArrow={<RightOutlined />}
+                        swipeToSlide draggable
                     >
-                        <Meta title={item.name ? item.name : ``} />
-                        <div className="rating">
-                            {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
-                        </div>
-                        <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
-                    </Card>
-                    ))}
-            </Carousel>
-        </Col>
-        </Row>
-        <Row className="titleHeading">
-            <Col>
-                <h2>Danh mục sản phẩm</h2>
-            </Col>
-        </Row>
-        <Row className="categories_block_container">
+                        {imgSrc.map((item, index) => {
+                            return <Image
+                                height={355}
+                                key={index}
+                                preview={false}
+                                style={contentStyle}
+                                src={item.url} />
+                        })}
+                    </Carousel>
+                </Col>
 
-            <Space size={[10, 16]}
-                    style={{
-                    width: '100%', padding: '1rem',
-                    backgroundColor: '#fff'
-                    }}
+                <Col span={10}>
+                    <Image preview={false}
+                        style={{ objectFit: 'contain', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                    />
+                </Col>
+            </Row>
+            <Row className='home_group_banner_container'
+                justify="space-between"
+                gutter={[10, 20]}
+                style={{ padding: '1rem 0' }}
             >
-                <Row gutter={[16, 16]}>
-                    {product_categories.map((item, index) => (
-                        <Col span={3} key={item.value}>
-                            <Button align='center' block style={{ height: '80px', borderRadius: 6 }}>
-                                <Avatar src={item.icon_link} size={48} />
-                                <p>{item.label}</p>
-                            </Button>
-                        </Col>
-                    ))}
-                </Row>
-            </Space>
-        </Row>
-        <Row className='ads_banners_container'
-            justify="space-between"
-            gutter={[10, 20]}
-            style={{ padding: '1rem 0' }}
-        >
-            <Col span={6}>
-                <Image preview={false}
-                    style={{ objectFit: 'cover', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/d6/86/61/2bd493a55e955d6b70afe7ba5d0c8bdd.png.webp'}
-                />
-            </Col>
-            <Col span={6}>
-                <Image preview={false}
-                    style={{ objectFit: 'cover', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/40/7b/ec/c74769be66862263dc3d95ed92e73cfd.png.webp'}
-                />
-            </Col>
-            <Col span={6}>
-                <Image preview={false}
-                    style={{ objectFit: 'cover', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/f2/cb/06/5b1f4c52c2a4e312919e32470ccd2554.png.webp'}
-                />
-            </Col>
-            <Col span={6}>
-                <Image preview={false}
-                    style={{ objectFit: 'cover', borderRadius: '3px' }}
-                    src={'https://salt.tikicdn.com/cache/w400/ts/banner/63/67/34/84a791b2a02dcc9f1ce93df1414ca207.png.webp'}
-                />
-            </Col>
-        </Row>
-        <>
-            <Affix offsetTop={0}>
-                <div className="sectionContainer">
-                    <Row className="titleHeading">
-                        <Col>
-                            <h2>Sản phẩm đề xuất</h2>
-                        </Col>
-                    </Row>
-                    <Row className="widgetContainer">
-                        <Space size={[10, 16]} wrap style={{ width: '100%', justifyContent: 'space-between' }} >
-                            {tittleArr.map((item, index) => (
-                                <Button key={index} align='center' block style={{ height: '80px', width: '200px' }}>
-                                    <Avatar src={item.img} size={48} />
-                                    <p>{item.title}</p>
-                                </Button>
-                            ))}
-                        </Space>
-
-                    </Row>
-                </div>
-            </Affix>
+                <Col flex="1">
+                    <Image preview={false}
+                        style={{ objectFit: 'cover', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                    />
+                </Col>
+                <Col flex="3">
+                    <Image preview={false}
+                        height={'100%'}
+                        style={{ objectFit: 'cover', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w1080/ts/banner/26/ea/9c/c3710ec037706052a7a2da56c4a66901.png.webp'}
+                    />
+                </Col>
+                <Col flex="1">
+                    <Image preview={false}
+                        style={{ objectFit: 'cover', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                    />
+                </Col>
+            </Row>
+            <Row className="titleHeading">
+                <Col span={22}>
+                    <h2>Thương hiệu chính hãng</h2>
+                </Col>
+                <Col span={2} className='more-btn'>
+                    <Typography.Link type="primary" >Xem thêm</Typography.Link>
+                </Col>
+            </Row>
             <Row className="productContainer">
-                <Space size={[10, 16]} style={{ width: '100%' }}>
-                    <Row gutter={[8, 8]}>
+                <Col span={24} className='bannerSlider'>
+                    <Carousel
+                        slidesToShow={2}
+                        autoplay
+                        arrows={true}
+                        prevArrow={<LeftOutlined />}
+                        nextArrow={<RightOutlined />}
+                        swipeToSlide draggable
+                    >
+                        {imgSrc.map((item, index) => {
+                            return <Image
+                                height={355}
+                                key={index}
+                                preview={false}
+                                style={contentStyle}
+                                src={item.url} />
+                        })}
+                    </Carousel>
+                </Col>
+                <Col span={24} className="productSlider">
+                    <Carousel
+                        slide
+                        slidesToShow={5}
+                        arrows={true}
+                        prevArrow={<LeftOutlined />}
+                        nextArrow={<RightOutlined />}
+                        swipeToSlide draggable
+                    >
                         {products.map((item, index) => (
-                            <Col span={4} key={item.id}>
-                                <Card className="productItem"
-                                    hoverable
-                                    cover={<img
-                                        alt={item.name ? item.name : ``}
-                                        style={{ height: 189, width: 165, objectFit: `contain` }}
-                                        src={item.image_link}
-                                    />}
-                                    onClick={() => setRouter({
-                                        module: 'products',
-                                        controller: 'productdetail',
-                                        action: 'view',
-                                        id: item.id,
-                                    })}
-                                    style={{ padding: 12 }}
-                                    bodyStyle={{padding: 0}}
-                                >
-                                    <div>
-                                        {/* <Meta title={item.name ? item.name : ``} style={{fontWeight: 400}}/> */}
-                                        <Text style={{fontWeight: 400}} ellipsis={true}>{item.name ? item.name : ``}</Text>
-                                        <div className="rating">
-                                            {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
-                                        </div>
-                                        <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
-                                    </div>
-                                </Card>
+                            <Card key={item.id}
+                                className="productItem"
+                                hoverable
+                                cover={<img
+                                    alt={item.name ? item.name : `product-img`}
+                                    style={{ padding: 10, height: '200px', width: '100%', objectFit: 'contain' }}
+                                    src={item.image_link}
+                                />}
+                                onClick={() => setRouter({
+                                    module: 'products',
+                                    controller: 'productdetail',
+                                    action: 'view',
+                                    id: item.id,
+                                })}
+                                style={{ padding: 12, marginLeft: 5 }}
+                            >
+                                <Meta title={item.name ? item.name : ``} />
+                                <div className="rating">
+                                    {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                    <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                                </div>
+                                <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
+                                <Space size={[0]} direction="vertical" className="productItem-btn-group">
+                                    <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
+                                        <Button icon={<HeartOutlined />} href="#" />
+                                    </Tooltip>
+                                    <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
+                                        <Button icon={<ShoppingCartOutlined />} href="#" />
+                                    </Tooltip>
+                                    <Tooltip placement="right" title={'Chia sẻ'}>
+                                        <Button icon={<ShareAltOutlined />} href="#" />
+                                    </Tooltip>
+                                </Space>
+                            </Card>
+                        ))}
+                    </Carousel>
+                </Col>
+            </Row>
+            <Row className="titleHeading">
+                <Col>
+                    <h2>Danh mục sản phẩm</h2>
+                </Col>
+            </Row>
+            <Row className="categories_block_container">
+
+                <Space size={[10, 16]}
+                    style={{
+                        width: '100%', padding: '1rem',
+                        backgroundColor: '#fff'
+                    }}
+                >
+                    <Row gutter={[16, 16]}>
+                        {product_categories.map((item, index) => (
+                            <Col span={3} key={item.value}>
+                                <Button align='center' block style={{ height: '80px', borderRadius: 6 }}>
+                                    <Avatar src={item.icon_link} size={48} />
+                                    <p>{item.label}</p>
+                                </Button>
                             </Col>
                         ))}
                     </Row>
                 </Space>
-                <Row justify="center" style={{ padding: 8, width: '100%' }}>
-                    <Col span={10}></Col>
-                    <Col span={4}>
-                        <div>
-                            <div style={{ padding: 24, }}>
-                                <Button type="primary" style={{ width: '100%', borderRadius: 6 }} size={`large`}>Xem thêm</Button>
-                            </div>
-                        </div>
-                    </Col>
-                    <Col span={10}></Col>
-                </Row>
             </Row>
-        </>
-        <BackTop>
-            <div className="ant-back-top-inner">
-                <Image width={65} height={65} src='/images/totop.png' alt='totop' preview={false} />
-            </div>
-        </BackTop>
+            <Row className='ads_banners_container'
+                justify="space-between"
+                gutter={[10, 20]}
+                style={{ padding: '1rem 0' }}
+            >
+                <Col span={6}>
+                    <Image preview={false}
+                        style={{ objectFit: 'cover', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w400/ts/banner/d6/86/61/2bd493a55e955d6b70afe7ba5d0c8bdd.png.webp'}
+                    />
+                </Col>
+                <Col span={6}>
+                    <Image preview={false}
+                        style={{ objectFit: 'cover', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w400/ts/banner/40/7b/ec/c74769be66862263dc3d95ed92e73cfd.png.webp'}
+                    />
+                </Col>
+                <Col span={6}>
+                    <Image preview={false}
+                        style={{ objectFit: 'cover', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w400/ts/banner/f2/cb/06/5b1f4c52c2a4e312919e32470ccd2554.png.webp'}
+                    />
+                </Col>
+                <Col span={6}>
+                    <Image preview={false}
+                        style={{ objectFit: 'cover', borderRadius: '3px' }}
+                        src={'https://salt.tikicdn.com/cache/w400/ts/banner/63/67/34/84a791b2a02dcc9f1ce93df1414ca207.png.webp'}
+                    />
+                </Col>
+            </Row>
+            <>
+                <Affix offsetTop={0}>
+                    <div className="sectionContainer">
+                        <Row className="titleHeading">
+                            <Col>
+                                <h2>Sản phẩm đề xuất</h2>
+                            </Col>
+                        </Row>
+                        <Row className="widgetContainer">
+                            <Space size={[10, 16]} wrap style={{ width: '100%', justifyContent: 'space-between' }} >
+                                {tittleArr.map((item, index) => (
+                                    <Button key={index} align='center' block style={{ height: '80px', width: '200px' }}>
+                                        <Avatar src={item.img} size={48} />
+                                        <p>{item.title}</p>
+                                    </Button>
+                                ))}
+                            </Space>
+
+                        </Row>
+                    </div>
+                </Affix>
+                <Row className="productContainer">
+                    <Space size={[10, 16]} style={{ width: '100%' }}>
+                        <Row gutter={[8, 8]}>
+                            {products.map((item, index) => (
+                                <Col span={4} key={item.id}>
+                                    <Card className="productItem"
+                                        hoverable
+                                        cover={<img
+                                            alt={item.name ? item.name : ``}
+                                            style={{ height: 189, width: 165, objectFit: `contain` }}
+                                            src={item.image_link}
+                                        />}
+                                        onClick={() => setRouter({
+                                            module: 'products',
+                                            controller: 'productdetail',
+                                            action: 'view',
+                                            id: item.id,
+                                        })}
+                                        style={{ padding: 12 }}
+                                        bodyStyle={{ padding: 0 }}
+                                    >
+                                        <div>
+                                            {/* <Meta title={item.name ? item.name : ``} style={{fontWeight: 400}}/> */}
+                                            <Text style={{ fontWeight: 400 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                            <div className="rating">
+                                                {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                                            </div>
+                                            <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
+                                        </div>
+                                        <Space size={[0]} direction="vertical" className="productItem-btn-group">
+                                            <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
+                                                <Button icon={<HeartOutlined />} href="#" />
+                                            </Tooltip>
+                                            <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
+                                                <Button icon={<ShoppingCartOutlined />} href="#" />
+                                            </Tooltip>
+                                            <Tooltip placement="right" title={'Chia sẻ'}>
+                                                <Button icon={<ShareAltOutlined />} href="#" />
+                                            </Tooltip>
+                                        </Space>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    </Space>
+                    <Row justify="center" style={{ padding: 8, width: '100%' }}>
+                        <Col span={10}></Col>
+                        <Col span={4}>
+                            <div>
+                                <div style={{ padding: 24, }}>
+                                    <Button type="primary" style={{ width: '100%', borderRadius: 6 }} size={`large`}>Xem thêm</Button>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col span={10}></Col>
+                    </Row>
+                </Row>
+            </>
+            <BackTop>
+                <div className="ant-back-top-inner">
+                    <Image width={65} height={65} src='/images/totop.png' alt='totop' preview={false} />
+                </div>
+            </BackTop>
         </>);
 }
 

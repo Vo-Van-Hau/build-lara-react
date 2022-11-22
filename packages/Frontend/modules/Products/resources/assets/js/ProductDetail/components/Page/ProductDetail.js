@@ -18,6 +18,7 @@ const ProductDetailPage = (props) => {
     const { seller } = product_item;
     const { store } = seller;
     const [quantity, setQuantity] = useState(1);
+    const [selectedImg, setSelectedImg] = useState(false);
 
     /**
      * @todo:
@@ -120,6 +121,14 @@ const ProductDetailPage = (props) => {
             </Row>
         </>
     }
+    const product_image_gallery=[
+        {url:'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp'},
+        {url:'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp'},
+        {url:'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp'},
+        {url:'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg'},
+        {url:'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp'}
+    ]
+    
 
     useEffect(() => {
         get_product_item({ id: props.id });
@@ -139,8 +148,15 @@ const ProductDetailPage = (props) => {
             <Col span={8} className='product_image_container'>
                 <Image preview={false}
                     style={{ objectFit: 'contain', borderRadius: '3px' }}
-                    src={product_item.image_link}
+                    src={selectedImg ? selectedImg : product_item.image_link }
                 />
+                <Space>
+                {
+                    product_image_gallery.map((data, index) => { return(
+                        <img style={{width:50}} className="galery-img-item" key={index} src={data.url} alt="images" onClick={() => setSelectedImg(data.url)} />
+                    )})
+                }
+                </Space>
             </Col>
             <Col className='separate'></Col>
             <Col span={15} className='product_info_container'>
