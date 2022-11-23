@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { HomeOutlined } from '@ant-design/icons';
-import { Breadcrumb, Col, Row, Menu, Divider, Typography, Affix, Space, Card, Rate, Pagination, Button, Form, Checkbox, InputNumber, List } from 'antd';
+import {
+    Breadcrumb, Col, Row, Menu, Divider, Typography, Affix, Space, Card, Rate, Pagination, Button, Form, Checkbox, InputNumber, List,
+    Tag,
+} from 'antd';
 import { Carousel, Image } from 'antd';
 import { LeftOutlined, RightOutlined ,CaretUpOutlined,CaretDownOutlined,StarFilled} from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
@@ -95,86 +98,132 @@ const ProductsPage = ({keyID, ...props}) => {
             <Breadcrumb.Item>Sản phẩm gợi ý</Breadcrumb.Item>
         </Breadcrumb>
         <Row className='products_by_category_container' gutter={24}>
-            <Col className='leftSide' span={5}>
+            <Col className='leftSide' span={4}>
                 {/* <Affix className='fixBar' offsetTop={0}> */}
                     <div>
                         {/* <Title level={5}>Danh sách thể loại</Title>
                         <Menu items={product_categories} /> */}
-                        <Title level={5}>Nơi bán</Title>
+                        <div style={{
+                            paddingTop: 10,
+                            paddingRight: 0,
+                            paddingLeft: 0,
+                            paddingBottom: 10,
+                        }}>
+                            <Text strong>Nơi bán</Text>
                             <List
                                 itemLayout="horizontal"
                                 dataSource={itemToRender(placeOfSaleList, isShowAll1)}
                                 loadMore={
-                                    <Button type="link" icon={isShowAll1?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll1(!isShowAll1)}>
-                                    {isShowAll1 ? `Thu gọn` : `Xem thêm `}
-                                    </Button>}
+                                    <Button type="link" icon={isShowAll1 ? <CaretUpOutlined /> :<CaretDownOutlined />} onClick={() => showAll1(!isShowAll1)} style={{paddingLeft: 0}}>
+                                        {isShowAll1 ? `Thu gọn` : `Xem thêm `}
+                                    </Button>
+                                }
                                 renderItem={(item,index) => (
-                                    <List.Item key={index}>
+                                    <List.Item key={index} style={{ paddingBottom: 5, paddingTop: 5 }}>
                                         <Checkbox onChange={onCheckChange} >{item.place}</Checkbox>
                                     </List.Item>
-                                )} 
+                                )}
                             />
-                        <Divider />
-                        <Title level={5}>Thương hiệu</Title>
+                        </div>
+                        <Divider style={{margin: 0}}/>
+                        <div style={{
+                            paddingTop: 10,
+                            paddingRight: 0,
+                            paddingLeft: 0,
+                            paddingBottom: 10,
+                        }}>
+                            <Text strong>Thương hiệu</Text>
                             <List
                                 itemLayout="horizontal"
                                 dataSource={itemToRender(trademark, isShowAll2)}
                                 loadMore={
-                                    <Button type="link" icon={isShowAll2?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll2(!isShowAll2)}>
-                                    {isShowAll2 ? `Thu gọn` : `Xem thêm `}
+                                    <Button type="link" icon={isShowAll2?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll2(!isShowAll2)} style={{paddingLeft: 0}}>
+                                        {isShowAll2 ? `Thu gọn` : `Xem thêm `}
                                     </Button>}
                                 renderItem={(item,index) => (
-                                    <List.Item key={index}>
+                                    <List.Item key={index} style={{ paddingBottom: 5, paddingTop: 5 }}>
                                         <Checkbox >{item.name}</Checkbox>
                                     </List.Item>
                                 )}
                             />
-                        <Divider />
-                        <Title level={5}>Nhà cung cấp</Title>
+                        </div>
+                        <Divider style={{margin: 0}}/>
+                        <div style={{
+                            paddingTop: 10,
+                            paddingRight: 0,
+                            paddingLeft: 0,
+                            paddingBottom: 10,
+                        }}>
+                            <Text strong>Nhà cung cấp</Text>
                             <List
                                 itemLayout="horizontal"
                                 dataSource={itemToRender(supplier, isShowAll3)}
                                 loadMore={
-                                    <Button type="link" icon={isShowAll3?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll3(!isShowAll3)}>
-                                    {isShowAll3 ? `Thu gọn` : `Xem thêm `}
+                                    <Button type="link" icon={isShowAll3?<CaretUpOutlined /> :<CaretDownOutlined />}onClick={() => showAll3(!isShowAll3)} style={{paddingLeft: 0}}>
+                                        {isShowAll3 ? `Thu gọn` : `Xem thêm `}
                                     </Button>}
                                 renderItem={(item,index) => (
-                                    <List.Item key={index}>
+                                    <List.Item key={index} style={{ paddingBottom: 5, paddingTop: 5 }}>
                                         <Checkbox >{item.name}</Checkbox>
                                     </List.Item>
                                 )}
                             />
-                        <Divider />
-                        <Title level={5}>Đánh giá</Title>
-                            <List
+                        </div>
+                        <Divider style={{margin: 0}}/>
+                        <div style={{
+                            paddingTop: 10,
+                            paddingRight: 0,
+                            paddingLeft: 0,
+                            paddingBottom: 10,
+                        }}>
+                            <Text strong>Đánh giá</Text>
+                             <List
                                 itemLayout="horizontal"
                                 dataSource={itemToRender(rate)}
-                                renderItem={(item,index) => (
-                                    <List.Item key={index}>
+                                renderItem={(item, index) => (
+                                    <List.Item key={index} style={{ paddingBottom: 5, paddingTop: 5 }}>
                                         <Checkbox >{item} <StarFilled /></Checkbox>
                                     </List.Item>
                                 )}
                             />
-                        <Divider />
-                        <Title level={5}>Giá</Title>
-                        <Button>Dưới 5.000.000đ</Button>
-                        <Button>Từ 5.000.000đ - 15.000.000đ</Button>
-                        <Button>Trên17.500.000đ</Button>
-                        <Space>
-                            <Form.Item label="Từ" name="priceMin">
-                                <InputNumber defaultValue={0} />
-                            </Form.Item> -
-                            <Form.Item label="đến" name="priceMax">
-                                <InputNumber defaultValue={0} />
-                            </Form.Item>
-                        </Space>
-                        <Button type="primary">Tìm</Button>
-                        <Divider />
-                        
+                        </div>
+                        <Divider style={{margin: 0}}/>
+                        <div style={{
+                            paddingTop: 10,
+                            paddingRight: 0,
+                            paddingLeft: 0,
+                            paddingBottom: 10,
+                        }}>
+                            <Text strong>Giá</Text><br/>
+                            <Space
+                                direction="vertical"
+                                size={8}
+                                style={{
+                                    display: 'flex',
+                                    paddingTop: 8,
+                                    paddingBottom: 8,
+                                }}
+                            >
+                                <Tag color="default" style={{}}>Dưới 5.000.000đ</Tag>
+                                <Tag color="default">Từ 5.000.000đ - 15.000.000</Tag>
+                                <Tag color="default">Trên 17.500.000đ</Tag>
+                            </Space>
+                            <Space>
+                                <Form.Item label="Từ" name="priceMin">
+                                    <InputNumber defaultValue={0} />
+                                </Form.Item> -
+                                <Form.Item label="đến" name="priceMax">
+                                    <InputNumber defaultValue={0} />
+                                </Form.Item>
+                            </Space>
+                        </div>
+                        <div>
+                            <Button type="primary" style={{width: '100%',}}>Tìm</Button>
+                        </div>
+                        <Divider style={{}}/>
                     </div>
-               
             </Col>
-            <Col className='rightSide' span={19}>
+            <Col className='rightSide' span={20}>
                 <Title level={5}>Product Category Name</Title>
                 <Row className='home_top_banner_container' justify="space-between">
                     <Col >
