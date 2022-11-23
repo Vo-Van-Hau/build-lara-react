@@ -112,7 +112,17 @@ const ProductDetailPage = (props) => {
                                     </div>
 
                                     <Text strong className="price" type="danger">120.000 đ</Text>
-
+                                    <Space size={[0]} direction="vertical" className="productItem-btn-group">
+                                        <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
+                                            <Button icon={<HeartOutlined />} href="#" />
+                                        </Tooltip>
+                                        <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
+                                            <Button icon={<ShoppingCartOutlined />} href="#" />
+                                        </Tooltip>
+                                        <Tooltip placement="right" title={'Chia sẻ'}>
+                                            <Button icon={<ShareAltOutlined />} href="#" />
+                                        </Tooltip>
+                                    </Space>
                                 </Card>
                             )
                         })}
