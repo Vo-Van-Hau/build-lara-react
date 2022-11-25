@@ -316,10 +316,20 @@ main.ant-layout-content {
         }
         .productContainer{
             .productItem{
+                position: relative;
+                overflow: hidden;
                 .ant-card-body{
                     padding: 10px;
                     .ant-card-meta-title{
                         font-size: 14px;
+                    }
+                }
+
+    
+                &:hover {
+                    .productItem-btn-group{
+                    transform: translateX(0);
+                    transition: transform linear .2s;
                     }
                 }
             }
@@ -333,6 +343,39 @@ main.ant-layout-content {
     }
     
 }
+
+.productItem{
+    position: relative;
+    overflow: hidden;
+    &:hover {
+        .productItem-btn-group{
+        transform: translateX(0);
+        transition: transform linear .2s;
+        }
+    }
+
+    .ant-card-bordered .ant-card-cover{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.productItem-btn-group{
+    background: #fff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(35px);
+    transition: transform linear .2s;
+}
+
+
+
+
+
+
+
 
 //Orders Module
 .products_by_category_container {

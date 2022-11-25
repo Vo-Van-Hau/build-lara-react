@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel,List,
-    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip
+    Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel, List, message,
+    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip, Popover
 } from 'antd';
 import {
-    HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined,MoreOutlined,LikeOutlined,
-    MinusOutlined, StarFilled, LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined
+    HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined,
+    MinusOutlined, StarFilled, LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined
 } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
@@ -78,63 +78,48 @@ const ProductDetailPage = (props) => {
         setQuantity(1);
     }
 
-    /** */
-    const RelatedProduct = () => {
-        const productArr = [
-            { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
+    /**btn group in productI */
+    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
+    const [messageApi, contextHolder] = message.useMessage();
+    const [open, setOpen] = useState(false);
+    const [openBar, setOpenBar] = useState(false);
+    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
+    const hide = () => {
+        setOpen(false);
+        setOpenBar(false);
+        setCopyTextClipBrd(false);
+    };
+    const handleOpenChange = (newOpen) => {
+        setOpen(newOpen);
+        setOpenBar(newOpen);
 
-        ]
-        return <>
-            <Row className='related_product_container'>
-                <Col span={24} >
-                    <h3 className='section_title'> Sản phẩm liên quan </h3>
-                    <Carousel
-                        autoplay
-                        arrows={true}
-                        prevArrow={<LeftOutlined />}
-                        nextArrow={<RightOutlined />}
-                        slidesToShow={5}
-                        swipeToSlide draggable
-                    >
-                        {productArr.map((item, index) => {
-                            return (
-                                <Card className="productItem"
-                                    key={index}
-                                    hoverable
-                                    cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-                                >
-                                    <Meta title={item.title} />
-                                    <div className="rating">
-                                        <Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} />
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++</small>
-                                    </div>
+    };
 
-                                    <Text strong className="price" type="danger">120.000 đ</Text>
-                                    <Space size={[0]} direction="vertical" className="productItem-btn-group">
-                                        <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
-                                            <Button icon={<HeartOutlined />} href="#" />
-                                        </Tooltip>
-                                        <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
-                                            <Button icon={<ShoppingCartOutlined />} href="#" />
-                                        </Tooltip>
-                                        <Tooltip placement="right" title={'Chia sẻ'}>
-                                            <Button icon={<ShareAltOutlined />} href="#" />
-                                        </Tooltip>
-                                    </Space>
-                                </Card>
-                            )
-                        })}
-                    </Carousel>
-                </Col>
-            </Row>
-        </>
+    const copy = async () => {
+        await navigator.clipboard.writeText(urlCoppied);
     }
+
+    const copyToClipBoard = () => {
+        copy();
+        setCopyTextClipBrd(true);
+        messageApi.open({
+            type: 'success',
+            content: 'Đã sao chép liên kết',
+        });
+    };
+
+    /** */
+    const relatedProducts = [
+        { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
+        { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
+
+    ]
+
     const product_image_gallery = [
         { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' },
         { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp' },
@@ -143,7 +128,7 @@ const ProductDetailPage = (props) => {
         { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' }
     ]
 
-   
+
 
     const listDummy = [
         {
@@ -377,72 +362,135 @@ const ProductDetailPage = (props) => {
                 <p className='description_txt' dangerouslySetInnerHTML={{ __html: product_item.description }}></p>
             </Col>
         </Row>
-        <RelatedProduct />
-
+        <Row className='product_related_container'>
+            <Col span={24} className="productSlider">
+                <Carousel
+                    slide
+                    slidesToShow={5}
+                    arrows={true}
+                    prevArrow={<LeftOutlined />}
+                    nextArrow={<RightOutlined />}
+                    swipeToSlide draggable
+                >
+                    {relatedProducts.map((item, index) => (
+                        <Card key={item.id}
+                            className="productItem"
+                            hoverable
+                            cover={<img
+                                alt={item.name ? item.name : `product-img`}
+                                style={{ padding: 10, height: '200px', width: '100%', objectFit: 'contain' }}
+                                src={item.image_link ? item.image_link : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEX09PTMzMzJycnPz8/d3d3V1dXi4uLo6Ojw8PDx8fH39/ft7e3Y2NjQ0NDp6enb29uHE20LAAACaklEQVR4nO3b6W6CQBhGYUTWD9T7v9uylLIN6jCk8Cbn+deEGo6DMOAYRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIJyFiuzshLesStJAdVZdufEV38LFydkZm6w+IrBJrK86itkxgU1ifnaKmz363QvUvsbjmoNYdjuXPPMQz6R7lfLsGKeq3bd76LvfHwnFIXt0tOKYwjuF51kVtjMUbzqFVmR1/cpK30idwv7qH98yz0SVwvI+XP19JygqhY9xehMnXokihfl0/hZ77a5I4WM2zXz5DKJI4XwKvjHLNGeGRmE1L7w7N7fKeRLSKCy+KGwCnedZjcJofruXuo7SbpwdiRqFlk4D42y9rf0eyOtEjcL5BzFeb2rV5oRApNAmj6QcjyRs8g4sE0UKJ4nxemJq8yGeJ6oURpY/uic26frppy0uJvNEmcI2JM/yovlz8cxlGbhIFCrcsA6cX0/kC52Bt3hMlC90Bk5HUbzQPYL9KA6b6BXmk8/YZuCYqFdYj/f47wL/EtUKrR6/LXsfOCSKFbaBQ+KnwGa79sqpVWjp7x1Ec6B+DhQsHAK7xM+BeoVjYLPzr499eoXTwO+IFfoHihXuWbWgVVh792kV7lt3IlRoe0ZQqvCLax+FZ8c4UUghheebFu6jU1gk++gU7l3t3f2rRmGAyxcGr329cuEh60stunBh2Z3y6yxM/wX52S1u/bf3Ryzzdq9tuIDnYWv1q7NTNlhy0O8t/Nb6/SfLbnHoYbpjSep/sjLfOZ0ZXfTXJKPgH69deAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDyA0uAKIxQw0bjAAAAAElFTkSuQmCC' }
+                            />}
+                            onClick={() => setRouter({
+                                module: 'products',
+                                controller: 'productdetail',
+                                action: 'view',
+                                id: item.id,
+                            })}
+                            style={{ padding: 12, marginLeft: 5 }}
+                        >
+                            <Meta title={item.name ? item.name : ``} />
+                            <div className="rating">
+                                {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                            </div>
+                            <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
+                            <Space size={[0]} direction="vertical" className="productItem-btn-group">
+                                <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
+                                    <Button icon={<HeartOutlined />} href="#" />
+                                </Tooltip>
+                                <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
+                                    <Button icon={<ShoppingCartOutlined />} href="#" />
+                                </Tooltip>
+                                <Popover
+                                    placement="rightTop"
+                                    id="socialBtnBar"
+                                    trigger="click"
+                                    open={open}
+                                    onOpenChange={handleOpenChange}
+                                    content={<>
+                                        <a className="close-btn" onClick={hide}><CloseOutlined /></a>
+                                        <Space className="social-bar-container" align="end" size="small">
+                                            Chia sẻ:
+                                            <img src="/facebook.png" width={20} />
+                                            <img src="/icon_instagram.png" width={20} />
+                                            <img src="/twitter.png" width={20} />
+                                            <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
+                                        </Space>
+                                    </>}>
+                                    <Button icon={<ShareAltOutlined />} href="#" />
+                                </Popover>
+                            </Space>
+                        </Card>
+                    ))}
+                </Carousel>
+            </Col>
+        </Row>
         <Row className='product_review'>
-           <Col span={24}>
-           <Card >
-                <Row align='middle'>
-                    <Col span={4}>
-                        <Row justify='center' align='middle' className='rating-num'> {ratingReview} <Rate style={{}} value={1} count={1} />/<span>5.0</span> </Row>
-                        <Row justify='center'> <Rate className='rating-review' disabled value={ratingReview} /> </Row>
+            <h3 className='section_title'> Nhận xét & Đánh giá </h3>
+            <Col span={24}>
+                <Card >
+                    <Row align='middle'>
+                        <Col span={4}>
+                            <Row justify='center' align='middle' className='rating-num'> {ratingReview} <Rate style={{}} value={1} count={1} />/<span>5.0</span> </Row>
+                            <Row justify='center'> <Rate className='rating-review' disabled value={ratingReview} /> </Row>
 
-                    </Col>
-                    <Col span={20} >
-                        <Space justify='center'>
-                            <Button onClick={() => handleChangebtnRating('all')}>Tất cả</Button>
-                            <Button onClick={() => handleChangebtnRating(5)}>5 Sao</Button>
-                            <Button onClick={() => handleChangebtnRating(4)}>4 Sao</Button>
-                            <Button onClick={() => handleChangebtnRating(3)}>3 Sao</Button>
-                            <Button onClick={() => handleChangebtnRating(2)}>2 Sao</Button>
-                            <Button onClick={() => handleChangebtnRating(1)}>1 Sao</Button>
-                        </Space>
-                    </Col>
-                </Row>
-            </Card>
-            <List
-                className="demo-loadmore-list"
-                itemLayout="horizontal"
-                dataSource={listRating}
-                pagination={{
-                    onChange: (page) => {
-                        console.log(page);
-                    },
-                    pageSize: 3,
-                }}
-                renderItem={(item) => (
-                    <div className='review-block-item'>
-                        <List.Item
-                            actions={[
-                                <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-                                <a key="list-loadmore-more"><MoreOutlined /></a>,
-                            ]} >
-                            <List.Item.Meta
-                                avatar={<Avatar src={item.picture} size={45} />}
-                                title={<a href="https://ant.design">{item.name}</a>}
-                                description={<>
-                                    <small>{item.date} | Phân loại hàng: {item.type}</small> <br />
-                                    <Rate className='rating-review' style={{ fontSize: 10 }} disabled value={item.rating} />
-                                </>}
-                            />
-                        </List.Item>
-                        <List.Item className='content-review'>
-                            <Row>
-                                <Col span={24}>
-                                    {item.comment ? item.comment : ''}
-                                </Col>
-                                <Col span={24}>
-                                    <Space className='img-review-wrapper'>
-                                        <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/2e/0a/41/d213b6b126c6a8637e412ee2cedbb5ce.jpg" />
-                                        <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/24/58/5d/4783e16696305909fb66ac0f9a65048a.jpg" />
-                                    </Space>
-                                </Col>
-                            </Row>
-                        </List.Item>
-                    </div>
-                )}
-            />
-           </Col>
+                        </Col>
+                        <Col span={20} >
+                            <Space justify='center'>
+                                <Button onClick={() => handleChangebtnRating('all')}>Tất cả</Button>
+                                <Button onClick={() => handleChangebtnRating(5)}>5 Sao</Button>
+                                <Button onClick={() => handleChangebtnRating(4)}>4 Sao</Button>
+                                <Button onClick={() => handleChangebtnRating(3)}>3 Sao</Button>
+                                <Button onClick={() => handleChangebtnRating(2)}>2 Sao</Button>
+                                <Button onClick={() => handleChangebtnRating(1)}>1 Sao</Button>
+                            </Space>
+                        </Col>
+                    </Row>
+                </Card>
+                <List
+                    className="demo-loadmore-list"
+                    itemLayout="horizontal"
+                    dataSource={listRating}
+                    pagination={{
+                        onChange: (page) => {
+                            console.log(page);
+                        },
+                        pageSize: 3,
+                    }}
+                    renderItem={(item) => (
+                        <div className='review-block-item'>
+                            <List.Item
+                                actions={[
+                                    <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+                                    <a key="list-loadmore-more"><MoreOutlined /></a>,
+                                ]} >
+                                <List.Item.Meta
+                                    avatar={<Avatar src={item.picture} size={45} />}
+                                    title={<a href="https://ant.design">{item.name}</a>}
+                                    description={<>
+                                        <small>{item.date} | Phân loại hàng: {item.type}</small> <br />
+                                        <Rate className='rating-review' style={{ fontSize: 10 }} disabled value={item.rating} />
+                                    </>}
+                                />
+                            </List.Item>
+                            <List.Item className='content-review'>
+                                <Row>
+                                    <Col span={24}>
+                                        {item.comment ? item.comment : ''}
+                                    </Col>
+                                    <Col span={24}>
+                                        <Space className='img-review-wrapper'>
+                                            <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/2e/0a/41/d213b6b126c6a8637e412ee2cedbb5ce.jpg" />
+                                            <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/24/58/5d/4783e16696305909fb66ac0f9a65048a.jpg" />
+                                        </Space>
+                                    </Col>
+                                </Row>
+                            </List.Item>
+                        </div>
+                    )}
+                />
+            </Col>
         </Row>
     </>)
 }
