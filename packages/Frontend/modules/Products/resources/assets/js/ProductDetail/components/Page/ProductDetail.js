@@ -1,10 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
-    Avatar, Button, Col, Image, Rate, Row, Space, Card,Carousel,
-    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider
+    Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel,List,
+    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip
 } from 'antd';
-import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, 
-        MinusOutlined, StarFilled,LeftOutlined, RightOutlined } from '@ant-design/icons';
+import {
+    HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined,MoreOutlined,LikeOutlined,
+    MinusOutlined, StarFilled, LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined
+} from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
 import Helper from '../Helper/Helper';
@@ -19,6 +21,8 @@ const ProductDetailPage = (props) => {
     const { store } = seller;
     const [quantity, setQuantity] = useState(1);
     const [selectedImg, setSelectedImg] = useState(false);
+    const [ratingReview, setRatingReview] = useState(5)
+    const [listRating, setListRating] = useState([]);
 
     /**
      * @todo:
@@ -91,12 +95,12 @@ const ProductDetailPage = (props) => {
                 <Col span={24} >
                     <h3 className='section_title'> Sản phẩm liên quan </h3>
                     <Carousel
-                    autoplay
-                    arrows={true}
-                    prevArrow={<LeftOutlined />}
-                    nextArrow={<RightOutlined />}
-                    slidesToShow={5}
-                    swipeToSlide draggable
+                        autoplay
+                        arrows={true}
+                        prevArrow={<LeftOutlined />}
+                        nextArrow={<RightOutlined />}
+                        slidesToShow={5}
+                        swipeToSlide draggable
                     >
                         {productArr.map((item, index) => {
                             return (
@@ -131,17 +135,127 @@ const ProductDetailPage = (props) => {
             </Row>
         </>
     }
-    const product_image_gallery=[
-        {url:'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp'},
-        {url:'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp'},
-        {url:'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp'},
-        {url:'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg'},
-        {url:'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp'}
+    const product_image_gallery = [
+        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' },
+        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp' },
+        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp' },
+        { url: 'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg' },
+        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' }
     ]
-    
+
+   
+
+    const listDummy = [
+        {
+            name: "Krämer",
+            picture: "https://randomuser.me/api/portraits/men/46.jpg",
+            date: "2022-11-25 13:38",
+            type: "màu trắng",
+            rating: 1,
+            comment: 'Giao hàng bthg, đóng gói tạm ổn nhe, có điều sách bị xước với bụi :(( sẽ dùng và review thêm nha'
+        },
+        {
+            name: "Krämer02",
+            picture: "https://randomuser.me/api/portraits/men/25.jpg",
+            date: "2022-11-25 13:38",
+            type: "màu đen",
+            rating: 1,
+            comment: 'Giao hàng bthg, đóng gói tạm ổn nhe, có điều sách bị xước với bụi :(( sẽ dùng và review thêm nha'
+        },
+        {
+            name: "Chavare",
+            picture: "https://randomuser.me/api/portraits/women/42.jpg",
+            date: "2022-11-25 13:38",
+            type: "500gr",
+            rating: 2
+        },
+        {
+            name: "Chavare02",
+            picture: "https://randomuser.me/api/portraits/men/42.jpg",
+            date: "2022-11-25 13:38",
+            type: "500gr",
+            rating: 2
+        },
+        {
+            name: "Chavare03",
+            picture: "https://randomuser.me/api/portraits/women/15.jpg",
+            date: "2022-11-25 13:38",
+            type: "500gr",
+            rating: 2
+        },
+        {
+            name: "کریمی",
+            picture: "https://randomuser.me/api/portraits/women/20.jpg",
+            date: "2022-11-25 13:38",
+            type: "màu trắng",
+            rating: 3
+        },
+        {
+            name: "Jason",
+            picture: "https://randomuser.me/api/portraits/men/21.jpg",
+            date: "2022-11-25 13:38",
+            type: "màu trắng",
+            rating: 4,
+            comment: "Chê. Nhìn giống như là đã cũ , không đóng gói kĩ càng, hộp như đã từng bóc qua và cũ rồi."
+        },
+        {
+            name: "Webb",
+            picture: "https://randomuser.me/api/portraits/men/87.jpg",
+            date: "2022-11-25 13:38",
+            type: "màu trắng",
+            rating: 5,
+            comment: `Cực kì hài lòng <br/>
+            Đã mua hàng 
+            Giao hàng nhanh <br/>
+            chất lượng sách Tuyệt vời ông mặt trời <br/>
+            Về nội dung sách: toàn những tác phẩm bán chạy toàn cầu thì chất lượng không phải bàn. <br/>`
+        }
+    ]
+
+    const handleChangebtnRating = (param) => {
+        console.log(param);
+        let data = [];
+        switch (param) {
+            case 'all':
+                data = listDummy;
+                setRatingReview(5);
+                break;
+            case 1:
+                data = listDummy.filter((item) => item.rating === 1);
+                setRatingReview(1);
+                break;
+            case 2:
+                data = listDummy.filter((item) => item.rating === 2);
+                setRatingReview(2);
+                break;
+            case 3:
+                data = listDummy.filter((item) => item.rating === 3);
+                setRatingReview(3);
+                break;
+            case 4:
+                data = listDummy.filter((item) => item.rating === 4);
+                setRatingReview(4);
+                break;
+            case 5:
+                data = listDummy.filter((item) => item.rating === 5);
+                setRatingReview(5);
+                break;
+            default: return listDummy;
+        }
+        setListRating(data);
+
+    }
+
+    const IconText = ({ icon, text }) => (
+        <Space>
+            {React.createElement(icon)}
+            {text}
+        </Space>
+    );
 
     useEffect(() => {
         get_product_item({ id: props.id });
+        setListRating(listDummy);
     }, [props.id]);
 
     return (<>
@@ -158,14 +272,16 @@ const ProductDetailPage = (props) => {
             <Col span={8} className='product_image_container'>
                 <Image preview={false}
                     style={{ objectFit: 'contain', borderRadius: '3px' }}
-                    src={selectedImg ? selectedImg : product_item.image_link }
+                    src={selectedImg ? selectedImg : product_item.image_link}
                 />
                 <Space>
-                {
-                    product_image_gallery.map((data, index) => { return(
-                        <img style={{width:50}} className="galery-img-item" key={index} src={data.url} alt="images" onClick={() => setSelectedImg(data.url)} />
-                    )})
-                }
+                    {
+                        product_image_gallery.map((data, index) => {
+                            return (
+                                <img style={{ width: 50 }} className="galery-img-item" key={index} src={data.url} alt="images" onClick={() => setSelectedImg(data.url)} />
+                            )
+                        })
+                    }
                 </Space>
             </Col>
             <Col className='separate'></Col>
@@ -262,6 +378,72 @@ const ProductDetailPage = (props) => {
             </Col>
         </Row>
         <RelatedProduct />
+
+        <Row className='product_review'>
+           <Col span={24}>
+           <Card >
+                <Row align='middle'>
+                    <Col span={4}>
+                        <Row justify='center' align='middle' className='rating-num'> {ratingReview} <Rate style={{}} value={1} count={1} />/<span>5.0</span> </Row>
+                        <Row justify='center'> <Rate className='rating-review' disabled value={ratingReview} /> </Row>
+
+                    </Col>
+                    <Col span={20} >
+                        <Space justify='center'>
+                            <Button onClick={() => handleChangebtnRating('all')}>Tất cả</Button>
+                            <Button onClick={() => handleChangebtnRating(5)}>5 Sao</Button>
+                            <Button onClick={() => handleChangebtnRating(4)}>4 Sao</Button>
+                            <Button onClick={() => handleChangebtnRating(3)}>3 Sao</Button>
+                            <Button onClick={() => handleChangebtnRating(2)}>2 Sao</Button>
+                            <Button onClick={() => handleChangebtnRating(1)}>1 Sao</Button>
+                        </Space>
+                    </Col>
+                </Row>
+            </Card>
+            <List
+                className="demo-loadmore-list"
+                itemLayout="horizontal"
+                dataSource={listRating}
+                pagination={{
+                    onChange: (page) => {
+                        console.log(page);
+                    },
+                    pageSize: 3,
+                }}
+                renderItem={(item) => (
+                    <div className='review-block-item'>
+                        <List.Item
+                            actions={[
+                                <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+                                <a key="list-loadmore-more"><MoreOutlined /></a>,
+                            ]} >
+                            <List.Item.Meta
+                                avatar={<Avatar src={item.picture} size={45} />}
+                                title={<a href="https://ant.design">{item.name}</a>}
+                                description={<>
+                                    <small>{item.date} | Phân loại hàng: {item.type}</small> <br />
+                                    <Rate className='rating-review' style={{ fontSize: 10 }} disabled value={item.rating} />
+                                </>}
+                            />
+                        </List.Item>
+                        <List.Item className='content-review'>
+                            <Row>
+                                <Col span={24}>
+                                    {item.comment ? item.comment : ''}
+                                </Col>
+                                <Col span={24}>
+                                    <Space className='img-review-wrapper'>
+                                        <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/2e/0a/41/d213b6b126c6a8637e412ee2cedbb5ce.jpg" />
+                                        <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/24/58/5d/4783e16696305909fb66ac0f9a65048a.jpg" />
+                                    </Space>
+                                </Col>
+                            </Row>
+                        </List.Item>
+                    </div>
+                )}
+            />
+           </Col>
+        </Row>
     </>)
 }
 
