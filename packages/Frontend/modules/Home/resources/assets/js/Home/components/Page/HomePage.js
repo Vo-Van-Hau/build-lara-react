@@ -1,14 +1,20 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
 
+const { Text } = Typography;
+
 const HomePage = (props) => {
     const { data, get_products, setRouter, get_product_categories } = useContext(HomeContext);
-    const { products, mouted, product_categories } = data;
-    const { Text } = Typography;
+    const { products, mouted, product_categories, loading_table } = data;
+    const [paginatePage, setPaginatePage] = useState({
+        current_page: 1,
+        start: 0,
+    });
+
     const imgSrc = [
         { id: 1, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/29/2c/4c/b8c757ba06d448ce3d2ec0bee3d75fa3.png.webp' },
         { id: 2, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/e5/db/cc/32b6b4268331a9ed46479ab0da46ae82.png.webp' },
@@ -23,21 +29,8 @@ const HomePage = (props) => {
         { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
         { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
         { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
-    ]
-    const categoriesArr = [
-        { img: 'https://static.vecteezy.com/system/resources/previews/003/717/164/non_2x/women-fashion-pink-flat-design-long-shadow-glyph-icon-luxury-clothes-and-accessories-female-shoes-apparel-details-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg', title: 'Quần Áo' },
-        { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvach0GUaLjVFTsZQC1SmGaTv2vgmmkU79bXKEWSlGMryz4vFUgvPJ-Y3Sxtz7Xf-PYRw&usqp=CAU', title: 'SALE' },
-        { img: 'https://static.vecteezy.com/system/resources/previews/003/769/924/original/electronics-and-accessories-pink-flat-design-long-shadow-glyph-icon-smartphone-and-laptop-computers-and-devices-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg', title: 'Đồ Gia Dụng' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
         { img: 'https://joeschmoe.io/api/v1/random', title: 'Just For You' },
         { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/7d/8a/6e/d8b76e2c43cbd06b7e1aa3ab8c54df64.png.webp', title: 'Market Center' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/41/99/9a/8898607d7fca4b79775a708c57a8152f.png.webp', title: 'Sale 50%' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
-
     ]
 
     const contentStyle = {
@@ -52,9 +45,28 @@ const HomePage = (props) => {
         console.log(e);
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param {unknown}
+     * @returns {void}
+     */
+    const loadMoreProducts = () => {
+        let next = paginatePage.start + 1;
+        return setPaginatePage({
+            ...paginatePage,
+            start: next,
+        });
+    }
+
     useEffect(() => {
         if (mouted) {
-            get_products(1, {});
+            get_products(paginatePage.start, {});
+        }
+    }, [paginatePage]);
+
+    useEffect(() => {
+        if (mouted) {
             get_product_categories(1, {});
         }
     }, []);
@@ -271,16 +283,15 @@ const HomePage = (props) => {
                                 <h2>Sản phẩm đề xuất</h2>
                             </Col>
                         </Row>
-                        <Row className="widgetContainer">
-                            <Space size={[10, 16]} wrap style={{ width: '100%', justifyContent: 'space-between' }} >
-                                {tittleArr.map((item, index) => (
-                                    <Button key={index} align='center' block style={{ height: '80px', width: '200px' }}>
+                        <Row className="widgetContainer" gutter={[8, 8]}>
+                            {tittleArr.map((item, index) => (
+                                <Col span={3}>
+                                    <Button key={index} align='center' block style={{height: 'auto'}}>
                                         <Avatar src={item.img} size={48} />
-                                        <p>{item.title}</p>
+                                        <p style={{marginBottom: 0}}>{item.title}</p>
                                     </Button>
-                                ))}
-                            </Space>
-
+                                </Col>
+                            ))}
                         </Row>
                     </div>
                 </Affix>
@@ -288,7 +299,7 @@ const HomePage = (props) => {
                     <Space size={[10, 16]} style={{ width: '100%' }}>
                         <Row gutter={[8, 8]}>
                             {products.map((item, index) => (
-                                <Col span={4} key={item.id}>
+                                <Col span={4} key={`${item.id}_${index}`}>
                                     <Card className="productItem"
                                         hoverable
                                         cover={<img
@@ -335,7 +346,13 @@ const HomePage = (props) => {
                         <Col span={4}>
                             <div>
                                 <div style={{ padding: 24, }}>
-                                    <Button type="primary" style={{ width: '100%', borderRadius: 4 }} size={`large`}>Xem thêm</Button>
+                                    <Button type="primary"
+                                        style={{ width: '100%', borderRadius: 4 }}
+                                        size={`large`} onClick={() => loadMoreProducts()}
+                                        loading={loading_table}
+                                    >
+                                        Xem thêm
+                                    </Button>
                                 </div>
                             </div>
                         </Col>

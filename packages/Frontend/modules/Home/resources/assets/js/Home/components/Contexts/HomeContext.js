@@ -64,20 +64,24 @@ const HomeContextProvicer = ({ children, axios, history, config, navigate }) => 
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get product
-     * @param {string} page
+     * @todo: get products
+     * @param {string} start
      * @param {string} keySearch
      * @return {void}
      */
-    const get_products = (page, keySearch) => {
+    const get_products = (start = 1, keySearch) => {
+        console.log(data)
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/products/products/get_list`)
+        .post(`/products/products/get_per_page`, {
+            start, keySearch
+        })
         .then((res) => {
             let { products } = res.data;
-            let { data } = products;
-            dispatch({ type: GET_PRODUCTS, payload: data });
+            let showingProducts = data.products;
+            let mergerProducts = [...products, ...showingProducts, ];
+            dispatch({ type: GET_PRODUCTS, payload: mergerProducts });
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});

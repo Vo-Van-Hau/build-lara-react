@@ -35,7 +35,26 @@ class ProductsController extends ControllerBase {
             $input = $request->all();
             $keyword = isset($input['keyword']) ? $input['keyword'] : '';
             $status = isset($input['status']) ? $input['status'] : [];
-            $data_json['products'] = $this->ProductsRepository->get_all($keyword, $status);
+            $page = isset($input['page']) ? $input['page'] : 1;
+            $data_json['products'] = $this->ProductsRepository->get_all($keyword, $status, $page);
+            return response()->json($data_json, 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_per_page(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $keyword = isset($input['keyword']) ? $input['keyword'] : '';
+            $status = isset($input['status']) ? $input['status'] : [];
+            $start = isset($input['start']) ? $input['start'] : 1;
+            $data_json['products'] = $this->ProductsRepository->get_per_page($keyword, $status, $start);
             return response()->json($data_json, 200);
         }
         return $this->response_base(['status' => false], 'Access denied !', 200);

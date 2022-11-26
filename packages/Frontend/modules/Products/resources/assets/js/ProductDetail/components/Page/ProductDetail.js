@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import {
     Avatar, Button, Col, Image, Rate, Row, Space, Card,Carousel,
-    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider
+    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip
 } from 'antd';
-import { HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, 
-        MinusOutlined, StarFilled,LeftOutlined, RightOutlined } from '@ant-design/icons';
+import {
+    HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, ShoppingCartOutlined, ShareAltOutlined,
+    MinusOutlined, StarFilled,LeftOutlined, RightOutlined, HeartOutlined
+} from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
 import Helper from '../Helper/Helper';
@@ -13,9 +15,11 @@ const { Text } = Typography;
 
 const ProductDetailPage = (props) => {
 
-    const { data, get_product_item, add_to_cart, setRouter } = useContext(ProductDetailContext);
-    const { product_item } = data;
-    const { seller } = product_item;
+    const {
+        data, get_product_item, add_to_cart, setRouter, get_similar_products
+    } = useContext(ProductDetailContext);
+    const { product_item, mouted } = data;
+    const { seller, similar_products } = product_item;
     const { store } = seller;
     const [quantity, setQuantity] = useState(1);
     const [selectedImg, setSelectedImg] = useState(false);
@@ -74,45 +78,77 @@ const ProductDetailPage = (props) => {
         setQuantity(1);
     }
 
-    /** */
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param
+     * @return {void}
+     */
     const RelatedProduct = () => {
-        const productArr = [
-            { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-            { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
 
-        ]
         return <>
             <Row className='related_product_container'>
                 <Col span={24} >
-                    <h3 className='section_title'> Sản phẩm liên quan </h3>
+                    <h3 className='section_title'>Sản Phẩm Tương Tự</h3>
                     <Carousel
-                    autoplay
-                    arrows={true}
-                    prevArrow={<LeftOutlined />}
-                    nextArrow={<RightOutlined />}
-                    slidesToShow={5}
-                    swipeToSlide draggable
+                        autoplay
+                        arrows={true}
+                        prevArrow={<LeftOutlined />}
+                        nextArrow={<RightOutlined />}
+                        slidesToShow={6}
+                        swipeToSlide draggable
                     >
-                        {productArr.map((item, index) => {
+                        {similar_products.map((item, index) => {
                             return (
+                                // <Card className="productItem"
+                                //     key={index}
+                                //     hoverable
+                                //     cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+                                // >
+                                //     <Meta title={item.title} />
+                                //     <div className="rating">
+                                //         {/* <Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} /> */}
+                                //         <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++</small>
+                                //     </div>
+                                //     <Text strong className="price" type="danger">120.000 đ</Text>
+                                // </Card>
                                 <Card className="productItem"
-                                    key={index}
                                     hoverable
-                                    cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+                                    cover={<img
+                                        alt={item.name ? item.name : ``}
+                                        style={{ height: 189, width: 165, objectFit: `contain` }}
+                                        src={item.image_link}
+                                    />}
+                                    onClick={() => setRouter({
+                                        module: 'products',
+                                        controller: 'productdetail',
+                                        action: 'view',
+                                        id: item.id,
+                                    })}
+                                    style={{ padding: 12 }}
+                                    bodyStyle={{ padding: 0 }}
+                                    key={index}
                                 >
-                                    <Meta title={item.title} />
-                                    <div className="rating">
-                                        <Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} />
-                                        <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++</small>
+                                    <div>
+                                        {/* <Meta title={item.name ? item.name : ``} style={{fontWeight: 400}}/> */}
+                                        <Text style={{ fontWeight: 400 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                        <div className="rating">
+                                            {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                                        </div>
+                                        <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
                                     </div>
-
-                                    <Text strong className="price" type="danger">120.000 đ</Text>
-
+                                    <Space size={[0]} direction="vertical" className="productItem-btn-group">
+                                        <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
+                                            <Button icon={<HeartOutlined />} href="#" />
+                                        </Tooltip>
+                                        <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
+                                            <Button icon={<ShoppingCartOutlined />} href="#" />
+                                        </Tooltip>
+                                        <Tooltip placement="right" title={'Chia sẻ'}>
+                                            <Button icon={<ShareAltOutlined />} href="#" />
+                                        </Tooltip>
+                                    </Space>
                                 </Card>
                             )
                         })}
@@ -128,10 +164,13 @@ const ProductDetailPage = (props) => {
         {url:'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg'},
         {url:'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp'}
     ]
-    
+
 
     useEffect(() => {
-        get_product_item({ id: props.id });
+        if(mouted) {
+            get_product_item({ id: props.id });
+            get_similar_products();
+        }
     }, [props.id]);
 
     return (<>
