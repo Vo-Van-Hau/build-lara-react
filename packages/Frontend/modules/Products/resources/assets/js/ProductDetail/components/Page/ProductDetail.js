@@ -19,7 +19,7 @@ const ProductDetailPage = (props) => {
         data, get_product_item, add_to_cart, setRouter, get_similar_products
     } = useContext(ProductDetailContext);
     const { product_item, mouted } = data;
-    const { seller, similar_products } = product_item;
+    const { seller, similar_products, products_additional_image_link } = product_item;
     const { store } = seller;
     const [quantity, setQuantity] = useState(1);
     const [selectedImg, setSelectedImg] = useState(false);
@@ -190,11 +190,11 @@ const ProductDetailPage = (props) => {
                     src={selectedImg ? selectedImg : product_item.image_link }
                 />
                 <Space>
-                {
-                    product_image_gallery.map((data, index) => { return(
-                        <img style={{width:50}} className="galery-img-item" key={index} src={data.url} alt="images" onClick={() => setSelectedImg(data.url)} />
-                    )})
-                }
+                {products_additional_image_link.map((item, index) => {
+                    return (
+                        <img style={{width:50}} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
+                    )
+                })}
                 </Space>
             </Col>
             <Col className='separate'></Col>

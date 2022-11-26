@@ -20,19 +20,21 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
      * @return {void}
      */
     const get_product_item = (values) => {
-        set_table_loading();
-        return axios
-        .get_secured()
-        .post(`/products/products/get_item`, {...values})
-        .then((res) => {
-            let { data, status } = res.data;
-            let { product } = data;
-            if(status) {
-                product && dispatch({ type: GET_PRODUCT_ITEM, payload: product });
-            }
-        })
-        .catch((errors) => {})
-        .finally(() => {set_table_loading();});
+        if(values.id && values.id !== '') {
+            set_table_loading();
+            return axios
+            .get_secured()
+            .post(`/products/products/get_item`, {...values})
+            .then((res) => {
+                let { data, status } = res.data;
+                let { product } = data;
+                if(status) {
+                    product && dispatch({ type: GET_PRODUCT_ITEM, payload: product });
+                }
+            })
+            .catch((errors) => {})
+            .finally(() => {set_table_loading();});
+        }
     }
 
     /**

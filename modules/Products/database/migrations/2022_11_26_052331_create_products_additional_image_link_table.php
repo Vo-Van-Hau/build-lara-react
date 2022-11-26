@@ -14,7 +14,8 @@ class CreateProductsAdditionalImageLinkTable extends Migration {
     public function up() {
         Schema::create('products_additional_image_link', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->text('link');
+            $table->text('url');
+            $table->integer('product_id')->unsigned()->comment('Product ID');
             $table->integer('status')->unsigned()->default(0);
             $table->longText('description')->nullable()->comment('1–5,000 characters');
             $table->integer('user_created_id');

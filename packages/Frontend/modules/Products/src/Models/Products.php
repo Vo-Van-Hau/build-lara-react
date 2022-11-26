@@ -8,6 +8,7 @@ use Frontend\Products\Models\ProductStock;
 use Frontend\Products\Models\ProductIdentifiers;
 use Frontend\Products\Models\ProductDescriptionDetail;
 use Frontend\Products\Models\ProductCaterory;
+use Frontend\Products\Models\ProductsAdditionalImageLink;
 
 class Products extends ModelBase {
 
@@ -53,7 +54,9 @@ class Products extends ModelBase {
     public function seller() {
         return $this->belongsTo(Sellers::class, 'seller_id', 'id')
             ->with([
-                'store'
+                'store' => function ($query) {
+                    $query->select('id', 'name', 'seller_id', 'brand_logo', 'status');
+                }
             ])
             ->where([
                 'sellers.status' => 1,
@@ -103,6 +106,18 @@ class Products extends ModelBase {
         return $this->belongsTo(ProductCaterory::class, 'category_id', 'id')->where([
             'product_categories.status' => 1,
             'product_categories.deleted' => 0
+        ]);
+    }
+
+    /**
+    * @author: <hauvo1709@gmail.com>
+    * @todo:
+    * @return void
+    */
+    public function products_additional_image_link() {
+        return $this->hasMany(ProductsAdditionalImageLink::class, 'product_id', 'id')->where([
+            'products_additional_image_link.status' => 1,
+            'products_additional_image_link.deleted' => 0,
         ]);
     }
 }

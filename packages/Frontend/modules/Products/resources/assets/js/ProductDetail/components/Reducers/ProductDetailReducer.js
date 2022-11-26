@@ -16,6 +16,7 @@ export const initialState = {
             title: '',
         },
         similar_products: [],
+        products_additional_image_link: [],
     },
     config:{
         status: []
