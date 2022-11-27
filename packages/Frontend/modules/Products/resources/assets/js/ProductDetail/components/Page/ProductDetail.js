@@ -262,13 +262,11 @@ const ProductDetailPage = (props) => {
                     src={selectedImg ? selectedImg : product_item.image_link}
                 />
                 <Space>
-                    {
-                        product_image_gallery.map((data, index) => {
-                            return (
-                                <img style={{ width: 50 }} className="galery-img-item" key={index} src={data.url} alt="images" onClick={() => setSelectedImg(data.url)} />
-                            )
-                        })
-                    }
+                {products_additional_image_link.map((item, index) => {
+                    return (
+                        <img style={{width:50}} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
+                    )
+                })}
                 </Space>
             </Col>
             <Col className='separate'></Col>
@@ -374,7 +372,7 @@ const ProductDetailPage = (props) => {
                     nextArrow={<RightOutlined />}
                     swipeToSlide draggable
                 >
-                    {relatedProducts.map((item, index) => (
+                    {similar_products.map((item, index) => (
                         <Card key={item.id}
                             className="productItem"
                             hoverable
