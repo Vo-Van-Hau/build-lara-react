@@ -259,6 +259,11 @@ main.ant-layout-content {
     }
 }
 
+.ant-carousel .slick-prev::before,
+.ant-carousel .slick-next::before {
+    content: '' !important;
+}
+
 .showBar{
     transform: translateX(0);
     transition: transform linear .2s;

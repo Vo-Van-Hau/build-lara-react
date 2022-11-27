@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel, List, message,
-    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip, Popover
+    Avatar, Button, Col, Image, Rate, Row, Space, Card,Carousel, message,
+    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip, List, Popover
 } from 'antd';
 import {
-    HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined,
-    MinusOutlined, StarFilled, LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined
+    HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, ShoppingCartOutlined, ShareAltOutlined,
+    MinusOutlined, StarFilled,LeftOutlined, RightOutlined, HeartOutlined, MoreOutlined, CloseOutlined, CopyOutlined
 } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
@@ -14,10 +14,11 @@ import Helper from '../Helper/Helper';
 const { Text } = Typography;
 
 const ProductDetailPage = (props) => {
-
-    const { data, get_product_item, add_to_cart, setRouter } = useContext(ProductDetailContext);
-    const { product_item } = data;
-    const { seller } = product_item;
+    const {
+        data, get_product_item, add_to_cart, setRouter, get_similar_products
+    } = useContext(ProductDetailContext);
+    const { product_item, mouted } = data;
+    const { seller, similar_products, products_additional_image_link } = product_item;
     const { store } = seller;
     const [quantity, setQuantity] = useState(1);
     const [selectedImg, setSelectedImg] = useState(false);
@@ -78,158 +79,19 @@ const ProductDetailPage = (props) => {
         setQuantity(1);
     }
 
-    /**btn group in productI */
-    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
-    const [messageApi, contextHolder] = message.useMessage();
-    const [open, setOpen] = useState(false);
-    const [openBar, setOpenBar] = useState(false);
-    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
-    const hide = () => {
-        setOpen(false);
-        setOpenBar(false);
-        setCopyTextClipBrd(false);
-    };
-    const handleOpenChange = (newOpen) => {
-        setOpen(newOpen);
-        setOpenBar(newOpen);
-
-    };
-
-    const copy = async () => {
-        await navigator.clipboard.writeText(urlCoppied);
-    }
-
-    const copyToClipBoard = () => {
-        copy();
-        setCopyTextClipBrd(true);
-        messageApi.open({
-            type: 'success',
-            content: 'Đã sao chép liên kết',
-        });
-    };
-
-    /** */
-    const relatedProducts = [
-        { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
-
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param
+     * @return {void}
+     */
+    const product_image_gallery=[
+        {url:'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp'},
+        {url:'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp'},
+        {url:'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp'},
+        {url:'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg'},
+        {url:'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp'}
     ]
-
-    const product_image_gallery = [
-        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' },
-        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp' },
-        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp' },
-        { url: 'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg' },
-        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' }
-    ]
-
-
-
-    const listDummy = [
-        {
-            name: "Krämer",
-            picture: "https://randomuser.me/api/portraits/men/46.jpg",
-            date: "2022-11-25 13:38",
-            type: "màu trắng",
-            rating: 1,
-            comment: 'Giao hàng bthg, đóng gói tạm ổn nhe, có điều sách bị xước với bụi :(( sẽ dùng và review thêm nha'
-        },
-        {
-            name: "Krämer02",
-            picture: "https://randomuser.me/api/portraits/men/25.jpg",
-            date: "2022-11-25 13:38",
-            type: "màu đen",
-            rating: 1,
-            comment: 'Giao hàng bthg, đóng gói tạm ổn nhe, có điều sách bị xước với bụi :(( sẽ dùng và review thêm nha'
-        },
-        {
-            name: "Chavare",
-            picture: "https://randomuser.me/api/portraits/women/42.jpg",
-            date: "2022-11-25 13:38",
-            type: "500gr",
-            rating: 2
-        },
-        {
-            name: "Chavare02",
-            picture: "https://randomuser.me/api/portraits/men/42.jpg",
-            date: "2022-11-25 13:38",
-            type: "500gr",
-            rating: 2
-        },
-        {
-            name: "Chavare03",
-            picture: "https://randomuser.me/api/portraits/women/15.jpg",
-            date: "2022-11-25 13:38",
-            type: "500gr",
-            rating: 2
-        },
-        {
-            name: "کریمی",
-            picture: "https://randomuser.me/api/portraits/women/20.jpg",
-            date: "2022-11-25 13:38",
-            type: "màu trắng",
-            rating: 3
-        },
-        {
-            name: "Jason",
-            picture: "https://randomuser.me/api/portraits/men/21.jpg",
-            date: "2022-11-25 13:38",
-            type: "màu trắng",
-            rating: 4,
-            comment: "Chê. Nhìn giống như là đã cũ , không đóng gói kĩ càng, hộp như đã từng bóc qua và cũ rồi."
-        },
-        {
-            name: "Webb",
-            picture: "https://randomuser.me/api/portraits/men/87.jpg",
-            date: "2022-11-25 13:38",
-            type: "màu trắng",
-            rating: 5,
-            comment: `Cực kì hài lòng <br/>
-            Đã mua hàng 
-            Giao hàng nhanh <br/>
-            chất lượng sách Tuyệt vời ông mặt trời <br/>
-            Về nội dung sách: toàn những tác phẩm bán chạy toàn cầu thì chất lượng không phải bàn. <br/>`
-        }
-    ]
-
-    const handleChangebtnRating = (param) => {
-        console.log(param);
-        let data = [];
-        switch (param) {
-            case 'all':
-                data = listDummy;
-                setRatingReview(5);
-                break;
-            case 1:
-                data = listDummy.filter((item) => item.rating === 1);
-                setRatingReview(1);
-                break;
-            case 2:
-                data = listDummy.filter((item) => item.rating === 2);
-                setRatingReview(2);
-                break;
-            case 3:
-                data = listDummy.filter((item) => item.rating === 3);
-                setRatingReview(3);
-                break;
-            case 4:
-                data = listDummy.filter((item) => item.rating === 4);
-                setRatingReview(4);
-                break;
-            case 5:
-                data = listDummy.filter((item) => item.rating === 5);
-                setRatingReview(5);
-                break;
-            default: return listDummy;
-        }
-        setListRating(data);
-
-    }
 
     const IconText = ({ icon, text }) => (
         <Space>
@@ -238,9 +100,69 @@ const ProductDetailPage = (props) => {
         </Space>
     );
 
+    const [messageApi, contextHolder] = message.useMessage();
+    const [open, setOpen] = useState(false);
+    const [openBar, setOpenBar] = useState(false);
+    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
+    const hide = () => {
+        setOpen(false);
+        setOpenBar(false);
+        setCopyTextClipBrd(false);
+        };
+        const handleOpenChange = (newOpen) => {
+        setOpen(newOpen);
+        setOpenBar(newOpen);
+        
+        };
+    const copy = async () => {
+        await navigator.clipboard.writeText(urlCoppied);
+        }
+
+    const copyToClipBoard = () => {
+        copy();
+        setCopyTextClipBrd(true);
+        messageApi.open({
+            type: 'success',
+            content: 'Đã sao chép liên kết',
+        });
+        };
+
+
+        const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+            <button
+              {...props}
+              className={
+                "slick-prev slick-arrow" +
+                (currentSlide === 0 ? " slick-disabled" : "")
+              }
+              aria-hidden="true"
+              aria-disabled={currentSlide === 0 ? true : false}
+              type="button"
+            >
+              
+            </button>
+          );
+          const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+            <button
+              {...props}
+              className={
+                "slick-next slick-arrow" +
+                (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+              }
+              aria-hidden="true"
+              aria-disabled={currentSlide === slideCount - 1 ? true : false}
+              type="button"
+            >
+              
+            </button>
+          );
+          
+
     useEffect(() => {
-        get_product_item({ id: props.id });
-        setListRating(listDummy);
+        if(mouted) {
+            get_product_item({ id: props.id });
+            get_similar_products();
+        }
     }, [props.id]);
 
     return (<>
@@ -260,13 +182,11 @@ const ProductDetailPage = (props) => {
                     src={selectedImg ? selectedImg : product_item.image_link}
                 />
                 <Space>
-                    {
-                        product_image_gallery.map((data, index) => {
-                            return (
-                                <img style={{ width: 50 }} className="galery-img-item" key={index} src={data.url} alt="images" onClick={() => setSelectedImg(data.url)} />
-                            )
-                        })
-                    }
+                {products_additional_image_link.map((item, index) => {
+                    return (
+                        <img style={{width:50}} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
+                    )
+                })}
                 </Space>
             </Col>
             <Col className='separate'></Col>
@@ -368,11 +288,11 @@ const ProductDetailPage = (props) => {
                     slide
                     slidesToShow={5}
                     arrows={true}
-                    prevArrow={<LeftOutlined />}
-                    nextArrow={<RightOutlined />}
+                    prevArrow=<SlickArrowLeft />
+                    nextArrow= <SlickArrowRight />
                     swipeToSlide draggable
                 >
-                    {relatedProducts.map((item, index) => (
+                    {similar_products.map((item, index) => (
                         <Card key={item.id}
                             className="productItem"
                             hoverable

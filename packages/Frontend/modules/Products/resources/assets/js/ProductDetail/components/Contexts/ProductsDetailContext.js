@@ -20,19 +20,21 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
      * @return {void}
      */
     const get_product_item = (values) => {
-        set_table_loading();
-        return axios
-        .get_secured()
-        .post(`/products/products/get_item`, {...values})
-        .then((res) => {
-            let { data, status } = res.data;
-            let { product } = data;
-            if(status) {
-                product && dispatch({ type: GET_PRODUCT_ITEM, payload: product });
-            }
-        })
-        .catch((errors) => {})
-        .finally(() => {set_table_loading();});
+        if(values.id && values.id !== '') {
+            set_table_loading();
+            return axios
+            .get_secured()
+            .post(`/products/products/get_item`, {...values})
+            .then((res) => {
+                let { data, status } = res.data;
+                let { product } = data;
+                if(status) {
+                    product && dispatch({ type: GET_PRODUCT_ITEM, payload: product });
+                }
+            })
+            .catch((errors) => {})
+            .finally(() => {set_table_loading();});
+        }
     }
 
     /**
@@ -57,6 +59,28 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get similar products
+     * @param {array} data
+     * @return {void}
+     */
+    const get_similar_products = (data) => {
+        // set_table_loading();
+        // return axios
+        // .get_secured()
+        // .post(`/products/products/get_item`, {...values})
+        // .then((res) => {
+        //     let { data, status } = res.data;
+        //     let { product } = data;
+        //     if(status) {
+        //         product && dispatch({ type: GET_PRODUCT_ITEM, payload: product });
+        //     }
+        // })
+        // .catch((errors) => {})
+        // .finally(() => {set_table_loading();});
     }
 
     /**
@@ -111,7 +135,7 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config},
+        data: { ...data, config }, get_similar_products,
         history, dispatch, get_axios, set_table_loading,
         set_mouted, get_product_item, add_to_cart, setRouter
     };

@@ -1,46 +1,79 @@
-import React, { useContext, useEffect,useState } from 'react';
-import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip, Popover , message } from 'antd';
-import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined,CopyOutlined } from '@ant-design/icons';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+    Card, Avatar, Rate, Image, Carousel, Button,
+    Affix, BackTop, Col, Row, Space, Tabs, Typography,
+    Tooltip, message, Popover
+} from 'antd';
+import {
+    LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined,
+    ShareAltOutlined, CloseOutlined, CopyOutlined
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
 
+const { Text } = Typography;
 const HomePage = (props) => {
     const { data, get_products, setRouter, get_product_categories } = useContext(HomeContext);
-    const { products, mouted, product_categories } = data;
-    const { Text } = Typography;
-    const imgSrc = [
+    const { products, mouted, product_categories, loading_table } = data;
+    const [messageApi, contextHolder] = message.useMessage();
+    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
+    const [open, setOpen] = useState(false);
+    const [openBar, setOpenBar] = useState(false);
+    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
+    const [paginatePage, setPaginatePage] = useState({
+        current_page: 1,
+        start: 0,
+    });
+
+    /**
+     * @author: <thuymai0805@gmail.com>
+     * @todo{Carousel Actions , DumyImage List *delete after change realdata*}
+     * @param {unknown}
+     * @returns {void}
+     */
+    const DummyImgList = [
         { id: 1, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/29/2c/4c/b8c757ba06d448ce3d2ec0bee3d75fa3.png.webp' },
         { id: 2, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/e5/db/cc/32b6b4268331a9ed46479ab0da46ae82.png.webp' },
         { id: 3, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/9b/19/a8/51a15d4d9811bdfa47559695a27d13a7.png.webp' },
         { id: 4, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/5f/8b/3d/96dc1c277cb1dbb4ea7d53a6f4c069f6.png.webp' },
         { id: 5, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/47/3f/c4/7cb5b763e8644aa1d4ef5c5639f2c029.jpg.webp' },
-    ]
-    const tittleArr = [
-        { img: 'https://joeschmoe.io/api/v1/random', title: 'Just For You' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/7d/8a/6e/d8b76e2c43cbd06b7e1aa3ab8c54df64.png.webp', title: 'Market Center' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/41/99/9a/8898607d7fca4b79775a708c57a8152f.png.webp', title: 'Sale 50%' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
-    ]
-    const categoriesArr = [
-        { img: 'https://static.vecteezy.com/system/resources/previews/003/717/164/non_2x/women-fashion-pink-flat-design-long-shadow-glyph-icon-luxury-clothes-and-accessories-female-shoes-apparel-details-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg', title: 'Quần Áo' },
-        { img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvach0GUaLjVFTsZQC1SmGaTv2vgmmkU79bXKEWSlGMryz4vFUgvPJ-Y3Sxtz7Xf-PYRw&usqp=CAU', title: 'SALE' },
-        { img: 'https://static.vecteezy.com/system/resources/previews/003/769/924/original/electronics-and-accessories-pink-flat-design-long-shadow-glyph-icon-smartphone-and-laptop-computers-and-devices-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg', title: 'Đồ Gia Dụng' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
-        { img: 'https://joeschmoe.io/api/v1/random', title: 'Just For You' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/7d/8a/6e/d8b76e2c43cbd06b7e1aa3ab8c54df64.png.webp', title: 'Market Center' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/41/99/9a/8898607d7fca4b79775a708c57a8152f.png.webp', title: 'Sale 50%' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/tikimsp/2e/9d/d1/df6a4b086a39de681ae46c210efb4afc.png.webp', title: 'Hot Deal' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/b7/aa/f3/bcff08097ead36826d2c9daf7c2debd5.png.webp', title: 'Freeship' },
-        { img: 'https://salt.tikicdn.com/cache/w100/ts/personalish/dc/f1/b1/6ba9e529785de3ad1a81b9c569d05aa0.png.webp', title: 'Fashion' },
-
-    ]
-
-    const contentStyle = {
+    ];
+    const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+        <button
+            {...props}
+            className={
+                "slick-prev slick-arrow" +
+                (currentSlide === 0 ? " slick-disabled" : "")
+            }
+            aria-hidden="true"
+            aria-disabled={currentSlide === 0 ? true : false}
+            type="button"
+        >
+            <LeftOutlined />
+        </button>
+    );
+    const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+        <button
+            {...props}
+            className={
+                "slick-next slick-arrow" +
+                (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+            }
+            aria-hidden="true"
+            aria-disabled={currentSlide === slideCount - 1 ? true : false}
+            type="button"
+        >
+            <RightOutlined />
+        </button>
+    );
+    /**
+     * @author: <thuymai0805@gmail.com>
+     * @todo{css custome}
+     * @param {unknown}
+     * @returns {void}
+     */
+    const CarouselContentStyle = {
         height: '160px',
         color: '#fff',
         lineHeight: '160px',
@@ -48,42 +81,72 @@ const HomePage = (props) => {
         background: '#364d79',
     };
 
-    const handleClickTab = (e) => {
+    /**
+     * @author: <thuymai0805@gmail.com>
+     * @todo{css custome}
+     * @param {unknown}
+     * @returns {void}
+     */
+    const handleClickCategoriesTab = (e) => {
         console.log(e);
-    }
+        setRouter({
+            module: 'products',
+            controller: 'products',
+            action: 'bycategory',
+            id: e ? e : 0
+    })}
+    
 
-    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
-    const [messageApi, contextHolder] = message.useMessage();
-    const [open, setOpen] = useState(false);
-    const [openBar, setOpenBar] = useState(false);
-    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
+    /**
+     * @author: <thuymai0805@gmail.com>
+     * @todo{share product Actions}
+     * @param {unknown}
+     * @returns {void}
+     */
     const hide = () => {
-    setOpen(false);
-    setOpenBar(false);
-    setCopyTextClipBrd(false);
+        setOpen(false);
+        setOpenBar(false);
+        setCopyTextClipBrd(false);
     };
     const handleOpenChange = (newOpen) => {
-    setOpen(newOpen);
-    setOpenBar(newOpen);
-    
-    };
+        setOpen(newOpen);
+        setOpenBar(newOpen);
 
+    };
     const copy = async () => {
         await navigator.clipboard.writeText(urlCoppied);
-      }
-
+    }
     const copyToClipBoard = () => {
         copy();
         setCopyTextClipBrd(true);
         messageApi.open({
-          type: 'success',
-          content: 'Đã sao chép liên kết',
+            type: 'success',
+            content: 'Đã sao chép liên kết',
         });
-      };
+    };
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param {unknown}
+     * @returns {void}
+     */
+    const loadMoreProducts = () => {
+        let next = paginatePage.start + 1;
+        return setPaginatePage({
+            ...paginatePage,
+            start: next,
+        });
+    }
 
     useEffect(() => {
         if (mouted) {
-            get_products(1, {});
+            get_products(paginatePage.start, {});
+        }
+    }, [paginatePage]);
+
+    useEffect(() => {
+        if (mouted) {
             get_product_categories(1, {});
         }
     }, []);
@@ -92,38 +155,36 @@ const HomePage = (props) => {
         <>
             <Tabs activeKey={'none'}
                 tabPosition={'top'}
-                onTabClick={(e) => handleClickTab(e)}
+                onTabClick={(e) => handleClickCategoriesTab(e)}
                 style={{ padding: '0px 5px', fontWeight: 500 }}
-                items={product_categories.map((item, index) => {
+                items={product_categories.map((item) => {
                     return {
                         label: item.label,
                         key: item.key,
                     };
                 })}
+            
             />
             <Row className='home_top_banner_container'
                 justify="space-between"
-                gutter={[10, 16]}
-            >
+                gutter={[10, 16]} >
                 <Col span={14} >
                     <Carousel
                         autoplay
                         arrows={true}
-                        prevArrow={<LeftOutlined />}
-                        nextArrow={<RightOutlined />}
-                        swipeToSlide draggable
-                    >
-                        {imgSrc.map((item, index) => {
+                        prevArrow=<SlickArrowLeft />
+                        nextArrow=<SlickArrowRight />
+                        swipeToSlide draggable >
+                        {DummyImgList.map((item, index) => {
                             return <Image
                                 height={355}
                                 key={index}
                                 preview={false}
-                                style={contentStyle}
+                                style={CarouselContentStyle}
                                 src={item.url} />
                         })}
                     </Carousel>
                 </Col>
-
                 <Col span={10}>
                     <Image preview={false}
                         style={{ objectFit: 'contain', borderRadius: '3px' }}
@@ -134,8 +195,7 @@ const HomePage = (props) => {
             <Row className='home_group_banner_container'
                 justify="space-between"
                 gutter={[10, 20]}
-                style={{ padding: '1rem 0' }}
-            >
+                style={{ padding: '1rem 0' }}>
                 <Col flex="1">
                     <Image preview={false}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
@@ -170,16 +230,15 @@ const HomePage = (props) => {
                         slidesToShow={2}
                         autoplay
                         arrows={true}
-                        prevArrow={<LeftOutlined />}
-                        nextArrow={<RightOutlined />}
-                        swipeToSlide draggable
-                    >
-                        {imgSrc.map((item, index) => {
+                        prevArrow=<SlickArrowLeft />
+                        nextArrow=<SlickArrowRight />
+                        swipeToSlide draggable>
+                        {DummyImgList.map((item, index) => {
                             return <Image
                                 height={355}
                                 key={index}
                                 preview={false}
-                                style={contentStyle}
+                                style={CarouselContentStyle}
                                 src={item.url} />
                         })}
                     </Carousel>
@@ -189,11 +248,10 @@ const HomePage = (props) => {
                         slide
                         slidesToShow={5}
                         arrows={true}
-                        prevArrow={<LeftOutlined />}
-                        nextArrow={<RightOutlined />}
-                        swipeToSlide draggable
-                    >
-                        {products.map((item, index) => (
+                        prevArrow=<SlickArrowLeft />
+                        nextArrow=<SlickArrowRight />
+                        swipeToSlide draggable >
+                        {products.map((item) => (
                             <Card key={item.id}
                                 className="productItem"
                                 hoverable
@@ -208,8 +266,7 @@ const HomePage = (props) => {
                                     action: 'view',
                                     id: item.id,
                                 })}
-                                style={{ padding: 12, marginLeft: 5 }}
-                            >
+                                style={{ padding: 12, marginLeft: 5 }} >
                                 <Meta title={item.name ? item.name : ``} />
                                 <div className="rating">
                                     {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
@@ -223,24 +280,24 @@ const HomePage = (props) => {
                                     <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
                                         <Button icon={<ShoppingCartOutlined />} href="#" />
                                     </Tooltip>
-                                    <Popover 
-                                            placement="rightTop"
-                                            id="socialBtnBar"
-                                            trigger="click"
-                                            open={open}
-                                            onOpenChange={handleOpenChange}
-                                            content={<>
-                                                <a className="close-btn" onClick={hide}><CloseOutlined /></a>
-                                                <Space className="social-bar-container" align="end" size="small">
-                                                    Chia sẻ:
+                                    <Popover
+                                        placement="rightTop"
+                                        id="socialBtnBar"
+                                        trigger="click"
+                                        open={open}
+                                        onOpenChange={handleOpenChange}
+                                        content={<>
+                                            <a className="close-btn" onClick={hide}><CloseOutlined /></a>
+                                            <Space className="social-bar-container" align="end" size="small">
+                                                Chia sẻ:
                                                 <img src="/facebook.png" width={20} />
                                                 <img src="/icon_instagram.png" width={20} />
                                                 <img src="/twitter.png" width={20} />
-                                                <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
-                                                </Space>
-                                                </>}>
-                                                <Button icon={<ShareAltOutlined />} href="#" />
-                                            </Popover>
+                                                <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
+                                            </Space>
+                                        </>}>
+                                        <Button icon={<ShareAltOutlined />} href="#" />
+                                    </Popover>
                                 </Space>
                             </Card>
                         ))}
@@ -315,16 +372,15 @@ const HomePage = (props) => {
                                 <h2>Sản phẩm đề xuất</h2>
                             </Col>
                         </Row>
-                        <Row className="widgetContainer">
-                            <Space size={[10, 16]} wrap style={{ width: '100%', justifyContent: 'space-between' }} >
-                                {tittleArr.map((item, index) => (
-                                    <Button key={index} align='center' block style={{ height: '80px', width: '200px' }}>
-                                        <Avatar src={item.img} size={48} />
-                                        <p>{item.title}</p>
+                        <Row className="widgetContainer" gutter={[8, 8]}>
+                            {product_categories.map((item, index) => (
+                                <Col span={3} key={index}>
+                                    <Button key={index} align='center' block style={{ height: 'auto' }}>
+                                        <Avatar src={item.icon_link} size={48} />
+                                        <p style={{ marginBottom: 0 }}>{item.label}</p>
                                     </Button>
-                                ))}
-                            </Space>
-
+                                </Col>
+                            ))}
                         </Row>
                     </div>
                 </Affix>
@@ -332,7 +388,7 @@ const HomePage = (props) => {
                     <Space size={[10, 16]} style={{ width: '100%' }}>
                         <Row gutter={[8, 8]}>
                             {products.map((item, index) => (
-                                <Col span={4} key={item.id}>
+                                <Col span={4} key={`${item.id}_${index}`}>
                                     <Card className="productItem"
                                         hoverable
                                         cover={<img
@@ -365,21 +421,21 @@ const HomePage = (props) => {
                                             <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
                                                 <Button icon={<ShoppingCartOutlined />} href="#" />
                                             </Tooltip>
-                                            <Popover 
-                                            placement="rightTop"
-                                            id="socialBtnBar"
-                                            trigger="click"
-                                            open={open}
-                                            onOpenChange={handleOpenChange}
-                                            content={<>
-                                                <a className="close-btn" onClick={hide}><CloseOutlined /></a>
-                                                <Space className="social-bar-container" align="end" size="small">
-                                                    Chia sẻ:
-                                                <img src="/facebook.png" width={20} />
-                                                <img src="/icon_instagram.png" width={20} />
-                                                <img src="/twitter.png" width={20} />
-                                                <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
-                                                </Space>
+                                            <Popover
+                                                placement="rightTop"
+                                                id="socialBtnBar"
+                                                trigger="click"
+                                                open={open}
+                                                onOpenChange={handleOpenChange}
+                                                content={<>
+                                                    <a className="close-btn" onClick={hide}><CloseOutlined /></a>
+                                                    <Space className="social-bar-container" align="end" size="small">
+                                                        Chia sẻ:
+                                                        <img src="/facebook.png" width={20} />
+                                                        <img src="/icon_instagram.png" width={20} />
+                                                        <img src="/twitter.png" width={20} />
+                                                        <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
+                                                    </Space>
                                                 </>}>
                                                 <Button icon={<ShareAltOutlined />} href="#" />
                                             </Popover>
@@ -394,7 +450,13 @@ const HomePage = (props) => {
                         <Col span={4}>
                             <div>
                                 <div style={{ padding: 24, }}>
-                                    <Button type="primary" style={{ width: '100%', borderRadius: 4 }} size={`large`}>Xem thêm</Button>
+                                    <Button type="primary"
+                                        style={{ width: '100%', borderRadius: 4 }}
+                                        size={`large`} onClick={() => loadMoreProducts()}
+                                        loading={loading_table}
+                                    >
+                                        Xem thêm
+                                    </Button>
                                 </div>
                             </div>
                         </Col>

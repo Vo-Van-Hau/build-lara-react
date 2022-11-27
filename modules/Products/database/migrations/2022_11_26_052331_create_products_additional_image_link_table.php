@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductCategoriesTable extends Migration {
+class CreateProductsAdditionalImageLinkTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,13 +12,10 @@ class CreateProductCategoriesTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('products_additional_image_link', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('title');
-            $table->integer('parent_id')->unsigned();
-            $table->integer('uncle_id')->unsigned()->default(1);
-            $table->integer('friend_id')->unsigned()->default(1);
-            $table->text('icon_link');
+            $table->text('url');
+            $table->integer('product_id')->unsigned()->comment('Product ID');
             $table->integer('status')->unsigned()->default(0);
             $table->longText('description')->nullable()->comment('1–5,000 characters');
             $table->integer('user_created_id');
@@ -37,6 +34,6 @@ class CreateProductCategoriesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('products_additional_image_link');
     }
 }

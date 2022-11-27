@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Frontend\Auth\AuthFrontend;
 use Frontend\Products\Products as ProductsProducts;
 use Frontend\Products\Models\ProductCaterory;
+use Frontend\Products\Models\ProductsAdditionalImageLink;
 use Sellers\Sellers\Models\Sellers;
 
 class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface {
@@ -19,6 +20,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     protected $model;
     protected ProductCaterory $product_category_model;
+    protected ProductsAdditionalImageLink $products_additional_image_link_model;
     protected Sellers $sellers_model;
 
     /**
@@ -34,11 +36,13 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
     public function __construct(
         Products $model,
         ProductCaterory $product_category_model,
-        Sellers $sellers_model
+        Sellers $sellers_model,
+        ProductsAdditionalImageLink $products_additional_image_link_model
     ) {
         $this->model = $model;
         $this->product_category_model = $product_category_model;
         $this->sellers_model = $sellers_model;
+        $this->products_additional_image_link_model = $products_additional_image_link_model;
     }
 
     /**
@@ -48,12 +52,29 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = '', $status = []) {
+    public function get_all($keyword = '', $status = [], $page = 1) {
         $result = $this->model->where(['deleted' => 0]);
         if(!empty($status)) {
             $result = $result->whereIn('status', $status);
         }
-        return $result->paginate(Config::get('packages.frontend.products.item_per_page', 10));
+        return $result->paginate($page*Config::get('item_per_home', 60));
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param string $keyword
+     * @param array $status
+     * @return Illuminate\Support\Collection
+     */
+    public function get_per_page($keyword = '', $status = [], $start = 0) {
+        $result = $this->model->where(['deleted' => 0]);
+        if(!empty($status)) {
+            $result = $result->whereIn('status', $status);
+        }
+        return $result->offset(intval($start)*Config::get('item_per_home', 60))
+        ->orderByRaw('products.id DESC')
+        ->limit(Config::get('item_per_home', 60))->get();
     }
 
     /**
@@ -66,13 +87,22 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $result = $this->model->where('id', $id)
         ->with([
             'seller' => function($query) {
-
+                $query->select('id', 'user_id', 'fullname', 'phone', 'status');
             },
             'category' => function($query) {
-
+                $query->select('id', 'parent_id', 'title', 'uncle_id', 'friend_id', 'icon_link', 'status');
+            },
+            'products_additional_image_link' => function($query) {
+                $query->select('product_id', 'id', 'url');
             }
         ])
         ->first();
+        if(!empty($result)) {
+            $result->similar_products = $this->model->where('id', '<>', $id)
+            ->whereRaw("products.category_id = {$result->category->id}")
+            ->orderByRaw('products.id DESC')
+            ->limit(Config::get('packages.frontend.products.limit_similar_products', 36))->get();
+        }
         return $result;
     }
 

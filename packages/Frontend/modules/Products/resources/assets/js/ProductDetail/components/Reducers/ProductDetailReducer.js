@@ -14,7 +14,9 @@ export const initialState = {
         category: {
             id: 0,
             title: '',
-        }
+        },
+        similar_products: [],
+        products_additional_image_link: [],
     },
     config:{
         status: []

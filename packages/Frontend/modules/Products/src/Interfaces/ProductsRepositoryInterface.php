@@ -15,6 +15,6 @@ use Frontend\Core\Interfaces\BaseRepositoryInterface;
  */
 interface ProductsRepositoryInterface extends BaseRepositoryInterface {
 
-    public function get_all($keyword = "", $status = []);
+    public function get_all($keyword = '', $status = [], $page = 1);
     public function get_by_id($id);
 }

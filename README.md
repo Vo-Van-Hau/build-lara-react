@@ -63,6 +63,7 @@ npm run build-by-webpack --source={resource} --module={module}
 39. failed_jobs: php artisan migrate --path=database\migrations\2019_08_19_000000_create_failed_jobs_table.php
 40. all-migrations: php artisan migrate 
 41. product_categories: php artisan migrate --path=modules\Products\database\migrations\2022_10_21_051701_create_product_categories_table.php
+42. products_additional_image_link: php artisan migrate --path=modules\Products\database\migrations\2022_11_26_052331_create_products_additional_image_link_table.php
 
 # Jobs
 1. php artisan queue:work --queue=sendinvoice
