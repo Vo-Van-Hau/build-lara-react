@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip } from 'antd';
-import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined } from '@ant-design/icons';
+import React, { useContext, useEffect,useState } from 'react';
+import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip, Popover , message } from 'antd';
+import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined,CopyOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
@@ -45,25 +45,34 @@ const HomePage = (props) => {
         console.log(e);
     }
 
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo
-     * @param {unknown}
-     * @returns {void}
-     */
-    const loadMoreProducts = () => {
-        let next = paginatePage.start + 1;
-        return setPaginatePage({
-            ...paginatePage,
-            start: next,
-        });
-    }
+    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
+    const [messageApi, contextHolder] = message.useMessage();
+    const [open, setOpen] = useState(false);
+    const [openBar, setOpenBar] = useState(false);
+    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
+    const hide = () => {
+    setOpen(false);
+    setOpenBar(false);
+    setCopyTextClipBrd(false);
+    };
+    const handleOpenChange = (newOpen) => {
+    setOpen(newOpen);
+    setOpenBar(newOpen);
 
-    useEffect(() => {
-        if (mouted) {
-            get_products(paginatePage.start, {});
-        }
-    }, [paginatePage]);
+    };
+
+    const copy = async () => {
+        await navigator.clipboard.writeText(urlCoppied);
+      }
+
+    const copyToClipBoard = () => {
+        copy();
+        setCopyTextClipBrd(true);
+        messageApi.open({
+          type: 'success',
+          content: 'Đã sao chép liên kết',
+        });
+      };
 
     useEffect(() => {
         if (mouted) {
@@ -206,9 +215,24 @@ const HomePage = (props) => {
                                     <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
                                         <Button icon={<ShoppingCartOutlined />} href="#" />
                                     </Tooltip>
-                                    <Tooltip placement="right" title={'Chia sẻ'}>
-                                        <Button icon={<ShareAltOutlined />} href="#" />
-                                    </Tooltip>
+                                    <Popover
+                                            placement="rightTop"
+                                            id="socialBtnBar"
+                                            trigger="click"
+                                            open={open}
+                                            onOpenChange={handleOpenChange}
+                                            content={<>
+                                                <a className="close-btn" onClick={hide}><CloseOutlined /></a>
+                                                <Space className="social-bar-container" align="end" size="small">
+                                                    Chia sẻ:
+                                                <img src="/facebook.png" width={20} />
+                                                <img src="/icon_instagram.png" width={20} />
+                                                <img src="/twitter.png" width={20} />
+                                                <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
+                                                </Space>
+                                                </>}>
+                                                <Button icon={<ShareAltOutlined />} href="#" />
+                                            </Popover>
                                 </Space>
                             </Card>
                         ))}
@@ -332,9 +356,24 @@ const HomePage = (props) => {
                                             <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
                                                 <Button icon={<ShoppingCartOutlined />} href="#" />
                                             </Tooltip>
-                                            <Tooltip placement="right" title={'Chia sẻ'}>
+                                            <Popover
+                                            placement="rightTop"
+                                            id="socialBtnBar"
+                                            trigger="click"
+                                            open={open}
+                                            onOpenChange={handleOpenChange}
+                                            content={<>
+                                                <a className="close-btn" onClick={hide}><CloseOutlined /></a>
+                                                <Space className="social-bar-container" align="end" size="small">
+                                                    Chia sẻ:
+                                                <img src="/facebook.png" width={20} />
+                                                <img src="/icon_instagram.png" width={20} />
+                                                <img src="/twitter.png" width={20} />
+                                                <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
+                                                </Space>
+                                                </>}>
                                                 <Button icon={<ShareAltOutlined />} href="#" />
-                                            </Tooltip>
+                                            </Popover>
                                         </Space>
                                     </Card>
                                 </Col>
