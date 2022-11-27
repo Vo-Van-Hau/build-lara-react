@@ -15,6 +15,12 @@ const HomePage = (props) => {
         start: 0,
     });
 
+    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
+    const [messageApi, contextHolder] = message.useMessage();
+    const [open, setOpen] = useState(false);
+    const [openBar, setOpenBar] = useState(false);
+    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
+
     const imgSrc = [
         { id: 1, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/29/2c/4c/b8c757ba06d448ce3d2ec0bee3d75fa3.png.webp' },
         { id: 2, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/e5/db/cc/32b6b4268331a9ed46479ab0da46ae82.png.webp' },
@@ -45,20 +51,29 @@ const HomePage = (props) => {
         console.log(e);
     }
 
-    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
-    const [messageApi, contextHolder] = message.useMessage();
-    const [open, setOpen] = useState(false);
-    const [openBar, setOpenBar] = useState(false);
-    const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
-    const hide = () => {
-    setOpen(false);
-    setOpenBar(false);
-    setCopyTextClipBrd(false);
-    };
-    const handleOpenChange = (newOpen) => {
-    setOpen(newOpen);
-    setOpenBar(newOpen);
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param {unknown}
+     * @returns {void}
+     */
+    const loadMoreProducts = () => {
+        let next = paginatePage.start + 1;
+        return setPaginatePage({
+            ...paginatePage,
+            start: next,
+        });
+    }
 
+    const hide = () => {
+        setOpen(false);
+        setOpenBar(false);
+        setCopyTextClipBrd(false);
+    };
+    
+    const handleOpenChange = (newOpen) => {
+        setOpen(newOpen);
+        setOpenBar(newOpen);
     };
 
     const copy = async () => {
@@ -72,7 +87,13 @@ const HomePage = (props) => {
           type: 'success',
           content: 'Đã sao chép liên kết',
         });
-      };
+    };
+
+    useEffect(() => {
+        if (mouted) {
+            get_products(paginatePage.start, {});
+        }
+    }, [paginatePage]);
 
     useEffect(() => {
         if (mouted) {
