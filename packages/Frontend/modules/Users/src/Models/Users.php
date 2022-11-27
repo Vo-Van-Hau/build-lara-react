@@ -88,7 +88,7 @@ class Users extends Authenticatable {
      * @todo: relationship
      * @return void
      */
-    public function groups(){
+    public function groups() {
         return $this->belongsToMany(Groups::class, 'user_group', 'user_id', 'group_id')->wherePivot('deleted', '=', 0);
     }
 
@@ -97,19 +97,23 @@ class Users extends Authenticatable {
      * @todo: relationship
      * @return void
      */
-    public function publishers(){
+    public function publishers() {
         return $this->belongsToMany(Publishers::class, 'user_publisher', 'user_id', 'publisher_id')->wherePivot('deleted', '=', 0);
     }
-    
+
     /**
      * @author <hauvo1709@gmail.com>
      * @todo: relationship
      * @return void
      */
-    public function customer(){
+    public function customer() {
         return $this->hasOne(Customer::class, 'user_id', 'id')->where([
             'customers.status' => 1,
             'customers.deleted' => 0
-        ])->with('customer_address');
+        ])->with([
+            'customer_address' => function ($query) {
+                $query->select('id', 'customer_id', 'customer_name', 'area_id', 'country_id', 'province_id', 'district_id', 'ward_id', 'address');
+            }
+        ]);
     }
 }

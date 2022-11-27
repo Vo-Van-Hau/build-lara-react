@@ -131,7 +131,14 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
      * @return Illuminate\Support\Collection
      */
     public function get_by_user_id($user_id) {
-        $result = $this->model->with(["user", "cart_detail"])
+        $result = $this->model->with([
+            'user' => function($query) {
+                $query->select('id', 'avatar', 'name', 'status');
+            },
+            'cart_detail' => function($query) {
+                $query->select('id', 'cart_id', 'product_id', 'product_quantity', 'status');
+            }
+        ])->select('id', 'user_id', 'ordered', 'status')
             ->firstWhere([
                 "user_id" => $user_id,
                 "status" => 1,

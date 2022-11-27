@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Frontend\Core\Exceptions\ApiException;
 use Frontend\Users\Interfaces\UsersRepositoryInterface;
+use Frontend\Checkout\Interfaces\CartsRepositoryInterface;
 use Frontend\Auth\AuthFrontend;
 
 /**
@@ -27,10 +28,15 @@ class AuthController extends ControllerBase {
 
     use Locates, AuthTrait;
 
-    protected $UsersRepository;
+    protected UsersRepositoryInterface $UsersRepository;
+    protected CartsRepositoryInterface $CartsRepository;
 
-    public function __construct(UsersRepositoryInterface $UsersRepository) {
+    public function __construct(
+        UsersRepositoryInterface $UsersRepository,
+        CartsRepositoryInterface $CartsRepository
+    ) {
         $this->UsersRepository = $UsersRepository;
+        $this->CartsRepository = $CartsRepository;
     }
 
     /**
@@ -162,6 +168,18 @@ class AuthController extends ControllerBase {
             $result = $this->UsersRepository->get_by_id($input['user_id']);
             if($result) {
                 $result['is_login'] = true;
+                if(!empty($result)) {
+                    $cart_of_user = $this->CartsRepository->get_by_user_id($input['user_id']);
+                    $result->carts = $cart_of_user ?? [];
+                    if(!empty($cart_of_user)) {
+                        if(!empty($cart_of_user->cart_detail)) {
+                            $result->carts['count'] = count($cart_of_user->cart_detail) ?? 0;
+                        }
+                    }
+                    if(empty($result->carts['count'])) {
+                        $result->carts['count'] = 0;
+                    }
+                }
                 return $this->response_base([
                     'status' => true,
                     'user' => $result

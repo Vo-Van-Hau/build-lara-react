@@ -335,7 +335,9 @@ class UsersRepository extends BaseRepository implements UsersRepositoryInterface
         ->with([
             'groups.parent_group:id,name,status',
             'publishers:id,name,status',
-            'customer'
+            'customer' => function ($query) {
+                $query->select('user_id', 'id', 'fullname', 'nickname', 'phone');
+            }
         ])->first();
         return $result;
     }

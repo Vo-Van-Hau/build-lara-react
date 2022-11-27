@@ -1,13 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-    Card, Avatar, Rate, Image, Carousel, Button,
-    Affix, BackTop, Col, Row, Space, Tabs, Typography,
-    Tooltip, message, Popover
-} from 'antd';
-import {
-    LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined,
-    ShareAltOutlined, CloseOutlined, CopyOutlined
-} from '@ant-design/icons';
+import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip, Popover, message } from 'antd';
+import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
@@ -94,25 +87,36 @@ const HomePage = (props) => {
             controller: 'products',
             action: 'bycategory',
             id: e ? e : 0
-    })}
-    
+        })
+    }
+
 
     /**
-     * @author: <thuymai0805@gmail.com>
-     * @todo{share product Actions}
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
      * @param {unknown}
      * @returns {void}
      */
+    const loadMoreProducts = () => {
+        let next = paginatePage.start + 1;
+        return setPaginatePage({
+            ...paginatePage,
+            start: next,
+        });
+    }
+
     const hide = () => {
         setOpen(false);
         setOpenBar(false);
         setCopyTextClipBrd(false);
     };
+
     const handleOpenChange = (newOpen) => {
         setOpen(newOpen);
         setOpenBar(newOpen);
-
     };
+
+
     const copy = async () => {
         await navigator.clipboard.writeText(urlCoppied);
     }
@@ -131,13 +135,6 @@ const HomePage = (props) => {
      * @param {unknown}
      * @returns {void}
      */
-    const loadMoreProducts = () => {
-        let next = paginatePage.start + 1;
-        return setPaginatePage({
-            ...paginatePage,
-            start: next,
-        });
-    }
 
     useEffect(() => {
         if (mouted) {
@@ -163,7 +160,7 @@ const HomePage = (props) => {
                         key: item.key,
                     };
                 })}
-            
+
             />
             <Row className='home_top_banner_container'
                 justify="space-between"
@@ -470,6 +467,5 @@ const HomePage = (props) => {
                 </div>
             </BackTop>
         </>);
-}
-
+};
 export default HomePage;

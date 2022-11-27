@@ -14,7 +14,7 @@ const { Search } = Input;
 const HeaderSection = (props) => {
     const { data, navigate, setRouter, searchParams } = props;
     const { user, config } = data;
-    const { is_login } = user;
+    const { is_login, carts } = user;
     const { app } = config;
     const { baseURL, adminPrefix } = app;
     const [searchKeywordHistory, setSearchKeywordHistory] = useLocalStorage('search-keyword', []);
@@ -386,8 +386,7 @@ const HeaderSection = (props) => {
                             </Button>
                         }
                         size="large"
-                        // onSearch={(value) => setKeySearch({...keySearch, q: value})}
-                        onPressEnter={(value) => setKeySearch({...keySearch, q: value})}
+                        onSearch={(value) => setKeySearch({...keySearch, q: value})}
                         style={{ width: '100%' }}
                         removeIcon={``}
                         expandIcon={<SearchOutlined />}
@@ -409,15 +408,15 @@ const HeaderSection = (props) => {
                     </Space>
                 </Col>
                 <Col className='header_cart_container' span={3}>
-                    <Badge count={1} >
-                        <ShoppingCartOutlined
-                         onClick={() => setRouter({
+                    <Badge count={ carts.count || 0 } >
+                        <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }}
+                        onClick={() => setRouter({
                             module: 'checkout',
                             controller: 'cart',
                             action: 'view',
                             id: 1
                         },navigate)}
-                         style={{ color: '#fff', fontSize: '32px' }} />
+                         />
                     </Badge>
                     <div className='user_itemText'>
                         <Button type="text" style={{ color: '#fff' }} onClick={showDrawer} >
