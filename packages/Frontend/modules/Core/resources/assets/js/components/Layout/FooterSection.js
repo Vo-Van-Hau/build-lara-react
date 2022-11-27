@@ -7,7 +7,14 @@ import { Link } from 'react-router-dom';
 const { Footer } = Layout;
 const { Title, Text } = Typography;
 
-const FooterSection = ({...props}) => {
+const FooterSection = (props) => {
+
+    const { data, navigate, setRouter, searchParams } = props;
+    const { user, config } = data;
+    const { is_login } = user;
+    const { app } = config;
+    const { baseURL, adminPrefix } = app;
+
     return (
         <footer className='footer_wrap_container'>
         <Row className='footer_container' >
@@ -49,34 +56,34 @@ const FooterSection = ({...props}) => {
                 <Title level={5}>Phương thức thanh toán </Title>
                 <Row className='payment' gutter={[5, 15]} wrap>
                     <Col className='icon' >
-                        <Avatar className='icon-visa' size={34}  src="../images/icon-cash.png" alt='icon-cash'/>
+                        <Avatar className='icon-visa' size={34} src={`${baseURL}/images/icon-cash.png`} alt='icon-cash'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-visa' size={34}  src="../images/icon-visa.png" alt='icon-visa'/>
+                        <Avatar className='icon-visa' size={34} src={`${baseURL}/images/icon-visa.png`} alt='icon-visa'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-mastercard' size={34}  src="../images/icon-mastercard.png" alt='icon-mastercard'/>
+                        <Avatar className='icon-mastercard' size={34} src={`${baseURL}/images/icon-mastercard.png`} alt='icon-mastercard'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-momo' size={34}  src="../images/icon-momo.png" alt='icon-momo'/>
-                    </Col> 
+                        <Avatar className='icon-momo' size={34} src={`${baseURL}/images/icon-momo.png`} alt='icon-momo'/>
+                    </Col>
                 </Row>
                 <Row className='payment' gutter={[0, 16]} wrap>
                     <Col className='icon' >
-                        <Avatar className='icon-zalopay' size={34}  src="../images/icon-zalopay.png" alt='icon-zalopay'/>
+                        <Avatar className='icon-zalopay' size={34} src={`${baseURL}/images/icon-zalopay.png`} alt='icon-zalopay'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-atm' size={34}  src="../images/icon-paypal.png" alt='icon-paypal'/>
+                        <Avatar className='icon-atm' size={34} src={`${baseURL}/images/icon-paypal.png`} alt='icon-paypal'/>
                     </Col>
-                    
+
                     <Col className='icon' >
-                        <Avatar className='icon-momo' size={34}  src="../images/icon-momo.png" alt='icon-momo'/>
+                        <Avatar className='icon-momo' size={34} src={`${baseURL}/images/icon-momo.png`} alt='icon-momo'/>
                     </Col>
                     <Col className='icon'>
-                        <Avatar className='icon-zalopay' size={34}  src="../images/icon-zalopay.png" alt='icon-zalopay'/>
+                        <Avatar className='icon-zalopay' size={34} src={`${baseURL}/images/icon-zalopay.png`} alt='icon-zalopay'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-atm' size={34}  src="../images/icon-paypal.png" alt='icon-paypal'/>
+                        <Avatar className='icon-atm' size={34} src={`${baseURL}/images/icon-paypal.png`} alt='icon-paypal'/>
                     </Col>
 
                 </Row>

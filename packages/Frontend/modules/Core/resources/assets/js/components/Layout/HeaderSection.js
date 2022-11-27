@@ -15,7 +15,7 @@ const HeaderSection = (props) => {
 
     const { data, navigate, setRouter, searchParams } = props;
     const { user, config } = data;
-    const { is_login } = user;
+    const { is_login, carts } = user;
     const { app } = config;
     const { baseURL, adminPrefix } = app;
     const [searchKeywordHistory, setSearchKeywordHistory] = useLocalStorage('search-keyword', []);
@@ -407,7 +407,7 @@ const HeaderSection = (props) => {
                     </Space>
                 </Col>
                 <Col className='header_cart_container' span={3}>
-                    <Badge count={1} >
+                    <Badge count={ carts.count || 0 } >
                         <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }} />
                     </Badge>
                     <div className='user_itemText'>

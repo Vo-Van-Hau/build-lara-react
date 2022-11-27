@@ -21,6 +21,9 @@ export const initialState = {
         },
         avatar: '',
         email: '',
+        carts: {
+            count: 0
+        },
     },
     access_user: false,
     siderBar: {
