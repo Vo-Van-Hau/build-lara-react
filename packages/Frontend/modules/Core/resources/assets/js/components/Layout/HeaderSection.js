@@ -15,7 +15,6 @@ const { Text } = Typography;
 const { Search } = Input;
 
 const HeaderSection = (props) => {
-
     const { data, navigate, setRouter, searchParams } = props;
     const { user, config } = data;
     const { is_login, carts } = user;
@@ -307,14 +306,16 @@ const HeaderSection = (props) => {
      * @param {*} path
      */
     const filterSearchbar = (inputValue, path) => {
+        console.log(inputValue);
         path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
     };
 
     /**
      *
      */
-    const onChange = (value, selectedOptions) => {
-        console.log(value, selectedOptions);
+    const onSearchInputChange = (value) => {
+        console.log(value);
+        console.log(value.keyCode)
     };
 
     /**
@@ -379,10 +380,10 @@ const HeaderSection = (props) => {
                 </Col>
                 <Col className='formSearch_container' span={16} >
                     <Cascader
+                        onChange={(value)=>onSearchInputChange(value)}
                         dropdownRender={SearchAutocomplete}
-                        onChange={onChange}
-                        placeholder={keySearch.q ? keySearch.q.trim() : `Tìm sản phẩm, danh mục hay thương hiệu mong muốn ...`}
                         showSearch={{ filterSearchbar }}
+                        placeholder={keySearch.q ? keySearch.q.trim() : `Tìm sản phẩm, danh mục hay thương hiệu mong muốn ...`}
                         suffixIcon={
                             <Button className='searchSubmit' icon={<SearchOutlined />} type="primary" onClick={() => handleSearchProducts()}>
                                 Tìm Kiếm
@@ -412,7 +413,14 @@ const HeaderSection = (props) => {
                 </Col>
                 <Col className='header_cart_container' span={3}>
                     <Badge count={ carts.count || 0 } >
-                        <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }} />
+                        <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }}
+                        onClick={() => setRouter({
+                            module: 'checkout',
+                            controller: 'cart',
+                            action: 'view',
+                            id: 1
+                        },navigate)}
+                         />
                     </Badge>
                     <div className='user_itemText'>
                         <Button type="text" style={{ color: '#fff' }} onClick={() => setOpenDrawerCart(!openDrawerCart)} >

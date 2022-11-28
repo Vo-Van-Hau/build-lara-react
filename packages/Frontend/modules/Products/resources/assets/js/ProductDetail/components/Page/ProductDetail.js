@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel, List, message,
-    Descriptions, Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip, Popover
+    Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel, List, message, Descriptions,
+    Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip, Popover
 } from 'antd';
 import {
     HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined,
@@ -14,7 +14,6 @@ import Helper from '../Helper/Helper';
 const { Text } = Typography;
 
 const ProductDetailPage = (props) => {
-
     const {
         data, get_product_item, add_to_cart, setRouter, get_similar_products
     } = useContext(ProductDetailContext);
@@ -80,6 +79,27 @@ const ProductDetailPage = (props) => {
         setQuantity(1);
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo
+     * @param
+     * @return {void}
+     */
+    const product_image_gallery = [
+        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' },
+        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp' },
+        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp' },
+        { url: 'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg' },
+        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' }
+    ]
+
+    const IconText = ({ icon, text }) => (
+        <Space>
+            {React.createElement(icon)}
+            {text}
+        </Space>
+    );
+
     /**btn group in productI */
     const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
     const [messageApi, contextHolder] = message.useMessage();
@@ -96,7 +116,6 @@ const ProductDetailPage = (props) => {
         setOpenBar(newOpen);
 
     };
-
     const copy = async () => {
         await navigator.clipboard.writeText(urlCoppied);
     }
@@ -110,27 +129,43 @@ const ProductDetailPage = (props) => {
         });
     };
 
-    /** */
-    const relatedProducts = [
-        { img: '', title: 'Europe Street beat', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11 },
-        { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11 },
 
-    ]
+    const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+        <button
+            {...props}
+            className={
+                "slick-prev slick-arrow" +
+                (currentSlide === 0 ? " slick-disabled" : "")
+            }
+            aria-hidden="true"
+            aria-disabled={currentSlide === 0 ? true : false}
+            type="button"
+        >
 
-    const product_image_gallery = [
-        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' },
-        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp' },
-        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp' },
-        { url: 'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg' },
-        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' }
-    ]
+        </button>
+    );
+    const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+        <button
+            {...props}
+            className={
+                "slick-next slick-arrow" +
+                (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+            }
+            aria-hidden="true"
+            aria-disabled={currentSlide === slideCount - 1 ? true : false}
+            type="button"
+        >
+
+        </button>
+    );
 
 
+    useEffect(() => {
+        if (mouted) {
+            get_product_item({ id: props.id });
+            get_similar_products();
+        }
+    })
 
     const listDummy = [
         {
@@ -233,28 +268,23 @@ const ProductDetailPage = (props) => {
 
     }
 
-    const IconText = ({ icon, text }) => (
-        <Space>
-            {React.createElement(icon)}
-            {text}
-        </Space>
-    );
-
     useEffect(() => {
         get_product_item({ id: props.id });
         setListRating(listDummy);
     }, [props.id]);
 
     return (<>
-        <><Breadcrumb style={{ padding: '12px' }}>
-            <Breadcrumb.Item style={{ cursor: 'pointer' }} >
-                <HomeOutlined />
-            </Breadcrumb.Item>
-            <Breadcrumb.Item style={{ cursor: 'pointer' }}>
-                <span>Sản phẩm</span>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>{product_item.name}</Breadcrumb.Item>
-        </Breadcrumb></>
+        <>
+            <Breadcrumb style={{ padding: '12px' }}>
+                <Breadcrumb.Item style={{ cursor: 'pointer' }} >
+                    <HomeOutlined />
+                </Breadcrumb.Item>
+                <Breadcrumb.Item style={{ cursor: 'pointer' }}>
+                    <span>Sản phẩm</span>
+                </Breadcrumb.Item>
+                <Breadcrumb.Item>{product_item.name}</Breadcrumb.Item>
+            </Breadcrumb>
+        </>
         <Row className='product_item_container' justify='space-between'>
             <Col span={8} className='product_image_container'>
                 <Image preview={false}
@@ -262,11 +292,11 @@ const ProductDetailPage = (props) => {
                     src={selectedImg ? selectedImg : product_item.image_link}
                 />
                 <Space>
-                {products_additional_image_link.map((item, index) => {
-                    return (
-                        <img style={{width:50}} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
-                    )
-                })}
+                    {products_additional_image_link.map((item, index) => {
+                        return (
+                            <img style={{ width: 50 }} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
+                        )
+                    })}
                 </Space>
             </Col>
             <Col className='separate'></Col>
@@ -368,8 +398,8 @@ const ProductDetailPage = (props) => {
                     slide
                     slidesToShow={5}
                     arrows={true}
-                    prevArrow={<LeftOutlined />}
-                    nextArrow={<RightOutlined />}
+                    prevArrow=<SlickArrowLeft />
+                    nextArrow=<SlickArrowRight />
                     swipeToSlide draggable
                 >
                     {similar_products.map((item, index) => (
@@ -379,7 +409,7 @@ const ProductDetailPage = (props) => {
                             cover={<img
                                 alt={item.name ? item.name : `product-img`}
                                 style={{ padding: 10, height: '200px', width: '100%', objectFit: 'contain' }}
-                                src={item.image_link ? item.image_link : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEX09PTMzMzJycnPz8/d3d3V1dXi4uLo6Ojw8PDx8fH39/ft7e3Y2NjQ0NDp6enb29uHE20LAAACaklEQVR4nO3b6W6CQBhGYUTWD9T7v9uylLIN6jCk8Cbn+deEGo6DMOAYRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIJyFiuzshLesStJAdVZdufEV38LFydkZm6w+IrBJrK86itkxgU1ifnaKmz363QvUvsbjmoNYdjuXPPMQz6R7lfLsGKeq3bd76LvfHwnFIXt0tOKYwjuF51kVtjMUbzqFVmR1/cpK30idwv7qH98yz0SVwvI+XP19JygqhY9xehMnXokihfl0/hZ77a5I4WM2zXz5DKJI4XwKvjHLNGeGRmE1L7w7N7fKeRLSKCy+KGwCnedZjcJofruXuo7SbpwdiRqFlk4D42y9rf0eyOtEjcL5BzFeb2rV5oRApNAmj6QcjyRs8g4sE0UKJ4nxemJq8yGeJ6oURpY/uic26frppy0uJvNEmcI2JM/yovlz8cxlGbhIFCrcsA6cX0/kC52Bt3hMlC90Bk5HUbzQPYL9KA6b6BXmk8/YZuCYqFdYj/f47wL/EtUKrR6/LXsfOCSKFbaBQ+KnwGa79sqpVWjp7x1Ec6B+DhQsHAK7xM+BeoVjYLPzr499eoXTwO+IFfoHihXuWbWgVVh792kV7lt3IlRoe0ZQqvCLax+FZ8c4UUghheebFu6jU1gk++gU7l3t3f2rRmGAyxcGr329cuEh60stunBh2Z3y6yxM/wX52S1u/bf3Ryzzdq9tuIDnYWv1q7NTNlhy0O8t/Nb6/SfLbnHoYbpjSep/sjLfOZ0ZXfTXJKPgH69deAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDyA0uAKIxQw0bjAAAAAElFTkSuQmCC' }
+                                src={item.image_link ? item.image_link : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEX09PTMzMzJycnPz8/d3d3V1dXi4uLo6Ojw8PDx8fH39/ft7e3Y2NjQ0NDp6enb29uHE20LAAACaklEQVR4nO3b6W6CQBhGYUTWD9T7v9uylLIN6jCk8Cbn+deEGo6DMOAYRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIJyFiuzshLesStJAdVZdufEV38LFydkZm6w+IrBJrK86itkxgU1ifnaKmz363QvUvsbjmoNYdjuXPPMQz6R7lfLsGKeq3bd76LvfHwnFIXt0tOKYwjuF51kVtjMUbzqFVmR1/cpK30idwv7qH98yz0SVwvI+XP19JygqhY9xehMnXokihfl0/hZ77a5I4WM2zXz5DKJI4XwKvjHLNGeGRmE1L7w7N7fKeRLSKCy+KGwCnedZjcJofruXuo7SbpwdiRqFlk4D42y9rf0eyOtEjcL5BzFeb2rV5oRApNAmj6QcjyRs8g4sE0UKJ4nxemJq8yGeJ6oURpY/uic26frppy0uJvNEmcI2JM/yovlz8cxlGbhIFCrcsA6cX0/kC52Bt3hMlC90Bk5HUbzQPYL9KA6b6BXmk8/YZuCYqFdYj/f47wL/EtUKrR6/LXsfOCSKFbaBQ+KnwGa79sqpVWjp7x1Ec6B+DhQsHAK7xM+BeoVjYLPzr499eoXTwO+IFfoHihXuWbWgVVh792kV7lt3IlRoe0ZQqvCLax+FZ8c4UUghheebFu6jU1gk++gU7l3t3f2rRmGAyxcGr329cuEh60stunBh2Z3y6yxM/wX52S1u/bf3Ryzzdq9tuIDnYWv1q7NTNlhy0O8t/Nb6/SfLbnHoYbpjSep/sjLfOZ0ZXfTXJKPgH69deAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDyA0uAKIxQw0bjAAAAAElFTkSuQmCC'}
                             />}
                             onClick={() => setRouter({
                                 module: 'products',
