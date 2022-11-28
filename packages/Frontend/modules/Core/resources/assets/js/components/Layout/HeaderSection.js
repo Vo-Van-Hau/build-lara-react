@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import {Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
-        Cascader, Divider, Menu, List, Alert, Tag, Drawer } from 'antd';
+import {
+    Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
+    Cascader, Divider, Menu, List, Alert, Tag, Drawer, Avatar,
+} from 'antd';
 import {
     UserOutlined, SearchOutlined, ShoppingCartOutlined, CloseCircleOutlined, UpOutlined,
     BellOutlined, LogoutOutlined, InboxOutlined, HistoryOutlined, DownOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import VirtualList from 'rc-virtual-list';
 import { useLocalStorage } from '../Hooks/LocalStorageHook';
 
 const { Text } = Typography;
@@ -16,6 +19,7 @@ const HeaderSection = (props) => {
     const { data, navigate, setRouter, searchParams } = props;
     const { user, config } = data;
     const { is_login, carts } = user;
+    const { cart_detail } = carts;
     const { app } = config;
     const { baseURL, adminPrefix } = app;
     const [searchKeywordHistory, setSearchKeywordHistory] = useLocalStorage('search-keyword', []);
@@ -319,12 +323,12 @@ const HeaderSection = (props) => {
      * @param {Object} props
      * @returns
      */
-    const [open, setOpen] = useState(false);
-    const showDrawer = () => {
-        setOpen(true);
-    };
-    const onClose = () => {
-        setOpen(false);
+    const [openDrawerCart, setOpenDrawerCart] = useState(false);
+
+    const onScrollDrawerCart = (e) => {
+        if(e.currentTarget.scrollHeight - e.currentTarget.scrollTop === 400) {
+        //   appendData();
+        }
     };
 
     /**
@@ -411,13 +415,41 @@ const HeaderSection = (props) => {
                         <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }} />
                     </Badge>
                     <div className='user_itemText'>
-                        <Button type="text" style={{ color: '#fff' }} onClick={showDrawer} >
+                        <Button type="text" style={{ color: '#fff' }} onClick={() => setOpenDrawerCart(!openDrawerCart)} >
                             Giỏ Hàng
                         </Button>
-                        <Drawer title="Giỏ hàng của bạn" placement="right" onClose={onClose} open={open}>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
+                        <Drawer title="Giỏ hàng của bạn" placement="right" onClose={() => setOpenDrawerCart(false)} open={openDrawerCart}>
+                            <List>
+                                <VirtualList
+                                    data={cart_detail}
+                                    height={400}
+                                    itemHeight={47}
+                                    itemKey="id"
+                                    onScroll={onScrollDrawerCart}
+                                >
+                                    {(item) => {
+                                        const { id, cart_id, product, product_quantity, product_id } = item;
+                                        return (
+                                            <List.Item key={item.id}>
+                                                <List.Item.Meta
+                                                    avatar={<Avatar src={`${product.image_link}`} />}
+                                                    title={<a href="https://ant.design">{product.name}</a>}
+                                                    description={() => {
+                                                        return (<>
+                                                            Giá: {product.price}
+                                                        </>)
+                                                    }}
+                                                />
+                                                <div>
+                                                    <div>
+                                                        x{`${product_quantity}`}
+                                                    </div>
+                                                </div>
+                                            </List.Item>
+                                        )
+                                    }}
+                                </VirtualList>
+                            </List>
                         </Drawer>
                     </div>
                 </Col>
