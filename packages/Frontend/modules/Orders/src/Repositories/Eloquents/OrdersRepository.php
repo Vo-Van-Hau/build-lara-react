@@ -167,12 +167,16 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $order = $this->model;
         if(empty($user_id)) return false;
         $result = $order->where([
-            // 'status'  => 0,
             'deleted' => 0,
             'user_id' => $user_id
         ])->with([
             'customer',
-            'order_detail'
+            'order_detail' => function($query) {
+                $query->select('id', 'order_id', 'order_tracking_status_id', 'product_id', 'product_name', 'product_image_link', 'quantity', 'price', 'note');
+            },
+            'order_tracking_status' => function($query) {
+                $query->select('id', 'title', 'code', 'tag_name');
+            }
         ])->get();
         if(!empty($result)) return $result;
         return false;

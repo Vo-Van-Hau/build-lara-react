@@ -412,15 +412,15 @@ const HeaderSection = (props) => {
                     </Space>
                 </Col>
                 <Col className='header_cart_container' span={3}>
-                    <Badge count={ carts.count || 0 } >
+                    <Badge count={ carts.count || 0 }>
                         <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }}
-                        onClick={() => setRouter({
-                            module: 'checkout',
-                            controller: 'cart',
-                            action: 'view',
-                            id: 1
-                        },navigate)}
-                         />
+                            onClick={() => setRouter({
+                                module: 'checkout',
+                                controller: 'cart',
+                                action: 'view',
+                                id: '#',
+                            }, navigate)}
+                        />
                     </Badge>
                     <div className='user_itemText'>
                         <Button type="text" style={{ color: '#fff' }} onClick={() => setOpenDrawerCart(!openDrawerCart)} >

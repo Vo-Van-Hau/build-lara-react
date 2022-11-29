@@ -33,27 +33,27 @@ class OrdersController extends ControllerBase {
      * @return void
      */
     public function storage(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthFrontend::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
             //
-            $input["payment_method_id"] = isset($input["payment_method_id"]) ? $input["payment_method_id"] : null;
-            $input["shipping_method_id"] = isset($input["shipping_method_id"]) ? $input["shipping_method_id"] : null;
+            $input['payment_method_id'] = isset($input['payment_method_id']) ? $input['payment_method_id'] : null;
+            $input['shipping_method_id'] = isset($input['shipping_method_id']) ? $input['shipping_method_id'] : null;
             $result = $this->OrdersRepository->store($input);
-            if($result && is_array($result) && $result["status"]) {
-                $mail_to = "";
-                if($result["user_email"]) {
-                    $mail_to = $result["user_email"];
+            if($result && is_array($result) && $result['status']) {
+                $mail_to = '';
+                if($result['user_email']) {
+                    $mail_to = $result['user_email'];
                 }
                 if(!empty($mail_to)) {
                     dispatch(new \App\Jobs\SendInvoiceEmail($mail_to));
                 }
-                return $this->response_base(["status" => true], "You have ordered successfully !!!", 200);
+                return $this->response_base(['status' => true], 'You have ordered successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to order !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to order !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -63,20 +63,20 @@ class OrdersController extends ControllerBase {
      * @return void
      */
     public function get_orders_history(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthFrontend::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
             $result = $this->OrdersRepository->get_history_by_auth($input);
             if($result) {
                 return $this->response_base([
-                    "status" => true,
-                    "orders" => $result
-                ], "You have got history successfully !!!", 200);
+                    'status' => true,
+                    'orders' => $result
+                ], 'You have got history successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get history !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get history !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 }
 
