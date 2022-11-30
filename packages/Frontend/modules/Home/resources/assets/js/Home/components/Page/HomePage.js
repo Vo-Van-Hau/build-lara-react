@@ -7,11 +7,14 @@ import { HomeContext } from '../Contexts/HomeContext';
 
 const { Text } = Typography;
 const HomePage = (props) => {
+    const { config } = props.data;
+    const { app } = config;
+    const { baseURL } = app;
     const { data, get_products, setRouter, get_product_categories } = useContext(HomeContext);
     const { products, mouted, product_categories, loading_table } = data;
     const [messageApi, contextHolder] = message.useMessage();
     const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
-    const [open, setOpen] = useState(false);
+    const [openSharingPopup, setOpenSharingPopup] = useState(false);
     const [openBar, setOpenBar] = useState(false);
     const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
     const [paginatePage, setPaginatePage] = useState({
@@ -106,13 +109,21 @@ const HomePage = (props) => {
     }
 
     const hide = () => {
-        setOpen(false);
+        setOpenSharingPopup(false);
         setOpenBar(false);
         setCopyTextClipBrd(false);
     };
 
-    const handleOpenChange = (newOpen) => {
-        setOpen(newOpen);
+    /**
+     * @author:
+     * @todo:
+     * @param {*} newOpen
+     * @returns
+     */
+    const handleOpenSharingPopupChange = (newOpen) => {
+        console.log(newOpen);
+        return;
+        setOpenSharingPopup(newOpen);
         setOpenBar(newOpen);
     };
 
@@ -282,7 +293,7 @@ const HomePage = (props) => {
                                         id="socialBtnBar"
                                         trigger="click"
                                         open={open}
-                                        onOpenChange={handleOpenChange}
+                                        onOpenChange={handleOpenSharingPopupChange}
                                         content={<>
                                             <a className="close-btn" onClick={hide}><CloseOutlined /></a>
                                             <Space className="social-bar-container" align="end" size="small">
@@ -393,12 +404,12 @@ const HomePage = (props) => {
                                             style={{ height: 189, width: 165, objectFit: `contain` }}
                                             src={item.image_link}
                                         />}
-                                        onClick={() => setRouter({
-                                            module: 'products',
-                                            controller: 'productdetail',
-                                            action: 'view',
-                                            id: item.id,
-                                        })}
+                                        // onClick={() => setRouter({
+                                        //     module: 'products',
+                                        //     controller: 'productdetail',
+                                        //     action: 'view',
+                                        //     id: item.id,
+                                        // })}
                                         style={{ padding: 12 }}
                                         bodyStyle={{ padding: 0 }}
                                     >
@@ -413,28 +424,29 @@ const HomePage = (props) => {
                                         </div>
                                         <Space size={[0]} direction="vertical" className="productItem-btn-group">
                                             <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
-                                                <Button icon={<HeartOutlined />} href="#" />
+                                                <Button icon={<HeartOutlined />} type="primary" />
                                             </Tooltip>
                                             <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
-                                                <Button icon={<ShoppingCartOutlined />} href="#" />
+                                                <Button icon={<ShoppingCartOutlined />} type="primary" />
                                             </Tooltip>
                                             <Popover
                                                 placement="rightTop"
                                                 id="socialBtnBar"
                                                 trigger="click"
-                                                open={open}
-                                                onOpenChange={handleOpenChange}
+                                                open={openSharingPopup}
+                                                onOpenChange={handleOpenSharingPopupChange}
                                                 content={<>
                                                     <a className="close-btn" onClick={hide}><CloseOutlined /></a>
                                                     <Space className="social-bar-container" align="end" size="small">
                                                         Chia sẻ:
-                                                        <img src="/facebook.png" width={20} />
-                                                        <img src="/icon_instagram.png" width={20} />
-                                                        <img src="/twitter.png" width={20} />
+                                                        <img src={`${baseURL}/images/facebook.png`} width={20} />
+                                                        <img src={`${baseURL}/images/icon_instagram.png`} width={20} />
+                                                        <img src={`${baseURL}/images/twitter.png`} width={20} />
                                                         <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
                                                     </Space>
-                                                </>}>
-                                                <Button icon={<ShareAltOutlined />} href="#" />
+                                                </>}
+                                            >
+                                                <Button icon={<ShareAltOutlined />} type="primary" />
                                             </Popover>
                                         </Space>
                                     </Card>

@@ -70,7 +70,6 @@ const HomeContextProvicer = ({ children, axios, history, config, navigate }) => 
      * @return {void}
      */
     const get_products = (start = 1, keySearch) => {
-        console.log(data)
         set_table_loading();
         return axios
         .get_secured()
