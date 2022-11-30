@@ -43,14 +43,14 @@ class OrdersController extends ControllerBase {
      * @return void
      */
     public function get_list(Request $request) {
-        if ($request->isMethod("get")) {
+        if ($request->isMethod('get')) {
             $input = $request->all();
-            $keyword = isset($input["keyword"]) ? $input["keyword"] : "";
-            $status = isset($input["status"]) ? $input["status"] : [];
-            $data_json["orders"] = $this->OrdersRepository->get_all($keyword, $status);
+            $keyword = isset($input['keyword']) ? $input['keyword'] : '';
+            $status = isset($input['status']) ? $input['status'] : [];
+            $data_json['orders'] = $this->OrdersRepository->get_all($keyword, $status);
             return response()->json($data_json, 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -60,14 +60,14 @@ class OrdersController extends ControllerBase {
      * @return void
      */
     public function get_item(Request $request) {
-        if ($request->isMethod("get")) {
+        if ($request->isMethod('get')) {
             $input = $request->all();
-            $id = !empty($input["id"]) ? intval($input["id"]) : $input["id"];
-            if (!empty($input["id"]));
-            $data_json["orders"] = $this->OrdersRepository->get_by_id($input["id"]);
+            $id = !empty($input['id']) ? intval($input['id']) : $input['id'];
+            if (!empty($input['id']));
+            $data_json['orders'] = $this->OrdersRepository->get_by_id($input['id']);
             return response()->json($data_json, 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -77,19 +77,28 @@ class OrdersController extends ControllerBase {
      * @return void
      */
     public function get_orders_sellers(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthSellers::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
             $result = $this->OrdersRepository->get_orders_sellers($input);
             if($result) {
+                foreach($result as $key => $item) {
+                    if(!empty($item['order_date'])) {
+                        $order_date_item = $item['order_date'];
+                        $result[$key]['order_date'] = [
+                            'date' => date_format(date_create($order_date_item), 'd-m-Y'),
+                            'time' => date_format(date_create($order_date_item), 'H:m:s'),
+                        ];
+                    }
+                }
                 return $this->response_base([
-                    "status" => true,
-                    "orders" => $result
-                ], "You have got orders successfully !!!", 200);
+                    'status' => true,
+                    'orders' => $result
+                ], 'You have got orders successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get orders !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get orders !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 }

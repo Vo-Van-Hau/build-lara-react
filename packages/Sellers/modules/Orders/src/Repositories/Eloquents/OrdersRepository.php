@@ -52,13 +52,13 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status = []) {
-        $result = $this->model->where(["deleted" => 0]);
+    public function get_all($keyword = '', $status = []) {
+        $result = $this->model->where(['deleted' => 0]);
         if (!empty($status)) {
-            $result = $result->whereIn("status", $status);
+            $result = $result->whereIn('status', $status);
         }
         return $result
-            ->paginate(Config::get("packages.sellers.orders.item_per_page", 10));
+            ->paginate(Config::get('packages.sellers.orders.item_per_page', 10));
     }
 
 
@@ -69,8 +69,8 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @return Illuminate\Support\Collection
      */
     public function get_by_id($id) {
-        $result = $this->model->where("id", $id)
-            ->with("order_detail")->first();
+        $result = $this->model->where('id', $id)
+            ->with('order_detail')->first();
         return $result;
     }
 
@@ -84,10 +84,10 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
     public function update($id, $input = []) {
         $existed = $this->model->find($id);
         if (empty($existed)) return false;
-        $existed->name = $input["name"];
-        $existed->status = $input["status"];
-        $existed->parent_group_id = $input["parent_group_id"];
-        $existed->description = $input["description"];
+        $existed->name = $input['name'];
+        $existed->status = $input['status'];
+        $existed->parent_group_id = $input['parent_group_id'];
+        $existed->description = $input['description'];
         return $existed->update(); // return boolean
     }
 
@@ -98,14 +98,15 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @return mixed
      */
     public function get_orders_sellers($input) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $seller = $this->sellers_model->where([
-            "status" => 1,
-            "deleted" => 0,
-            "user_id" => $user_id
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
-        $order_detail_list = $this->order_detail_model->join('orders', 'orders.id', '=', 'order_detail.order_id')
+        $order_detail_list = $this->order_detail_model
+        ->join('orders', 'orders.id', '=', 'order_detail.order_id')
         ->join('products', 'order_detail.product_id', '=', 'products.id')
         ->where([
             'products.seller_id' => $seller->id
