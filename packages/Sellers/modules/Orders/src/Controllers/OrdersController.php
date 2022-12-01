@@ -101,4 +101,50 @@ class OrdersController extends ControllerBase {
         }
         return $this->response_base(['status' => false], 'Access denied !', 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo create order tracking
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function create_order_tracking_detail(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->OrdersRepository->create_order_tracking_detail($input);
+            if(!empty($result)) {
+                return $this->response_base([
+                    'status' => true,
+                    'tracking' => $result
+                ], 'You have create order tracking detail successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to create order tracking detail !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo create order tracking
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_order_tracking_detail(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->OrdersRepository->get_order_tracking_detail($input);
+            if(!empty($result)) {
+                return $this->response_base([
+                    'status' => true,
+                    'tracking' => $result
+                ], 'You have get order tracking detail successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to get order tracking detail !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
 }

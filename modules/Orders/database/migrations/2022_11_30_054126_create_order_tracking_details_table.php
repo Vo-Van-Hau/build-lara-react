@@ -17,8 +17,11 @@ class CreateOrderTrackingDetailsTable extends Migration {
             $table->increments('id')->unsigned();
             $table->string('code');
             $table->integer('order_id')->unsigned();
+            $table->integer('order_detail_id')->unsigned();
             $table->integer('order_tracking_status_id')->unsigned()->default(1);
             $table->timestamp('tracking_at')->useCurrent();
+            $table->integer('order_type')->unsigned()->comment('1: orders, 2: order_detail');
+            $table->integer('status')->unsigned()->default(1);
             $table->longText('description')->nullable()->comment('1–5,000 characters');
             $table->integer('user_created_id');
             $table->integer('user_updated_id')->nullable();

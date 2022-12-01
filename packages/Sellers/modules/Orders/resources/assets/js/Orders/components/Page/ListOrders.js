@@ -18,6 +18,7 @@ const ListOrders = (props) => {
         status: null
     });
     const [viewAction, setViewAction] = useState(false);
+    const [orderDetail, setOrderDetail] = useState({});
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -30,6 +31,23 @@ const ListOrders = (props) => {
         let { status } = filters;
         setKeySearch({...keySearch, status });
         get_orders(pagination.current, {...keySearch, status});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Objetc} orderDetail
+     * @return {void}
+     */
+    const openOrderTrackingDetailDrawer = (orderDetail) => {
+        try {
+            if(Object.prototype.toString.call(orderDetail) === '[object Object]') {
+                setViewAction(true);
+                setOrderDetail(orderDetail);
+            }
+        } catch (errors) {
+            console.log(errors);
+        }
     }
 
     const onTabsChange = (key) => {
@@ -90,7 +108,7 @@ const ListOrders = (props) => {
                     render: (_, record) => {
                         return (
                             <div>
-                                <Button type="primary" icon={<BranchesOutlined />} onClick={() => setViewAction(true)}/>
+                                <Button type="primary" icon={<BranchesOutlined />} onClick={() => openOrderTrackingDetailDrawer(record)}/>
                             </div>
                         )
                     }
@@ -140,15 +158,14 @@ const ListOrders = (props) => {
             </Fragment>)
             });
     };
-    const Waiting = () => {
-        return <Result title="No orders yet" />
-    };
+
     const Processing = () => {
         return <Result title="No orders yet" />
     };
     const Transporting = () => {
         return <Result title="No orders yet" />
     };
+
     const Delivered = () => {
         const columns = [
             {
@@ -207,6 +224,7 @@ const ListOrders = (props) => {
 
         </>
     };
+
     const Canceled = () => {
         return <Result title="No orders yet" />
     };
@@ -251,7 +269,7 @@ const ListOrders = (props) => {
                     ]} />
             </Col>
         </Row>
-        <OrderTrackingStatusDrawer visible={viewAction} setDrawer={setViewAction}/>
+        <OrderTrackingStatusDrawer visible={viewAction} setDrawer={setViewAction} orderDetail={orderDetail}/>
     </>);
 }
 
