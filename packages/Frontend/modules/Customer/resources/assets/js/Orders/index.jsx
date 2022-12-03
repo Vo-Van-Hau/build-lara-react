@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import OrdersPage from './components/Page/OrdersPage';
+import OrderDetailPage from './components/Page/OrderDetailPage';
 import OrdersContextProvider from './components/Contexts/OrdersContext';
 
 const Orders = (props) => {
@@ -32,19 +33,37 @@ const Orders = (props) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get action
+     * @param:
+     * @returns {void}
+     */
+    const get_action = () => {
+        const searchParams = props.searchParams;
+        let params = {
+            action: searchParams.get('action') || 'index',
+            id: searchParams.get('id') || ''
+        }
+        setAction(params.action);
+        setId(params.id);
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: render a React element
      * @param:
      * @returns {void}
      */
     const render_view = () => {
-        switch (action) {
+        switch(action) {
+            case 'detail': return (<OrderDetailPage {...props} keyID={id}/>);
             default: return (<OrdersPage {...props}/>);
         }
     }
 
     useEffect(function() {
-        // get_config();
-    }, []);
+        get_config();
+        get_action();
+    }, [props]);
 
     return (
         <>

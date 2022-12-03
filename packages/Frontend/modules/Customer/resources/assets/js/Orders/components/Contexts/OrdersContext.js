@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from 'react';
 import { initialState, OrdersReducer } from '../Reducers/OrdersReducer';
 import {
-    GET_ORDERS_HISTORY, SET_PAGINATION, SET_TABLE_LOADING,
+    GET_ORDERS_HISTORY, SET_DETAIL_ITEM, SET_TABLE_LOADING,
     MOUTED
 } from '../Dispatch/type';
 import { createSearchParams } from 'react-router-dom';
@@ -14,7 +14,7 @@ const OrdersContextProvider = ({ children, axios, history, config, navigate }) =
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
+     * @todo: get orders in history
      * @param {string} page
      * @param {string} keySearch
      * @return {void}
@@ -31,6 +31,28 @@ const OrdersContextProvider = ({ children, axios, history, config, navigate }) =
                 // let { total, data, current_page, per_page } = groups;
                 dispatch({ type: GET_ORDERS_HISTORY, payload: orders });
                 // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+        /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get detail
+     * @param {Object} data
+     * @return {void}
+     */
+    const get_detail = (data) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/orders/orders/get_detail`, {...data})
+        .then((res) => {
+            let { status, data } = res.data;
+            if(status) {
+                let { result } = data;
+                dispatch({ type: SET_DETAIL_ITEM, payload: result });
             }
         })
         .catch((errors) => {})
@@ -89,7 +111,7 @@ const OrdersContextProvider = ({ children, axios, history, config, navigate }) =
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config},
+        data: {...data, config}, get_detail,
         history, dispatch, get_axios, set_table_loading,
         set_mouted, get_orders_history, setRouter
     };
