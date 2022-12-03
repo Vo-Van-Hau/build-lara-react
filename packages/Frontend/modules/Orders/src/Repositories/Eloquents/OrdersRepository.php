@@ -164,8 +164,8 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      */
     public function get_history_by_auth($input) {
         $user_id = $input['user_id'];
-        $order = $this->model;
         if(empty($user_id)) return false;
+        $order = $this->model;
         $result = $order->where([
             'deleted' => 0,
             'user_id' => $user_id
@@ -178,6 +178,34 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
                 $query->select('id', 'title', 'code', 'tag_name');
             }
         ])->get();
+        if(!empty($result)) return $result;
+        return false;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function get_detail_by_auth($input) {
+        $user_id = $input['user_id'];
+        $id = isset($input['id']) ? $input['id'] : 0;
+        $order = $this->model;
+        if(empty($user_id) || empty($id)) return false;
+        $result = $order->where([
+            'deleted' => 0,
+            'user_id' => $user_id,
+            'id' => $id,
+        ])->with([
+            'customer',
+            'order_detail' => function($query) {
+                $query->select('id', 'order_id', 'order_tracking_status_id', 'product_id', 'product_name', 'product_image_link', 'quantity', 'price', 'note');
+            },
+            'order_tracking_status' => function($query) {
+                $query->select('id', 'title', 'code', 'tag_name');
+            }
+        ])->first();
         if(!empty($result)) return $result;
         return false;
     }

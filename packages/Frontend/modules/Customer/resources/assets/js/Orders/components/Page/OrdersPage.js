@@ -45,9 +45,6 @@ const OrdersPage = (props) => {
                                     })}/>
                                         <div>
                                             <><ShopOutlined />  { store && store.name ? store.name : `` }</><br/>
-                                            {/* <Text><Text strong>Tên sản phẩm:</Text> { record.product_name }</Text><br/> */}
-                                            {/* <Text><Text strong>Giá bán:</Text> { record.price }</Text><br/>
-                                            <Text><Text strong>Số lượng:</Text> x{ record.quantity }</Text><br/> */}
                                         </div>
                                 </Space></>)
                         },
@@ -109,7 +106,12 @@ const OrdersPage = (props) => {
                                             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
                                                 <Space wrap>
                                                     <Button size={'small'}>Mua lại</Button>
-                                                    <Button size={'small'}>Xem chi tiết</Button>
+                                                    <Button size={'small'} onClick={() => setRouter({
+                                                        module: 'customer',
+                                                        controller: 'orders',
+                                                        action: 'detail',
+                                                        id: order.id || 0
+                                                    })}>Xem chi tiết</Button>
                                                 </Space>
                                             </div>
                                         </Space>
@@ -123,9 +125,7 @@ const OrdersPage = (props) => {
             })}
         </Space>)
     };
-    const Waiting = () => {
-        return <Result title="No orders yet" />
-    };
+
     const Processing = () => {
         return <Result title="No orders yet" />
     };

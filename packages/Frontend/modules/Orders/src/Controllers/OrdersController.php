@@ -78,6 +78,29 @@ class OrdersController extends ControllerBase {
         }
         return $this->response_base(['status' => false], 'Access denied !', 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo get order detail
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function get_detail(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->OrdersRepository->get_detail_by_auth($input);
+            if($result) {
+                return $this->response_base([
+                    'status' => true,
+                    'result' => $result
+                ], 'You have got data successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to get data !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
 }
 
 
