@@ -1,11 +1,12 @@
 import React, { useEffect, useContext, useState, Fragment } from 'react';
 import { OrdersContext } from '../Contexts/OrdersContext';
 import {
-    Table, Space, Input, Button, Row, Col, Content, SideBar, Typography,
-    Layout, Result, Tabs, Image, Tag
+    Table, Space, Input, Button, Row, Col, Divider, Typography, Result, Tabs, Image, Tag,
+    Select
 } from 'antd';
-import { ShopOutlined } from '@ant-design/icons';
+import { ShopOutlined, BarcodeOutlined, BranchesOutlined } from '@ant-design/icons';
 import Helper from '../Helper/Helper';
+import OrderTrackingStatusDrawer from '../Actions/OrderTrackingStatusDrawer';
 const { Search } = Input;
 const { Text, Title } = Typography;
 
@@ -16,6 +17,8 @@ const ListOrders = (props) => {
         keyword: null,
         status: null
     });
+    const [viewAction, setViewAction] = useState(false);
+    const [orderDetail, setOrderDetail] = useState({});
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -30,15 +33,30 @@ const ListOrders = (props) => {
         get_orders(pagination.current, {...keySearch, status});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Objetc} orderDetail
+     * @return {void}
+     */
+    const openOrderTrackingDetailDrawer = (orderDetail) => {
+        try {
+            if(Object.prototype.toString.call(orderDetail) === '[object Object]') {
+                setViewAction(true);
+                setOrderDetail(orderDetail);
+            }
+        } catch (errors) {
+            console.log(errors);
+        }
+    }
+
     const onTabsChange = (key) => {
         console.log(key);
     };
 
     const AllOrders = () => {
         return orders.map((order, index) => {
-
             let { order_detail } = order;
-
             const columns = [
                 {
                     title: 'Giao hàng thành công',
@@ -69,36 +87,85 @@ const ListOrders = (props) => {
                             <><Tag color={tag_name}>{ title }</Tag></>
                         )
                     }
+                },{
+                    title: 'Thời gian đặt hàng',
+                    align: 'center',
+                    render: (_, record) => {
+                        return (<>{ order.order_date && order.order_date.date && order.order_date.time ?
+                            <Space
+                                direction="vertical"
+                                align="center"
+                                size="small"
+                            >
+                                <Text>{order.order_date.time}</Text>
+                                <Text>{order.order_date.date}</Text>
+                            </Space> :
+                        ''}</>)
+                    }
+                },{
+                    title: 'Hành động',
+                    align: 'center',
+                    render: (_, record) => {
+                        return (
+                            <div>
+                                <Button type="primary" icon={<BranchesOutlined />} onClick={() => openOrderTrackingDetailDrawer(record)}/>
+                            </div>
+                        )
+                    }
                 },
-
             ];
 
             return (<Fragment key={index}>
-                <Title level={5} className='shop_name'>
-                    <ShopOutlined /> Mã đơn hàng: #{ order.code ? order.code : 'Undefined' }
-                </Title>
-                <Table
-                    pagination={false}
-                    columns={columns}
-                    dataSource={order_detail}
-                    rowKey={'id'}
-                    footer={() => { return <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div> }}
-                />
-                <Row align='end'>
-                    <Button type="primary" size={'large'} style={{ margin: '1rem' }} >Xem chi tiết</Button>
-                </Row>
+                <div>
+                    <div>
+                        <Space size={`small`} direction="vertical" style={{paddingBottom: 12, paddingTop: 12}}>
+                            <Text className='shop_name'>
+                                <BarcodeOutlined /> Mã đơn hàng: #{ order.code ? order.code : '' }
+                            </Text>
+                        </Space>
+                    </div>
+                    <div>
+                        <Table
+                            pagination={false}
+                            columns={columns}
+                            dataSource={order_detail}
+                            rowKey={'id'}
+                            footer={() => {
+                                return (
+                                    <Space
+                                        direction="vertical"
+                                        size="small"
+                                        style={{
+                                            display: 'flex',
+                                        }}
+                                    >
+                                        <div>
+                                            <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+                                            <Space wrap>
+                                                <Button size={'small'}>Mua lại</Button>
+                                                <Button size={'small'}>Xem chi tiết</Button>
+                                            </Space>
+                                        </div>
+                                    </Space>
+                                )
+                            }}
+                        />
+                    </div>
+                </div>
+                <Divider />
             </Fragment>)
             });
     };
-    const Waiting = () => {
-        return <Result title="No orders yet" />
-    };
+
     const Processing = () => {
         return <Result title="No orders yet" />
     };
     const Transporting = () => {
         return <Result title="No orders yet" />
     };
+
     const Delivered = () => {
         const columns = [
             {
@@ -157,6 +224,7 @@ const ListOrders = (props) => {
 
         </>
     };
+
     const Canceled = () => {
         return <Result title="No orders yet" />
     };
@@ -167,7 +235,7 @@ const ListOrders = (props) => {
     }, []);
 
     return (
-        <><Row className="orders_container">
+    <><Row className="orders_container">
             <Col className="page_title" span={24} align="bottom">
                 <Title level={3}>Đơn hàng của tôi</Title>
             </Col>
@@ -178,39 +246,31 @@ const ListOrders = (props) => {
                     onChange={onTabsChange}
                     items={[
                         {
-                            label: `Tất cả đơn hàng`,
+                            label: `Tất cả đơn`,
                             key: '1',
                             children: <AllOrders />,
-                        },
-                        {
-                            label: `Wait for pay`,
+                        },{
+                            label: `Đang xử lý`,
                             key: '2',
-                            children: <Waiting />,
-                        },
-                        {
-                            label: `Processing`,
-                            key: '3',
                             children: <Processing />,
-                        },
-                        {
-                            label: `Being transported`,
-                            key: '4',
+                        },{
+                            label: `Đang vận chuyển`,
+                            key: '3',
                             children: <Transporting />,
-                        },
-                        {
-                            label: `Delivered`,
-                            key: '5',
+                        },{
+                            label: `Đã giao`,
+                            key: '4',
                             children: <Delivered />,
-                        },
-                        {
-                            label: `Canceled`,
-                            key: '6',
+                        },{
+                            label: `Đã huỷ`,
+                            key: '5',
                             children: <Canceled />,
                         }
                     ]} />
             </Col>
-        </Row></>
-    );
+        </Row>
+        <OrderTrackingStatusDrawer visible={viewAction} setDrawer={setViewAction} orderDetail={orderDetail}/>
+    </>);
 }
 
 export default ListOrders;

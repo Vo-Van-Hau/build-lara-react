@@ -1,10 +1,14 @@
 import {
-    GET_ORDERS, SET_PAGINATION,
+    GET_ORDERS, SET_PAGINATION, GET_ORDER_TRACKING_DETAIL,
     SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 
 export const initialState = {
     orders: [],
+    order_tracking_detail: {
+        current_tracking: [],
+        next_tracking_status: {},
+    },
     config: {
         status: []
     },
@@ -21,11 +25,19 @@ export const initialState = {
     mouted: true
 }
 
+/**
+ *
+ * @param {Object} state
+ * @param {Object} action
+ * @returns
+ */
 export const OrdersReducer = (state = initialState, action) => {
     let { type, payload } = action;
     switch (type) {
         case GET_ORDERS:
             return {...state, orders: [...payload]};
+        case GET_ORDER_TRACKING_DETAIL:
+            return {...state, order_tracking_detail: {...payload}};
         case SET_PAGINATION:
             return {...state, pagination: { ...payload, showSizeChanger: false}};
         case SET_TABLE_LOADING:

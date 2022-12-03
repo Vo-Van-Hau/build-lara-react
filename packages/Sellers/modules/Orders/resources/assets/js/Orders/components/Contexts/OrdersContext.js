@@ -1,11 +1,11 @@
 import React, { createContext, useReducer } from 'react';
 import { initialState, OrdersReducer } from '../Reducers/OrdersReducer';
 import {
-    GET_ORDERS,
-    SET_PAGINATION, SET_TABLE_LOADING, MOUTED
+    GET_ORDER_TRACKING_DETAIL,
+    GET_ORDERS, SET_PAGINATION, SET_TABLE_LOADING, MOUTED
 } from '../Dispatch/type';
 import { createSearchParams } from 'react-router-dom';
-
+import Helper from '../Helper/Helper';
 export const OrdersContext = createContext();
 
 const OrdersContextProvicer = ({ children, axios, history, config, navigate }) => {
@@ -31,6 +31,57 @@ const OrdersContextProvicer = ({ children, axios, history, config, navigate }) =
                 // let { data, current_page, per_page, total } = orders;
                 dispatch({ type: GET_ORDERS, payload: orders ? orders : [] });
                 // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get order tracking detail
+     * @param {Object} data
+     * @return {void}
+     */
+    const get_order_tracking_detail = (data) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/orders/orders/get_order_tracking_detail`, {...data})
+        .then((res) => {
+            const { status, message, data } = res.data;
+            if(status) {
+                const { tracking } = data;
+                const { current_tracking, next_tracking_status } = tracking;
+                if(current_tracking && next_tracking_status) {
+                    dispatch({
+                        type: GET_ORDER_TRACKING_DETAIL,
+                        payload: {
+                            current_tracking, next_tracking_status
+                        }
+                    });
+                }
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: create order tracking detail
+     * @param {Object} data
+     * @return {void}
+     */
+    const create_order_tracking_detail = (data) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/orders/orders/create_order_tracking_detail`, {...data})
+        .then((res) => {
+            const { status, message, data } = res.data;
+            if(status) {
+                Helper.Notification('success', '[Update Order Tracking Status]', message);
             }
         })
         .catch((errors) => {})
@@ -89,8 +140,8 @@ const OrdersContextProvicer = ({ children, axios, history, config, navigate }) =
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config}, setRouter,
-        history, dispatch, get_axios,
+        data: {...data, config}, setRouter, create_order_tracking_detail,
+        history, dispatch, get_axios, get_order_tracking_detail,
         set_table_loading, set_mouted, get_orders
     };
 
