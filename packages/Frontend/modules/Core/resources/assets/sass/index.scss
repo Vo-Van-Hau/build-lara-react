@@ -33,6 +33,72 @@
         justify-content: flex-end;
     }
 }
+//formLogin and Rregister
+.reLogForm_wrapper {
+    min-width: 770px;
+  
+    .ant-form-item{
+      margin-bottom: 0;
+    }
+  }
+  .reLogForm_wrapper .ant-modal-body {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+  .reLogForm_wrapper .ant-modal-body > * {
+    min-height: 500px;
+    height: 100%;
+  }
+  .reLogForm_wrapper .reLogForm{
+   margin-right: 0;
+  }
+  .ant-modal-content{
+    border-radius: 20px;
+  }
+  .reLogRight {
+    height: 500px;
+    width: 300px;
+    background: linear-gradient(136deg, rgb(240, 248, 255) -1%, rgb(219, 238, 255) 85%);
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .reLogForm{
+    position: relative;
+  }
+  
+  .prevBtn{
+    position: absolute;
+    top: -105px;
+    left: 10px;
+    font-size: 24px;
+    color: #36324d;
+  }
+  .reLogForm #register{
+    margin-top: 25px;
+     .accept_txt{
+      line-height: 12px;
+     }
+  }
+  .reLogForm #register .ant-form-item {
+    width: 100%;
+    line-height: 30px;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 20px;
+    text-align: left;
+  
+    .ant-form-item-explain-error{
+      text-align: left;
+    }
+  }
+
 .formSearch_container {
     .ant-input-group-addon {
         button.ant-btn.ant-input-search-button {

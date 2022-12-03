@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
-    Cascader, Divider, Menu, List, Alert, Tag, Drawer, Avatar,Affix
+    Col, Row, Space, Typography, Image, Modal, Button, Badge, Popover, Divider, Menu, List,
+    Form, Checkbox, Input, Cascader, Alert, Tag, Drawer, Avatar, Affix
 } from 'antd';
 import {
+    LockOutlined, LeftOutlined,
     UserOutlined, SearchOutlined, ShoppingCartOutlined, CloseCircleOutlined, UpOutlined,
     BellOutlined, LogoutOutlined, InboxOutlined, HistoryOutlined, DownOutlined
 } from '@ant-design/icons';
@@ -71,6 +72,42 @@ const HeaderSection = (props) => {
      * @param {Object} props
      * @returns
      */
+    const [openReLog, setOpen] = useState(true);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [logBy, setLogby] = useState('');
+    const [currentForm, setCurrentForm] = useState('registerForm');
+
+    const showReLog = () => {
+        setOpen(true);
+    };
+
+    const hideReLog = () => {
+        setCurrentForm('phoneNumForm');
+        setOpen(false);
+    };
+
+    const submitStep1Form = (values) => {
+        values['remember'] === true ?
+            setCurrentForm('logInForm')
+            : setCurrentForm('registerForm');
+        if (currentForm === 'phoneNumForm') {
+            setPhoneNumber(values['phoneNumber']);
+            setLogby('phoneNum');
+        } else {
+            setEmail(values['email']);
+            setLogby('email');
+        }
+    }
+
+    const onSubmitForm = (values) => {
+        console.log('Success:', values);
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     const AccountBox = (props) => {
 
         const { data, history } = props;
@@ -86,7 +123,7 @@ const HeaderSection = (props) => {
                 <DownOutlined />
                 </>
             </Dropdown> */}
-            <Popover content={() => {
+            {/* <Popover content={() => {
                 return (<>
                     <List itemLayout="horizontal"
                         dataSource={[
@@ -132,15 +169,267 @@ const HeaderSection = (props) => {
                         )}
                     /></>)
             }} title="" trigger="hover" placement="bottom">
-                <><Row justify='center' align='center' style={{ justify: 'center', align: 'center' }}>
-                    <Col span={24} style={{ padding: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text level={4}><span style={{ color: '#FFFFFF' }}>Tài khoản</span></Text>
+                <>
+                    <Row justify='center' align='center' style={{ justify: 'center', align: 'center' }}>
+                        <Col span={24} style={{ padding: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text level={4}><span style={{ color: '#FFFFFF' }}>Tài khoản</span></Text>
+                        </Col>
+                        <Col span={24} style={{ padding: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Tag color="#87d068" style={{ marginRight: 0 }}>{user.name ? user.name : ''}</Tag>
+                        </Col>
+                    </Row>
+
+                </>
+            </Popover> */}
+
+            <Button type="primary" onClick={showReLog}>
+                Đăng nhập / Đăng ký
+            </Button>
+            <Modal
+                className='reLogForm_wrapper'
+                keyboard={true}
+                footer={null}
+                open={openReLog}
+                onCancel={hideReLog}
+            >
+                <Row className='reLogForm' gutter={24} align='middle'>
+                    <Col span={14} align='center'>
+                        {currentForm === 'phoneNumForm' && (
+                            <Form name="reLog"
+                                wrapperCol={{ span: 24, }}
+                                initialValues={{ remember: true, }}
+                                onFinish={submitStep1Form}
+                                onFinishFailed={onFinishFailed}
+                                autoComplete="off"
+
+                            >
+                                <h2>Xin chào</h2> <h4>Đăng nhập hoặc Tạo tài khoản</h4>
+                                <Form.Item name="phoneNumber"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không để trống số điện thoại',
+                                        },
+                                    ]}
+                                    style={{ marginBottom: 0, textAlign: 'left' }}
+                                >
+                                    <Input placeholder="Nhập số điện thoại"
+                                        style={{ lineHeight: '50px', borderBottom: '1px solid lightgrey', marginBottom: 20 }}
+                                        size='large'
+                                        bordered={false}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="remember"
+                                    valuePropName="checked"
+                                    style={{ textAlign: 'left' }}
+                                >
+                                    <Checkbox>Toogle <small>(true= đăng nhập, false = đăng ký)</small></Checkbox>
+                                </Form.Item>
+
+                                <Form.Item>
+                                    <Button type="primary" size='large' htmlType='submit' danger block >Tiếp tục</Button>
+                                </Form.Item>
+                            </Form>
+                        )}
+
+                        {currentForm === 'emailForm' && (
+                            <Form name="reLog"
+                                wrapperCol={{ span: 24, }}
+                                initialValues={{ remember: true, }}
+                                onFinish={submitStep1Form}
+                                onFinishFailed={onFinishFailed}
+                                autoComplete="off"
+
+                            >
+                                <h2>Xin chào</h2> <h4>Đăng nhập hoặc Tạo tài khoản</h4>
+                                <Form.Item name="email"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không để trống Email',
+                                        },
+                                    ]}
+                                    style={{ marginBottom: 0, textAlign: 'left' }}
+                                >
+                                    <Input placeholder="Nhập Email..."
+                                        style={{ lineHeight: '50px', borderBottom: '1px solid lightgrey', marginBottom: 20 }}
+                                        size='large'
+                                        bordered={false}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="remember"
+                                    valuePropName="checked"
+                                    style={{ textAlign: 'left' }}
+                                >
+                                    <Checkbox>Toogle <small>(true= đăng nhập, false = đăng ký)</small></Checkbox>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" size='large' htmlType='submit' danger block >Tiếp tục</Button>
+                                </Form.Item>
+                            </Form>
+                        )}
+
+                        {currentForm === 'logInForm' && (
+                            <>
+                                <Form name="reLog"
+                                    wrapperCol={{ span: 24, }}
+                                    initialValues={{ remember: true, }}
+                                    onFinish={onSubmitForm}
+                                    onFinishFailed={onFinishFailed}
+                                    autoComplete="off"
+                                >
+                                    <Button type='link' className='prevBtn' onClick={() => { logBy === 'phoneNum' ? setCurrentForm('phoneNumForm') : setCurrentForm('emailForm') }}><LeftOutlined /></Button>
+                                    <h2>Nhập mật khẩu</h2> <h4>Vui lòng nhập mật khẩu của {logBy === 'phoneNum' ? <>số điện thoại <strong>{phoneNumber}</strong></> : <>email <strong>{email}</strong></>} </h4>
+                                    <Form.Item
+                                        name="password"
+                                        rules={[{ required: true, message: 'Không để trống mật khẩu!' }]}
+                                    >
+                                        <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
+                                            type="password"
+                                            placeholder="Nhập mật khẩu"
+                                            style={{ lineHeight: '50px', borderBottom: '1px solid lightgrey', marginBottom: 10 }}
+                                            size='large'
+                                            bordered={false}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="remember"
+                                        valuePropName="checked"
+                                        style={{ textAlign: 'left' }}
+                                    >
+                                        <Checkbox>Nhớ tài khoản</Checkbox>
+                                    </Form.Item>
+
+                                    <Form.Item>
+                                        <Button type="primary" size='large' htmlType='submit' danger block >Đăng nhập</Button>
+                                    </Form.Item>
+                                </Form>
+                                <Button type='link'>Quên mật khẩu ?</Button>
+
+                            </>
+                        )}
+
+                        {currentForm === 'registerForm' && (
+                            <Form name="register"
+                                wrapperCol={{ span: 24, }}
+                                initialValues={{ remember: true, }}
+                                layout="inline"
+                                onFinish={onSubmitForm}
+                                onFinishFailed={onFinishFailed}
+                                autoComplete="off"
+                            >
+                                <h2>Số điện thoại chưa đăng ký tài khoản</h2> <h4>Vui lòng nhập thông tin đăng ký tài khoản <strong>{phoneNumber}</strong></h4>
+                                <Form.Item wrapperCol={12} name="firstname"
+                                    rules={[{ required: true, message: 'Không để trống Họ!' }]}>
+                                    <Input placeholder='Nhập họ' bordered={false} />
+                                </Form.Item>
+
+                                <Form.Item wrapperCol={12} name="lastname"
+                                    rules={[{ required: true, message: 'Không để trống Tên!' }]}>
+                                    <Input placeholder='Nhập tên' bordered={false} />
+                                </Form.Item>
+
+                                <Form.Item
+                                    name="password"
+                                    hasFeedback
+                                    wrapperCol={24}
+                                    rules={[{ required: true, message: 'Không để trống mật khẩu!' }]}
+                                >
+                                    <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
+                                        type="password"
+                                        size='large'
+                                        placeholder="Tạo mật khẩu"
+                                        bordered={false}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    name="password-confirm"
+                                    dependencies={['password']}
+                                    hasFeedback
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không để trống mật khẩu',
+                                        },
+                                        ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                                if (!value || getFieldValue('password') === value) {
+                                                    return Promise.resolve();
+                                                }
+                                                return Promise.reject(new Error('Mật khẩu chưa khớp !'));
+                                            },
+                                        }),
+                                    ]}
+                                >
+                                    <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
+                                        type="password"
+                                        size='large'
+                                        placeholder="Nhập lại mật khẩu"
+                                        bordered={false}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item name="email"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không để trống địa chỉ email',
+                                        },
+                                    ]}
+                                >
+                                    <Input placeholder="Nhập Email đăng ký"
+                                        size='large'
+                                        bordered={false}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item name="address"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Không để trống địa chỉ',
+                                        },
+                                    ]}
+                                >
+                                    <Input placeholder="Nhập địa chỉ"
+                                        size='large'
+                                        bordered={false}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    name="acceptRegister"
+                                    valuePropName="checked"
+                                    style={{ border: 'none' }}
+                                >
+                                    <Checkbox className='accept_txt'>
+                                        <small> Bằng cách nhấp vào Đăng ký, bạn đồng ý với <a href='#' target="_blank"> Điều khoản, Chính sách quyền riêng tư và Chính sách cookie của chúng tôi.</a> Bạn có thể nhận được thông báo của chúng tôi qua SMS và hủy nhận bất kỳ lúc nào.
+                                        </small>
+                                    </Checkbox>
+                                </Form.Item>
+
+                                <Form.Item>
+                                    <Button type="primary" size='large' htmlType='submit' danger block >Đăng ký</Button>
+                                </Form.Item>
+                            </Form>
+                        )}
+                        {
+                            (currentForm === 'emailForm' || currentForm === 'phoneNumForm') && (<>
+                                <Text type="secondary">Hoặc</Text> <br />
+                                <Button type='link' onClick={() => currentForm === 'emailForm' ? setCurrentForm('phoneNumForm') : setCurrentForm('emailForm')}>Đăng nhập bằng {currentForm === 'emailForm' ? 'Số điện thoại' : 'Email'}</Button>
+                            </>
+                            )
+                        }
+
                     </Col>
-                    <Col span={24} style={{ padding: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Tag color="#87d068" style={{ marginRight: 0 }}>{user.name ? user.name : ''}</Tag>
+                    <Col span={10} className='reLogRight' >
+                        <Image width={'50%'} preview={false} src='https://salt.tikicdn.com/ts/upload/eb/f3/a3/25b2ccba8f33a5157f161b6a50f64a60.png' />
                     </Col>
-                </Row></>
-            </Popover>
+                </Row>
+            </Modal>
         </>)
     }
 
@@ -409,47 +698,47 @@ const HeaderSection = (props) => {
                             <div className='user_itemText'>
                                 {is_login ? <AccountBox {...props} /> : <AuthenticatedBox {...props} />}
                             </div>
-                        {/* </div> */}
-                    </Space>
-                </Col>
-                <Col className='header_cart_container' span={3}>
-                    <Badge count={ carts.count || 0 }>
-                        <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }}
-                            onClick={() => setRouter({
-                                module: 'checkout',
-                                controller: 'cart',
-                                action: 'view',
-                                id: '#',
-                            }, navigate)}
-                        />
-                    </Badge>
-                    <div className='user_itemText'>
-                        <Button type="text" style={{ color: '#fff' }} onClick={() => setOpenDrawerCart(!openDrawerCart)} >
-                            Giỏ Hàng
-                        </Button>
-                        <Drawer title="Giỏ hàng của bạn" placement="right" onClose={() => setOpenDrawerCart(false)} open={openDrawerCart}>
-                            <List>
-                                <VirtualList
-                                    data={cart_detail}
-                                    height={400}
-                                    itemHeight={47}
-                                    itemKey="id"
-                                    onScroll={onScrollDrawerCart}
-                                >
-                                    {(item) => {
-                                        const { id, cart_id, product, product_quantity, product_id } = item;
-                                        return (
-                                            <List.Item key={item.id}>
-                                                <List.Item.Meta
-                                                    avatar={<Avatar src={`${product.image_link}`} />}
-                                                    title={<a href="https://ant.design">{product.name}</a>}
-                                                    description={() => {
-                                                        return (<>
-                                                            Giá: {product.price}
-                                                        </>)
-                                                    }}
-                                                />
-                                                
+                            {/* </div> */}
+                        </Space>
+                    </Col>
+                    <Col className='header_cart_container' span={3}>
+                        <Badge count={carts.count || 0}>
+                            <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }}
+                                onClick={() => setRouter({
+                                    module: 'checkout',
+                                    controller: 'cart',
+                                    action: 'view',
+                                    id: '#',
+                                }, navigate)}
+                            />
+                        </Badge>
+                        <div className='user_itemText'>
+                            <Button type="text" style={{ color: '#fff' }} onClick={() => setOpenDrawerCart(!openDrawerCart)} >
+                                Giỏ Hàng
+                            </Button>
+                            <Drawer title="Giỏ hàng của bạn" placement="right" onClose={() => setOpenDrawerCart(false)} open={openDrawerCart}>
+                                <List>
+                                    <VirtualList
+                                        data={cart_detail}
+                                        height={400}
+                                        itemHeight={47}
+                                        itemKey="id"
+                                        onScroll={onScrollDrawerCart}
+                                    >
+                                        {(item) => {
+                                            const { id, cart_id, product, product_quantity, product_id } = item;
+                                            return (
+                                                <List.Item key={item.id}>
+                                                    <List.Item.Meta
+                                                        avatar={<Avatar src={`${product.image_link}`} />}
+                                                        title={<a href="https://ant.design">{product.name}</a>}
+                                                        description={() => {
+                                                            return (<>
+                                                                Giá: {product.price}
+                                                            </>)
+                                                        }}
+                                                    />
+
                                                     <div>
                                                         <div>
                                                             x{`${product_quantity}`}
