@@ -11,8 +11,8 @@ use Frontend\Address\Models\Wards;
 
 class CustomerAddress extends ModelBase {
 
-    protected $connection = "mysql";
-    protected $table = "customer_address";
+    protected $connection = 'mysql';
+    protected $table = 'customer_address';
 
     protected $fillable = ['id'];
 
@@ -26,10 +26,10 @@ class CustomerAddress extends ModelBase {
      * @return
      */
      public function area() {
-        return $this->belongsTo(Areas::class, "area_id", "id")
+        return $this->belongsTo(Areas::class, 'area_id', 'id')
         ->where([
-            "areas.status" => 1,
-            "areas.deleted" => 0
+            'areas.status' => 1,
+            'areas.deleted' => 0
         ]);
      }
 
@@ -40,10 +40,10 @@ class CustomerAddress extends ModelBase {
      * @return
      */
      public function country() {
-        return $this->belongsTo(Countries::class, "country_id", "id")
+        return $this->belongsTo(Countries::class, 'country_id', 'id')
         ->where([
-            "countries.status" => 1,
-            "countries.deleted" => 0
+            'countries.status' => 1,
+            'countries.deleted' => 0
         ]);
      }
 
@@ -54,10 +54,10 @@ class CustomerAddress extends ModelBase {
      * @return
      */
      public function province() {
-        return $this->belongsTo(Provinces::class, "province_id", "id")
+        return $this->belongsTo(Provinces::class, 'province_id', 'id')
         ->where([
-            "provinces.status" => 1,
-            "provinces.deleted" => 0
+            'provinces.status' => 1,
+            'provinces.deleted' => 0
         ]);
      }
 
@@ -68,10 +68,10 @@ class CustomerAddress extends ModelBase {
      * @return
      */
      public function district() {
-        return $this->belongsTo(Districts::class, "district_id", "id")
+        return $this->belongsTo(Districts::class, 'district_id', 'id')
         ->where([
-            "districts.status" => 1,
-            "districts.deleted" => 0
+            'districts.status' => 1,
+            'districts.deleted' => 0
         ]);
      }
 
@@ -82,10 +82,10 @@ class CustomerAddress extends ModelBase {
      * @return
      */
      public function ward() {
-        return $this->belongsTo(Wards::class, "ward_id", "id")
+        return $this->belongsTo(Wards::class, 'ward_id', 'id')
         ->where([
-            "wards.status" => 1,
-            "wards.deleted" => 0
+            'wards.status' => 1,
+            'wards.deleted' => 0
         ]);
      }
 }

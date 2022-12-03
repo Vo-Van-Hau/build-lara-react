@@ -198,14 +198,35 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             'user_id' => $user_id,
             'id' => $id,
         ])->with([
-            'customer',
+            'customer' => function($query) {
+
+            },
             'order_detail' => function($query) {
                 $query->select('id', 'order_id', 'order_tracking_status_id', 'product_id', 'product_name', 'product_image_link', 'quantity', 'price', 'note');
             },
             'order_tracking_status' => function($query) {
                 $query->select('id', 'title', 'code', 'tag_name');
+            },
+            'country' => function($query) {
+                $query->select('id', 'name', 'type', 'status');
+            },
+            'province' => function($query) {
+                $query->select('id', 'name', 'type', 'status');
+            },
+            'district' => function($query) {
+                $query->select('id', 'name', 'type', 'status');
+            },
+            'ward' => function($query) {
+                $query->select('id', 'name', 'type', 'status');
+            },
+            'payment_method' => function($query) {
+                $query->select('id', 'name', 'status');
             }
-        ])->first();
+        ])->select(
+            'id', 'code', 'receiver_name', 'receiver_phone', 'receiver_country_id', 'receiver_province_id', 'receiver_district_id', 'receiver_ward_id', 'receiver_address',
+            'subtotal', 'total_amount', 'item_quantity', 'discount', 'shipping_id', 'payment_method_id', 'contact_type_id', 'order_tracking_status_id', 'shipping_method_id',
+            'transporter_id', 'delivery_date', 'order_date', 'status'
+        )->first();
         if(!empty($result)) return $result;
         return false;
     }

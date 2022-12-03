@@ -7,8 +7,8 @@ use Frontend\Address\Models\Provinces;
 
 class Countries extends ModelBase {
 
-    protected $connection = "mysql";
-    protected $table = "countries";
+    protected $connection = 'mysql';
+    protected $table = 'countries';
 
     protected $fillable = [];
 
@@ -23,10 +23,10 @@ class Countries extends ModelBase {
     * @return
     */
     public function provinces() {
-        return $this->hasMany(Provinces::class, "country_id", "id")
+        return $this->hasMany(Provinces::class, 'country_id', 'id')
         ->where([
-            "provinces.status"      => 1,
-            "provinces.deleted"     => 0
+            'provinces.status' => 1,
+            'provinces.deleted' => 0
         ]);
     }
 }

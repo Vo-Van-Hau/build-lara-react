@@ -56,7 +56,7 @@ const Orders = (props) => {
     const render_view = () => {
         switch(action) {
             case 'detail': return (<OrderDetailPage {...props} keyID={id}/>);
-            default: return (<OrdersPage {...props}/>);
+            default: return (<OrdersPage {...props} keyID={id}/>);
         }
     }
 
