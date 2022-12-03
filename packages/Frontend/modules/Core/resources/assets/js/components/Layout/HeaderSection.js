@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     Col, Row, Image, Input, Modal, Button, Form, Typography, Space, Badge, Popover,
-    Cascader, Divider, Menu, List, Alert, Tag, Drawer, Avatar,
+    Cascader, Divider, Menu, List, Alert, Tag, Drawer, Avatar,Affix
 } from 'antd';
 import {
     UserOutlined, SearchOutlined, ShoppingCartOutlined, CloseCircleOutlined, UpOutlined,
