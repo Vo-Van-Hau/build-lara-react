@@ -26,7 +26,7 @@ RUN apk add autoconf build-base && pecl install xdebug
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel
-ARG PUID=1000
+ARG PUID=1000  
 ENV PUID ${PUID}
 ARG PGID=1000
 ENV PGID ${PGID}

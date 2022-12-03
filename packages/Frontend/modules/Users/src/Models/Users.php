@@ -112,7 +112,10 @@ class Users extends Authenticatable {
             'customers.deleted' => 0
         ])->with([
             'customer_address' => function ($query) {
-                $query->select('id', 'customer_id', 'customer_name', 'area_id', 'country_id', 'province_id', 'district_id', 'ward_id', 'address');
+                $query->select(
+                    'id', 'customer_id', 'customer_name', 'area_id', 'country_id', 'province_id', 'district_id', 'ward_id',
+                    'address', 'is_verified', 'is_default', 'delivery_address_type', 'status', 'phone', 'company_name'
+                );
             }
         ]);
     }

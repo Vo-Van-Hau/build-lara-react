@@ -1,14 +1,14 @@
-import React, { useEffect, useContext } from 'react';
-import { UserOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
-    CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined
+import React, { useEffect, useContext, Fragment } from 'react';
+import { BarcodeOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
+    CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined, ControlOutlined
 } from '@ant-design/icons';
-import { Layout, Table, Col, Result,
+import { Layout, Table, Col, Result, Space, Tag, Divider,
     Row, Typography, Button, Tabs, Image
 } from 'antd';
 import { OrdersContext } from '../Contexts/OrdersContext';
 import SideBar from '../../../Customer/components/Layout/Sidebar';
 const { Content, Footer } = Layout;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const OrdersPage = (props) => {
 
@@ -20,60 +20,108 @@ const OrdersPage = (props) => {
     };
 
     const AllOrders = () => {
-        return orders.map((order) => {
-            let { order_detail } = order;
-            const columns = [
-                {
-                    title: 'Giao hàng thành công',
-                    render: (_, record) => {
-                        return (
-                            <><Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
-                                module: 'products',
-                                controller: 'productdetail',
-                                action: 'view',
-                                id: record.product.id
-                            })}/></>
-                        )
+        return (<Space
+            direction="vertical"
+            size="large"
+            style={{
+                display: 'flex',
+            }}
+        >
+            {orders.map((order) => {
+                let { order_detail, order_tracking_status } = order;
+                const columns = [
+                    {
+                        title: '',
+                        render: (_, record) => {
+                            const { seller } = record.product;
+                            const { store } = seller;
+                            return (
+                                <><Space align="start">
+                                    <Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
+                                        module: 'products',
+                                        controller: 'productdetail',
+                                        action: 'view',
+                                        id: record.product.id
+                                    })}/>
+                                        <div>
+                                            <><ShopOutlined />  { store && store.name ? store.name : `` }</><br/>
+                                            {/* <Text><Text strong>Tên sản phẩm:</Text> { record.product_name }</Text><br/> */}
+                                            {/* <Text><Text strong>Giá bán:</Text> { record.price }</Text><br/>
+                                            <Text><Text strong>Số lượng:</Text> x{ record.quantity }</Text><br/> */}
+                                        </div>
+                                </Space></>)
+                        },
+                    },{
+                        title: 'Tên sản phẩm',
+                        width: 300,
+                        render: (_, record) => {
+                            return (
+                                <a>{ record.product_name }</a>
+                            )
+                        },
+                    },{
+                        title: 'Số lượng',
+                        align: 'center',
+                        render: (_, record) => {
+                            return (
+                                <>x{ record.quantity }</>
+                            )
+                        }
+                    },{
+                        title: 'Đơn giá',
+                        align: 'center',
+                        render: (_, record) => {
+                            return (
+                                <>{ record.price }</>
+                            )
+                        }
                     },
-                },{
-                    title: 'Tên sản phẩm',
-                    width: 300,
-                    render: (_, record) => {
-                        return (
-                            <a>{ record.product_name }</a>
-                        )
-                    },
-                },{
-                    title: 'Số lượng',
-                    align: 'center',
-                    dataIndex: 'quantity',
-                },{
-                    title: 'Đơn giá',
-                    align: 'center',
-                    render: (_, record) => {
-                        return (
-                            <>{ record.price }</>
-                        )
-                    }
-                },
 
-            ];
-            return (<>
-                <Title level={5} className='shop_name'>
-                    <ShopOutlined /> Mã đơn hàng: #{ order.code ? order.code : 'Undefined' }
-                </Title>
-                <Table
-                    pagination={false}
-                    columns={columns}
-                    dataSource={order_detail}
-                    rowKey={'id'}
-                    footer={() => { return <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div> }}
-                />
-                <Row align='end'>
-                    <Button type="primary" size={'large'} style={{ margin: '1rem' }} >Xem chi tiết</Button>
-                </Row>
-            </>)
-            });
+                ];
+                return (<Fragment>
+                    <div>
+                        <div>
+                            <Space size={`small`} direction="vertical" style={{paddingBottom: 12, paddingTop: 12}}>
+                                <Text className='shop_name'>
+                                    <BarcodeOutlined /> Mã đơn hàng: #{ order.code ? order.code : '' }
+                                </Text>
+                                <Text><ControlOutlined /> Trạng thái: <><Tag color={order_tracking_status.tag_name ? order_tracking_status.tag_name : 'blue'}>{ order_tracking_status.title ? order_tracking_status.title : '' }</Tag></></Text>
+                            </Space>
+                        </div>
+                        <div>
+                            <Table
+                                pagination={false}
+                                columns={columns}
+                                dataSource={order_detail}
+                                rowKey={'id'}
+                                footer={() => {
+                                    return (
+                                        <Space
+                                            direction="vertical"
+                                            size="small"
+                                            style={{
+                                                display: 'flex',
+                                            }}
+                                        >
+                                            <div>
+                                                <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
+                                                <Space wrap>
+                                                    <Button size={'small'}>Mua lại</Button>
+                                                    <Button size={'small'}>Xem chi tiết</Button>
+                                                </Space>
+                                            </div>
+                                        </Space>
+                                    )
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <Divider />
+                </Fragment>)
+            })}
+        </Space>)
     };
     const Waiting = () => {
         return <Result title="No orders yet" />
@@ -158,7 +206,7 @@ const OrdersPage = (props) => {
                     <Content className='customer_content_container'>
                         <Row className="orders_container">
                             <Col className="page_title" span={24} align="bottom">
-                                <Title level={3}>Đơn hàng của tôi</Title>
+                                <Title level={5}>Đơn hàng của tôi</Title>
                             </Col>
                             <Col className="page_container" span={24}>
                                 <Tabs
@@ -167,33 +215,24 @@ const OrdersPage = (props) => {
                                     onChange={onTabsChange}
                                     items={[
                                         {
-                                            label: `Tất cả đơn hàng`,
+                                            label: `Tất cả đơn`,
                                             key: '1',
                                             children: <AllOrders />,
-                                        },
-                                        {
-                                            label: `Wait for pay`,
+                                        },{
+                                            label: `Đang xử lý`,
                                             key: '2',
-                                            children: <Waiting />,
-                                        },
-                                        {
-                                            label: `Processing`,
-                                            key: '3',
                                             children: <Processing />,
-                                        },
-                                        {
-                                            label: `Being transported`,
-                                            key: '4',
+                                        },{
+                                            label: `Đang vận chuyển`,
+                                            key: '3',
                                             children: <Transporting />,
-                                        },
-                                        {
-                                            label: `Delivered`,
-                                            key: '5',
+                                        },{
+                                            label: `Đã giao`,
+                                            key: '4',
                                             children: <Delivered />,
-                                        },
-                                        {
-                                            label: `Canceled`,
-                                            key: '6',
+                                        },{
+                                            label: `Đã huỷ`,
+                                            key: '5',
                                             children: <Canceled />,
                                         }
                                     ]} />

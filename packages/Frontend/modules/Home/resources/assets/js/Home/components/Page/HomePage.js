@@ -13,7 +13,6 @@ const HomePage = (props) => {
     const { data, get_products, setRouter, get_product_categories } = useContext(HomeContext);
     const { products, mouted, product_categories, loading_table } = data;
     const [messageApi, contextHolder] = message.useMessage();
-    const [urlCoppied, seUrlCoppied] = useState('https://www.facebook.com/msmall.vn');
     const [openSharingPopup, setOpenSharingPopup] = useState(false);
     const [openBar, setOpenBar] = useState(false);
     const [copyTextClipBrd, setCopyTextClipBrd] = useState(false);
@@ -289,22 +288,22 @@ const HomePage = (props) => {
                                         <Button icon={<ShoppingCartOutlined />} href="#" />
                                     </Tooltip>
                                     <Popover
-                                        placement="rightTop"
-                                        id="socialBtnBar"
-                                        trigger="click"
-                                        open={open}
-                                        onOpenChange={handleOpenSharingPopupChange}
-                                        content={<>
-                                            <a className="close-btn" onClick={hide}><CloseOutlined /></a>
-                                            <Space className="social-bar-container" align="end" size="small">
-                                                Chia sẻ:
+                                            placement="rightTop"
+                                            id="socialBtnBar"
+                                            trigger="click"
+                                            open={open}
+                                            onOpenChange={handleOpenSharingPopupChange}
+                                            content={<>
+                                                <a className="close-btn" onClick={hide}><CloseOutlined /></a>
+                                                <Space className="social-bar-container" align="end" size="small">
+                                                    Chia sẻ:
                                                 <img src="/facebook.png" width={20} />
                                                 <img src="/icon_instagram.png" width={20} />
                                                 <img src="/twitter.png" width={20} />
-                                                <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
-                                            </Space>
-                                        </>}>
-                                        <Button icon={<ShareAltOutlined />} href="#" />
+                                                <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
+                                                </Space>
+                                                </>}>
+                                                <Button icon={<ShareAltOutlined />} href="#" />
                                     </Popover>
                                 </Space>
                             </Card>

@@ -409,39 +409,47 @@ const HeaderSection = (props) => {
                             <div className='user_itemText'>
                                 {is_login ? <AccountBox {...props} /> : <AuthenticatedBox {...props} />}
                             </div>
-                            {/* </div> */}
-                        </Space>
-                    </Col>
-                    <Col className='header_cart_container' span={3}>
-                        <Badge count={carts.count || 0} >
-                            <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }} />
-                        </Badge>
-                        <div className='user_itemText'>
-                            <Button type="text" style={{ color: '#fff' }} onClick={() => setOpenDrawerCart(!openDrawerCart)} >
-                                Giỏ Hàng
-                            </Button>
-                            <Drawer title="Giỏ hàng của bạn" placement="right" onClose={() => setOpenDrawerCart(false)} open={openDrawerCart}>
-                                <List>
-                                    <VirtualList
-                                        data={cart_detail}
-                                        height={400}
-                                        itemHeight={47}
-                                        itemKey="id"
-                                        onScroll={onScrollDrawerCart}
-                                    >
-                                        {(item) => {
-                                            const { id, cart_id, product, product_quantity, product_id } = item;
-                                            return (
-                                                <List.Item key={item.id}>
-                                                    <List.Item.Meta
-                                                        avatar={<Avatar src={`${product.image_link}`} />}
-                                                        title={<a href="https://ant.design">{product.name}</a>}
-                                                        description={() => {
-                                                            return (<>
-                                                                Giá: {product.price}
-                                                            </>)
-                                                        }}
-                                                    />
+                        {/* </div> */}
+                    </Space>
+                </Col>
+                <Col className='header_cart_container' span={3}>
+                    <Badge count={ carts.count || 0 }>
+                        <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }}
+                            onClick={() => setRouter({
+                                module: 'checkout',
+                                controller: 'cart',
+                                action: 'view',
+                                id: '#',
+                            }, navigate)}
+                        />
+                    </Badge>
+                    <div className='user_itemText'>
+                        <Button type="text" style={{ color: '#fff' }} onClick={() => setOpenDrawerCart(!openDrawerCart)} >
+                            Giỏ Hàng
+                        </Button>
+                        <Drawer title="Giỏ hàng của bạn" placement="right" onClose={() => setOpenDrawerCart(false)} open={openDrawerCart}>
+                            <List>
+                                <VirtualList
+                                    data={cart_detail}
+                                    height={400}
+                                    itemHeight={47}
+                                    itemKey="id"
+                                    onScroll={onScrollDrawerCart}
+                                >
+                                    {(item) => {
+                                        const { id, cart_id, product, product_quantity, product_id } = item;
+                                        return (
+                                            <List.Item key={item.id}>
+                                                <List.Item.Meta
+                                                    avatar={<Avatar src={`${product.image_link}`} />}
+                                                    title={<a href="https://ant.design">{product.name}</a>}
+                                                    description={() => {
+                                                        return (<>
+                                                            Giá: {product.price}
+                                                        </>)
+                                                    }}
+                                                />
+                                                
                                                     <div>
                                                         <div>
                                                             x{`${product_quantity}`}
