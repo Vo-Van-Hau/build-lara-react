@@ -441,7 +441,7 @@ const HomePage = (props) => {
                                                         <img src={`${baseURL}/images/facebook.png`} width={20} />
                                                         <img src={`${baseURL}/images/icon_instagram.png`} width={20} />
                                                         <img src={`${baseURL}/images/twitter.png`} width={20} />
-                                                        <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
+                                                        <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
                                                     </Space>
                                                 </>}
                                             >
