@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { lazy, useContext, useEffect, useState } from 'react';
 import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip, Popover, message } from 'antd';
 import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -28,11 +28,16 @@ const HomePage = (props) => {
      * @returns {void}
      */
     const DummyImgList = [
-        { id: 1, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/29/2c/4c/b8c757ba06d448ce3d2ec0bee3d75fa3.png.webp' },
-        { id: 2, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/e5/db/cc/32b6b4268331a9ed46479ab0da46ae82.png.webp' },
-        { id: 3, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/9b/19/a8/51a15d4d9811bdfa47559695a27d13a7.png.webp' },
-        { id: 4, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/5f/8b/3d/96dc1c277cb1dbb4ea7d53a6f4c069f6.png.webp' },
-        { id: 5, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/47/3f/c4/7cb5b763e8644aa1d4ef5c5639f2c029.jpg.webp' },
+        { id: 1, url: 'mainbnr_01.png' },
+        { id: 2, url: 'mainbnr_02.png' },
+        { id: 3, url: 'mainbnr_03.png' },
+        { id: 4, url: 'mainbnr_04.png' },
+        { id: 5, url: 'mainbnr_05.png' }
+    ];
+    const DummyImgList02 = [
+        { id: 1, url: 'secondbnr_01.png',col:4 },
+        { id: 2, url: 'secondbnr_02.png',col:16},
+        { id: 3, url: 'secondbnr_03.png',col:4 }
     ];
     const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
         <button
@@ -69,9 +74,9 @@ const HomePage = (props) => {
      * @returns {void}
      */
     const CarouselContentStyle = {
-        height: '160px',
+        margin: 0,
+        height: 'auto',
         color: '#fff',
-        lineHeight: '160px',
         textAlign: 'center',
         background: '#364d79',
     };
@@ -91,6 +96,16 @@ const HomePage = (props) => {
             id: e ? e : 0
         })
     }
+
+    const offerCategoryList = [
+        { id: 1, url: 'offer_01.png', label: 'Dành cho bạn' },
+        { id: 2, url: 'offer_02.png', label: 'Đi chợ siêu sale' },
+        { id: 3, url: 'offer_03.png', label: 'Dịch vụ số' },
+        { id: 4, url: 'offer_04.png', label: 'Deal siêu HOT' },
+        { id: 5, url: 'offer_05.png', label: 'Rẻ bất ngờ' },
+        { id: 6, url: 'offer_06.png', label: 'Trending' }
+
+    ]
 
 
     /**
@@ -175,7 +190,7 @@ const HomePage = (props) => {
             <Row className='home_top_banner_container'
                 justify="space-between"
                 gutter={[10, 16]} >
-                <Col span={14} >
+                <Col span={16} >
                     <Carousel
                         autoplay
                         arrows={true}
@@ -184,15 +199,14 @@ const HomePage = (props) => {
                         swipeToSlide draggable >
                         {DummyImgList.map((item, index) => {
                             return <Image
-                                height={355}
                                 key={index}
                                 preview={false}
                                 style={CarouselContentStyle}
-                                src={item.url} />
+                                src={`${baseURL}/images/${item.url}`} />
                         })}
                     </Carousel>
                 </Col>
-                <Col span={10}>
+                <Col span={8} >
                     <Image preview={false}
                         style={{ objectFit: 'contain', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
@@ -203,25 +217,30 @@ const HomePage = (props) => {
                 justify="space-between"
                 gutter={[10, 20]}
                 style={{ padding: '1rem 0' }}>
-                <Col flex="1">
+                {DummyImgList02.map((item, index) => {
+                    return <Col span={item.col} id={index}>
+                        <Image preview={false}
+                            loading={lazy}
+                            style={{ objectFit: 'cover', borderRadius: '3px' }}
+                            src={`${baseURL}/images/${item.url}`}
+                        />
+                    </Col>
+                })}
+                {/* <Col flex="1">
                     <Image preview={false}
+                        loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
                     />
                 </Col>
-                <Col flex="3">
-                    <Image preview={false}
-                        height={'100%'}
-                        style={{ objectFit: 'cover', borderRadius: '3px' }}
-                        src={'https://salt.tikicdn.com/cache/w1080/ts/banner/26/ea/9c/c3710ec037706052a7a2da56c4a66901.png.webp'}
-                    />
-                </Col>
+
                 <Col flex="1">
                     <Image preview={false}
+                        loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
                     />
-                </Col>
+                </Col> */}
             </Row>
             <Row className="titleHeading">
                 <Col span={22}>
@@ -242,11 +261,11 @@ const HomePage = (props) => {
                         swipeToSlide draggable>
                         {DummyImgList.map((item, index) => {
                             return <Image
-                                height={355}
+                                loading={lazy}
                                 key={index}
                                 preview={false}
                                 style={CarouselContentStyle}
-                                src={item.url} />
+                                src={`${baseURL}/images/${item.url}`} />
                         })}
                     </Carousel>
                 </Col>
@@ -265,7 +284,7 @@ const HomePage = (props) => {
                                 cover={<img
                                     alt={item.name ? item.name : `product-img`}
                                     style={{ padding: 10, height: '200px', width: '100%', objectFit: 'contain' }}
-                                    src={item.image_link}
+                                    src={item.image_link} loading={lazy}
                                 />}
                                 onClick={() => setRouter({
                                     module: 'products',
@@ -282,28 +301,28 @@ const HomePage = (props) => {
                                 <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
                                 <Space size={[0]} direction="vertical" className="productItem-btn-group">
                                     <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
-                                        <Button icon={<HeartOutlined />} href="#" />
+                                        <Button icon={<HeartOutlined />} type='link' />
                                     </Tooltip>
                                     <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
-                                        <Button icon={<ShoppingCartOutlined />} href="#" />
+                                        <Button icon={<ShoppingCartOutlined />} type='link' />
                                     </Tooltip>
                                     <Popover
-                                            placement="rightTop"
-                                            id="socialBtnBar"
-                                            trigger="click"
-                                            open={open}
-                                            onOpenChange={handleOpenSharingPopupChange}
-                                            content={<>
-                                                <a className="close-btn" onClick={hide}><CloseOutlined /></a>
-                                                <Space className="social-bar-container" align="end" size="small">
-                                                    Chia sẻ:
+                                        placement="rightTop"
+                                        id="socialBtnBar"
+                                        trigger="click"
+                                        open={open}
+                                        onOpenChange={handleOpenSharingPopupChange}
+                                        content={<>
+                                            <a className="close-btn" onClick={hide}><CloseOutlined /></a>
+                                            <Space className="social-bar-container" align="end" size="small">
+                                                Chia sẻ:
                                                 <img src="/facebook.png" width={20} />
                                                 <img src="/icon_instagram.png" width={20} />
                                                 <img src="/twitter.png" width={20} />
-                                                <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
-                                                </Space>
-                                                </>}>
-                                                <Button icon={<ShareAltOutlined />} href="#" />
+                                                <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
+                                            </Space>
+                                        </>}>
+                                        <Button icon={<ShareAltOutlined />} type='link' />
                                     </Popover>
                                 </Space>
                             </Card>
@@ -333,7 +352,7 @@ const HomePage = (props) => {
                                     action: 'bycategory',
                                     id: item.value ? item.value : 0
                                 })}>
-                                    <Avatar src={item.icon_link} size={48} />
+                                    <Avatar src={`${baseURL}/${item.icon_link}`} size={48} />
                                     <p>{item.label}</p>
                                 </Button>
                             </Col>
@@ -348,24 +367,26 @@ const HomePage = (props) => {
             >
                 <Col span={6}>
                     <Image preview={false}
+                        loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/d6/86/61/2bd493a55e955d6b70afe7ba5d0c8bdd.png.webp'}
                     />
                 </Col>
                 <Col span={6}>
                     <Image preview={false}
+                        loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/40/7b/ec/c74769be66862263dc3d95ed92e73cfd.png.webp'}
                     />
                 </Col>
                 <Col span={6}>
-                    <Image preview={false}
+                    <Image preview={false} loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/f2/cb/06/5b1f4c52c2a4e312919e32470ccd2554.png.webp'}
                     />
                 </Col>
                 <Col span={6}>
-                    <Image preview={false}
+                    <Image preview={false} loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/63/67/34/84a791b2a02dcc9f1ce93df1414ca207.png.webp'}
                     />
@@ -380,10 +401,10 @@ const HomePage = (props) => {
                             </Col>
                         </Row>
                         <Row className="widgetContainer" gutter={[8, 8]}>
-                            {product_categories.map((item, index) => (
+                            {offerCategoryList.map((item, index) => (
                                 <Col span={3} key={index}>
                                     <Button key={index} align='center' block style={{ height: 'auto' }}>
-                                        <Avatar src={item.icon_link} size={48} />
+                                        <Avatar src={`${baseURL}/images/${item.url}`} size={48} />
                                         <p style={{ marginBottom: 0 }}>{item.label}</p>
                                     </Button>
                                 </Col>
@@ -401,7 +422,7 @@ const HomePage = (props) => {
                                         cover={<img
                                             alt={item.name ? item.name : ``}
                                             style={{ height: 189, width: 165, objectFit: `contain` }}
-                                            src={item.image_link}
+                                            src={item.image_link} loading={lazy}
                                         />}
                                         // onClick={() => setRouter({
                                         //     module: 'products',
@@ -438,10 +459,10 @@ const HomePage = (props) => {
                                                     <a className="close-btn" onClick={hide}><CloseOutlined /></a>
                                                     <Space className="social-bar-container" align="end" size="small">
                                                         Chia sẻ:
-                                                        <img src={`${baseURL}/images/facebook.png`} width={20} />
-                                                        <img src={`${baseURL}/images/icon_instagram.png`} width={20} />
-                                                        <img src={`${baseURL}/images/twitter.png`} width={20} />
-                                                        <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
+                                                        <img src={`${baseURL}/images/facebook.png`} loading={lazy} width={20} />
+                                                        <img src={`${baseURL}/images/icon_instagram.png`} loading={lazy} width={20} />
+                                                        <img src={`${baseURL}/images/twitter.png`} loading={lazy} width={20} />
+                                                        <CopyOutlined className={copyTextClipBrd == true ? 'copyClicked' : ''} style={{ fontSize: 16, }} onClick={copyToClipBoard} />
                                                     </Space>
                                                 </>}
                                             >
@@ -474,7 +495,7 @@ const HomePage = (props) => {
             </>
             <BackTop>
                 <div className="ant-back-top-inner">
-                    <Image width={65} height={65} src='/images/totop.png' alt='totop' preview={false} />
+                    <Image loading={lazy} width={65} height={65} src='/images/totop.png' alt='totop' preview={false} />
                 </div>
             </BackTop>
         </>);

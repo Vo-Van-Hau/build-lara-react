@@ -56,50 +56,48 @@ const FooterSection = (props) => {
                 <Title level={5}>Phương thức thanh toán </Title>
                 <Row className='payment' gutter={[5, 15]} wrap>
                     <Col className='icon' >
-                        <Avatar className='icon-visa' size={34} src={`${baseURL}/images/icon-cash.png`} alt='icon-cash'/>
+                        <Avatar className='payment_visa' size={34} src={`${baseURL}/images/payment_cash.png`} alt='payment_cash'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-visa' size={34} src={`${baseURL}/images/icon-visa.png`} alt='icon-visa'/>
+                        <Avatar className='payment_visa' size={34} src={`${baseURL}/images/payment_visa.png`} alt='payment_visa'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-mastercard' size={34} src={`${baseURL}/images/icon-mastercard.png`} alt='icon-mastercard'/>
+                        <Avatar className='payment_mastercard' size={34} src={`${baseURL}/images/payment_mastercard.png`} alt='payment_mastercard'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar className='icon-momo' size={34} src={`${baseURL}/images/icon-momo.png`} alt='icon-momo'/>
+                        <Avatar className='payment_momo' size={34} src={`${baseURL}/images/payment_momo.png`} alt='payment_momo'/>
                     </Col>
+                    
                 </Row>
-                <Row className='payment' gutter={[0, 16]} wrap>
+                <Row className='payment' gutter={[5, 15]} wrap>
+                    
                     <Col className='icon' >
-                        <Avatar className='icon-zalopay' size={34} src={`${baseURL}/images/icon-zalopay.png`} alt='icon-zalopay'/>
-                    </Col>
-                    <Col className='icon' >
-                        <Avatar className='icon-atm' size={34} src={`${baseURL}/images/icon-paypal.png`} alt='icon-paypal'/>
+                        <Avatar className='payment_atm' size={34} src={`${baseURL}/images/payment_paypal.png`} alt='payment_paypal'/>
                     </Col>
 
                     <Col className='icon' >
-                        <Avatar className='icon-momo' size={34} src={`${baseURL}/images/icon-momo.png`} alt='icon-momo'/>
+                        <Avatar className='payment_apple' size={34} src={`${baseURL}/images/payment_apple.png`} alt='payment_apple'/>
                     </Col>
                     <Col className='icon'>
-                        <Avatar className='icon-zalopay' size={34} src={`${baseURL}/images/icon-zalopay.png`} alt='icon-zalopay'/>
+                        <Avatar className='payment_amazon' size={34} src={`${baseURL}/images/payment_amazon.png`} alt='payment_amazon'/>
                     </Col>
-                    <Col className='icon' >
-                        <Avatar className='icon-atm' size={34} src={`${baseURL}/images/icon-paypal.png`} alt='icon-paypal'/>
-                    </Col>
+                    <Col>
 
+                    </Col>
                 </Row>
             </Col>
             <Col className='footer_section' flex={1}>
                 <Title level={5}>Kết nối với chúng tôi</Title>
                 <Row className='payment' gutter={[5, 16]} wrap>
                     <Col className='icon' >
-                        <Avatar size={34}  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Facebook-icon-1.png/640px-Facebook-icon-1.png" alt='icon-facebook'/>
+                        <Avatar size={34}  src={`${baseURL}/images/social_facebook.png`} alt='social_facebook'/>
                     </Col>
                     <Col className='icon' >
-                        <Avatar size={34}  src="https://img.freepik.com/premium-vector/youtube-background-youtube-icon-social-media-icons-realistic-logo-vector-zaporizhzhia-ukraine-may-10-2021_399089-1047.jpg" alt='icon-youtube'/>
+                        <Avatar size={34}  src={`${baseURL}/images/social_youtube.png`} alt='social_youtube'/>
 
                     </Col>
                     <Col className='icon' >
-                        <Avatar size={34}  src="https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Zalo-App-Rec.png" alt='icon-zalo'/>
+                        <Avatar size={34}  src={`${baseURL}/images/social_zalo.png`} alt='social_zalo'/>
                     </Col>
                 </Row>
             </Col>
