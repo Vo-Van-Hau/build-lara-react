@@ -158,6 +158,10 @@ const HomePage = (props) => {
         }
     }, []);
 
+    // return (
+    //     <>This is homepage</>
+    // )
+
     return (
         <>
             <Tabs activeKey={'none'}
@@ -237,9 +241,10 @@ const HomePage = (props) => {
                         slidesToShow={2}
                         autoplay
                         arrows={true}
-                        prevArrow=<SlickArrowLeft />
-                        nextArrow=<SlickArrowRight />
-                        swipeToSlide draggable>
+                        prevArrow={<SlickArrowLeft />}
+                        nextArrow={<SlickArrowRight />}
+                        swipeToSlide draggable
+                    >
                         {DummyImgList.map((item, index) => {
                             return <Image
                                 height={355}
@@ -255,8 +260,8 @@ const HomePage = (props) => {
                         slide
                         slidesToShow={5}
                         arrows={true}
-                        prevArrow=<SlickArrowLeft />
-                        nextArrow=<SlickArrowRight />
+                        prevArrow={<SlickArrowLeft />}
+                        nextArrow={<SlickArrowRight />}
                         swipeToSlide draggable >
                         {products.map((item) => (
                             <Card key={item.id}
@@ -273,7 +278,8 @@ const HomePage = (props) => {
                                     action: 'view',
                                     id: item.id,
                                 })}
-                                style={{ padding: 12, marginLeft: 5 }} >
+                                style={{ padding: 12, marginLeft: 5 }}
+                            >
                                 <Meta title={item.name ? item.name : ``} />
                                 <div className="rating">
                                     {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
@@ -291,19 +297,20 @@ const HomePage = (props) => {
                                             placement="rightTop"
                                             id="socialBtnBar"
                                             trigger="click"
-                                            open={open}
+                                            open={openSharingPopup}
                                             onOpenChange={handleOpenSharingPopupChange}
                                             content={<>
                                                 <a className="close-btn" onClick={hide}><CloseOutlined /></a>
                                                 <Space className="social-bar-container" align="end" size="small">
                                                     Chia sẻ:
-                                                <img src="/facebook.png" width={20} />
-                                                <img src="/icon_instagram.png" width={20} />
-                                                <img src="/twitter.png" width={20} />
-                                                <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/>
+                                                    <img src="/facebook.png" width={20} />
+                                                    <img src="/icon_instagram.png" width={20} />
+                                                    <img src="/twitter.png" width={20} />
+                                                    {/* <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/> */}
                                                 </Space>
-                                                </>}>
-                                                <Button icon={<ShareAltOutlined />} href="#" />
+                                            </>}
+                                    >
+                                        <Button icon={<ShareAltOutlined />} href="#" />
                                     </Popover>
                                 </Space>
                             </Card>
