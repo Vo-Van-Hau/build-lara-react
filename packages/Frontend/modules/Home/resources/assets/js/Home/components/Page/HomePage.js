@@ -103,7 +103,9 @@ const HomePage = (props) => {
         { id: 3, url: 'offer_03.png', label: 'Dịch vụ số' },
         { id: 4, url: 'offer_04.png', label: 'Deal siêu HOT' },
         { id: 5, url: 'offer_05.png', label: 'Rẻ bất ngờ' },
-        { id: 6, url: 'offer_06.png', label: 'Trending' }
+        { id: 6, url: 'offer_06.png', label: 'Trending' },
+        { id: 7, url: 'offer_07.png', label: 'Mã giảm giá' },
+        { id: 8, url: 'offer_08.png', label: 'Black Friday' }
 
     ]
 
@@ -329,7 +331,7 @@ const HomePage = (props) => {
                                                 </Space>
                                             </>}
                                     >
-                                        <Button icon={<ShareAltOutlined />} href="#" />
+                                        <Button icon={<ShareAltOutlined />} type='link' />
                                     </Popover>
                                 </Space>
                             </Card>
@@ -400,7 +402,7 @@ const HomePage = (props) => {
                 </Col>
             </Row>
             <>
-                <Affix offsetTop={0}>
+                <Affix offsetTop={90}>
                     <div className="sectionContainer">
                         <Row className="titleHeading">
                             <Col>
@@ -451,10 +453,10 @@ const HomePage = (props) => {
                                         </div>
                                         <Space size={[0]} direction="vertical" className="productItem-btn-group">
                                             <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
-                                                <Button icon={<HeartOutlined />} type="primary" />
+                                                <Button icon={<HeartOutlined />} type="link" />
                                             </Tooltip>
                                             <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
-                                                <Button icon={<ShoppingCartOutlined />} type="primary" />
+                                                <Button icon={<ShoppingCartOutlined />} type="link" />
                                             </Tooltip>
                                             <Popover
                                                 placement="rightTop"
@@ -473,7 +475,7 @@ const HomePage = (props) => {
                                                     </Space>
                                                 </>}
                                             >
-                                                <Button icon={<ShareAltOutlined />} type="primary" />
+                                                <Button icon={<ShareAltOutlined />} type="link" />
                                             </Popover>
                                         </Space>
                                     </Card>
