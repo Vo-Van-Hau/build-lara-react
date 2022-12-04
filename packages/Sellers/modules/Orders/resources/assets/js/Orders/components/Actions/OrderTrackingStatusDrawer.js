@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Drawer, Radio, Space, Typography, Timeline } from 'antd';
+import { Drawer, Checkbox, Space, Typography, Timeline } from 'antd';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { OrdersContext } from '../Contexts/OrdersContext';
 const { Text, Link } = Typography;
@@ -19,17 +19,18 @@ const OrderTrackingStatusDrawer = (props) => {
      * @return {void}
      */
     const onChangeStatus = (e) => {
-        if(e && e.target && e.target.value) {
-            try {
-                create_order_tracking_detail({
-                    status_target: e.target.value ? e.target.value : '',
-                    order_id: orderDetail.order_id ? orderDetail.order_id : 0,
-                    order_detail_id: orderDetail.id ? orderDetail.id : 0,
-                });
-            } catch(errors) {
-                console.error(errors);
-            }
-        }
+        // if(e && e.target && e.target.value) {
+        //     try {
+        //         create_order_tracking_detail({
+        //             status_target: e.target.value ? e.target.value : '',
+        //             order_id: orderDetail.order_id ? orderDetail.order_id : 0,
+        //             order_detail_id: orderDetail.id ? orderDetail.id : 0,
+        //         });
+        //     } catch(errors) {
+        //         console.error(errors);
+        //     }
+        // }
+        console.log(e.target);
     }
 
     useEffect(() => {
@@ -51,29 +52,80 @@ const OrderTrackingStatusDrawer = (props) => {
                 width={580}
             >
                 <div>
-                    <Timeline mode={`right`}>
+                    <Timeline mode={`left`}>
                         {
                             current_tracking.map((tracking, index) => {
                                 const { order_tracking_status, tracking_at } = tracking;
+                                const { order_tracking_group_status } = order_tracking_status;
                                 return (
-                                    <Timeline.Item label={`${tracking_at || ''}`} color="green">{ order_tracking_status.title || ''} <Radio value={order_tracking_status.id || 0} onChange={(e) => onChangeStatus(e)}></Radio></Timeline.Item>
+                                    <Timeline.Item color="green"
+                                        dot={
+                                            <ClockCircleOutlined
+                                                style={{
+                                                    fontSize: '16px',
+                                                }}
+                                            />
+                                        }
+                                        key={index}
+                                    >
+                                        <Space
+                                            direction="vertical"
+                                            size="small"
+                                            style={{
+                                                display: 'flex',
+                                            }}
+                                        >
+                                            <Checkbox
+                                                onChange={(e) => onChangeStatus(e)}
+                                                checked
+                                                disabled
+                                            >
+                                                <Text strong>{order_tracking_group_status.title || ''}</Text>
+                                            </Checkbox>
+                                            <Text>{order_tracking_status.title || ''}</Text>
+                                            <Text>{tracking.tracking_at || ''}</Text>
+                                        </Space>
+                                    </Timeline.Item>
                                 )
                             })
                         }
                         {
                             next_tracking_status ?
-                                <Timeline.Item
-                                    label={`${'' || ''}`}
-                                    dot={
-                                        <ClockCircleOutlined
-                                          style={{
-                                            fontSize: '16px',
-                                          }}
-                                        />
-                                    }
-                                >
-                                    { next_tracking_status.title || ''} <Radio value={next_tracking_status.id || 0} onChange={(e) => onChangeStatus(e)}></Radio>
-                                </Timeline.Item>
+                                // <Timeline.Item
+                                //     label={`${'' || ''}`}
+                                //     dot={
+                                //         <ClockCircleOutlined
+                                //           style={{
+                                //             fontSize: '16px',
+                                //           }}
+                                //         />
+                                //     }
+                                // >
+                                //     { next_tracking_status.title || ''} <Radio value={next_tracking_status.id || 0} onChange={(e) => onChangeStatus(e)}></Radio>
+                                // </Timeline.Item>
+                                // <Timeline.Item color="green"
+                                //     dot={
+                                //         <ClockCircleOutlined
+                                //             style={{
+                                //                 fontSize: '16px',
+                                //             }}
+                                //         />
+                                //     }
+                                //     key={index}
+                                // >
+                                //     <Space
+                                //         direction="vertical"
+                                //         size="small"
+                                //         style={{
+                                //             display: 'flex',
+                                //         }}
+                                //     >
+                                //         <Text strong>{order_tracking_group_status.title || ''}</Text>
+                                //         <Text>{order_tracking_status.title || ''}</Text>
+                                //         <Text>{tracking.tracking_at || ''}</Text>
+                                //     </Space>
+                                // </Timeline.Item>
+                                <></>
                             : <></>
                         }
                     </Timeline>

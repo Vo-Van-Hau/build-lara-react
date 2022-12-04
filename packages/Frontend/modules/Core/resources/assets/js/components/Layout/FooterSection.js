@@ -21,32 +21,32 @@ const FooterSection = (props) => {
             <Col className='footer_section' flex={1}>
                 <Title level={5}>Hỗ trợ khách hàng</Title>
                 <Space direction="vertical">
-                    <Link to="#" target="_blank"> Câu hỏi thường gặp </Link>
-                    <Link to="#" target="_blank"> Gửi yêu cầu hỗ trợ </Link>
-                    <Link to="#" target="_blank"> Hướng dẫn đặt hàng </Link>
-                    <Link to="#" target="_blank"> Phương thức vận chuyển </Link>
-                    <Link to="#" target="_blank"> Chính sách đổi trả </Link>
-                    <Link to="#" target="_blank"> Hỗ trợ khách hàng </Link>
+                    <Link to="#"> Câu hỏi thường gặp </Link>
+                    <Link to="#"> Gửi yêu cầu hỗ trợ </Link>
+                    <Link to="#"> Hướng dẫn đặt hàng </Link>
+                    <Link to="#"> Phương thức vận chuyển </Link>
+                    <Link to="#"> Chính sách đổi trả </Link>
+                    <Link to="#"> Hỗ trợ khách hàng </Link>
                 </Space>
             </Col>
             <Col className='footer_section' flex={1}>
                 <Title level={5}>Về MS Mall</Title>
                 <Space direction="vertical">
-                    <Link to="#" target="_blank"> Giới thiệu </Link>
-                    <Link to="#" target="_blank"> Chính sách bảo mật thanh toán </Link>
-                    <Link to="#" target="_blank"> Chính sách bảo mật thông tin </Link>
-                    <Link to="#" target="_blank"> Chính sách giải quyết khiếu nại </Link>
-                    <Link to="#" target="_blank"> Bán hàng doanh nghiệp </Link>
-                    <Link to="#" target="_blank"> Điều kiện vận chuyển </Link>
+                    <Link to="#"> Giới thiệu </Link>
+                    <Link to="#"> Chính sách bảo mật thanh toán </Link>
+                    <Link to="#"> Chính sách bảo mật thông tin </Link>
+                    <Link to="#"> Chính sách giải quyết khiếu nại </Link>
+                    <Link to="#"> Bán hàng doanh nghiệp </Link>
+                    <Link to="#"> Điều kiện vận chuyển </Link>
                 </Space>
             </Col>
             <Col className='footer_section' flex={1}>
                 <Title level={5}>Hợp tác và liên kết</Title>
                 <Space direction="vertical">
-                    <Link to="#" target="_blank"> Quy chế hoạt động sàn MS </Link>
-                    <Link to="#" target="_blank"> Bán hàng cùng MS </Link>
+                    <Link to="#" > Quy chế hoạt động sàn MS </Link>
+                    <Link to="#" > Bán hàng cùng MS </Link>
                     <Title level={5}>Chứng nhận bởi </Title>
-                    <Link to="#" target="_blank">
+                    <Link to="#">
                         <Image preview={false} src="https://frontend.tikicdn.com/_desktop-next/static/img/footer/bo-cong-thuong.svg" />
                     </Link>
                 </Space>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderTrackingStatusTable extends Migration {
+class CreateOrderTrackingGroupStatus extends Migration {
 
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class CreateOrderTrackingStatusTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('order_tracking_status', function (Blueprint $table) {
+        Schema::create('order_tracking_group_status', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->integer('group_status_id')->unsigned()->default(0);
-            $table->text('title');
-            $table->string('code');
+            $table->string('title');
+            $table->string('status_code');
             $table->string('tag_name')->nullable();
-            $table->integer('status')->unsigned();
+            $table->integer('status')->integer();
             $table->longText('description')->nullable()->comment('1–5,000 characters');
             $table->integer('user_created_id');
             $table->integer('user_updated_id')->nullable();
@@ -36,6 +35,6 @@ class CreateOrderTrackingStatusTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('order_tracking_status');
+        Schema::dropIfExists('order_tracking_group_status');
     }
 }

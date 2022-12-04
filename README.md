@@ -65,6 +65,7 @@ npm run build-by-webpack --source={resource} --module={module}
 41. product_categories: php artisan migrate --path=modules\Products\database\migrations\2022_10_21_051701_create_product_categories_table.php
 42. products_additional_image_link: php artisan migrate --path=modules\Products\database\migrations\2022_11_26_052331_create_products_additional_image_link_table.php
 43. order_tracking_details: php artisan migrate --path=modules\Orders\database\migrations\2022_11_30_054126_create_order_tracking_details_table.php
+44. order_tracking_group_status: php artisan migrate --path=modules/Orders/database/migrations/2022_12_03_074146_create_order_tracking_group_status.php
 
 # Jobs
 1. php artisan queue:work --queue=sendinvoice

@@ -7,6 +7,35 @@ export const initialState = {
     orders: [],
     detail_item: {
         order_detail: [],
+        country: {
+            id: 0,
+            name: '',
+            type: '',
+            status: '',
+        },
+        province: {
+            id: 0,
+            name: '',
+            type: '',
+            status: '',
+        },
+        district: {
+            id: 0,
+            name: '',
+            type: '',
+            status: '',
+        },
+        ward: {
+            id: 0,
+            name: '',
+            type: '',
+            status: '',
+        },
+        payment_method: {
+            id: 0,
+            name: '',
+            status: '',
+        }
     },
     config:{
         status: []

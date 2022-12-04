@@ -3,6 +3,7 @@
 namespace Frontend\Orders\Models;
 
 use Frontend\Core\Models\ModelBase;
+use Frontend\Orders\Models\OrderTrackingGroupStatus;
 
 class OrderTrackingStatus extends ModelBase {
 
@@ -156,4 +157,17 @@ class OrderTrackingStatus extends ModelBase {
      public function get_order_tracking_status(): array {
         return $this->order_tracking_status;
      }
+
+    /**
+    * @author: <hauvo1709@gmail.com>
+    * @todo:
+    * @return void
+    */
+    public function order_tracking_group_status() {
+        return $this->belongsTo(OrderTrackingGroupStatus::class, 'group_status_id', 'id')
+        ->where([
+            'order_tracking_group_status.status' => 1,
+            'order_tracking_group_status.deleted' => 0
+        ]);
+    }
 }

@@ -7,8 +7,8 @@ use Frontend\Address\Models\Districts;
 
 class Provinces extends ModelBase {
 
-    protected $connection = "mysql";
-    protected $table = "provinces";
+    protected $connection = 'mysql';
+    protected $table = 'provinces';
 
     protected $fillable = [];
 
@@ -23,10 +23,10 @@ class Provinces extends ModelBase {
     * @return
     */
     public function districts() {
-        return $this->hasMany(Districts::class, "province_id", "id")
+        return $this->hasMany(Districts::class, 'province_id', 'id')
         ->where([
-            "districts.status"      => 1,
-            "districts.deleted"     => 0
+            'districts.status' => 1,
+            'districts.deleted' => 0
         ]);
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, Fragment } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { BarcodeOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
     CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined, ControlOutlined
 } from '@ant-design/icons';
@@ -7,6 +7,7 @@ import { Layout, Table, Col, Card, Space, Tag, Divider,
 } from 'antd';
 import { OrdersContext } from '../Contexts/OrdersContext';
 import SideBar from '../../../Customer/components/Layout/Sidebar';
+import OrderTrackingStatusDrawer from '../Actions/OrderTrackingStatusDrawer';
 const { Content, Footer } = Layout;
 const { Title, Text } = Typography;
 
@@ -14,7 +15,12 @@ const OrderDetailPage = ({keyID, ...props}) => {
 
     const { data, setRouter, get_detail }  = useContext(OrdersContext);
     const { detail_item } = data;
-    const { order_detail } = detail_item;
+    const {
+        order_detail, country, province, district, ward, receiver_address, receiver_name, receiver_phone,
+        payment_method,
+    } = detail_item;
+    const [viewAction, setViewAction] = useState(false);
+    const [orderDetail, setOrderDetail] = useState({});
 
     const columnsOrderDetail = [
         {
@@ -65,13 +71,28 @@ const OrderDetailPage = ({keyID, ...props}) => {
             render: (_, record) => {
                 return (
                     <>
-                        <Button type='primary'>Theo dõi đơn hàng</Button>
+                        <Button type='primary' onClick={() => openOrderTrackingDetailDrawer(record)}>Theo dõi đơn hàng</Button>
                     </>
                 )
             }
         },
 
     ];
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Objetc} orderDetail
+     * @return {void}
+     */
+    const openOrderTrackingDetailDrawer = (orderDetail) => {
+        try {
+            setViewAction(true);
+            setOrderDetail(orderDetail);
+        } catch (errors) {
+            console.log(errors);
+        }
+    }
 
     useEffect(() => {
         if(keyID && keyID !== '') {
@@ -103,9 +124,9 @@ const OrderDetailPage = ({keyID, ...props}) => {
                                                         display: 'flex',
                                                     }}
                                                 >
-                                                    <Text strong>VÕ VĂN HẬU</Text>
-                                                    <Text>Địa chỉ: 117/134/5 Nguyễn Hữu Cảnh street, 22 Ward, Bình Thạnh District, HCM city, Phường 22, Quận Bình Thạnh, Hồ Chí Minh, Việt Nam</Text>
-                                                    <Text>Điện thoại: 0359744542</Text>
+                                                    <Text strong>{`${receiver_name}`}</Text>
+                                                    <Text>Địa chỉ: {`${receiver_address}, ${ward.name || ''}, ${district.name || ''}, ${province.name || ''}, ${country.name || ''}`}</Text>
+                                                    <Text>Điện thoại: {`${receiver_phone}`}</Text>
                                                 </Space>
                                             </Card>
                                         </Col>
@@ -133,7 +154,7 @@ const OrderDetailPage = ({keyID, ...props}) => {
                                                         display: 'flex',
                                                     }}
                                                 >
-                                                    <Text>Thanh toán tiền mặt khi nhận hàng</Text>
+                                                    <Text>{`${payment_method.name || ''}`}</Text>
                                                 </Space>
                                             </Card>
                                         </Col>
@@ -175,6 +196,7 @@ const OrderDetailPage = ({keyID, ...props}) => {
                                 </div>
                             </Col>
                         </Row>
+                        <OrderTrackingStatusDrawer visible={viewAction} setDrawer={setViewAction} orderDetail={orderDetail}/>
                     </Content>
                 </Layout>
             </Content>

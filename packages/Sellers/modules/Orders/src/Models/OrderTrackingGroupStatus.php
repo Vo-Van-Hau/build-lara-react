@@ -1,13 +1,13 @@
 <?php
 
-namespace Frontend\Payments\Models;
+namespace Sellers\Orders\Models;
 
-use Frontend\Core\Models\ModelBase;
+use Sellers\Core\Models\ModelBase;
 
-class Payments extends ModelBase {
+class OrderTrackingGroupStatus extends ModelBase {
 
     protected $connection = 'mysql';
-    protected $table = 'payments';
+    protected $table = 'order_tracking_group_status';
 
     protected $fillable = [
         'name',

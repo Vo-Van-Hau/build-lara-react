@@ -10,7 +10,7 @@ import SideBar from '../../../Customer/components/Layout/Sidebar';
 const { Content, Footer } = Layout;
 const { Title, Text } = Typography;
 
-const OrdersPage = (props) => {
+const OrdersPage = ({keyID, ...props}) => {
 
     const { data, setRouter, get_orders_history }  = useContext(OrdersContext);
     const { orders } = data;
@@ -195,7 +195,9 @@ const OrdersPage = (props) => {
     };
 
     useEffect(() => {
-        get_orders_history();
+        if(keyID !== '' || keyID !== '#') {
+            get_orders_history();
+        }
     }, []);
 
     return (
