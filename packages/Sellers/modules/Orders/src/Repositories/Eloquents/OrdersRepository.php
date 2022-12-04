@@ -246,7 +246,11 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             $query = $this->order_tracking_details_model
             ->with([
                 'order_tracking_status' => function($withQuery) {
-                    $withQuery->select('id', 'title', 'code', 'tag_name');
+                    $withQuery->select('id', 'group_status_id', 'title', 'code', 'tag_name')->with([
+                        'order_tracking_group_status' => function($query) {
+                            $query->select('id', 'title', 'tag_name', 'status');
+                        }
+                    ]);
                 }
             ])
             ->where([
