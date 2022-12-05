@@ -6,7 +6,7 @@ import {
 import {
     LockOutlined, LeftOutlined,
     UserOutlined, SearchOutlined, ShoppingCartOutlined, CloseCircleOutlined, UpOutlined,
-    BellOutlined, LogoutOutlined, InboxOutlined, HistoryOutlined, DownOutlined
+    BellOutlined, LogoutOutlined, InboxOutlined, HistoryOutlined, DownOutlined,CaretDownOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import VirtualList from 'rc-virtual-list';
@@ -60,9 +60,10 @@ const HeaderSection = (props) => {
      */
     const AuthenticatedBox = (props) => {
         return (<>
-            <Button type="text" style={{ color: '#fff' }} onClick={showModal} >
+            <Button size='small' type="text" style={{ color: '#fff',fontSize:12 }} onClick={showModal} >
                 Đăng nhập / Đăng ký
             </Button>
+            <Button size='small' type='link' style={{ color: '#fff',fontSize:14 }}  >Tài khoản <CaretDownOutlined /></Button>
         </>)
     }
 
@@ -691,7 +692,7 @@ const HeaderSection = (props) => {
                             direction="horizontal"
                             size="small"
                             style={{ display: 'flex', }}
-                            align="end"
+                            align="center"
                         >
                             {/* <div> */}
                             <UserOutlined style={{ color: '#fff', fontSize: '32px' }} />
