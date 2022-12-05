@@ -16,7 +16,7 @@ const Auth = ({ history, ...props }) => {
         setPage(page);
     };
 
-    if (page === 'login') {
+    if(page === 'login') {
         return (
             <>
                 <Row style={{marginTop: '60px'}}>
@@ -28,6 +28,12 @@ const Auth = ({ history, ...props }) => {
                     </Col>
                     <Col span={8}></Col>
                 </Row>
+            </>
+        );
+    } else if(page === 'register') {
+        return (
+            <>
+                RegisterPage
             </>
         );
     }
