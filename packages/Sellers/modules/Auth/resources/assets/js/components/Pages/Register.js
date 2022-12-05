@@ -99,19 +99,19 @@ const Register = ({ history, ...props }) => {
                 }}
             >
                 <Form.Item
-                    label="Email Address"
+                    label="Địa chỉ Email"
                     tooltip={{
-                        title: 'Please enter your most frequently used email address to make sure you don’t miss any important notices from us.',
+                        title: 'Hãy điền Email của bạn',
                         icon: <InfoCircleOutlined />,
                     }}
                     name="email"
                     rules={[{ required: true }]}
                     required
                 >
-                    <Input placeholder="Enter email address" />
+                    <Input placeholder="Nhập Email..." />
                 </Form.Item>
                 <Form.Item
-                    label="Fullname"
+                    label="Họ tên của bạn"
                     name="fullname"
                     required
                     tooltip={{
@@ -123,17 +123,17 @@ const Register = ({ history, ...props }) => {
                     }}
                     rules={[{ required: true, }]}
                 >
-                    <Input placeholder="Enter fullname" />
+                    <Input placeholder="Nhập tên của bạn..." />
                 </Form.Item>
                 <Form.Item
-                    name="phonenumber"
+                    name="Số điện thoại"
                     label="Phone Number"
                     rules={[{ required: true, message: 'Enter your phone number!' }]}
                 >
-                    <Input addonBefore={prefixSelector} placeholder="Enter your phone number" style={{ width: '100%' }} />
+                    <Input addonBefore={prefixSelector} placeholder="Nhập số điện thoại..." style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
-                    label="Country"
+                    label="Quốc gia"
                     name='country'
                     required
                     tooltip={{
@@ -152,7 +152,7 @@ const Register = ({ history, ...props }) => {
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    label="Main selling category"
+                    label="Loại hàng đăng ký"
                     name='sellCategory'
                     required
                     tooltip={{
@@ -171,7 +171,7 @@ const Register = ({ history, ...props }) => {
 
                 </Form.Item>
                 <Form.Item
-                    label="Password"
+                    label="Mật khẩu"
                     name="password"
                     tooltip={{
                         title: 'Password must contain at least 6 characters, not contains any spaces and must have either numbers or symbols.',
@@ -180,7 +180,7 @@ const Register = ({ history, ...props }) => {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your password!',
+                            message: 'Không để trống mật khẩu!',
                         },
                     ]}
                     required
@@ -189,13 +189,13 @@ const Register = ({ history, ...props }) => {
                 </Form.Item>
                 <Form.Item
                     name="confirmpassword"
-                    label="Confirm Password"
+                    label="Nhập lại mật khẩu"
                     dependencies={['password']}
                     hasFeedback
                     rules={[
                         {
                             required: true,
-                            message: 'Please confirm your password!',
+                            message: 'Không để trống mật khẩu!',
                         },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
