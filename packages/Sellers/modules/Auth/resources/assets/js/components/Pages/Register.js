@@ -210,7 +210,7 @@ const Register = ({ history, ...props }) => {
                     <Input.Password />
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType='submit' block >Register</Button>
+                    <Button type="primary" htmlType='submit' block >Đăng ký ngay!</Button>
                 </Form.Item>
             </Form>
         );
