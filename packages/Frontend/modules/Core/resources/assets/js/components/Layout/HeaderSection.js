@@ -666,10 +666,10 @@ const HeaderSection = (props) => {
         <Affix offsetTop={0}>
             <header className='main_header_container'>
                 <Row className='header_container' justify="center"  >
-                    <Col className='logo_container' span={2}>
+                    <Col className='logo_container' span={3}>
                         <Link to="/shopping/home/home" > <Image preview={false} width={90} height={90} src="/images/msmall-icon.png" alt='icon' /></Link>
                     </Col>
-                    <Col className='formSearch_container' span={16} >
+                    <Col className='formSearch_container' span={15} >
                         <Cascader
                             onChange={(value) => onSearchInputChange(value)}
                             dropdownRender={SearchAutocomplete}
@@ -682,8 +682,7 @@ const HeaderSection = (props) => {
                             }
                             size="large"
                             onSearch={(value) => setKeySearch({ ...keySearch, q: value })}
-                            style={{ width: '100%' }}
-                            removeIcon={``}
+                            style={{width:'100%'}}
                             expandIcon={<SearchOutlined />}
                         />
                     </Col>

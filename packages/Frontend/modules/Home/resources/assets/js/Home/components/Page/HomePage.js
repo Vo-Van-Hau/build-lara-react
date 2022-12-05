@@ -32,7 +32,8 @@ const HomePage = (props) => {
         { id: 2, url: 'mainbnr_02.png' },
         { id: 3, url: 'mainbnr_03.png' },
         { id: 4, url: 'mainbnr_04.png' },
-        { id: 5, url: 'mainbnr_05.png' }
+        { id: 5, url: 'mainbnr_05.png' },
+        { id: 6, url: 'mainbnr_06.png' }
     ];
     const DummyImgList02 = [
         { id: 1, url: 'secondbnr_01.png',col:4 },
@@ -215,7 +216,7 @@ const HomePage = (props) => {
                 <Col span={8} >
                     <Image preview={false}
                         style={{ objectFit: 'contain', borderRadius: '3px' }}
-                        src={'https://salt.tikicdn.com/cache/w750/ts/banner/1f/48/85/1e0d26bf9e0f148402ef6e56ad374941.png.webp'}
+                        src={`${baseURL}/images/shipping_bnr.jpg`}
                     />
                 </Col>
             </Row>
