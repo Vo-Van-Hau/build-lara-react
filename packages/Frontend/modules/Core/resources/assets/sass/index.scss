@@ -980,3 +980,27 @@ main.ant-layout-content {
 .reports {
     color: "#000000";
 }
+
+//seller register
+.register_seller_container{
+    min-height: 100vh;
+
+    h2{
+        padding: 2rem 0 0;
+    }
+    
+    .rightRegister{
+        padding: 2.5rem 10%;
+        background-color: #F5F5FA;
+    }
+    
+    .leftRegister{
+        padding: 1rem 10%;
+        background-color: #fff;
+    }
+}
+
+.information_footer{
+    padding: 2rem 10%;
+    background: #fff;
+}
