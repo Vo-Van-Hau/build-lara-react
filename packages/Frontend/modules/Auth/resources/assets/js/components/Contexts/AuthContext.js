@@ -16,18 +16,18 @@ const AuthContextProvicer = ({ children, axios, history }) => {
      */
     const get_config = () => {
         return api
-            .get_secured()
-            .get(`${window.sparrowConfig.app.backendURL}/api/auth/auth/get_config`)
-            .then(res => {
-                let { language, config } = res.data;
-                dispatch({
-                    type: SET_CONFIG,
-                    payload: {
-                        config: config,
-                        language: language
-                    }
-                });
+        .get_secured()
+        .get(`${window.sparrowConfig.app.backendURL}/api/auth/auth/get_config`)
+        .then(res => {
+            let { language, config } = res.data;
+            dispatch({
+                type: SET_CONFIG,
+                payload: {
+                    config: config,
+                    language: language
+                }
             });
+        });
     };
 
     /**
@@ -43,26 +43,34 @@ const AuthContextProvicer = ({ children, axios, history }) => {
     }) => {
         try {
             let { email, password, remember } = values;
-            const { data } = await api.get_secured().post(`${window.sparrowConfig.app.backendURL}/api/auth/auth/login`, {
+            const { data } = await api.get_secured()
+            .post(`${window.sparrowConfig.app.backendURL}/api/auth/auth/login`, {
                 email,
                 password,
                 remember
             });
+            if(data.status) {
+                return {
+                    error: null,
+                    ...data
+                };
+            } else {
+                return {
+                    error: true,
+                    ...data
+                };
+            }
+        } catch(errors) {
             return {
-                error: null,
-                ...data
-            };
-        } catch (errors) {
-            return {error: true}
+                error: true,
+            }
         }
     };
 
     const todoContextData = {
-        data,
-        login,
-        get_config,
-        dispatch
+        data, login, get_config, dispatch
     };
+    
     return (
         <AuthContext.Provider value={todoContextData}>
             {children}

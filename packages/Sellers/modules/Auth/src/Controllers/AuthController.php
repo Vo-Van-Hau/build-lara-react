@@ -81,7 +81,8 @@ class AuthController extends ControllerBase {
         if ($request->isMethod('post')) {
             $validator = $this->validate_login($request);
             if($validator->fails()) {
-                throw new ApiException(trans('AuthSellers::auth.invalid_credentials'), 400, $validator->getMessageBag()->toArray());
+                // throw new ApiException(trans('AuthSellers::auth.invalid_credentials'), 400, $validator->getMessageBag()->toArray());
+                return $this->response_base(['status' => false], trans('AuthSellers::auth.invalid_credentials'), 200);
             } else {
                 $credentials = $this->get_credentials($request);
                 try {
@@ -101,7 +102,8 @@ class AuthController extends ControllerBase {
                                 'message' => trans('AuthSellers::auth.login_success'),
                             ]);
                     } else {
-                        throw new ApiException(trans('AuthSellers::auth.failed'), 400, []);
+                        // throw new ApiException(trans('AuthSellers::auth.failed'), 400, []);
+                        return $this->response_base(['status' => false], trans('AuthSellers::auth.invalid_credentials'), 200);
                     }
                 } catch (Exception $errors) {
                     throw new ApiException($errors->getMessage(), 500, []);
@@ -229,6 +231,7 @@ class AuthController extends ControllerBase {
                                 'brand_logo' => isset($input['store_brand_logo']) ? $input['store_brand_logo'] : '',
                                 'description' => isset($input['store_description']) ? $input['store_description'] : '',
                                 'status' => isset($sellerID) ? 1 : 0,
+                                'category_id' => isset($input['category_id']) ? $input['category_id'] : 0,
                                 'created_at' => date('Y-m-d H:i:s'),
                                 'updated_at' => date('Y-m-d H:i:s'),
                                 'joined_date' => date('Y-m-d H:i:s'),

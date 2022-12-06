@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../Contexts/AuthContext';
 import { Form, Input, Button, Row, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import Helper from '../../helpers/helper';
 
 const Login = ({ history, ...props }) => {
 
@@ -25,8 +26,10 @@ const Login = ({ history, ...props }) => {
         if(data.error !== null) {
             setError(data.error);
         }
-        if(data.redirect_to) {
+        if(data.status && data.redirect_to) {
             window.location.replace(data.redirect_to);
+        } else {
+            Helper.Notification('error', '[Đăng nhập nhà bán hàng]', data.message || 'Errors for login');
         }
     };
 

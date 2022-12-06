@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../Contexts/AuthContext';
 import { Form, Input, Button, Row, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import Helper from '../../helpers/helper';
 
 const Login = ({ history, ...props }) => {
 
@@ -22,11 +23,13 @@ const Login = ({ history, ...props }) => {
         setLoadingStatus(true);
         let data = await login(values);
         setLoadingStatus(false);
-        if (data.error !== null) {
+        if(data.error !== null) {
             setError(data.error);
         }
-        if (data.redirect_to) {
+        if(data.status && data.redirect_to) {
             window.location.replace(data.redirect_to);
+        } else {
+            Helper.Notification('error', '[Đăng nhập người mua hàng]', data.message || 'Errors for login');
         }
     };
 
@@ -40,7 +43,8 @@ const Login = ({ history, ...props }) => {
 
     return (
         <>
-            <Form name='basic'
+            <Form
+                name='basic'
                 initialValues={{
                     remember: false
                 }}
@@ -52,18 +56,18 @@ const Login = ({ history, ...props }) => {
                     <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder='Email'/>
                 </Form.Item>
                 <Form.Item name='password' rules={[{required: true}]}>
-                    <Input.Password prefix={<LockOutlined className='site-form-item-icon' />} placeholder='Password'/>
+                    <Input.Password prefix={<LockOutlined className='site-form-item-icon' />} placeholder='Mật khẩu'/>
                 </Form.Item>
                 <Row justify='center'>
-                    <Form.Item>
+                    <Form.Item style={{width: '100%'}}>
                         {
                         loadingStatus == true ? (
                             <div style={{ textAlign: 'center' }}>
                                 <Spin size='large' />
                             </div>
                         ) : (
-                            <Button className='btn-login-custom' type='primary' htmlType='submit' style={{width: '100%'}}>
-                                Login
+                            <Button className='btn-login-custom' type='primary' htmlType='submit' style={{width: '100%'}}size={'large'}>
+                                ĐĂNG NHẬP
                             </Button>
                         )}
                     </Form.Item>

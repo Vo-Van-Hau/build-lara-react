@@ -4,6 +4,7 @@ import {
     SET_CONFIG, SET_TABLE_LOADING, GET_PRODUCT_CATEGORIES,
 } from '../Dispatch/type';
 import api from '../../helpers/api';
+import Helper from '../../helpers/helper';
 export const AuthContext = createContext();
 
 const AuthContextProvicer = ({ children, history }) => {
@@ -50,12 +51,21 @@ const AuthContextProvicer = ({ children, history }) => {
                 password,
                 remember
             });
+            if(data.status) {
+                return {
+                    error: null,
+                    ...data
+                };
+            } else {
+                return {
+                    error: true,
+                    ...data
+                };
+            }
+        } catch(errors) {
             return {
-                error: null,
-                ...data
-            };
-        } catch (errors) {
-            return {error: true}
+                error: true,
+            }
         }
     };
 
@@ -69,11 +79,18 @@ const AuthContextProvicer = ({ children, history }) => {
         try {
             const { data } = await api.get_secured()
             .post(`${window.sparrowConfig.app.backendURL}/api/auth/auth/register`, values);
-            return {
-                error: null,
-                ...data
-            };
-        } catch (errors) {
+            if(data.status) {
+                return {
+                    error: null,
+                    ...data
+                };
+            } else {
+                return {
+                    error: true,
+                    ...data
+                };
+            }
+        } catch(errors) {
             return {error: true}
         }
     };
@@ -95,6 +112,8 @@ const AuthContextProvicer = ({ children, history }) => {
             if(status) {
                 let { categories } = res.data.data;
                 dispatch({ type: GET_PRODUCT_CATEGORIES, payload: categories });
+            } else {
+
             }
         })
         .catch((errors) => {})
