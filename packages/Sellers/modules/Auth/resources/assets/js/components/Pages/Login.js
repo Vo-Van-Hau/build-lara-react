@@ -52,18 +52,18 @@ const Login = ({ history, ...props }) => {
                     <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder='Email'/>
                 </Form.Item>
                 <Form.Item name='password' rules={[{required: true}]}>
-                    <Input.Password prefix={<LockOutlined className='site-form-item-icon' />} placeholder='Password'/>
+                    <Input.Password prefix={<LockOutlined className='site-form-item-icon' />} placeholder='Mật khẩu'/>
                 </Form.Item>
                 <Row justify='center'>
-                    <Form.Item>
+                    <Form.Item style={{width: '100%'}}>
                         {
                         loadingStatus == true ? (
                             <div style={{ textAlign: 'center' }}>
                                 <Spin size='large' />
                             </div>
                         ) : (
-                            <Button className='btn-login-custom' type='primary' htmlType='submit' style={{width: '100%'}}>
-                                Login
+                            <Button className='btn-login-custom' type='primary' htmlType='submit' style={{width: '100%'}} size={'large'}>
+                                ĐĂNG NHẬP
                             </Button>
                         )}
                     </Form.Item>

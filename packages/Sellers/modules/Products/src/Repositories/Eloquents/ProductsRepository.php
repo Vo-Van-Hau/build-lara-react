@@ -63,13 +63,13 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status = []) {
-        $result = $this->model->where(["deleted" => 0]);
+    public function get_all($keyword = '', $status = []) {
+        $result = $this->model->where(['deleted' => 0]);
         if (!empty($status)) {
-            $result = $result->whereIn("status", $status);
+            $result = $result->whereIn('status', $status);
         }
         return $result
-            ->paginate(Config::get("packages.sellers.orders.item_per_page", 10));
+            ->paginate(Config::get('packages.sellers.orders.item_per_page', 10));
     }
 
     /**
@@ -87,7 +87,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
         $existed = $this->model->where([
-            // "status" => 1,
+            // 'status' => 1,
             'deleted' => 0,
             'seller_id' => $seller->id
         ])->with([
@@ -124,17 +124,17 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return mixed
      */
     public function get_products_sellers($input) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $seller = $this->sellers_model->where([
-            "status" => 1,
-            "deleted" => 0,
-            "user_id" => $user_id
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
         $existed = $this->model->where([
-            // "status" => 1,
-            "deleted" => 0,
-            "seller_id" => $seller->id
+            // 'status' => 1,
+            'deleted' => 0,
+            'seller_id' => $seller->id
         ])->with([
             'product_stock' => function ($query) {
 
@@ -170,17 +170,17 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     public function get_categories() {
         $result = $this->product_category_model->where([
-            "parent_id" => 0,
-            "deleted" => 0,
-            "status" => 1
-        ])->select("title as label", "id as value")->get();
+            'parent_id' => 0,
+            'deleted' => 0,
+            'status' => 1
+        ])->select('title as label', 'id as value')->get();
         foreach($result as $key => $item) {
             $id = $item->value;
             $item->children = $this->product_category_model->where([
-                "parent_id" => $id,
-                "deleted" => 0,
-                "status" => 1
-            ])->select("title as label", "id as value")->get();
+                'parent_id' => $id,
+                'deleted' => 0,
+                'status' => 1
+            ])->select('title as label', 'id as value')->get();
         }
         return $result;
     }
@@ -192,34 +192,34 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return mixed
      */
     public function store($input) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $seller = $this->sellers_model->where([
-            "status" => 1,
-            "deleted" => 0,
-            "user_id" => $user_id
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
-        $name = isset($input["name"]) ? $input["name"] : "";
+        $name = isset($input['name']) ? $input['name'] : '';
         $seller_id = isset($seller->id) ? $seller->id : 0;
         $slug_name = Str::slug($name);
-        $price = isset($input["price"]) ? $input["price"] : 0;
+        $price = isset($input['price']) ? $input['price'] : 0;
         $sale_price_id = 0;
         $cogs = $price;
-        $mobile_link = "";
-        $image_link = "";
-        $category_id = isset($input["category_id"]) ? $input["category_id"] : 0;
+        $mobile_link = '';
+        $image_link = '';
+        $category_id = isset($input['category_id']) ? $input['category_id'] : 0;
         $currency_id = 1;
-        $availability = "in_stock";
-        $availability_date = date("Y-m-d H:i:s");
-        $expiration_date = date("Y-m-d H:i:s");
+        $availability = 'in_stock';
+        $availability_date = date('Y-m-d H:i:s');
+        $expiration_date = date('Y-m-d H:i:s');
         $status = 0;
-        $description = isset($input["description"]) ? $input["description"] : "";
-        $colors = "";
-        foreach($input["color"] ?? [] as $key => $_colors) {
-            if($key == count($input["color"] ?? []) - 1) {
+        $description = isset($input['description']) ? $input['description'] : '';
+        $colors = '';
+        foreach($input['color'] ?? [] as $key => $_colors) {
+            if($key == count($input['color'] ?? []) - 1) {
                 $colors .= $_colors;
             } else {
-                $colors .= $_colors . "-";
+                $colors .= $_colors . '-';
             }
         }
         $new = $this->model;
@@ -241,39 +241,39 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         if($new->save()) {
             $product_id = $new->id;
             // Update Product
-            $link = Config::get("app.url", "") . "/shopping/products/productdetail?action=view&id=" . $product_id;
-            $mobile_link = str_replace(request()->getHost(), "m.".request()->getHost(), Config::get("app.url", "") . "/shopping/products/productdetail?action=view&id=" . $product_id);
+            $link = Config::get('app.url', '') . '/shopping/products/productdetail?action=view&id=' . $product_id;
+            $mobile_link = str_replace(request()->getHost(), 'm.'.request()->getHost(), Config::get('app.url', '') . '/shopping/products/productdetail?action=view&id=' . $product_id);
             $new->link = $link;
             $new->mobile_link = $mobile_link;
             $new->save();
 
             // Product Identifiers
             $this->product_identifiers_model->product_id = $product_id;
-            $this->product_identifiers_model->brand = isset($input["brand"]) ? $input["brand"] : "";
-            $this->product_identifiers_model->supplier_id = isset($input["supplier_id"]) ? $input["supplier_id"] : 0;
-            $this->product_identifiers_model->sku = isset($input["sku"]) ? $input["sku"] : "";
-            $this->product_identifiers_model->gtin = isset($input["gtin"]) ? $input["gtin"] : "";
-            $this->product_identifiers_model->mpn = isset($input["mpn"]) ? $input["mpn"] : "";
+            $this->product_identifiers_model->brand = isset($input['brand']) ? $input['brand'] : '';
+            $this->product_identifiers_model->supplier_id = isset($input['supplier_id']) ? $input['supplier_id'] : 0;
+            $this->product_identifiers_model->sku = isset($input['sku']) ? $input['sku'] : '';
+            $this->product_identifiers_model->gtin = isset($input['gtin']) ? $input['gtin'] : '';
+            $this->product_identifiers_model->mpn = isset($input['mpn']) ? $input['mpn'] : '';
             $this->product_identifiers_model->status = 1;
             $this->product_identifiers_model->save();
             // Product Description Detail
             $this->product_description_detail_model->product_id = $product_id;
-            $this->product_description_detail_model->condition = isset($input["condition"]) ? $input["condition"] : "new";
+            $this->product_description_detail_model->condition = isset($input['condition']) ? $input['condition'] : 'new';
             $this->product_description_detail_model->color = $colors;
-            $this->product_description_detail_model->for_adult = isset($input["for_adult"]) ? $input["for_adult"] : 1;
-            $this->product_description_detail_model->weight = isset($input["weight"]) ? $input["weight"] : 0;
-            $this->product_description_detail_model->width = isset($input["width"]) ? $input["width"] : 0;
-            $this->product_description_detail_model->height = isset($input["height"]) ? $input["height"] : 0;
-            $this->product_description_detail_model->length = isset($input["length"]) ? $input["length"] : 0;
-            $this->product_description_detail_model->gender = isset($input["gender"]) ? $input["gender"] : 0;
-            $this->product_description_detail_model->size_type = isset($input["size_type"]) ? $input["size_type"] : "all";
-            $this->product_description_detail_model->size = isset($input["size"]) ? $input["size"] : "";
-            $this->product_description_detail_model->material = isset($input["material"]) ? $input["material"] : 0;
+            $this->product_description_detail_model->for_adult = isset($input['for_adult']) ? $input['for_adult'] : 1;
+            $this->product_description_detail_model->weight = isset($input['weight']) ? $input['weight'] : 0;
+            $this->product_description_detail_model->width = isset($input['width']) ? $input['width'] : 0;
+            $this->product_description_detail_model->height = isset($input['height']) ? $input['height'] : 0;
+            $this->product_description_detail_model->length = isset($input['length']) ? $input['length'] : 0;
+            $this->product_description_detail_model->gender = isset($input['gender']) ? $input['gender'] : 0;
+            $this->product_description_detail_model->size_type = isset($input['size_type']) ? $input['size_type'] : 'all';
+            $this->product_description_detail_model->size = isset($input['size']) ? $input['size'] : '';
+            $this->product_description_detail_model->material = isset($input['material']) ? $input['material'] : 0;
             $this->product_description_detail_model->save();
             // Product Stock
             $this->product_stock_model->product_id = $product_id;
             $this->product_stock_model->warehouse_id = 0;
-            $this->product_stock_model->product_quantity = isset($input["quantity"]) ? $input["quantity"] : 0;
+            $this->product_stock_model->product_quantity = isset($input['quantity']) ? $input['quantity'] : 0;
             $this->product_stock_model->status = 1;
             $this->product_stock_model->save();
             return true;
@@ -290,34 +290,34 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return mixed
      */
     public function update($id, $input = []) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $seller = $this->sellers_model->where([
-            "status" => 1,
-            "deleted" => 0,
-            "user_id" => $user_id
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
-        $name = isset($input["name"]) ? $input["name"] : "";
+        $name = isset($input['name']) ? $input['name'] : '';
         $seller_id = isset($seller->id) ? $seller->id : 0;
         $slug_name = Str::slug($name);
-        $price = isset($input["price"]) ? $input["price"] : 0;
+        $price = isset($input['price']) ? $input['price'] : 0;
         $sale_price_id = 0;
         $cogs = $price;
-        $mobile_link = "";
-        $image_link = "";
-        $category_id = isset($input["category_id"]) ? $input["category_id"] : 0;
+        $mobile_link = '';
+        $image_link = '';
+        $category_id = isset($input['category_id']) ? $input['category_id'] : 0;
         $currency_id = 1;
-        $availability = "in_stock";
-        $availability_date = date("Y-m-d H:i:s");
-        $expiration_date = date("Y-m-d H:i:s");
+        $availability = 'in_stock';
+        $availability_date = date('Y-m-d H:i:s');
+        $expiration_date = date('Y-m-d H:i:s');
         $status = 0;
-        $description = isset($input["description"]) ? $input["description"] : "";
-        $colors = "";
-        foreach($input["color"] ?? [] as $key => $_colors) {
-            if($key == count($input["color"] ?? []) - 1) {
+        $description = isset($input['description']) ? $input['description'] : '';
+        $colors = '';
+        foreach($input['color'] ?? [] as $key => $_colors) {
+            if($key == count($input['color'] ?? []) - 1) {
                 $colors .= $_colors;
             } else {
-                $colors .= $_colors . "-";
+                $colors .= $_colors . '-';
             }
         }
         $existed = $this->model->find($id);
@@ -339,8 +339,8 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         if($existed->update()) {
             $product_id = $existed->id;
             // Update Product
-            $link = Config::get("app.url", "") . "/shopping/products/productdetail?action=view&id=" . $product_id;
-            $mobile_link = str_replace(request()->getHost(), "m.".request()->getHost(), Config::get("app.url", "") . "/shopping/products/productdetail?action=view&id=" . $product_id);
+            $link = Config::get('app.url', '') . '/shopping/products/productdetail?action=view&id=' . $product_id;
+            $mobile_link = str_replace(request()->getHost(), 'm.'.request()->getHost(), Config::get('app.url', '') . '/shopping/products/productdetail?action=view&id=' . $product_id);
             $existed->link = $link;
             $existed->mobile_link = $mobile_link;
             $existed->update();
@@ -350,11 +350,11 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                 'status' => 1
             ])->first();
             if(!empty($existed)) {
-                $existed->brand = isset($input["brand"]) ? $input["brand"] : "";
-                $existed->supplier_id = isset($input["supplier_id"]) ? $input["supplier_id"] : 0;
-                $existed->sku = isset($input["sku"]) ? $input["sku"] : "";
-                $existed->gtin = isset($input["gtin"]) ? $input["gtin"] : "";
-                $existed->mpn = isset($input["mpn"]) ? $input["mpn"] : "";
+                $existed->brand = isset($input['brand']) ? $input['brand'] : '';
+                $existed->supplier_id = isset($input['supplier_id']) ? $input['supplier_id'] : 0;
+                $existed->sku = isset($input['sku']) ? $input['sku'] : '';
+                $existed->gtin = isset($input['gtin']) ? $input['gtin'] : '';
+                $existed->mpn = isset($input['mpn']) ? $input['mpn'] : '';
                 $existed->status = 1;
                 $existed->update();
             }
@@ -364,17 +364,17 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                 'status' => 1
             ])->first();
             if(!empty($existed)) {
-                $existed->condition = isset($input["condition"]) ? $input["condition"] : "new";
+                $existed->condition = isset($input['condition']) ? $input['condition'] : 'new';
                 $existed->color = $colors;
-                $existed->for_adult = isset($input["for_adult"]) ? $input["for_adult"] : 1;
-                $existed->weight = isset($input["weight"]) ? $input["weight"] : 0;
-                $existed->width = isset($input["width"]) ? $input["width"] : 0;
-                $existed->height = isset($input["height"]) ? $input["height"] : 0;
-                $existed->length = isset($input["length"]) ? $input["length"] : 0;
-                $existed->gender = isset($input["gender"]) ? $input["gender"] : 0;
-                $existed->size_type = isset($input["size_type"]) ? $input["size_type"] : "all";
-                $existed->size = isset($input["size"]) ? $input["size"] : "";
-                $existed->material = isset($input["material"]) ? $input["material"] : 0;
+                $existed->for_adult = isset($input['for_adult']) ? $input['for_adult'] : 1;
+                $existed->weight = isset($input['weight']) ? $input['weight'] : 0;
+                $existed->width = isset($input['width']) ? $input['width'] : 0;
+                $existed->height = isset($input['height']) ? $input['height'] : 0;
+                $existed->length = isset($input['length']) ? $input['length'] : 0;
+                $existed->gender = isset($input['gender']) ? $input['gender'] : 0;
+                $existed->size_type = isset($input['size_type']) ? $input['size_type'] : 'all';
+                $existed->size = isset($input['size']) ? $input['size'] : '';
+                $existed->material = isset($input['material']) ? $input['material'] : 0;
                 $existed->update();
             }
             // Product Stock
@@ -384,7 +384,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             ])->first();
             if(!empty($existed)) {
                 $existed->warehouse_id = 0;
-                $existed->product_quantity = isset($input["quantity"]) ? $input["quantity"] : 0;
+                $existed->product_quantity = isset($input['quantity']) ? $input['quantity'] : 0;
                 $existed->status = 1;
                 $existed->update();
             }
@@ -401,17 +401,17 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return mixed
      */
     public function get_item($input) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $seller = $this->sellers_model->where([
-            "status" => 1,
-            "deleted" => 0,
-            "user_id" => $user_id
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
         $existed = $this->model->where([
-            // "status" => 1,
-            "deleted" => 0,
-            "seller_id" => $seller->id,
+            // 'status' => 1,
+            'deleted' => 0,
+            'seller_id' => $seller->id,
             'id' => $input['id']
         ])->with([
             'product_stock' => function ($query) {

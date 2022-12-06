@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Sellers\Core\Exceptions\ApiException;
 use Sellers\Users\Interfaces\UsersRepositoryInterface;
+use Sellers\Sellers\Interfaces\SellersRepositoryInterface;
+use Sellers\Shop\Interfaces\ShopRepositoryInterface;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -26,10 +28,18 @@ class AuthController extends ControllerBase {
 
     use Locates, AuthTrait;
 
-    protected $usersRepository;
+    protected $UsersRepository;
+    protected $SellersRepository;
+    protected $ShopRepository;
 
-    public function __construct(UsersRepositoryInterface $usersRepository) {
-        $this->usersRepository = $usersRepository;
+    public function __construct(
+        UsersRepositoryInterface $UsersRepository,
+        SellersRepositoryInterface $SellersRepository,
+        ShopRepositoryInterface $ShopRepository
+    ) {
+        $this->UsersRepository = $UsersRepository;
+        $this->SellersRepository = $SellersRepository;
+        $this->ShopRepository = $ShopRepository;
     }
 
     /**
@@ -51,12 +61,12 @@ class AuthController extends ControllerBase {
     public function get_config() {
         return response()->json(
             [
-                "status" => true,
-                "config" => Core::config(),
-                "language" => [
-                    "locale" => app()->getLocale(),
-                    "locales" => Config::get("module.core.locales", []),
-                    "lang" => $this->translations("Auth"),
+                'status' => true,
+                'config' => Core::config(),
+                'language' => [
+                    'locale' => app()->getLocale(),
+                    'locales' => Config::get('module.core.locales', []),
+                    'lang' => $this->translations('Auth'),
                 ],
             ], 200);
     }
@@ -68,37 +78,37 @@ class AuthController extends ControllerBase {
      * @return void
      */
     public function login(Request $request) {
-        if ($request->isMethod("post")) {
+        if ($request->isMethod('post')) {
             $validator = $this->validate_login($request);
             if($validator->fails()) {
-                throw new ApiException(trans("AuthSellers::auth.invalid_credentials"), 400, $validator->getMessageBag()->toArray());
+                throw new ApiException(trans('AuthSellers::auth.invalid_credentials'), 400, $validator->getMessageBag()->toArray());
             } else {
                 $credentials = $this->get_credentials($request);
                 try {
-                    if(Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->attempt($credentials, $request->has("remember"))) {
+                    if(Auth::guard(Config::get('packages.sellers.auth.guard', 'sellers'))->attempt($credentials, $request->has('remember'))) {
                         /**
                          * @description: To log a user into the application by their ID, you may use the loginUsingId method.
                          * This method accepts the primary key of the user you wish to authenticate
                          */
-                        $id = Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->id(); // Get the currently authenticated user's ID...
-                        Auth::guard(Config::get("packages.sellers.auth.guard", "sellers"))->loginUsingId($id, $request->has("remember")); // Login and "remember" the given user...
+                        $id = Auth::guard(Config::get('packages.sellers.auth.guard', 'sellers'))->id(); // Get the currently authenticated user's ID...
+                        Auth::guard(Config::get('packages.sellers.auth.guard', 'sellers'))->loginUsingId($id, $request->has('remember')); // Login and 'remember' the given user...
                         if(!$this->build_session()) {
-                            throw new ApiException(trans("AuthSellers::auth.failed"), 400, []);
+                            throw new ApiException(trans('AuthSellers::auth.failed'), 400, []);
                         }
                         return response()->json([
-                                "redirect_to" => $this->redirectTo(),
-                                "status" => true,
-                                "message" => trans("AuthSellers::auth.login_success"),
+                                'redirect_to' => $this->redirectTo(),
+                                'status' => true,
+                                'message' => trans('AuthSellers::auth.login_success'),
                             ]);
                     } else {
-                        throw new ApiException(trans("AuthSellers::auth.failed"), 400, []);
+                        throw new ApiException(trans('AuthSellers::auth.failed'), 400, []);
                     }
                 } catch (Exception $errors) {
                     throw new ApiException($errors->getMessage(), 500, []);
                 }
             }
         }
-        return view("AuthSellers::auth.login");
+        return view('AuthSellers::auth.login');
     }
 
      /**
@@ -109,8 +119,22 @@ class AuthController extends ControllerBase {
      */
     protected function validate_login(Request $request) {
         $rules = array(
-            $this->login_username() => "required",
-            "password" => "required|min:3",
+            $this->login_username() => 'required',
+            'password' => 'required|min:3',
+        );
+        return Validator::make($request->all(), $rules);
+    }
+
+     /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: validation
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Validation\Validator
+     */
+    protected function validate_register(Request $request) {
+        $rules = array(
+            $this->login_username() => 'required',
+            'password' => 'required|min:3',
         );
         return Validator::make($request->all(), $rules);
     }
@@ -121,7 +145,7 @@ class AuthController extends ControllerBase {
      * @return string
      */
     public function login_username() {
-        return property_exists($this, "username") ? $this->username : "email";
+        return property_exists($this, 'username') ? $this->username : 'email';
     }
 
     /**
@@ -131,11 +155,11 @@ class AuthController extends ControllerBase {
      * @return array
      */
     protected function get_credentials(Request $request){
-        $login = request()->input("email");
-        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? "email" : "username";
+        $login = request()->input('email');
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         return [
-            $field => $request->get("email"),
-            "password" => $request->password,
+            $field => $request->get('email'),
+            'password' => $request->password,
         ];
     }
 
@@ -144,7 +168,109 @@ class AuthController extends ControllerBase {
      * @todo: redirectTo
      * @return void
      */
-    protected function redirectTo() {
-        return Core::backendURL() . "/dashboard";
+    protected function redirectTo($to = '') {
+        if(!empty($to)) {
+            return Core::backendURL() . $to;
+        }
+        return Core::backendURL() . '/dashboard';
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: register sellers account
+     * @param \Illuminate\Http\Request
+     * @return void
+     */
+    public function register(Request $request) {
+        if($request->isMethod('post')) {
+            $validator = $this->validate_register($request);
+            if($validator->fails()) {
+                throw new ApiException(trans('AuthSellers::auth.invalid_credentials'), 400, $validator->getMessageBag()->toArray());
+            } else {
+                $input = $request->all();
+                $check_email = $this->checkUniqueEmail($input['email']);
+                if(!$check_email) return $this->response_base(['status' => false], 'Email already exists !!!', 200);
+                $check_username = $this->checkUniqueUsername($input['username']);
+                if(!$check_username) return $this->response_base(['status' => false], 'Username already exists !!!', 200);
+                $credentials = array(
+                    'email' => isset($input['email']) ? $input['email'] : '',
+                    'name' => isset($input['fullname']) ? $input['fullname'] : '',
+                    'username' => isset($input['username']) ? $input['username'] : '',
+                    'status' => 1,
+                    'password' => isset($input['password']) ? $input['password'] : '',
+                    'role_id' => 19, // Role ID for Sellers,
+                    'special' => 0,
+                    'type' => 0,
+                    'is_publisher' => 0,
+                    'avatar' => isset($input['avatar']) ? $input['avatar'] : '',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                );
+                try {
+                    $new = $this->UsersRepository->store($credentials);
+                    if(!empty($new)) {
+                        $userID = $new->id ?? 0;
+                        $credentials = array(
+                            'user_id' => isset($userID) ? $userID : 0,
+                            'fullname' => isset($input['fullname']) ? $input['fullname'] : '',
+                            'phone' => isset($input['phone']) ? $input['phone'] : '',
+                            'date_of_birth' => date('Y-m-d H:i:s'),
+                            'status' => isset($userID) ? 1 : 0,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        );
+                        $new = $this->SellersRepository->store($credentials);
+                        if(!empty($new)) {
+                            $sellerID = $new->id ?? 0;
+                            $credentials = array(
+                                'user_id' => isset($userID) ? $userID : 0,
+                                'seller_id' => isset($sellerID) ? $sellerID : 0,
+                                'name' => isset($input['store_name']) ? $input['store_name'] : '',
+                                'brand_logo' => isset($input['store_brand_logo']) ? $input['store_brand_logo'] : '',
+                                'description' => isset($input['store_description']) ? $input['store_description'] : '',
+                                'status' => isset($sellerID) ? 1 : 0,
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s'),
+                                'joined_date' => date('Y-m-d H:i:s'),
+                            );
+                            $new = $this->ShopRepository->create_store($credentials);
+                            return response()->json([
+                                'redirect_to' => $this->redirectTo('/login'),
+                                'status' => true,
+                                'message' => trans('AuthSellers::auth.login_success'),
+                            ]);
+                        }
+                        return $this->response_base(['status' => false], 'You have failed to store new item!!!', 200);
+                    }
+                } catch (Exception $errors) {
+                    throw new ApiException($errors->getMessage(), 500, []);
+                }
+            }
+        }
+        return view('AuthSellers::auth.login');
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo check unique email
+     * @param string $email
+     * @return boolean
+     */
+    public function checkUniqueEmail($email) {
+        $count = $this->UsersRepository->findbyemail($email);
+        if($count == 0) return true;
+        return false;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo check unique username
+     * @param string $email
+     * @return boolean
+     */
+    public function checkUniqueUsername($username) {
+        $count = $this->UsersRepository->findbyusername($username);
+        if($count == 0) return true;
+        return false;
     }
 }

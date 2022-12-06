@@ -1,11 +1,12 @@
 import React, { createContext, useReducer } from 'react';
 import { initialState, AuthReducer } from '../Reducers/AuthReducer';
-import { SET_CONFIG } from '../Dispatch/type';
+import {
+    SET_CONFIG, SET_TABLE_LOADING, GET_PRODUCT_CATEGORIES,
+} from '../Dispatch/type';
 import api from '../../helpers/api';
-import axios from 'axios';
 export const AuthContext = createContext();
 
-const AuthContextProvicer = ({ children, axios, history }) => {
+const AuthContextProvicer = ({ children, history }) => {
 
     const [data, dispatch] = useReducer(AuthReducer, initialState);
 
@@ -43,12 +44,12 @@ const AuthContextProvicer = ({ children, axios, history }) => {
     }) => {
         try {
             let { email, password, remember } = values;
-            const { data } = await api.get_secured().post(`${window.sparrowConfig.app.backendURL}/api/auth/auth/login`, {
+            const { data } = await api.get_secured()
+            .post(`${window.sparrowConfig.app.backendURL}/api/auth/auth/login`, {
                 email,
                 password,
                 remember
             });
-            console.log(data);
             return {
                 error: null,
                 ...data
@@ -58,12 +59,61 @@ const AuthContextProvicer = ({ children, axios, history }) => {
         }
     };
 
-    const todoContextData = {
-        data,
-        login,
-        get_config,
-        dispatch
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} values
+     * @return {Object}
+     */
+    const register = async (values) => {
+        try {
+            const { data } = await api.get_secured()
+            .post(`${window.sparrowConfig.app.backendURL}/api/auth/auth/register`, values);
+            return {
+                error: null,
+                ...data
+            };
+        } catch (errors) {
+            return {error: true}
+        }
     };
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get product categories
+     * @param {string} page
+     * @param {string} keySearch
+     * @return {void}
+     */
+    const get_product_categories = (page, keySearch) => {
+        set_table_loading();
+        return api
+        .get_secured()
+        .post(`/products/products/get_product_categories?page=${page}`, {...keySearch})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { categories } = res.data.data;
+                dispatch({ type: GET_PRODUCT_CATEGORIES, payload: categories });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: set table loading...
+     * @return {void}
+     */
+    const set_table_loading = () => {
+        dispatch({ type: SET_TABLE_LOADING })
+    }
+
+    const todoContextData = {
+        data, register, login, get_config, dispatch, get_product_categories,
+    };
+
     return (
         <AuthContext.Provider value={todoContextData}>
             {children}

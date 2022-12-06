@@ -27,7 +27,7 @@ const Sidebar = ({ history, ...props }) => {
      * @return {Voimport("react").idFunctionComponent}
      */
     const toggleCollapsed = () => {
-        setCollapsed(!collapsed);
+        // setCollapsed(!collapsed);
     };
 
     /**

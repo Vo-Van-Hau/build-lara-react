@@ -153,9 +153,9 @@ class UsersController extends ControllerBase {
                 throw new ApiException(trans("Users::users.invalid_credentials"), 0, $validator->getMessageBag()->toArray());
             }
             $check_email = $this->checkUniqueEmail($input["email"]);
-            if (!$check_email) return $this->response_base(["status" => false], "Email already exists !!!", 200);
+            if(!$check_email) return $this->response_base(["status" => false], "Email already exists !!!", 200);
             $check_username = $this->checkUniqueUsername($input["username"]);
-            if (!$check_username) return $this->response_base(["status" => false], "Username already exists !!!", 200);
+            if(!$check_username) return $this->response_base(["status" => false], "Username already exists !!!", 200);
             $input["name"] = isset($input["name"]) ? $input["name"] : "";
             $input["username"] = isset($input["username"]) ? $input["username"] : "";
             $input["email"] = isset($input["email"]) ? $input["email"] : "";

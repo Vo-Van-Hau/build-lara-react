@@ -51,20 +51,20 @@ class ProductsController extends ControllerBase {
      * @return void
      */
     public function get_products_sellers(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthSellers::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
             $result = $this->ProductsRepository->get_products_sellers($input);
             if($result) {
                 return $this->response_base([
-                    "status" => true,
-                    "products" => $result
-                ], "You have got products successfully !!!", 200);
+                    'status' => true,
+                    'products' => $result
+                ], 'You have got products successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get products !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get products !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -98,20 +98,20 @@ class ProductsController extends ControllerBase {
      * @return void
      */
     public function store(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthSellers::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
             $result = $this->ProductsRepository->store($input);
             if($result) {
                 return $this->response_base([
-                    "status" => true,
-                    "id" => $result
-                ], "You have added a new product successfully !!!", 200);
+                    'status' => true,
+                    'id' => $result
+                ], 'You have added a new product successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to add a new product !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to add a new product !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -121,20 +121,20 @@ class ProductsController extends ControllerBase {
      * @return void
      */
     public function update(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthSellers::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
             $input['id'] = isset( $input['id']) ? $input['id'] : 0;
             $result = $this->ProductsRepository->update($input['id'], $input);
             if($result) {
                 return $this->response_base([
-                    "status" => true,
-                ], "You have updated an existed product successfully !!!", 200);
+                    'status' => true,
+                ], 'You have updated an existed product successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to update an existed product !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to update an existed product !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -144,17 +144,17 @@ class ProductsController extends ControllerBase {
      * @return void
      */
     public function get_product_categories(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
             $result = $this->ProductsRepository->get_categories($input);
             if($result) {
                 return $this->response_base([
-                    "status" => true,
-                    "categories" => $result
-                ], "You have got data successfully !!!", 200);
+                    'status' => true,
+                    'categories' => $result
+                ], 'You have got data successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get data !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get data !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 }

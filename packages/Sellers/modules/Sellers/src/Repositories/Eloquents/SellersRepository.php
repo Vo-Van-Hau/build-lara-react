@@ -45,4 +45,31 @@ class SellersRepository extends BaseRepository implements SellersRepositoryInter
         return $result
             ->paginate(Config::get("packages.sellers.orders.item_per_page", 10));
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function store($input = []) {
+        try {
+            $this->model->user_id = $input['user_id'];
+            $this->model->fullname = $input['fullname'];
+            $this->model->phone = $input['phone'];
+            $this->model->date_of_birth = $input['date_of_birth'];
+            $this->model->user_created_id = $input['user_id'];
+            $this->model->user_updated_id = $input['user_id'];
+            $this->model->user_owner_id = $input['user_id'];
+            $this->model->created_at = $input['created_at'];
+            $this->model->updated_at = $input['updated_at'];
+            if($this->model->save()) {
+                return $this->model;
+            }
+            return false;
+        }
+        catch (Exception $errors) {
+            return $errors->getMessage();
+        }
+    }
 }

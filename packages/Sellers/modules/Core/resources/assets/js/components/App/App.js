@@ -11,9 +11,7 @@ import { CoreContext } from '../Contexts/CoreContext';
 const App = (props) => {
 
     const { history } = props;
-
     const { data, get_module } = useContext(CoreContext);
-    const {} = props;
 
     useEffect(() => {
         get_module();

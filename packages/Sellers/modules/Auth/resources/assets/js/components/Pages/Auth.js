@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import Login from './Login';
 import { Card, Row, Col } from 'antd';
+import Login from './Login';
+import Register from './Register';
 
 const Auth = ({ history, ...props }) => {
-
-    const [page, setPage] = useState('login');
+    const { page } = props;
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -33,7 +32,7 @@ const Auth = ({ history, ...props }) => {
     } else if(page === 'register') {
         return (
             <>
-                RegisterPage
+                <Register />
             </>
         );
     }

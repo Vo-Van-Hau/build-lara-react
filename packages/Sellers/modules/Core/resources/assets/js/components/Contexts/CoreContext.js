@@ -29,7 +29,6 @@ const CoreContextProvicer = ({ children, axios, history }) => {
         )
         .then(res => {
             let { language, menus, modules, config } = res.data;
-            console.log(res);
             dispatch({
                 type: GET_MODULE,
                 payload: {

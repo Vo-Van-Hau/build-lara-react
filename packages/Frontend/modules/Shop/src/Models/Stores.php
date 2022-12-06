@@ -6,8 +6,8 @@ use Frontend\Core\Models\ModelBase;
 
 class Stores extends ModelBase {
 
-    protected $connection = "mysql";
-    protected $table = "stores";
+    protected $connection = 'mysql';
+    protected $table = 'stores';
 
     protected $fillable = [];
 

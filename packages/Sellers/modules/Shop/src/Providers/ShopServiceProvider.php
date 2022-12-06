@@ -1,22 +1,22 @@
 <?php
 
-namespace Sellers\Publishers\Providers;
+namespace Sellers\Shop\Providers;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Config;
 
-class PublishersServiceProvider extends ServiceProvider {
+class ShopServiceProvider extends ServiceProvider {
 
     /**
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
     protected $package = "Sellers";
-    protected $module = "Publishers";
+    protected $module = "Shop";
     protected $models = [
-        "Publishers" => [
-            "name" => "Publishers",
+        "Shop" => [
+            "name" => "Shop",
             "status" => "active",
         ]
     ];
@@ -31,10 +31,10 @@ class PublishersServiceProvider extends ServiceProvider {
         /* To register your package's views with Laravel, you need to tell Laravel where the views are located.
          * You may do this using the service provider's loadViewsFrom method.
          */
-        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.publishers.namespace", "PublishersSellers"));
+        $this->loadViewsFrom(__DIR__ . "/../../resources/views", Config::get("packages.sellers.shop.namespace", "ShopSellers"));
 
         // Load Lang
-        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.publishers.namespace", "PublishersSellers"));
+        $this->loadTranslationsFrom(__DIR__ . "/../../resources/lang", Config::get("packages.sellers.shop.namespace", "ShopSellers"));
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
@@ -70,6 +70,6 @@ class PublishersServiceProvider extends ServiceProvider {
     private function publishResources() {
 
         //Publish Resource
-        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/publishers.php")], "config");
+        $this->publishes([__DIR__ . "/../../config/config.php" => config_path("sellers/module/shop.php")], "config");
     }
 }
