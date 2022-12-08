@@ -39,7 +39,7 @@ class PaymentsRepository extends BaseRepository implements PaymentsRepositoryInt
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status = []){
+    public function get_all($keyword = '', $status = []){
 
     }
 
@@ -50,7 +50,7 @@ class PaymentsRepository extends BaseRepository implements PaymentsRepositoryInt
      * @return Illuminate\Support\Collection
      */
     public function get_by_id($id){
-        $result = $this->model->where("id", $id)->first();
+        $result = $this->model->where('id', $id)->first();
         return $result;
     }
 
@@ -61,11 +61,12 @@ class PaymentsRepository extends BaseRepository implements PaymentsRepositoryInt
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all_methods($keyword = "", $status = []) {
-        $result = $this->payment_methods->where(["deleted" => 0]);
+    public function get_all_methods($keyword = '', $status = []) {
+        $result = $this->payment_methods->where(['deleted' => 0])
+        ->select('id', 'name', 'icon_link', 'status');
         if(!empty($status)) {
-            $result = $result->whereIn("status", $status);
+            $result = $result->whereIn('status', $status);
         }
-        return $result->paginate(Config::get("packages.frontend.payments.item_per_page", 10));
+        return $result->paginate(Config::get('packages.frontend.payments.item_per_page', 10));
     }
 }

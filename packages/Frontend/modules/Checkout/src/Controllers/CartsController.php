@@ -120,6 +120,47 @@ class CartsController extends ControllerBase {
         }
         return $this->response_base(['status' => false], 'Access denied !', 200);
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: remove product in cart
+     * @param \Illuminate\Support\Facades\Request $request
+     * @return void
+     */
+    public function update_quantity_item(Request $request) {
+        if($request->isMethod('post')) {
+            $auth_id = AuthFrontend::info('id');
+            $input = $request->all();
+            $input['product_id'] = isset($input['product_id']) ? $input['product_id'] : null;
+            $input['cart_id'] = isset($input['cart_id']) ? $input['cart_id'] : null;
+            $input['type'] = isset($input['type']) ? $input['type'] : null;
+            $input['quantity'] = isset($input['quantity']) ? $input['quantity'] : null;
+            if(
+                empty($auth_id) || is_null($input['product_id']) || is_null($input['cart_id']) ||
+                is_null($input['type']) || is_null($input['quantity'])
+            ) {
+                return $this->response_base(['status' => false], 'Missing [User, Product, Cart] ID !!!', 200);
+            }
+            $input['user_id'] = $auth_id ?? 0;
+            if($input['quantity'] >= 1) {
+                if($input['type'] === 0 && $input['quantity'] > 1) {
+                    $input['quantity'] = $input['quantity'] - 1;
+                } elseif($input['type'] === 1) {
+                    $input['quantity'] = $input['quantity'] + 1;
+                }
+            }
+            try {
+                $result = $this->CartsRepository->update_quantity_item($input);
+                return $this->response_base([
+                    'status' => true,
+                    'cart' => $this->CartsRepository->get_by_user_id($input['user_id']),
+                ], 'Saving data successfully', 200);
+            } catch (\Exception $errors) {
+                return $this->response_base(['status' => false], $errors->getMessage(), 200);
+            }
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
 }
 
 

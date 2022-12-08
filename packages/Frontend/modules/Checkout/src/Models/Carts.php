@@ -66,10 +66,13 @@ class Carts extends ModelBase {
                         $query->select('id', 'status');
                     },
                     'product_identifiers' => function($query) {
-                        $query->select('id', 'brand', 'sku', 'gtin', 'mpn', 'status');
+                        $query->select('id', 'brand', 'sku', 'gtin', 'mpn', 'status', 'product_id');
                     },
                     'product_description_detail' => function($query) {
-
+                        $query->select(
+                            'id', 'product_id', 'color', 'condition', 'for_adult', 'material', 'age_group', 'multipack', 'is_bundle', 'size_type', 'size',
+                            'gender', 'size_system', 'highlight', 'width', 'height', 'length', 'weight', 'product_detail', 'status'
+                        );
                     }
                 ]);
             }

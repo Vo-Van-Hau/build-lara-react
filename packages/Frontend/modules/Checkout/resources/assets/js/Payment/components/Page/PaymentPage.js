@@ -1,8 +1,13 @@
 import { Fragment, useState, useContext, useEffect } from 'react';
 import { PaymentContext } from '../Contexts/PaymentContext';
-import { Avatar, Button, Card, Col, Collapse, Divider, List, Radio, Row, Space, Typography } from 'antd';
-import { CalendarFilled } from '@ant-design/icons'
-const { Title } = Typography;
+import {
+    Avatar, Button, Card, Col, Collapse, Divider, List, Radio, Row, Space, Typography,
+    Image
+} from 'antd';
+import {
+    CalendarFilled, WalletOutlined,
+} from '@ant-design/icons'
+const { Title, Text } = Typography;
 const { Panel } = Collapse;
 
 const PaymentPage = (props) => {
@@ -54,7 +59,10 @@ const PaymentPage = (props) => {
 
     return (<>
         <Row className='checkout_container'>
-            <Col span={17} className='leftSide'>
+            <Col className="title" span={24}>
+                <Title level={4} style={{fontWeight: 400}}><WalletOutlined /> Thanh toán đơn hàng</Title>
+            </Col>
+            <Col span={18} className='leftSide' style={{paddingRight: 8,}}>
                 <section className='section_container'>
                     <Title level={4}>Chọn hình thức giao hàng</Title>
                     <fieldset>
@@ -65,7 +73,7 @@ const PaymentPage = (props) => {
                             renderItem={(item) => (
                                 <List.Item>
                                     <List.Item.Meta
-                                        avatar={ <Avatar src={item.product.image_link} /> }
+                                        avatar={ <Image width={78} height={78} src={item.product.image_link} /> }
                                         title={ item.product.name }
                                         description={ <>{'Số lượng: x'}{item.product_quantity}</>}
                                     />
@@ -82,8 +90,8 @@ const PaymentPage = (props) => {
                                 return (
                                     <Fragment key={item.id}>
                                         <Radio value={item.id}>
-                                            <img src='https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg' width={32} alt='payment-ico' />
-                                            { item.name }
+                                            <img src={item.icon_link} width={32} alt='payment-ico' />
+                                            <Text style={{marginLeft: 8}}>{ item.name }</Text>
                                         </Radio>
                                     </Fragment>
                                 )
@@ -92,7 +100,7 @@ const PaymentPage = (props) => {
                     </Radio.Group>
                 </section>
             </Col>
-            <Col span={6} offset={1} className='rightSide'>
+            <Col span={6} className='rightSide' style={{paddingLeft: 8,}}>
                 <Card className='client_info' title="Giao tới" extra={<a href="#" onClick={() => setRouter({module: 'customer', controller: 'address', action: '#', id: '#',})}>Thay đổi</a>}>
                     <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : 'Undefined'}</Title>
                     <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : 'Undefined'}</span>
@@ -106,7 +114,7 @@ const PaymentPage = (props) => {
                         }
                     </span>
                 </Card>
-                <Card className='checkout_container'
+                <Card
                     title={<>Đơn hàng</>}
                     extra={<><Button type='link' onClick={() => setRouter({
                         module: 'checkout',
@@ -119,26 +127,24 @@ const PaymentPage = (props) => {
                         defaultActiveKey={['1']}
                         ghost
                     >
-                        <Panel header="Chi tiết đơn hàng" style={{ color: 'red' }} key="1">
+                        <Panel header="Chi tiết đơn hàng" style={{ color: '#000000', padding: 0 }} key="1">
                             {cart_detail.map((item, index) => {
                                 const { product } = item;
                                 return <Fragment key={ product.id }>
                                     <div className='product_info'>
                                         <Row className='product_info'>
                                             <Col span={4}><span className='product_amount'> x {item.product_quantity} | </span> </Col>
-                                            <Col span={16}><p className='product_title'>{product.name || ''}</p></Col>
-                                            <Col span={3} offset={1}><b className='product_price'>{product.price_format}đ</b></Col>
+                                            <Col span={16}><Text>{product.name || ''}</Text></Col>
+                                            <Col span={3} offset={1}><Text strong>{product.price_format}đ</Text></Col>
                                         </Row>
                                     </div>
                                 </Fragment>
                             })}
                         </Panel>
                     </Collapse>
-                    <Divider />
+                    <Divider style={{marginBottom: 12, marginTop: 12}}/>
                     <>
-                        <Checkout
-                            cart={cart}
-                        />
+                        <Checkout cart={cart}/>
                     </>
                 </Card>
                 <Button type='primary' size='large' danger onClick={() => get_order()}>ĐẶT HÀNG</Button>
@@ -147,6 +153,12 @@ const PaymentPage = (props) => {
     </>)
 }
 
+/**
+ * @author: <hauvo1709@gmail.com>
+ * @todo
+ * @param {Object} props
+ * @return
+ */
 const Checkout = (props) => {
 
     const { cart } = props;
@@ -154,22 +166,37 @@ const Checkout = (props) => {
     let discount = 0;
 
     return (<>
-        <div className='prices_item'>
-            <p className='prices_text'>Tạm tính</p>
-            <p className='prices_value'>{ total_amount_format || 0 }đ</p>
-        </div>
-        <div className='prices_item'>
-            <p className='prices_text'>Phí vận chuyển</p>
-            <p className='prices_value'>0 đ</p>
-        </div>
-        <div className='prices_item'>
-            <p className='prices_text'>Giảm giá</p>
-            <p className='prices_value'>{ discount }đ</p>
-        </div>
-        <Divider />
-        <div className='prices_item'>
-            <p className='prices_text'>Tổng tiền <br/><span>(Đã bao gồm VAT nếu có)</span></p>
-            <p className='prices_value total_price'>{ total_amount_format || 0}đ</p>
+        <Row>
+            <Col span={12}>
+                <Text style={{float: 'left',}}>Tạm tính</Text>
+            </Col>
+            <Col span={12}>
+                <Text strong style={{float: 'right',}}>{ total_amount_format || '' }đ</Text>
+            </Col>
+        </Row>
+        <Row>
+            <Col span={12}>
+                <Text style={{float: 'left',}}>Giảm giá</Text>
+            </Col>
+            <Col span={12}>
+                <Text strong style={{float: 'right',}}>{ discount}đ</Text>
+            </Col>
+        </Row>
+        <Divider style={{marginBottom: 12, marginTop: 12}}/>
+        <div>
+            <Row>
+                <Col span={12}>
+                    <Text style={{float: 'left', fontSize: 16}}>Tổng tiền</Text>
+                </Col>
+                <Col span={12}>
+                    <Text strong type="danger" style={{float: 'right', fontSize: 18, fontWeight: 500}}>{ total_amount_format || '' }đ</Text>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={24}>
+                    <Text style={{float: 'right', fontSize: 12}}>(Đã bao gồm VAT nếu có)</Text>
+                </Col>
+            </Row>
         </div>
     </>)
 }

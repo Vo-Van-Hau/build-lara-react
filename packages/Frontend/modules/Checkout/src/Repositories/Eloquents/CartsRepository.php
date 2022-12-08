@@ -145,13 +145,14 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
             'cart_detail' => function($query) {
                 $query->select('id', 'cart_id', 'product_id', 'product_quantity', 'status');
             }
-        ])->select('id', 'user_id', 'ordered', 'status')
-            ->firstWhere([
-                'user_id' => $user_id,
-                'status' => 1,
-                'deleted' => 0,
-                'ordered' => 0
-            ]);
+        ])
+        ->select('id', 'user_id', 'ordered', 'status')
+        ->firstWhere([
+            'user_id' => $user_id,
+            'status' => 1,
+            'deleted' => 0,
+            'ordered' => 0
+        ]);
         if(!empty($result)) {
             if(!empty($result['user']) && !empty($result['user']['customer'] && $result['user']['customer']['customer_address'])) {
                 foreach($result['user']['customer']['customer_address'] as $key => $address) {
@@ -229,10 +230,34 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
     public function remove_item($input) {
         $cart = $this->model->find($input['cart_id']);
         if(empty($cart) || empty($input['product_id'])) return false;
-        $exists = CartDetail::where([
+        $existed = CartDetail::where([
             'cart_id' => $cart->id,
             'product_id' => $input['product_id']
         ])->first();
-        return $exists->delete();
+        return $existed->delete();
+    }
+
+     /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return boolean
+     */
+    public function update_quantity_item($input) {
+        $cart = $this->model->where([
+            'id' => $input['cart_id'],
+            'user_id' => $input['user_id']
+        ])->first();
+        if(empty($cart) || empty($input['product_id']) || empty($input['quantity'])) return false;
+        $existed = CartDetail::where([
+            'cart_id' => $cart->id,
+            'product_id' => $input['product_id']
+        ])->first();
+        if(!empty($existed)) {
+            $existed->product_quantity = intval($input['quantity']) ?? $existed->product_quantity;
+            return $existed->save();
+        } else {
+            return false;
+        }
     }
 }

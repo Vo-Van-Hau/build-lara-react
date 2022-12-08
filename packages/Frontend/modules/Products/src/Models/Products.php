@@ -82,7 +82,8 @@ class Products extends ModelBase {
     */
     public function product_identifiers() {
         return $this->hasOne(ProductIdentifiers::class, 'product_id', 'id')->where([
-            'product_identifiers.status' => 1
+            'product_identifiers.status' => 1,
+            'product_identifiers.deleted' => 0,
         ]);
     }
 
@@ -93,7 +94,8 @@ class Products extends ModelBase {
     */
     public function product_description_detail() {
         return $this->hasOne(ProductDescriptionDetail::class, 'product_id', 'id')->where([
-            'product_description_detail.status' => 1
+            'product_description_detail.status' => 1,
+            'product_description_detail.deleted' => 0,
         ]);
     }
 
@@ -105,7 +107,7 @@ class Products extends ModelBase {
     public function category() {
         return $this->belongsTo(ProductCaterory::class, 'category_id', 'id')->where([
             'product_categories.status' => 1,
-            'product_categories.deleted' => 0
+            'product_categories.deleted' => 0,
         ]);
     }
 

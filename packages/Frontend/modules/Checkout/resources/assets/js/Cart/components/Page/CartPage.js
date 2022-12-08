@@ -1,17 +1,50 @@
 import { useContext, useEffect } from 'react';
 import { CartContext } from '../Contexts/CartContextProvider';
 import Helper from '../Helper/Helper';
-import { Button, Card, Col, Divider, Popconfirm, Row, Typography, Image, Table, Space } from 'antd';
+import { GET_CART } from '../Dispatch/type';
 import {
-    DeleteOutlined, ShopOutlined, TagsOutlined, GlobalOutlined
+    Button, Card, Col, Divider, Popconfirm, Row, Typography, Image, Table, Space, Input
+} from 'antd';
+import {
+    DeleteOutlined, ShopOutlined, TagsOutlined, GlobalOutlined, BarcodeOutlined, ShoppingCartOutlined,
+    PlusOutlined, MinusOutlined,
 } from '@ant-design/icons';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const CartPage = (props) => {
 
-    const { data, get_cart, setRouter, remove_item, set_table_loading }  = useContext(CartContext);
+    const {
+        data, get_cart, setRouter, remove_item, set_table_loading, update_quantity_item,
+        dispatch,
+    } = useContext(CartContext);
     const { cart, loading_table } = data;
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo:
+     * @param {number} type
+     * @param {number} quantity
+     * @param {number} cart_id
+     * @param {number} product_id
+     * @return {void}
+     */
+    const updateProductQuantity = (type, quantity, cart_id, product_id) => {
+        if(quantity <= 1 && type === 0) return false;
+        return update_quantity_item({type, quantity, cart_id, product_id})
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                let { cart } = res.data.data;
+                let newCart = cart;
+                return dispatch({type: GET_CART, payload: newCart});
+            } else {
+                Helper.Notification('error', '[Update Item]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
 
     /**
      * @author <hauvo1709@gmail.com>
@@ -39,9 +72,9 @@ const CartPage = (props) => {
     }, []);
 
     return (
-        <Row className="cart_page_container" gutter={[16, 16]}>
+        <Row className="cart_page_container" gutter={[8, 8]} style={{paddingTop: 16}}>
             <Col className="title" span={24}>
-                <Title level={4} style={{marginTop:'10px'}}>Giỏ hàng của bạn</Title>
+                <Title level={4} style={{fontWeight: 400}}><ShoppingCartOutlined /> Giỏ hàng của bạn</Title>
             </Col>
             <Col className="left_Container" span={18}>
                 <CartTable
@@ -49,6 +82,7 @@ const CartPage = (props) => {
                     setRouter={setRouter}
                     loading_table={loading_table}
                     remove_product={remove_product}
+                    updateProductQuantity={updateProductQuantity}
                 />
             </Col>
             <Col className="right_Container" span={6}>
@@ -69,15 +103,20 @@ const CartPage = (props) => {
  */
 const CartTable = (props) => {
 
-    const { cart, setRouter, loading_table, remove_product } = props;
+    const { cart, setRouter, loading_table, remove_product, updateProductQuantity } = props;
     const { cart_detail } = cart;
     const columns = [
         {
             title: '',
             dataIndex: 'img',
             render: (_, record) => {
-                const { seller } = record.product;
+                const { seller, product_identifiers, product_description_detail } = record.product;
                 const { store } = seller;
+                const { brand, sku, gtin, mpn } = product_identifiers;
+                const {
+                    color, condition, for_adult, material, age_group, multipack, is_bundle, size_type,
+                    size, size_system, gender, highlight, width, height, length, weight
+                } = product_description_detail;
                 return (
                     <><Space align="start">
                         <Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
@@ -87,9 +126,10 @@ const CartTable = (props) => {
                             id: record.product.id
                         })}/>
                             <div>
-                                <><ShopOutlined />  Nhà bán: { store && store.name ? store.name : `` }</><br/>
-                                <><TagsOutlined />  Thương hiệu: { store && store.name ? store.name : `` }</><br/>
-                                <><GlobalOutlined/>  Xuất xứ: { store && store.name ? store.name : `` }</><br/>
+                                <div style={{marginBottom: 4,}}><ShopOutlined /> <span style={{fontWeight: 500}}>Nhà bán:</span> { store && store.name ? store.name : `` }</div>
+                                <div style={{marginBottom: 4,}}><TagsOutlined /> <span style={{fontWeight: 500}}>Thương hiệu:</span> { brand || `` }</div>
+                                <div style={{marginBottom: 4,}}><GlobalOutlined/> <span style={{fontWeight: 500}}>Xuất xứ:</span> Việt Nam</div>
+                                <div style={{marginBottom: 4,}}><BarcodeOutlined /> <span style={{fontWeight: 500}}>Mã SKU:</span> { sku || `` }</div>
                             </div>
                     </Space></>
                 )
@@ -103,7 +143,7 @@ const CartTable = (props) => {
                         controller: 'productdetail',
                         action: 'view',
                         id: record.product.id
-                    })}>{ record.product.name ? record.product.name : '' }</a></>
+                    })}><Text>{ record.product.name ? record.product.name : '' }</Text></a></>
                 )
             },
         },{
@@ -111,7 +151,7 @@ const CartTable = (props) => {
             align: 'center',
             render: (_, record) => {
                 return (
-                    <>{ record.product.price_format ? record.product.price_format : '' }đ</>
+                    <>{ record.product.price_format ? record.product.price_format : '' } đ</>
                 )
             }
         },{
@@ -119,7 +159,19 @@ const CartTable = (props) => {
             align: 'center',
             render: (_, record) => {
                 return (
-                    <>x{ record.product_quantity ? record.product_quantity : '' }</>
+                    <Button.Group>
+                        <Button
+                            icon={<MinusOutlined />}
+                            type="ghost"
+                            onClick={() => updateProductQuantity(0, record.product_quantity, cart.id, record.product.id)}
+                        />
+                        <Input value={ record.product_quantity ? record.product_quantity : '' } style={{ width: '60px', textAlign: 'center' }} />
+                        <Button
+                            icon={<PlusOutlined />}
+                            type="ghost"
+                            onClick={() => updateProductQuantity(1, record.product_quantity, cart.id, record.product.id)}
+                        />
+                    </Button.Group>
                 )
             }
         },{
@@ -127,14 +179,22 @@ const CartTable = (props) => {
             align: 'center',
             render: (_, record) => {
                 return (
-                    <>{ record.total_amount_item ? record.total_amount_item  : '' }đ</>
+                    <>
+                        <Text strong type="danger">{ record.total_amount_item ? record.total_amount_item  : '' } đ</Text>
+                    </>
                 )
             }
         },{
             title: '',
             dataIndex: 'key',
             render: (_, record) => (
-                <Popconfirm title='Bạn có muốn xóa?'  placement='leftTop' onConfirm={() => remove_product(cart.id, record.product.id)}>
+                <Popconfirm
+                    title='Bạn có muốn xóa sản phẩm đang chọn?'
+                    placement='leftTop'
+                    okText={`Xác Nhận`}
+                    cancelText={`Huỷ`}
+                    onConfirm={() => remove_product(cart.id, record.product.id)}
+                >
                     <DeleteOutlined />
                 </Popconfirm>
             ),
@@ -152,9 +212,6 @@ const CartTable = (props) => {
     };
 
     return (<>
-        <Title level={5} className='shop_name'>
-            <ShopOutlined /> Shop Name
-        </Title>
         <Table
             rowSelection={{
                 type: 'checkbox',
@@ -229,19 +286,38 @@ const Checkout = (props) => {
                 }
             </span>
         </Card>
-        <Card className='checkout_container'>
-            <div className='prices_item'>
-                <p className='prices_text'>Tạm tính</p>
-                <p className='prices_value'>{ total_amount_format }đ</p>
-            </div>
-            <div className='prices_item'>
-                <p className='prices_text'>Giảm giá</p>
-                <p className='prices_value'>{ discount }đ</p>
-            </div>
-            <Divider />
-            <div className='prices_item'>
-                <p className='prices_text'>Tổng tiền</p>
-                <p className='prices_value'>{ total_amount_format }đ <br/><span>(Đã bao gồm VAT nếu có)</span></p>
+        <Card>
+            <Row>
+                <Col span={12}>
+                    <Text style={{float: 'left',}}>Tạm tính</Text>
+                </Col>
+                <Col span={12}>
+                    <Text strong style={{float: 'right',}}>{ total_amount_format || '' } đ</Text>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={12}>
+                    <Text style={{float: 'left',}}>Giảm giá</Text>
+                </Col>
+                <Col span={12}>
+                    <Text strong style={{float: 'right',}}>{ discount} đ</Text>
+                </Col>
+            </Row>
+            <Divider style={{marginBottom: 12, marginTop: 12}}/>
+            <div>
+                <Row>
+                    <Col span={12}>
+                        <Text style={{float: 'left', fontSize: 16}}>Tổng tiền</Text>
+                    </Col>
+                    <Col span={12}>
+                        <Text strong type="danger" style={{float: 'right', fontSize: 18, fontWeight: 500}}>{ total_amount_format || '' } đ</Text>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <Text style={{float: 'right', fontSize: 12}}>(Đã bao gồm VAT nếu có)</Text>
+                    </Col>
+                </Row>
             </div>
         </Card>
         <><Button type='primary' size='large' danger onClick={() => redirect_to_payment()}>Mua Hàng</Button></>

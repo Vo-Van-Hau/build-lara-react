@@ -45,16 +45,19 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
     }
 
     /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: storage group
-     * @param {Object} values
+     * @author <hauvo1709@gmail.com>
+     * @todo:
+     * @param {number} type
+     * @param {number} quantity
+     * @param {number} cart_id
+     * @param {number} product_id
      * @return {void}
      */
-    const storage_group = (values = {}) => {
-        // return axios
-        // .get_secured()
-        // .post(`/users/groups/storage`, {...values});
-        console.log(values);
+    const update_quantity_item = (values) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/checkout/carts/update_quantity_item`, {...values});
     }
 
     /**
@@ -110,8 +113,8 @@ const CartContextProvider = ({ children, axios, history, config, navigate }) => 
 
     const todoContextData = {
         data: {...data, config},
-        history, dispatch, get_axios, storage_group,
-        set_table_loading, set_mouted,
+        history, dispatch, get_axios,
+        set_table_loading, set_mouted, update_quantity_item,
         get_cart, setRouter, remove_item
     };
 
