@@ -33,6 +33,7 @@ class OrderDetail extends ModelBase {
                 'product_id' => $product_id,
                 'deleted' => 0,
             ])->get();
+            return $result;
         }
         return [];
     }

@@ -1,23 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
     Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel, List, message, Descriptions,
-    Divider, Input, notification, Breadcrumb, Typography, Slider, Tooltip, Popover, Modal
+    Divider, Input, notification, Breadcrumb, Typography, Tooltip, Popover, Modal
 } from 'antd';
 import {
-    HomeOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined,
-    MinusOutlined, StarFilled, LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined
+    HomeOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined, AppstoreOutlined,
+    MinusOutlined, StarFilled, TagsOutlined, GlobalOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined
 } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
 import Helper from '../Helper/Helper';
+import Slider from "react-slick";
 
 const { Text, Title } = Typography;
 
 const ProductDetailPage = (props) => {
 
+    console.log(props);
+
     const { id } = props;
     const { user, config } = props.data;
-    const { is_login } = user;
+    const { is_login, customer } = user;
+    const { customer_address } = customer;
     const { app } = config;
     const { baseURL, adminPrefix } = app;
 
@@ -25,13 +29,41 @@ const ProductDetailPage = (props) => {
         data, get_product_item, add_to_cart, setRouter, get_similar_products
     } = useContext(ProductDetailContext);
     const { product_item, mouted } = data;
-    const { seller, similar_products, products_additional_image_link } = product_item;
+    const { seller, similar_products, products_additional_image_link, product_identifiers } = product_item;
     const { store } = seller;
+
     const [quantity, setQuantity] = useState(1);
     const [selectedImg, setSelectedImg] = useState(false);
     const [ratingReview, setRatingReview] = useState(5)
     const [listRating, setListRating] = useState([]);
     const [isModalConfirmLogin, setIsModalConfirmLogin] = useState(false);
+
+    const slickSettings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1
+    };
+    const SliderSlick = Slider;
+
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo
+     * @param {array} customer_address
+     * @return {Object}
+     */
+    const getDefaultDeliveryTo = (customer_address = []) => {
+        if(customer_address && Array.isArray(customer_address) && customer_address.length > 0) {
+            let result = customer_address.find((item, _i) => {
+                return item.is_default === 1;
+            });
+            return result ? result : false;
+        }
+        return false;
+    }
+
+    const defaultDeliveryTo = getDefaultDeliveryTo(customer_address ? customer_address : []);
 
     /**
      * @todo:
@@ -90,20 +122,6 @@ const ProductDetailPage = (props) => {
             setIsModalConfirmLogin(true);
         }
     }
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo
-     * @param
-     * @return {void}
-     */
-    const product_image_gallery = [
-        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' },
-        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/dd/e6/fc/68b7246e01393350da3506e6ccb2c3e9.jpg.webp' },
-        { url: 'https://salt.tikicdn.com/cache/750x750/ts/product/03/0a/50/6af71ef33fca65a90e4b04dc04ef3ad3.jpg.webp' },
-        { url: 'https://salt.tikicdn.com/cache/w1200/ts/product/a4/56/3a/3a04f82e48ffa3bc1ae3d6e77039b104.jpg' },
-        { url: 'https://salt.tikicdn.com/cache/100x100/ts/product/54/ff/25/bfdf0febe11a28eaa7cd3fa735a82c49.png.webp' }
-    ]
 
     const IconText = ({ icon, text }) => (
         <Space>
@@ -307,25 +325,34 @@ const ProductDetailPage = (props) => {
                     style={{ objectFit: 'contain', borderRadius: '3px' }}
                     src={selectedImg ? selectedImg : product_item.image_link}
                 />
-                <Space>
-                    {products_additional_image_link.map((item, index) => {
-                        return (
-                            <img style={{ width: 50 }} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
-                        )
-                    })}
-                </Space>
+                <div style={{
+                    marginTop: 24, paddingLeft: 36, paddingRight: 36, paddingTop: 12, paddingBottom: 12,
+                    background: 'yellowgreen', border: '1px solid #000000', borderRadius: 4
+                }}>
+                    <SliderSlick {...slickSettings}>
+                        {products_additional_image_link.map((item, index) => {
+                            return (
+                                <img style={{ width: 64, height: 64 }} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
+                            )
+                        })}
+                    </SliderSlick>
+                </div>
             </Col>
             <Col className='separate'></Col>
             <Col span={15} className='product_info_container'>
                 <Row className='head'>
-                    <Col span={24} style={{marginBottom: 6}}>
-                        <Text style={{fontWeight: 480, fontSize: 16,}}>Thương hiệu: {product_item.product_identifiers ? product_item.product_identifiers.brand : ``} </Text>
+                    <Col span={24} style={{}}>
+                        <Text style={{fontWeight: 480, fontSize: 16,}}>
+                            <TagsOutlined /> <span>Thương hiệu:</span> <span style={{color: '#0B74E5'}}>{product_identifiers ? product_identifiers.brand : ``}</span>
+                        </Text>
                     </Col>
-                    <Col span={24} style={{marginBottom: 6}}>
-                        <Text style={{fontWeight: 480, fontSize: 16,}}>Loại sản phẩm: {product_item.category ? product_item.category.title : ``} </Text>
+                    <Col span={24} style={{}}>
+                        <Text style={{fontWeight: 480, fontSize: 16,}}>
+                            <AppstoreOutlined /> <span>Loại sản phẩm:</span> <span style={{color: '#0B74E5'}}>{product_item.category ? product_item.category.title : ``}</span>
+                        </Text>
                     </Col>
-                    <Col span={24} style={{marginBottom: 6}}>
-                        <h1 className='product_title' style={{fontWeight: 500}}>{product_item.name}</h1>
+                    <Col span={24} style={{marginBottom: 8, marginTop: 8}}>
+                        <Text style={{fontWeight: 300,fontSize: 24, color: 'rgb(36, 36, 36)'}}>{product_item.name || ''}</Text>
                     </Col>
                     <Col className='rating' span={24}>
                         <Space split={<Divider type="vertical" />}>
@@ -341,6 +368,21 @@ const ProductDetailPage = (props) => {
                         <span className='product_price__current-price'>{product_item.price_format} ₫</span>
                         <span className='product_price__list-price'>{product_item.price_format} ₫</span>
                         <span className='product_price__discount-rate'>-32%</span>
+                        <Divider/>
+                        <Card className='client_info' title="Giao tới" extra={<a href="#" onClick={() => setRouter({module: 'customer', controller: 'address', action: '#', id: '#',})}>Thay đổi</a>}>
+                            <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : ''}</Title>
+                            <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : ''}</span>
+                            <span> <Divider type="vertical"/></span>
+                            <span className='address'>
+                                {
+                                    (defaultDeliveryTo && defaultDeliveryTo.address && defaultDeliveryTo.ward && defaultDeliveryTo.district && defaultDeliveryTo.province)
+                                    ? `${defaultDeliveryTo.address || ''}, ${defaultDeliveryTo.ward.name || ''},
+                                    ${defaultDeliveryTo.district.type || ''} ${defaultDeliveryTo.district.name || ''},
+                                    ${defaultDeliveryTo.province.type || ''} ${defaultDeliveryTo.province.name || ''}` : ''
+                                }
+                            </span>
+                        </Card>
+                        <Divider/>
                         <div className='product_quantity'>
                             <>
                                 <div style={{marginBottom: 4}}>
@@ -403,10 +445,9 @@ const ProductDetailPage = (props) => {
             </Col>
             <Col span={24} className='table_detail_container'>
                 <Descriptions column={24} bordered>
-                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Thương hiệu">Glucosamin</Descriptions.Item>
+                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label='Thương hiệu'>{product_identifiers ? product_identifiers.brand : `-`}</Descriptions.Item>
                     <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Xuất xứ">Việt Nam</Descriptions.Item>
-                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Hạn sử dụng">-</Descriptions.Item>
-                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Mô tả ngắn">Trong chiết xuất cây Móng Quỷ, có chứa Harpagoside - hoạt chất có tính ứng dụng cao trong y học, giúp giảm đau, giúp giảm viêm nhờ ức chế hoạt động của enzyms phá huỷ sụn khớp hiệu quả. Ngoài ra, Harpagoside còn giúp bảo vệ, tái tạo sụn khớp nhờ đảm bảo quá trình tổng hợp Collagen của sụn...</Descriptions.Item>
+                    <Descriptions.Item span={24} labelStyle={{ width: '25%', fontWeight: 'bold' }} label="Mã SKU">{product_identifiers ? product_identifiers.sku : '-'}</Descriptions.Item>
                 </Descriptions>
             </Col>
         </Row>
@@ -482,72 +523,9 @@ const ProductDetailPage = (props) => {
                 </Carousel>
             </Col>
         </Row>
-        <Row className='product_review'>
-            <h3 className='section_title'> Nhận xét & Đánh giá </h3>
-            <Col span={24}>
-                <Card >
-                    <Row align='middle'>
-                        <Col span={4}>
-                            <Row justify='center' align='middle' className='rating-num'> {ratingReview} <Rate style={{}} value={1} count={1} />/<span>5.0</span> </Row>
-                            <Row justify='center'> <Rate className='rating-review' disabled value={ratingReview} /> </Row>
 
-                        </Col>
-                        <Col span={20} >
-                            <Space justify='center'>
-                                <Button onClick={() => handleChangebtnRating('all')}>Tất cả</Button>
-                                <Button onClick={() => handleChangebtnRating(5)}>5 Sao</Button>
-                                <Button onClick={() => handleChangebtnRating(4)}>4 Sao</Button>
-                                <Button onClick={() => handleChangebtnRating(3)}>3 Sao</Button>
-                                <Button onClick={() => handleChangebtnRating(2)}>2 Sao</Button>
-                                <Button onClick={() => handleChangebtnRating(1)}>1 Sao</Button>
-                            </Space>
-                        </Col>
-                    </Row>
-                </Card>
-                <List
-                    className="demo-loadmore-list"
-                    itemLayout="horizontal"
-                    dataSource={listRating}
-                    pagination={{
-                        onChange: (page) => {
-                            console.log(page);
-                        },
-                        pageSize: 3,
-                    }}
-                    renderItem={(item) => (
-                        <div className='review-block-item'>
-                            <List.Item
-                                actions={[
-                                    <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-                                    <a key="list-loadmore-more"><MoreOutlined /></a>,
-                                ]} >
-                                <List.Item.Meta
-                                    avatar={<Avatar src={item.picture} size={45} />}
-                                    title={<a href="https://ant.design">{item.name}</a>}
-                                    description={<>
-                                        <small>{item.date} | Phân loại hàng: {item.type}</small> <br />
-                                        <Rate className='rating-review' style={{ fontSize: 10 }} disabled value={item.rating} />
-                                    </>}
-                                />
-                            </List.Item>
-                            <List.Item className='content-review'>
-                                <Row>
-                                    <Col span={24}>
-                                        {item.comment ? item.comment : ''}
-                                    </Col>
-                                    <Col span={24}>
-                                        <Space className='img-review-wrapper'>
-                                            <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/2e/0a/41/d213b6b126c6a8637e412ee2cedbb5ce.jpg" />
-                                            <Image className='img-review' width={100} src="https://salt.tikicdn.com/cache/w280/ts/review/24/58/5d/4783e16696305909fb66ac0f9a65048a.jpg" />
-                                        </Space>
-                                    </Col>
-                                </Row>
-                            </List.Item>
-                        </div>
-                    )}
-                />
-            </Col>
-        </Row>
+
+
         <Modal title="Đăng nhập tài khoản của bạn"
             open={isModalConfirmLogin} onOk={() => {
                 setRouter({
