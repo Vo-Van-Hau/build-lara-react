@@ -82,4 +82,34 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
             return $exception->getMessage();
        }
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return Illuminate\Support\Collection
+     */
+    public function store($input = []) {
+        try {
+            $this->model->user_id = $input['user_id'] ?? 0;
+            $this->model->fullname = $input['fullname'] ?? '';
+            $this->model->nickname = $input['fullname'] ?? '';
+            $this->model->phone = $input['phone'] ?? '';
+            $this->model->gender = $input['gender'] ?? 'unisex';
+            $this->model->date_of_birth = $input['date_of_birth'] ?? date('Y-m-d H:i:s');
+            $this->model->status = $input['status'] ?? 1;
+            $this->model->user_created_id = $input['user_id'] ?? 0;
+            $this->model->user_updated_id = $input['user_id'] ?? 0;
+            $this->model->user_owner_id = $input['user_id'] ?? 0;
+            $this->model->created_at = $input['created_at'] ?? date('Y-m-d H:i:s');
+            $this->model->updated_at = $input['updated_at'] ?? date('Y-m-d H:i:s');
+            if($this->model->save()) {
+                return $this->model;
+            }
+            return false;
+        }
+        catch (Exception $errors) {
+            return $errors->getMessage();
+        }
+    }
 }

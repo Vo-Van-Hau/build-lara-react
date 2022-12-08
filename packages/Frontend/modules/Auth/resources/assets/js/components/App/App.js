@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react';
 import RoutesWeb from '../../routes/RoutesWeb';
 import { AuthContext } from '../Contexts/AuthContext';
 
-const App = () => {
+const App = (props) => {
 
     const { get_config, data } = useContext(AuthContext);
 
@@ -10,7 +10,7 @@ const App = () => {
         get_config();
     }, []);
 
-    return RoutesWeb();
+    return RoutesWeb({...props, data});
 };
 
 export default App;

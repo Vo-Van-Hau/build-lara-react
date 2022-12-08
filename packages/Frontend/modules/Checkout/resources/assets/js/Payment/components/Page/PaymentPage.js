@@ -69,7 +69,7 @@ const PaymentPage = (props) => {
                                         title={ item.product.name }
                                         description={ <>{'Số lượng: x'}{item.product_quantity}</>}
                                     />
-                                    <div className='product_price'>{ item.product.price } đ</div>
+                                    <div className='product_price'>{ item.product.price_format } đ</div>
                                 </List.Item>
                             )} />
                     </fieldset>
@@ -93,7 +93,7 @@ const PaymentPage = (props) => {
                 </section>
             </Col>
             <Col span={6} offset={1} className='rightSide'>
-                <Card className='client_info' title="Giao tới" extra={<a href="#">Thay đổi</a>}>
+                <Card className='client_info' title="Giao tới" extra={<a href="#" onClick={() => setRouter({module: 'customer', controller: 'address', action: '#', id: '#',})}>Thay đổi</a>}>
                     <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : 'Undefined'}</Title>
                     <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : 'Undefined'}</span>
                     <span> <Divider type="vertical" /></span>
@@ -106,7 +106,6 @@ const PaymentPage = (props) => {
                         }
                     </span>
                 </Card>
-
                 <Card className='checkout_container'
                     title={<>Đơn hàng</>}
                     extra={<><Button type='link' onClick={() => setRouter({
@@ -127,8 +126,8 @@ const PaymentPage = (props) => {
                                     <div className='product_info'>
                                         <Row className='product_info'>
                                             <Col span={4}><span className='product_amount'> x {item.product_quantity} | </span> </Col>
-                                            <Col span={16}><p className='product_title'>{product.name}</p></Col>
-                                            <Col span={3} offset={1}><b className='product_price'>{product.price}đ</b></Col>
+                                            <Col span={16}><p className='product_title'>{product.name || ''}</p></Col>
+                                            <Col span={3} offset={1}><b className='product_price'>{product.price_format}đ</b></Col>
                                         </Row>
                                     </div>
                                 </Fragment>
@@ -151,18 +150,13 @@ const PaymentPage = (props) => {
 const Checkout = (props) => {
 
     const { cart } = props;
-    const { cart_detail } = cart;
-
-    let total_amount = 0;
+    const { cart_detail, total_amount_format } = cart;
     let discount = 0;
-    cart_detail && cart_detail.forEach(function(item) {
-        total_amount += (parseInt(item.product_quantity) * item.product.price)
-    });
 
     return (<>
         <div className='prices_item'>
             <p className='prices_text'>Tạm tính</p>
-            <p className='prices_value'>{ total_amount }đ</p>
+            <p className='prices_value'>{ total_amount_format || 0 }đ</p>
         </div>
         <div className='prices_item'>
             <p className='prices_text'>Phí vận chuyển</p>
@@ -175,10 +169,11 @@ const Checkout = (props) => {
         <Divider />
         <div className='prices_item'>
             <p className='prices_text'>Tổng tiền <br/><span>(Đã bao gồm VAT nếu có)</span></p>
-            <p className='prices_value total_price'>{ total_amount }đ</p>
+            <p className='prices_value total_price'>{ total_amount_format || 0}đ</p>
         </div>
     </>)
 }
+
 
 
 export default PaymentPage;

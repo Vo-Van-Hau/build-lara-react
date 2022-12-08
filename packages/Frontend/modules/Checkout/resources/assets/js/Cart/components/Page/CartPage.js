@@ -1,8 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { CartContext } from '../Contexts/CartContextProvider';
 import Helper from '../Helper/Helper';
-import { Button, Card, Col, Divider, Popconfirm, Row, Typography, Image, Table } from 'antd';
-import { DeleteOutlined, ShopOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Divider, Popconfirm, Row, Typography, Image, Table, Space } from 'antd';
+import {
+    DeleteOutlined, ShopOutlined, TagsOutlined, GlobalOutlined
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -39,7 +41,7 @@ const CartPage = (props) => {
     return (
         <Row className="cart_page_container" gutter={[16, 16]}>
             <Col className="title" span={24}>
-                <Title level={2} style={{marginTop:'10px'}}>GIỎ HÀNG</Title>
+                <Title level={4} style={{marginTop:'10px'}}>Giỏ hàng của bạn</Title>
             </Col>
             <Col className="left_Container" span={18}>
                 <CartTable
@@ -59,6 +61,12 @@ const CartPage = (props) => {
     )
 }
 
+/**
+ * @author: <hauvo1709@gmail.com>
+ * @todo
+ * @param {Object} props
+ * @return
+ */
 const CartTable = (props) => {
 
     const { cart, setRouter, loading_table, remove_product } = props;
@@ -68,18 +76,26 @@ const CartTable = (props) => {
             title: '',
             dataIndex: 'img',
             render: (_, record) => {
+                const { seller } = record.product;
+                const { store } = seller;
                 return (
-                    <><Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
-                        module: 'products',
-                        controller: 'productdetail',
-                        action: 'view',
-                        id: record.product.id
-                    })}/></>
+                    <><Space align="start">
+                        <Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
+                            module: 'products',
+                            controller: 'productdetail',
+                            action: 'view',
+                            id: record.product.id
+                        })}/>
+                            <div>
+                                <><ShopOutlined />  Nhà bán: { store && store.name ? store.name : `` }</><br/>
+                                <><TagsOutlined />  Thương hiệu: { store && store.name ? store.name : `` }</><br/>
+                                <><GlobalOutlined/>  Xuất xứ: { store && store.name ? store.name : `` }</><br/>
+                            </div>
+                    </Space></>
                 )
             },
         },{
             title: 'Tên sản phẩm',
-            width: 300,
             render: (_, record) => {
                 return (
                     <><a onClick={() => setRouter({
@@ -87,7 +103,7 @@ const CartTable = (props) => {
                         controller: 'productdetail',
                         action: 'view',
                         id: record.product.id
-                    })}>{ record.product.name ? record.product.name : 'Undefined' }</a></>
+                    })}>{ record.product.name ? record.product.name : '' }</a></>
                 )
             },
         },{
@@ -95,7 +111,7 @@ const CartTable = (props) => {
             align: 'center',
             render: (_, record) => {
                 return (
-                    <>{ record.product.price ? record.product.price : 'Undefined' }</>
+                    <>{ record.product.price_format ? record.product.price_format : '' }đ</>
                 )
             }
         },{
@@ -103,7 +119,7 @@ const CartTable = (props) => {
             align: 'center',
             render: (_, record) => {
                 return (
-                    <>{ record.product_quantity ? record.product_quantity : 'Undefined' }</>
+                    <>x{ record.product_quantity ? record.product_quantity : '' }</>
                 )
             }
         },{
@@ -111,7 +127,7 @@ const CartTable = (props) => {
             align: 'center',
             render: (_, record) => {
                 return (
-                    <>{ record.product_quantity ? (parseInt(record.product_quantity) * record.product.price)  : 'Undefined' }</>
+                    <>{ record.total_amount_item ? record.total_amount_item  : '' }đ</>
                 )
             }
         },{
@@ -152,18 +168,19 @@ const CartTable = (props) => {
     </>)
 }
 
+/**
+ * @author: <hauvo1709@gmail.com>
+ * @todo
+ * @param {Object} props
+ * @return
+ */
 const Checkout = (props) => {
 
     const { cart, setRouter } = props;
-    const { user, cart_detail } = cart;
+    const { user, cart_detail, total_amount_format } = cart;
     const { customer } = user;
     const { customer_address } = customer;
-
-    let total_amount = 0;
     let discount = 0;
-    cart_detail && cart_detail.forEach(function(item) {
-        total_amount += (parseInt(item.product_quantity) * item.product.price)
-    });
 
     /**
      * @author: <hauvo1709@gmail.com>
@@ -199,9 +216,9 @@ const Checkout = (props) => {
     }
 
     return (<>
-        <Card className='client_info' title="Giao tới" extra={<a href="#">Thay đổi</a>}>
-            <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : 'Undefined'}</Title>
-            <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : 'Undefined'}</span>
+        <Card className='client_info' title="Giao tới" extra={<a href="#" onClick={() => setRouter({module: 'customer', controller: 'address', action: '#', id: '#',})}>Thay đổi</a>}>
+            <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : ''}</Title>
+            <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : ''}</span>
             <span> <Divider type="vertical"/></span>
             <span className='address'>
                 {
@@ -215,7 +232,7 @@ const Checkout = (props) => {
         <Card className='checkout_container'>
             <div className='prices_item'>
                 <p className='prices_text'>Tạm tính</p>
-                <p className='prices_value'>{ total_amount }đ</p>
+                <p className='prices_value'>{ total_amount_format }đ</p>
             </div>
             <div className='prices_item'>
                 <p className='prices_text'>Giảm giá</p>
@@ -224,7 +241,7 @@ const Checkout = (props) => {
             <Divider />
             <div className='prices_item'>
                 <p className='prices_text'>Tổng tiền</p>
-                <p className='prices_value'>{ total_amount }đ <br/><span>(Đã bao gồm VAT nếu có)</span></p>
+                <p className='prices_value'>{ total_amount_format }đ <br/><span>(Đã bao gồm VAT nếu có)</span></p>
             </div>
         </Card>
         <><Button type='primary' size='large' danger onClick={() => redirect_to_payment()}>Mua Hàng</Button></>

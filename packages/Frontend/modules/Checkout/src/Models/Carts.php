@@ -60,7 +60,18 @@ class Carts extends ModelBase {
             'cart_detail.deleted' => 0
         ])->with([
             'product' => function($query) {
-                $query->select('id', 'name', 'slug_name', 'price', 'link', 'mobile_link', 'image_link');
+                $query->select('id', 'name', 'slug_name', 'price', 'link', 'mobile_link', 'image_link', 'seller_id')
+                ->with([
+                    'seller' => function($query) {
+                        $query->select('id', 'status');
+                    },
+                    'product_identifiers' => function($query) {
+                        $query->select('id', 'brand', 'sku', 'gtin', 'mpn', 'status');
+                    },
+                    'product_description_detail' => function($query) {
+
+                    }
+                ]);
             }
         ]);
     }

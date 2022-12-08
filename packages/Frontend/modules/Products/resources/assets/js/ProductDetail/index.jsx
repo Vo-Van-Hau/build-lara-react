@@ -54,7 +54,7 @@ const ProductDetail = (props) => {
      * @returns {void}
      */
     const render_view = () => {
-        switch (action) {
+        switch(action) {
             default: return (<ProductDetailPage {...props} id={id} />);
         }
     }
@@ -62,7 +62,7 @@ const ProductDetail = (props) => {
     useEffect(function() {
         get_config();
         get_action();
-    }, []);
+    }, [props]);
 
     return (
         <>

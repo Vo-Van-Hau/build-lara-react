@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Frontend\Core\Exceptions\ApiException;
 use Frontend\Users\Interfaces\UsersRepositoryInterface;
 use Frontend\Checkout\Interfaces\CartsRepositoryInterface;
+use Frontend\Customer\Interfaces\CustomerRepositoryInterface;
 use Frontend\Auth\AuthFrontend;
 
 /**
@@ -30,13 +31,16 @@ class AuthController extends ControllerBase {
 
     protected UsersRepositoryInterface $UsersRepository;
     protected CartsRepositoryInterface $CartsRepository;
+    protected CustomerRepositoryInterface $CustomerRepository;
 
     public function __construct(
         UsersRepositoryInterface $UsersRepository,
-        CartsRepositoryInterface $CartsRepository
+        CartsRepositoryInterface $CartsRepository,
+        CustomerRepositoryInterface $CustomerRepository
     ) {
         $this->UsersRepository = $UsersRepository;
         $this->CartsRepository = $CartsRepository;
+        $this->CustomerRepository = $CustomerRepository;
     }
 
     /**
@@ -126,11 +130,25 @@ class AuthController extends ControllerBase {
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
+     * @todo: validation
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Validation\Validator
+     */
+    protected function validate_register(Request $request) {
+        $rules = array(
+            $this->login_username() => 'required',
+            'password' => 'required|min:3',
+        );
+        return Validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
      * @todo: Get the login username to be used by the controller.
      * @return string
      */
     public function login_username() {
-        return property_exists($this, "username") ? $this->username : "email";
+        return property_exists($this, 'username') ? $this->username : 'email';
     }
 
     /**
@@ -140,11 +158,11 @@ class AuthController extends ControllerBase {
      * @return array
      */
     protected function get_credentials(Request $request) {
-        $login = request()->input("email");
-        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? "email" : "username";
+        $login = request()->input('email');
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         return [
-            $field => $request->get("email"),
-            "password" => $request->password,
+            $field => $request->get('email'),
+            'password' => $request->password,
         ];
     }
 
@@ -153,8 +171,11 @@ class AuthController extends ControllerBase {
      * @todo: redirectTo
      * @return void
      */
-    protected function redirectTo() {
-        return Core::backendURL() . "/home";
+    protected function redirectTo($to = '') {
+        if(!empty($to)) {
+            return Core::backendURL() . $to;
+        }
+        return Core::backendURL() . '/home/home';
     }
 
     /**
@@ -172,13 +193,13 @@ class AuthController extends ControllerBase {
                 $result['is_login'] = true;
                 if(!empty($result)) {
                     $cart_of_user = $this->CartsRepository->get_by_user_id($input['user_id']);
-                    $result->carts = $cart_of_user ?? [];
+                    $result->carts = !empty($cart_of_user) ? $cart_of_user : [];
                     if(!empty($cart_of_user)) {
                         if(!empty($cart_of_user->cart_detail)) {
                             $result->carts['count'] = count($cart_of_user->cart_detail) ?? 0;
                         }
                     }
-                    if(empty($result->carts['count'])) {
+                    if(!isset($result->carts)) {
                         $result->carts['count'] = 0;
                     }
                 }
@@ -190,5 +211,93 @@ class AuthController extends ControllerBase {
             return $this->response_base(['status' => false], 'You have failed to get user !!!', 200);
         }
         return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo: register sellers account
+     * @param \Illuminate\Http\Request
+     * @return void
+     */
+    public function register(Request $request) {
+        if($request->isMethod('post')) {
+            $validator = $this->validate_register($request);
+            if($validator->fails()) {
+                throw new ApiException(trans('AuthSellers::auth.invalid_credentials'), 400, $validator->getMessageBag()->toArray());
+            } else {
+                $input = $request->all();
+                $check_email = $this->checkUniqueEmail($input['email']);
+                if(!$check_email) return $this->response_base(['status' => false], 'Email already exists !!!', 200);
+                $check_username = $this->checkUniqueUsername($input['username']);
+                if(!$check_username) return $this->response_base(['status' => false], 'Username already exists !!!', 200);
+                $credentials = array(
+                    'email' => isset($input['email']) ? $input['email'] : '',
+                    'name' => isset($input['fullname']) ? $input['fullname'] : '',
+                    'username' => isset($input['username']) ? $input['username'] : '',
+                    'status' => 1,
+                    'password' => isset($input['password']) ? $input['password'] : '',
+                    'role_id' => 20, // Role ID for Frontend,
+                    'special' => 0,
+                    'type' => 0,
+                    'is_publisher' => 0,
+                    'avatar' => isset($input['avatar']) ? $input['avatar'] : Config::get('packages.frontend.core.app_url').'/userdata/avatar/default_user_avatar_v1.jpg',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                );
+                try {
+                    $new = $this->UsersRepository->store($credentials);
+                    if(!empty($new)) {
+                        $userID = $new->id ?? 0;
+                        $credentials = array(
+                            'user_id' => isset($userID) ? $userID : 0,
+                            'fullname' => isset($input['fullname']) ? $input['fullname'] : '',
+                            'nickname' => isset($input['fullname']) ? $input['fullname'] : '',
+                            'phone' => isset($input['phone']) ? $input['phone'] : '',
+                            'gender' => isset($input['gender']) ? $input['gender'] : 'unisex',
+                            'date_of_birth' => isset($input['date_of_birth']) ? $input['date_of_birth'] : date('Y-m-d H:i:s'),
+                            'status' => isset($userID) ? 1 : 0,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        );
+                        $new = $this->CustomerRepository->store($credentials);
+                        if(!empty($new)) {
+                            return response()->json([
+                                'redirect_to' => $this->redirectTo('/login'),
+                                'status' => true,
+                                'message' => trans('AuthSellers::auth.login_success'),
+                            ]);
+                        }
+                        return $this->response_base(['status' => false], 'You have failed to store new item!!!', 200);
+                    }
+                } catch (Exception $errors) {
+                    throw new ApiException($errors->getMessage(), 500, []);
+                }
+            }
+        }
+        return view('AuthSellers::auth.login');
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo check unique email
+     * @param string $email
+     * @return boolean
+     */
+    public function checkUniqueEmail($email) {
+        $count = $this->UsersRepository->findbyemail($email);
+        if($count == 0) return true;
+        return false;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo check unique username
+     * @param string $email
+     * @return boolean
+     */
+    public function checkUniqueUsername($username) {
+        $count = $this->UsersRepository->findbyusername($username);
+        if($count == 0) return true;
+        return false;
     }
 }

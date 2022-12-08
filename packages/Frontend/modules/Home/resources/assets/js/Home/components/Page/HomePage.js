@@ -1,11 +1,17 @@
 import React, { lazy, useContext, useEffect, useState } from 'react';
-import { Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip, Popover, message } from 'antd';
-import { LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined } from '@ant-design/icons';
+import {
+    Card, Avatar, Rate, Image, Carousel, Button, Affix, BackTop, Col, Row, Space, Tabs, Typography, Tooltip, Popover, message
+} from 'antd';
+import {
+    LeftOutlined, RightOutlined, SearchOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined,
+    VerticalAlignTopOutlined,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Meta from "antd/lib/card/Meta";
 import { HomeContext } from '../Contexts/HomeContext';
 
 const { Text } = Typography;
+
 const HomePage = (props) => {
     const { config } = props.data;
     const { app } = config;
@@ -107,7 +113,6 @@ const HomePage = (props) => {
         { id: 6, url: 'offer_06.png', label: 'Trending' },
         { id: 7, url: 'offer_07.png', label: 'Mã giảm giá' },
         { id: 8, url: 'offer_08.png', label: 'Black Friday' }
-
     ]
 
 
@@ -307,7 +312,7 @@ const HomePage = (props) => {
                                     {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
                                     <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
                                 </div>
-                                <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
+                                <Text className="price" type="danger" strong>{item.price_format ? item.price_format : ``} đ</Text>
                                 <Space size={[0]} direction="vertical" className="productItem-btn-group">
                                     <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
                                         <Button icon={<HeartOutlined />} type='link' />
@@ -434,12 +439,12 @@ const HomePage = (props) => {
                                             style={{ height: 189, width: 165, objectFit: `contain` }}
                                             src={item.image_link} loading={lazy}
                                         />}
-                                        // onClick={() => setRouter({
-                                        //     module: 'products',
-                                        //     controller: 'productdetail',
-                                        //     action: 'view',
-                                        //     id: item.id,
-                                        // })}
+                                        onClick={() => setRouter({
+                                            module: 'products',
+                                            controller: 'productdetail',
+                                            action: 'view',
+                                            id: item.id,
+                                        })}
                                         style={{ padding: 12 }}
                                         bodyStyle={{ padding: 0 }}
                                     >
@@ -450,7 +455,7 @@ const HomePage = (props) => {
                                                 {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
                                                 <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
                                             </div>
-                                            <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
+                                            <Text className="price" type="danger" strong>{item.price_format ? item.price_format : ``} đ</Text>
                                         </div>
                                         <Space size={[0]} direction="vertical" className="productItem-btn-group">
                                             <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
@@ -504,9 +509,7 @@ const HomePage = (props) => {
                 </Row>
             </>
             <BackTop>
-                <div className="ant-back-top-inner">
-                    <Image loading={lazy} width={65} height={65} src='/images/totop.png' alt='totop' preview={false} />
-                </div>
+                <Button icon={<VerticalAlignTopOutlined/>}></Button>
             </BackTop>
         </>);
 };

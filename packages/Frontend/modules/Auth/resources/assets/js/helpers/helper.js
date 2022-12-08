@@ -1,4 +1,5 @@
 import { notification } from 'antd';
+import moment from 'moment';
 
 export default {
     /**
@@ -22,5 +23,18 @@ export default {
             message: message,
             description: description,
         });
-    }
+    },
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @param {string} value
+     * @param {string} format
+     * @returns {void}
+     */
+    formatTime(value, format = 'DD/MM/YYYY HH:mm:ss') {
+        try {
+            return moment(value).format(format);
+        } catch(err) {
+            return moment().format('YYYY-MM-DD');
+        }
+    },
 }

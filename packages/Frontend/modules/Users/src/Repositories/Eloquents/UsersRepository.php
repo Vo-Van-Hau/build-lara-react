@@ -117,53 +117,21 @@ class UsersRepository extends BaseRepository implements UsersRepositoryInterface
      */
     public function store($input = []){
         try {
-            $auth_id = AuthFrontend::info('id');
-            if(empty($auth_id) || is_null($auth_id)) return false;
-            $this->model->name         = $input['name'];
-            $this->model->username     = $input['username'];
+            $this->model->name = $input['name'];
+            $this->model->username = $input['username'];
             $this->model->email = $input['email'];
             $this->model->password = Hash::make($input['password']);
-            $this->model->role_id = $input['role'];
+            $this->model->role_id = $input['role_id'];
             $this->model->type = $input['type'];
             $this->model->status = $input['status'];
             $this->model->is_publisher = $input['is_publisher'];
             $this->model->avatar = $input['avatar'];
-            $this->model->user_created_id = $auth_id;
-            $this->model->user_updated_id = $auth_id;
-            $this->model->user_owner_id = $auth_id;
-            if($this->model->save()){
-                if(!empty($input['user_groups'])){
-                    $groups = $input['user_groups'];
-                    foreach($groups as $group){
-                        $pivotGroups[$group] = array(
-                            'user_created_id' => $auth_id,
-                            'user_updated_id' => $auth_id,
-                            'user_owner_id' => $auth_id,
-                            'created_at' => new \DateTime(),
-                            'updated_at' => new \DateTime(),
-                            'deleted' => 0,
-                        );
-                    }
-                    if(isset($pivotGroups) && !empty($pivotGroups)) {
-                        $this->model->groups()->sync($pivotGroups);
-                    }
-                }
-                if(!empty($input['user_publishers'])){
-                    $publishers = $input['user_publishers'];
-                    foreach($publishers as $publisher){
-                        $pivotPublishers[$publisher] = array(
-                            'user_created_id' => $auth_id,
-                            'user_updated_id' => $auth_id,
-                            'user_owner_id' => $auth_id,
-                            'created_at' => new \DateTime(),
-                            'updated_at' => new \DateTime(),
-                            'deleted' => 0,
-                        );
-                    }
-                    if(isset($pivotPublishers) && !empty($pivotPublishers)) {
-                        $this->model->publishers()->sync($pivotPublishers);
-                    }
-                }
+            $this->model->user_created_id = 0;
+            $this->model->user_updated_id = 0;
+            $this->model->user_owner_id = 0;
+            $this->model->created_at = $input['created_at'];
+            $this->model->updated_at = $input['updated_at'];
+            if($this->model->save()) {
                 return $this->model;
             }
             return false;

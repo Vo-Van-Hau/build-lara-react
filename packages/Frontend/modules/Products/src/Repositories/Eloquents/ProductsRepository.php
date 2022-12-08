@@ -11,7 +11,8 @@ use Frontend\Auth\AuthFrontend;
 use Frontend\Products\Products as ProductsProducts;
 use Frontend\Products\Models\ProductCaterory;
 use Frontend\Products\Models\ProductsAdditionalImageLink;
-use Sellers\Sellers\Models\Sellers;
+use Frontend\Sellers\Models\Sellers;
+use Frontend\Orders\Models\OrderDetail;
 
 class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface {
 
@@ -22,6 +23,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
     protected ProductCaterory $product_category_model;
     protected ProductsAdditionalImageLink $products_additional_image_link_model;
     protected Sellers $sellers_model;
+    protected OrderDetail $order_detail_model;
 
     /**
      * @var Eloquent | Model
@@ -37,12 +39,14 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         Products $model,
         ProductCaterory $product_category_model,
         Sellers $sellers_model,
-        ProductsAdditionalImageLink $products_additional_image_link_model
+        ProductsAdditionalImageLink $products_additional_image_link_model,
+        OrderDetail $order_detail_model
     ) {
         $this->model = $model;
         $this->product_category_model = $product_category_model;
         $this->sellers_model = $sellers_model;
         $this->products_additional_image_link_model = $products_additional_image_link_model;
+        $this->order_detail_model = $order_detail_model;
     }
 
     /**
@@ -72,9 +76,21 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         if(!empty($status)) {
             $result = $result->whereIn('status', $status);
         }
-        return $result->offset(intval($start)*Config::get('item_per_home', 60))
+        $result = $result->offset(intval($start)*Config::get('item_per_home', 60))
         ->orderByRaw('products.id DESC')
-        ->limit(Config::get('item_per_home', 60))->get();
+        ->limit(Config::get('item_per_home', 60))->get()
+        ->makeHidden([
+            'user_created_id', 'user_updated_id', 'user_owner_id', 'created_at', 'updated_at',
+            'deleted', 'deleted_at'
+        ]);
+        if(!empty($result)) {
+            foreach($result as $key => $item) {
+                $result[$key]->price_format = number_format($item->price, 0, '.', ',');
+            }
+            return $result;
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -94,14 +110,23 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             },
             'products_additional_image_link' => function($query) {
                 $query->select('product_id', 'id', 'url');
+            },
+            'product_identifiers' => function($query) {
+                $query->select('id', 'brand', 'product_id', 'sku', 'status');
             }
         ])
-        ->first();
+        ->first()->makeHidden([
+            'user_created_id', 'user_updated_id', 'user_owner_id', 'created_at', 'updated_at',
+            'deleted', 'deleted_at'
+        ]);
         if(!empty($result)) {
+            $result->price_format = number_format($result->price, 0, '.', ',');
+            $quantity_sold = $this->order_detail_model->get_by_product_id($id) ?? [];
+            $result->quantity_sold = !empty($quantity_sold) ? count($quantity_sold) : 0;
             $result->similar_products = $this->model->where('id', '<>', $id)
-            ->whereRaw("products.category_id = {$result->category->id}")
-            ->orderByRaw('products.id DESC')
-            ->limit(Config::get('packages.frontend.products.limit_similar_products', 36))->get();
+                ->whereRaw("products.category_id = {$result->category->id}")
+                ->orderByRaw('products.id DESC')
+                ->limit(Config::get('packages.frontend.products.limit_similar_products', 36))->get();
         }
         return $result;
     }

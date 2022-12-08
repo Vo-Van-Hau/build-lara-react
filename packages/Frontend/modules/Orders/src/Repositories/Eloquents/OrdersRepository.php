@@ -112,7 +112,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $new->total_amount = $total_amount;
         $new->item_quantity = count($cart_detail);
         $new->discount = $discount;
-        $new->user_id = $customer['id'];
+        $new->user_id = $user_id;
         // Shipping information
         $new->shipping_id = 0;
         // Payment information

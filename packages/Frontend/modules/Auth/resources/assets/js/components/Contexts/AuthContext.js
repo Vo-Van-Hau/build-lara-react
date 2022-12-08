@@ -67,10 +67,36 @@ const AuthContextProvicer = ({ children, axios, history }) => {
         }
     };
 
-    const todoContextData = {
-        data, login, get_config, dispatch
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {Object} values
+     * @return {Object}
+     */
+    const register = async (values) => {
+        try {
+            const { data } = await api.get_secured()
+            .post(`${window.sparrowConfig.app.backendURL}/api/auth/auth/register`, values);
+            if(data.status) {
+                return {
+                    error: null,
+                    ...data
+                };
+            } else {
+                return {
+                    error: true,
+                    ...data
+                };
+            }
+        } catch(errors) {
+            return {error: true}
+        }
     };
-    
+
+    const todoContextData = {
+        data, login, get_config, dispatch, register
+    };
+
     return (
         <AuthContext.Provider value={todoContextData}>
             {children}

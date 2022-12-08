@@ -174,7 +174,7 @@ class AuthController extends ControllerBase {
         if(!empty($to)) {
             return Core::backendURL() . $to;
         }
-        return Core::backendURL() . '/dashboard';
+        return Core::backendURL() . '/dashboard/dashboard';
     }
 
     /**
@@ -204,7 +204,7 @@ class AuthController extends ControllerBase {
                     'special' => 0,
                     'type' => 0,
                     'is_publisher' => 0,
-                    'avatar' => isset($input['avatar']) ? $input['avatar'] : '',
+                    'avatar' => isset($input['avatar']) ? $input['avatar'] : Config::get('packages.frontend.core.app_url').'/userdata/avatar/default_user_avatar_v1.jpg',
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 );

@@ -17,8 +17,8 @@ use Frontend\Products\Models\Products;
  */
 class CartDetail extends ModelBase {
 
-    protected $connection = "mysql";
-    protected $table = "cart_detail";
+    protected $connection = 'mysql';
+    protected $table = 'cart_detail';
 
     /**
      * The attributes that are mass assignable.
@@ -26,8 +26,8 @@ class CartDetail extends ModelBase {
      * @var array
      */
     protected $fillable = [
-        "cart_id", "product_id", "product_quantity",
-        "status"
+        'cart_id', 'product_id', 'product_quantity',
+        'status'
     ];
 
     /**
@@ -54,10 +54,10 @@ class CartDetail extends ModelBase {
      * @return void
      */
     public function product() {
-        return $this->belongsTo(Products::class, "product_id", "id")
+        return $this->belongsTo(Products::class, 'product_id', 'id')
         ->where([
-            "products.status" => 1,
-            "products.deleted" => 0
+            'products.status' => 1,
+            'products.deleted' => 0
         ]);
     }
 }

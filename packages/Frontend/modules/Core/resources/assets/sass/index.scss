@@ -36,7 +36,7 @@
 //formLogin and Rregister
 .reLogForm_wrapper {
     min-width: 770px;
-  
+
     .ant-form-item{
       margin-bottom: 0;
     }
@@ -56,7 +56,7 @@
    margin-right: 0;
   }
   .ant-modal-content{
-    border-radius: 20px;
+    // border-radius: 20px;
   }
   .reLogRight {
     height: 500px;
@@ -69,11 +69,11 @@
     display: flex;
     flex-direction: column;
   }
-  
+
   .reLogForm{
     position: relative;
   }
-  
+
   .prevBtn{
     position: absolute;
     top: -105px;
@@ -93,7 +93,7 @@
     border-bottom: 1px solid #e7e7e7;
     margin-bottom: 20px;
     text-align: left;
-  
+
     .ant-form-item-explain-error{
       text-align: left;
     }
@@ -988,12 +988,12 @@ main.ant-layout-content {
     h2{
         padding: 2rem 0 0;
     }
-    
+
     .rightRegister{
         padding: 2.5rem 10%;
         background-color: #F5F5FA;
     }
-    
+
     .leftRegister{
         padding: 1rem 10%;
         background-color: #fff;

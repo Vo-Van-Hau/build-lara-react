@@ -1,19 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
     Avatar, Button, Col, Image, Rate, Row, Space, Card, Carousel, List, message, Descriptions,
-    Badge, Input, notification, Breadcrumb, Typography, Slider, Tooltip, Popover
+    Divider, Input, notification, Breadcrumb, Typography, Slider, Tooltip, Popover, Modal
 } from 'antd';
 import {
-    HomeOutlined, StarOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined,
+    HomeOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined,
     MinusOutlined, StarFilled, LeftOutlined, RightOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined
 } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
 import Helper from '../Helper/Helper';
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const ProductDetailPage = (props) => {
+
+    const { id } = props;
+    const { user, config } = props.data;
+    const { is_login } = user;
+    const { app } = config;
+    const { baseURL, adminPrefix } = app;
+
     const {
         data, get_product_item, add_to_cart, setRouter, get_similar_products
     } = useContext(ProductDetailContext);
@@ -24,6 +31,7 @@ const ProductDetailPage = (props) => {
     const [selectedImg, setSelectedImg] = useState(false);
     const [ratingReview, setRatingReview] = useState(5)
     const [listRating, setListRating] = useState([]);
+    const [isModalConfirmLogin, setIsModalConfirmLogin] = useState(false);
 
     /**
      * @todo:
@@ -47,36 +55,40 @@ const ProductDetailPage = (props) => {
      * @return {void}
      */
     const handleAddToCart = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        const key = `open${Date.now()}`;
-        const btn = (<Button className='viewCartBtn' type="primary" onClick={() => {
-            notification.close(key);
-            setRouter({
-                module: 'checkout',
-                controller: 'cart',
-                action: 'view',
-                id: seller.id ? seller.id : '#'
+        if(is_login) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const key = `open${Date.now()}`;
+            const btn = (<Button className='viewCartBtn' type="primary" onClick={() => {
+                notification.close(key);
+                setRouter({
+                    module: 'checkout',
+                    controller: 'cart',
+                    action: 'view',
+                    id: seller.id ? seller.id : '#'
+                });
+            }} block>
+                {`Xem giỏ hàng và thanh toán`}
+            </Button>);
+            notification.success({
+                message: `Thêm vào giỏ hàng thành công!`,
+                placement: 'topRight',
+                top: 80,
+                duration: 5,
+                btn, key,
+                style: {
+                    fontSize: '14px',
+                    padding: '10px',
+                    width: 300,
+                }
             });
-        }} block>
-            {`Xem giỏ hàng và thanh toán`}
-        </Button>);
-        notification.success({
-            message: `Thêm vào giỏ hàng thành công!`,
-            placement: 'topRight',
-            top: 80,
-            duration: 5,
-            btn, key,
-            style: {
-                fontSize: '14px',
-                padding: '10px',
-                width: 300,
-            }
-        });
-        add_to_cart({
-            product_id: product_item.id,
-            quantity,
-        });
-        setQuantity(1);
+            add_to_cart({
+                product_id: product_item.id,
+                quantity,
+            });
+            setQuantity(1);
+        } else {
+            setIsModalConfirmLogin(true);
+        }
     }
 
     /**
@@ -129,7 +141,9 @@ const ProductDetailPage = (props) => {
         });
     };
 
-
+    /**
+     *
+     */
     const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
         <button
             {...props}
@@ -144,6 +158,10 @@ const ProductDetailPage = (props) => {
 
         </button>
     );
+
+    /**
+     *
+     */
     const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
         <button
             {...props}
@@ -158,14 +176,6 @@ const ProductDetailPage = (props) => {
 
         </button>
     );
-
-
-    useEffect(() => {
-        if (mouted) {
-            get_product_item({ id: props.id });
-            get_similar_products();
-        }
-    })
 
     const listDummy = [
         {
@@ -269,9 +279,15 @@ const ProductDetailPage = (props) => {
     }
 
     useEffect(() => {
-        get_product_item({ id: props.id });
+        if(mouted) {
+            get_product_item({ id: props.id });
+            get_similar_products();
+        }
+    }, [id]);
+
+    useEffect(() => {
         setListRating(listDummy);
-    }, [props.id]);
+    }, []);
 
     return (<>
         <>
@@ -301,22 +317,33 @@ const ProductDetailPage = (props) => {
             </Col>
             <Col className='separate'></Col>
             <Col span={15} className='product_info_container'>
-                <Row className='head' >
-                    <Col span={24}><h4>Loại sản phẩm: {product_item.category ? product_item.category.title : ``} </h4></Col>
-                    <Col span={24}><h1 className='product_title'>{product_item.name}</h1></Col>
+                <Row className='head'>
+                    <Col span={24} style={{marginBottom: 6}}>
+                        <Text style={{fontWeight: 480, fontSize: 16,}}>Thương hiệu: {product_item.product_identifiers ? product_item.product_identifiers.brand : ``} </Text>
+                    </Col>
+                    <Col span={24} style={{marginBottom: 6}}>
+                        <Text style={{fontWeight: 480, fontSize: 16,}}>Loại sản phẩm: {product_item.category ? product_item.category.title : ``} </Text>
+                    </Col>
+                    <Col span={24} style={{marginBottom: 6}}>
+                        <h1 className='product_title' style={{fontWeight: 500}}>{product_item.name}</h1>
+                    </Col>
                     <Col className='rating' span={24}>
-                        <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
-                        <span style={{ color: 'rgb(128, 128, 137)', borderLeft: '1px solid grey' }}>{product_item.name}</span>
+                        <Space split={<Divider type="vertical" />}>
+                            <Rate disabled defaultValue={4} style={{ fontSize: 20, marginRight: 10 }} />
+                            <span style={{ color: 'rgb(128, 128, 137)' }}>
+                                Đã bán: {product_item.quantity_sold || 0 }
+                            </span>
+                        </Space>
                     </Col>
                 </Row>
-                <Row className='body' >
+                <Row className='body'>
                     <Col className='product_add' span={15}>
-                        <span className='product_price__current-price'>{product_item.price}</span>
-                        <span className='product_price__list-price'>{product_item.price}</span>
+                        <span className='product_price__current-price'>{product_item.price_format} ₫</span>
+                        <span className='product_price__list-price'>{product_item.price_format} ₫</span>
                         <span className='product_price__discount-rate'>-32%</span>
                         <div className='product_quantity'>
                             <>
-                                <div>
+                                <div style={{marginBottom: 4}}>
                                     <Text strong>Số Lượng</Text>
                                 </div>
                                 <Button.Group>
@@ -341,7 +368,7 @@ const ProductDetailPage = (props) => {
                                     controller: 'shop',
                                     action: 'view',
                                     id: seller.id ? seller.id : '#'
-                                })}>{store.name ? store.name : 'Undefined'}</Button></>
+                                })}>{store.name ? store.name : ''}</Button></>
                             </Col>
                             <Col span={12} className='shop_rating'>
                                 <div>4.5 / 5  <StarFilled /></div>
@@ -370,7 +397,6 @@ const ProductDetailPage = (props) => {
                 </Row>
             </Col>
         </Row>
-
         <Row className='product_detail_container'>
             <Col span={24}>
                 <h3>Thông tin chi tiết</h3>
@@ -522,9 +548,38 @@ const ProductDetailPage = (props) => {
                 />
             </Col>
         </Row>
+        <Modal title="Đăng nhập tài khoản của bạn"
+            open={isModalConfirmLogin} onOk={() => {
+                setRouter({
+                    module: 'auth',
+                    controller: 'login',
+                })
+            }}
+            onCancel={() => {setIsModalConfirmLogin(false)}}
+            cancelText={`Đóng`}
+            okText={`Đăng nhập ngay`}
+        >
+            <Space
+                direction="vertical"
+                size="middle"
+                style={{
+                display: 'flex',
+                }}
+            >
+                <Text>Đăng nhập để bắt đầu mua sắm những món hàng yêu thích</Text>
+                <Text>
+                    Nếu chưa có tài khoản? Đăng ký tài khoản
+                    <Button
+                        type="link"
+                        onClick={() => ( window.location.replace(`${baseURL}/${adminPrefix}/auth/register`))}
+                        style={{padding: 2}}
+                    >
+                    tại đây
+                </Button>
+            </Text>
+            </Space>
+        </Modal>
     </>)
 }
-
-
 
 export default ProductDetailPage;

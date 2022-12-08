@@ -22,6 +22,21 @@ class OrderDetail extends ModelBase {
         'description',
     ];
 
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo
+     * @param int $product_id
+     */
+    public function get_by_product_id($product_id = 0) {
+        if(!empty($product_id)) {
+            $result = $this->where([
+                'product_id' => $product_id,
+                'deleted' => 0,
+            ])->get();
+        }
+        return [];
+    }
+
     /**=======================
      *     RelationShip
      *=======================*/
@@ -51,4 +66,5 @@ class OrderDetail extends ModelBase {
             'order_tracking_details.deleted' => 0
         ]);
     }
+
 }

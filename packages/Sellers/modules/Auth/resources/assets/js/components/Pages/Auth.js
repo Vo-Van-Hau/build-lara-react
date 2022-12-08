@@ -3,17 +3,8 @@ import Login from './Login';
 import Register from './Register';
 
 const Auth = ({ history, ...props }) => {
-    const { page } = props;
 
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: change page
-     * @param {string} page
-     * @return {void}
-     */
-    const change_page = page => {
-        setPage(page);
-    };
+    const { page } = props;
 
     if(page === 'login') {
         return (
@@ -22,7 +13,7 @@ const Auth = ({ history, ...props }) => {
                     <Col span={8}></Col>
                     <Col span={8}>
                         <Card title={window.sparrowConfig.app.name} className='loginPageContainer'>
-                            <Login change_page={change_page}/>
+                            <Login {...props}/>
                         </Card>
                     </Col>
                     <Col span={8}></Col>
@@ -32,7 +23,7 @@ const Auth = ({ history, ...props }) => {
     } else if(page === 'register') {
         return (
             <>
-                <Register />
+                <Register {...props}/>
             </>
         );
     }

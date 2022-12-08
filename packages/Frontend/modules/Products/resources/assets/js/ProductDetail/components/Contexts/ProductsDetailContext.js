@@ -5,10 +5,10 @@ import {
     GET_PRODUCT_ITEM, SET_TABLE_LOADING, MOUTED,
     ADD_TO_CART
 } from '../Dispatch/type';
-
+import Helper from '../Helper/Helper';
 export const ProductDetailContext = createContext();
 
-const ProductDetailContextProvicer = ({ children, axios, history, config, navigate }) => {
+const ProductDetailContextProvicer = ({ children, axios, history, config, navigate, ...props }) => {
 
     const [data, dispatch] = useReducer(ProductDetailReducer, initialState);
 
