@@ -1,7 +1,4 @@
-    const Sellers = () => {
-        return (
-            <>Hello Sellers Module</>
-        )
-    }
+import Sellers from './Sellers';
 
-    export default Sellers;
+export default Sellers;
+export { Sellers as sellers }

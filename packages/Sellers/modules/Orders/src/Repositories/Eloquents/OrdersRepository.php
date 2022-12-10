@@ -192,6 +192,55 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
+     * @param string $start_date
+     * @param string $end_date
+     * @param array $input
+     * @param array $data
+     * @return mixed
+     */
+    public function get_orders_sellers_by_date($start_date, $end_date, $input = []) {
+        $user_id = $input['user_id'];
+        $seller = $this->sellers_model->where([
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
+        ])->first();
+        if(is_null($user_id) || is_null($seller)) return false;
+        $condition = "orders.order_date BETWEEN '{$start_date}' AND '{$end_date}'";
+        $order_detail_list = $this->order_detail_model->join('orders', 'orders.id', '=', 'order_detail.order_id')
+        ->join('products', 'order_detail.product_id', '=', 'products.id')
+        ->where([
+            'products.seller_id' => $seller->id
+        ])
+        ->whereRaw($condition)
+        ->selectRaw('order_detail.*')
+        ->get();
+        $result = array();
+        $orders_list = [];
+        foreach($order_detail_list as $key => $order_detail) {
+            $order_detail['product'] = $this->products_model->find($order_detail['product_id']);
+            $order_detail['order_tracking_status'] = $this->order_tracking_status_model
+            ->select('id', 'title', 'tag_name')
+            ->find($order_detail['order_tracking_status_id']);
+            $orders_list[$order_detail['order_id']]['order_detail'][] = $order_detail;
+        }
+        foreach($orders_list as $key => $_order) {
+            $order = $this->model->find($key);
+            if(!empty($order)) {
+                $order['order_detail'] = $_order['order_detail'];
+                $result[] = $order;
+            }
+        }
+        $result = [
+            'data' => $result,
+            'total' => count($orders_list),
+        ];
+        return $result;
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
      * @param array $data
      * @return mixed
      */

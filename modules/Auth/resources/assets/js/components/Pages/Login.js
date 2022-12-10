@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../Contexts/AuthContext';
 import { Form, Input, Button, Row, Spin } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, ExportOutlined } from '@ant-design/icons';
 
 const Login = ({ history, ...props }) => {
 
@@ -55,14 +55,14 @@ const Login = ({ history, ...props }) => {
                     <Input.Password prefix={<LockOutlined className='site-form-item-icon' />} placeholder='Password'/>
                 </Form.Item>
                 <Row justify='center'>
-                    <Form.Item>
+                    <Form.Item style={{width: '100%' }}>
                         {
                         loadingStatus == true ? (
                             <div style={{ textAlign: 'center' }}>
                                 <Spin size='large' />
                             </div>
                         ) : (
-                            <Button className='btn-login-custom' type='primary' htmlType='submit' style={{width: '100%'}}>
+                            <Button className='btn-login-custom' type='primary' htmlType='submit' style={{width: '100%'}} size={'large'} icon={<ExportOutlined />}>
                                 Login
                             </Button>
                         )}

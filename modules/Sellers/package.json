@@ -9,6 +9,26 @@
     },
     "dependencies": {},
     "devDependencies": {},
-    "menu": {},
-    "status": false
+    "component": {
+        "Sellers": true
+    },
+    "menu": {
+        "Sellers": {
+            "name": "Sellers",
+            "icon": "fas fa-user",
+            "controller": "Sellers",
+            "group": "systems",
+            "position": 3,
+            "child": [
+                {
+                    "name": "View Sellers",
+                    "link": "\/sellers\/sellers",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Sellers"
+                }
+            ]
+        }
+    },
+    "status": true
 }

@@ -34,7 +34,7 @@ const RoutesWeb = (props) => {
     return (
         <BrowserRouter history={history}>
             <Routes>
-                <Route path={window.sparrowConfig.app.adminPrefix + '/auth/login'} element={<Auth {...props}/>} />
+                <Route path={window.sparrowConfig.app.adminPrefix + '/auth/login'} element={<Auth {...props} page={`login`}/>} />
             </Routes>
         </BrowserRouter>
     )

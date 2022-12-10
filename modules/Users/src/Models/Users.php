@@ -12,6 +12,7 @@ use Modules\Core\Models\Traits\BasicModel;
 use Modules\Users\Models\Roles;
 use Modules\Users\Models\Groups;
 use Modules\Publishers\Models\Publishers;
+use Modules\Sellers\Models\Sellers;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -98,5 +99,17 @@ class Users extends Authenticatable {
      */
     public function publishers(){
         return $this->belongsToMany(Publishers::class, "user_publisher", "user_id", "publisher_id")->wherePivot("deleted", "=", 0);
+    }
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: relationship
+     * @return void
+     */
+    public function seller() {
+        return $this->hasOne(Sellers::class, 'user_id', 'id')
+        ->where([
+            'sellers.deleted' => 0
+        ]);
     }
 }

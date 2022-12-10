@@ -19,12 +19,10 @@ else if(MIX_SOURCE && MIX_SOURCE === 'sellers') {
 // It returns a boolean value which indicates the presence of a file.
 if (pathMix !== '' && fs.existsSync(pathMix)) {
     require(pathMix);
-}
-else {
+} else {
     if(MIX_SOURCE === 'frontend') {
         require(`./packages/Frontend/build/webpack.mix.js`);
-    }
-    else {
+    } else {
         require(`./build/webpack.mix.js`);
     }
 }
