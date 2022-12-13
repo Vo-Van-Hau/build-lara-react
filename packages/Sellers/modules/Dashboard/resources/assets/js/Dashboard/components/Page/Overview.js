@@ -249,13 +249,13 @@ const Overview = ({keyID, ...props}) => {
                 <Row>
                     <Col span={24}>
                         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-                            <Title level={5}>Thống Kê Sản Phẩm</Title>
+                            <Title level={5}>Thống Kê Sản Phẩm ({products.total} sản phẩm)</Title>
                             <StatictisProductsPieChart />
                         </Space>
                     </Col>
                     <Col span={24}>
                         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-                            <Title level={5}>Thống Kê Đơn Hàng</Title>
+                            <Title level={5}>Thống Kê Đơn Hàng ({orders.total} đơn hàng)</Title>
                             <StatictisOrdersInYearColumn />
                         </Space>
                     </Col>

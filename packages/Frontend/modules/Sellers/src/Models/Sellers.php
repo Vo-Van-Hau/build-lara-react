@@ -12,6 +12,25 @@ class Sellers extends ModelBase {
     protected $primaryKey = 'id';
     protected $fillable = [];
 
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo
+     * @param array $brand_ids
+     * @return
+     */
+    public function get_seller_ids_by_stores($store_ids = []) : array {
+        if(empty($store_ids)) return [];
+        $result = Stores::whereIn('id', $store_ids)->select('seller_id')->get()->toArray();
+        if(!empty($result)) {
+            foreach($result as $key => $_result) {
+                unset($result[$key]);
+                $result[$key] = $_result['seller_id'];
+            }
+            $result = array_unique($result);
+        }
+        return $result;
+    }
+
     /**=======================
      *     RelationShip
      *=======================*/

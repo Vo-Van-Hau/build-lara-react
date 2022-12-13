@@ -14,6 +14,7 @@ use Sellers\Core\Exceptions\ApiException;
 use Sellers\Users\Interfaces\UsersRepositoryInterface;
 use Sellers\Sellers\Interfaces\SellersRepositoryInterface;
 use Sellers\Shop\Interfaces\ShopRepositoryInterface;
+use Sellers\Auth\AuthSellers;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -175,6 +176,33 @@ class AuthController extends ControllerBase {
             return Core::backendURL() . $to;
         }
         return Core::backendURL() . '/dashboard/dashboard';
+    }
+
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @return void
+     */
+    public function authenticate_user(Request $request) {
+        if($request->isMethod('post')) {
+            $input = $request->all();
+            $auth_id = AuthSellers::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $result = $this->UsersRepository->get_by_id($input['user_id']);
+            if($result) {
+                $result['is_login'] = true;
+                if(!empty($result)) {
+                   
+                }
+                return $this->response_base([
+                    'status' => true,
+                    'user' => $result
+                ], 'You have got user successfully !!!', 200);
+            }
+            return $this->response_base(['status' => false], 'You have failed to get user !!!', 200);
+        }
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**

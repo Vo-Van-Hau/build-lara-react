@@ -60,7 +60,8 @@ class Products extends ModelBase {
             ])
             ->where([
                 'sellers.status' => 1,
-                'sellers.deleted' => 0
+                'sellers.deleted' => 0,
+                'is_accepted' => 1,
             ]);
     }
 

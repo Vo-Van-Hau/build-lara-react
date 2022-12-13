@@ -1663,16 +1663,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.47.4",
+            "version": "v1.48.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "3a00a21e2af5a07a77cd01a7dcbc664d459c8fa2"
+                "reference": "83d1c896ab481ae647d536d017f4a5374f1bf094"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/3a00a21e2af5a07a77cd01a7dcbc664d459c8fa2",
-                "reference": "3a00a21e2af5a07a77cd01a7dcbc664d459c8fa2",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/83d1c896ab481ae647d536d017f4a5374f1bf094",
+                "reference": "83d1c896ab481ae647d536d017f4a5374f1bf094",
                 "shasum": ""
             },
             "require": {
@@ -1723,22 +1723,22 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.47.4"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.48.0"
             },
-            "time": "2022-11-01T20:21:07+00:00"
+            "time": "2022-12-07T23:19:22+00:00"
         },
         {
             "name": "google/cloud-translate",
-            "version": "v1.12.8",
+            "version": "v1.12.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-translate.git",
-                "reference": "4895a14774cd2dfd45ca29787ae6e640e143202c"
+                "reference": "d78f4ce0454489a4acbdefa7d175c444e514e9c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-translate/zipball/4895a14774cd2dfd45ca29787ae6e640e143202c",
-                "reference": "4895a14774cd2dfd45ca29787ae6e640e143202c",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-translate/zipball/d78f4ce0454489a4acbdefa7d175c444e514e9c5",
+                "reference": "d78f4ce0454489a4acbdefa7d175c444e514e9c5",
                 "shasum": ""
             },
             "require": {
@@ -1778,9 +1778,9 @@
             ],
             "description": "Cloud Translation Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-translate/tree/v1.12.8"
+                "source": "https://github.com/googleapis/google-cloud-php-translate/tree/v1.12.9"
             },
-            "time": "2022-08-23T20:22:22+00:00"
+            "time": "2022-12-07T23:19:22+00:00"
         },
         {
             "name": "google/common-protos",
@@ -1836,16 +1836,16 @@
         },
         {
             "name": "google/gax",
-            "version": "v1.17.0",
+            "version": "v1.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "bb8d95187dcfebe04a40d2de916951fa4942fc35"
+                "reference": "45e01473b7215d593a58a72c89225f110e9d2ce0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/bb8d95187dcfebe04a40d2de916951fa4942fc35",
-                "reference": "bb8d95187dcfebe04a40d2de916951fa4942fc35",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/45e01473b7215d593a58a72c89225f110e9d2ce0",
+                "reference": "45e01473b7215d593a58a72c89225f110e9d2ce0",
                 "shasum": ""
             },
             "require": {
@@ -1886,9 +1886,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/gax-php/issues",
-                "source": "https://github.com/googleapis/gax-php/tree/v1.17.0"
+                "source": "https://github.com/googleapis/gax-php/tree/v1.18.1"
             },
-            "time": "2022-09-12T15:22:54+00:00"
+            "time": "2022-12-06T22:02:34+00:00"
         },
         {
             "name": "google/grpc-gcp",
@@ -1937,16 +1937,16 @@
         },
         {
             "name": "google/longrunning",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/php-longrunning.git",
-                "reference": "5b7500eede9d6b18ef038bef0b5449cbf085e1d6"
+                "reference": "3bdea7559f0e9ff65b826b07c942cd430eabaf38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/php-longrunning/zipball/5b7500eede9d6b18ef038bef0b5449cbf085e1d6",
-                "reference": "5b7500eede9d6b18ef038bef0b5449cbf085e1d6",
+                "url": "https://api.github.com/repos/googleapis/php-longrunning/zipball/3bdea7559f0e9ff65b826b07c942cd430eabaf38",
+                "reference": "3bdea7559f0e9ff65b826b07c942cd430eabaf38",
                 "shasum": ""
             },
             "require-dev": {
@@ -1975,22 +1975,22 @@
             ],
             "description": "Google LongRunning Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/php-longrunning/tree/v0.2.0"
+                "source": "https://github.com/googleapis/php-longrunning/tree/v0.2.1"
             },
-            "time": "2022-08-05T00:41:21+00:00"
+            "time": "2022-12-07T23:19:22+00:00"
         },
         {
             "name": "google/protobuf",
-            "version": "v3.21.10",
+            "version": "v3.21.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "118cb171ecd7dcac38055a954717a3b5ed4a4e5a"
+                "reference": "8f8dc48540aed2c96eb3febcc4816f1321f66b85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/118cb171ecd7dcac38055a954717a3b5ed4a4e5a",
-                "reference": "118cb171ecd7dcac38055a954717a3b5ed4a4e5a",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/8f8dc48540aed2c96eb3febcc4816f1321f66b85",
+                "reference": "8f8dc48540aed2c96eb3febcc4816f1321f66b85",
                 "shasum": ""
             },
             "require": {
@@ -2019,9 +2019,9 @@
                 "proto"
             ],
             "support": {
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.10"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.11"
             },
-            "time": "2022-11-30T19:56:32+00:00"
+            "time": "2022-12-08T06:36:59+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -2462,16 +2462,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.83.26",
+            "version": "v8.83.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "7411d9fa71c1b0fd73a33e225f14512b74e6c81e"
+                "reference": "e1afe088b4ca613fb96dc57e6d8dbcb8cc2c6b49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/7411d9fa71c1b0fd73a33e225f14512b74e6c81e",
-                "reference": "7411d9fa71c1b0fd73a33e225f14512b74e6c81e",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/e1afe088b4ca613fb96dc57e6d8dbcb8cc2c6b49",
+                "reference": "e1afe088b4ca613fb96dc57e6d8dbcb8cc2c6b49",
                 "shasum": ""
             },
             "require": {
@@ -2631,7 +2631,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-11-01T14:48:50+00:00"
+            "time": "2022-12-08T15:28:55+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -2828,16 +2828,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "a36bd2be4f5387c0f3a8792a0d76b7d68865abbf"
+                "reference": "c493585c130544c4e91d2e0e131e6d35cb0cbc47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/a36bd2be4f5387c0f3a8792a0d76b7d68865abbf",
-                "reference": "a36bd2be4f5387c0f3a8792a0d76b7d68865abbf",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c493585c130544c4e91d2e0e131e6d35cb0cbc47",
+                "reference": "c493585c130544c4e91d2e0e131e6d35cb0cbc47",
                 "shasum": ""
             },
             "require": {
@@ -2865,7 +2865,7 @@
                 "symfony/finder": "^5.3 | ^6.0",
                 "symfony/yaml": "^2.3 | ^3.0 | ^4.0 | ^5.0 | ^6.0",
                 "unleashedtech/php-coding-standard": "^3.1.1",
-                "vimeo/psalm": "^4.24.0"
+                "vimeo/psalm": "^4.24.0 || ^5.0.0"
             },
             "suggest": {
                 "symfony/yaml": "v2.3+ required if using the Front Matter extension"
@@ -2930,7 +2930,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-03T17:29:46+00:00"
+            "time": "2022-12-10T16:02:17+00:00"
         },
         {
             "name": "league/config",
@@ -9483,16 +9483,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.26",
+            "version": "9.5.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "851867efcbb6a1b992ec515c71cdcf20d895e9d2"
+                "reference": "a2bc7ffdca99f92d959b3f2270529334030bba38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/851867efcbb6a1b992ec515c71cdcf20d895e9d2",
-                "reference": "851867efcbb6a1b992ec515c71cdcf20d895e9d2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a2bc7ffdca99f92d959b3f2270529334030bba38",
+                "reference": "a2bc7ffdca99f92d959b3f2270529334030bba38",
                 "shasum": ""
             },
             "require": {
@@ -9565,7 +9565,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.26"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.27"
             },
             "funding": [
                 {
@@ -9581,7 +9581,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-28T06:00:21+00:00"
+            "time": "2022-12-09T07:31:23+00:00"
         },
         {
             "name": "sebastian/cli-parser",

@@ -55,7 +55,7 @@ const ActionAddress = ({keyID, ...props}) => {
 
     useEffect(() => {
         if(mouted) {
-            get_areas();
+            get_areas(1, {});
             if(keyID) {
                 get_item(keyID).then((res) => {
                     let { status, data, message } = res.data;

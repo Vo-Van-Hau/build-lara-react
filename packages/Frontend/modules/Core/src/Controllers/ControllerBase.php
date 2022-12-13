@@ -31,12 +31,12 @@ class ControllerBase extends Controller {
      * @return void
      */
     protected function response_base($data = [
-        "status" => true
-    ], $message = "", $status = 200, $status_response = true) {
+        'status' => true
+    ], $message = '', $status = 200, $status_response = true) {
         return response()->json([
-            "status" => $data["status"],
-            "message"  => $message,
-            "data" => $data
+            'status' => $data['status'],
+            'message'  => $message,
+            'data' => $data
         ], $status);
     }
 }

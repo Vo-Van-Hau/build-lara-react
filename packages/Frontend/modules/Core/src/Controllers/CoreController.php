@@ -28,36 +28,36 @@ class CoreController extends ControllerBase {
     public function get_module() {
         $module_path = \Frontend\Core\Core::module_path();
         $dirs = [];
-        foreach (glob($module_path . "/*", GLOB_ONLYDIR) as $dir) {
+        foreach (glob($module_path . '/*', GLOB_ONLYDIR) as $dir) {
             $folder = basename($dir);
-            $composer_path = $module_path . $folder . "/package.json";
+            $composer_path = $module_path . $folder . '/package.json';
             $config = [];
             if (file_exists($composer_path)) {
                 $config = json_decode(file_get_contents($composer_path));
             }
             if (!empty($config->status) && $config->status == true) {
                 $dirs[] = array(
-                    "name" => $folder,
-                    "module_name" => !empty($config->name) ? $config->name : "",
-                    "version" => !empty($config->version) ? $config->version : "",
+                    'name' => $folder,
+                    'module_name' => !empty($config->name) ? $config->name : '',
+                    'version' => !empty($config->version) ? $config->version : '',
                 );
             }
         }
         $menu_acl = array();
-        if(!is_null(request()->session()->get("auth_module"))) {
-            if(isset(request()->session()->get("auth_module")["menu_acl"])) {
-                $menu_acl = (Array) request()->session()->get("auth_module")["menu_acl"];
+        if(!is_null(request()->session()->get('auth_module'))) {
+            if(isset(request()->session()->get('auth_module')['menu_acl'])) {
+                $menu_acl = (Array) request()->session()->get('auth_module')['menu_acl'];
             }
         }
         return response()->json([
-                "status" => true,
-                "config" => \Frontend\Core\Core::config(),
-                "modules" => $dirs,
-                "menus" => $menu_acl,
-                "language" => [
-                    "locale" => app()->getLocale(),
-                    "locales" => \Config::get("module.core.locales", []),
-                    "lang" => $this->translations("Core"),
+                'status' => true,
+                'config' => \Frontend\Core\Core::config(),
+                'modules' => $dirs,
+                'menus' => $menu_acl,
+                'language' => [
+                    'locale' => app()->getLocale(),
+                    'locales' => \Config::get('module.core.locales', []),
+                    'lang' => $this->translations('Core'),
                 ],
             ], 200);
     }
@@ -68,6 +68,6 @@ class CoreController extends ControllerBase {
      * @return void
      */
     protected function redirectTo(){
-        return \Core::backendURL() . "/dashboard";
+        return \Core::backendURL() . '/dashboard';
     }
 }

@@ -17,6 +17,12 @@ class CreateStoresTable extends Migration {
             $table->string('name');
             $table->integer('seller_id')->unsigned();
             $table->text('brand_logo')->nullable();
+            $table->integer('area_id')->unsigned()->default(0);
+            $table->integer('country_id')->unsigned()->default(0);
+            $table->integer('province_id')->unsigned()->default(0);
+            $table->integer('district_id')->unsigned()->default(0);
+            $table->integer('ward_id')->unsigned()->default(0);
+            $table->text('address');
             $table->integer('status')->unsigned()->default(0);
             $table->longText('description')->nullable()->comment('1–5,000 characters');
             $table->integer('user_created_id');

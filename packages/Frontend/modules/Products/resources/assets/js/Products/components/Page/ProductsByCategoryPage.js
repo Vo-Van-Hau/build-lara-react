@@ -91,7 +91,7 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
                             // onClick={({ item, key, keyPath, domEvent }) => getProductsByCategory({ item, key, keyPath, domEvent })}
                         />
                         <Divider />
-                       
+
                     </div>
                 </Affix>
             </Col>
@@ -120,8 +120,8 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
                             </Col>
                         </Row>
                         <Menu items={menuRightItems} mode="horizontal" />
-                        <Row className="productContainer">
-                            <Space size={[20, 16]} wrap style={{ width: '100%' }} >
+                        <Row>
+                            <Space size={[4, 4]} wrap style={{ width: '100%' }} >
                                 {products.slice(minValue, maxValue).map((item, index) => (
                                     <Card className="productItem"
                                         key={index}
@@ -144,8 +144,7 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
 
                                         <Text className="price" type="danger" strong>{item.price} đ</Text>
                                     </Card>
-                                ),
-                                )}
+                                ))}
                             </Space>
                             <Pagination
                                 defaultCurrent={1}

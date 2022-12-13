@@ -13,6 +13,7 @@ use Frontend\Products\Models\ProductCaterory;
 use Frontend\Products\Models\ProductsAdditionalImageLink;
 use Frontend\Sellers\Models\Sellers;
 use Frontend\Orders\Models\OrderDetail;
+use Frontend\Shop\Models\Stores;
 
 class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface {
 
@@ -24,6 +25,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
     protected ProductsAdditionalImageLink $products_additional_image_link_model;
     protected Sellers $sellers_model;
     protected OrderDetail $order_detail_model;
+    protected Stores $stores_model;
 
     /**
      * @var Eloquent | Model
@@ -40,13 +42,15 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ProductCaterory $product_category_model,
         Sellers $sellers_model,
         ProductsAdditionalImageLink $products_additional_image_link_model,
-        OrderDetail $order_detail_model
+        OrderDetail $order_detail_model,
+        Stores $stores_model
     ) {
         $this->model = $model;
         $this->product_category_model = $product_category_model;
         $this->sellers_model = $sellers_model;
         $this->products_additional_image_link_model = $products_additional_image_link_model;
         $this->order_detail_model = $order_detail_model;
+        $this->stores_model = $stores_model;
     }
 
     /**
@@ -57,11 +61,42 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return Illuminate\Support\Collection
      */
     public function get_all($keyword = '', $status = [], $page = 1) {
-        $result = $this->model->where(['deleted' => 0]);
+        $result = $this->model
+        ->where([
+            'status' => 1,
+            'deleted' => 0,
+        ])
+        ->with([
+            'seller' => function($query) {
+                $query->select('id', 'is_accepted');
+            },
+            'product_description_detail' => function($query) {
+                $query->select('id', 'condition', 'color');
+            },
+            'category' => function($query) {
+                $query->with([
+                    'product_category_brands' => function($query) {
+                        $query->select('id', 'name', 'category_id', 'status');
+                    }
+                ])->select('id', 'title');
+            }
+        ])
+        ->select(
+            'id', 'seller_id', 'name', 'slug_name', 'price', 'sale_price_id', 'link', 'mobile_link', 'image_link', 'category_id', 'availability',
+            'availability_date', 'expiration_date', 'status'
+        );
         if(!empty($status)) {
             $result = $result->whereIn('status', $status);
         }
-        return $result->paginate($page*Config::get('item_per_home', 60));
+        $result = $result->paginate($page*Config::get('item_per_home', 60));
+        if(!empty($result)) {
+            foreach($result as $key => $item) {
+                $result[$key]->price_format = number_format($item->price, 0, '.', ',');
+            }
+            return $result;
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -236,4 +271,84 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ->paginate(50);
         return $result;
     }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $data
+     * @return mixed
+     */
+    public function filter_products($data) {
+        $min_price = $data['min_price'] ?? 0;
+        $max_price = $data['max_price'] ?? 0;
+        $locations = $data['locations'] ?? [];
+        $brands = $data['brands'] ?? [];
+        $stores = $data['stores'] ?? [];
+        $result = $this->model
+        ->with([
+            'seller' => function($query) {
+                $query->select('id', 'is_accepted');
+            },
+            'product_description_detail' => function($query) {
+                $query->select('id', 'condition', 'color');
+            },
+            'category' => function($query) {
+                $query->with([
+                    'product_category_brands' => function($query) {
+                        $query->select('id', 'name', 'category_id', 'status');
+                    }
+                ])->select('id', 'title');
+            }
+        ])
+        ->where([
+            'status' => 1,
+            'deleted' => 0
+        ]);
+        /**
+         * Filter: locations
+         */
+        if(!empty($locations)) {
+            $seller_ids = $this->stores_model->whereIn('province_id', $locations)->select('seller_id');
+            if(!empty($seller_ids)) {
+                $result->whereIn('seller_id', $seller_ids);
+            }
+        }
+        /**
+         * Filter: brands
+         */
+        if(!empty($brands)) {
+            $category_ids = $this->product_category_model->get_category_ids_by_brands($brands);
+            if(!empty($category_ids)) {
+                $result->whereIn('category_id', $category_ids);
+            }
+        }
+        /**
+         * Filter: stores
+         */
+        if(!empty($stores)) {
+            $seller_ids = $this->sellers_model->get_seller_ids_by_stores($stores);
+            if(!empty($seller_ids)) {
+                $result->whereIn('seller_id', $seller_ids);
+            }
+        }
+        /**
+         * Filter: prices
+         */
+        if(!empty($min_price) && !empty($max_price)) {
+            $result->whereBetween('price', [$min_price, $max_price]);
+        }
+        $result = $result->select(
+            'id', 'seller_id', 'name', 'slug_name', 'price', 'sale_price_id', 'link', 'mobile_link', 'image_link', 'category_id', 'availability',
+            'availability_date', 'expiration_date', 'status'
+        )->get();
+        if(!empty($result)) {
+            foreach($result as $key => $item) {
+                $result[$key]->price_format = number_format($item->price, 0, '.', ',');
+            }
+            return $result;
+        } else {
+            return [];
+        }
+    }
+
 }

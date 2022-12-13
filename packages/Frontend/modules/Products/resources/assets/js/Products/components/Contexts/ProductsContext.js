@@ -3,7 +3,7 @@ import { createSearchParams } from 'react-router-dom';
 import { initialState, ProductsReducer } from '../Reducers/ProductsReducer';
 import {
     GET_PRODUCTS, SET_TABLE_LOADING, MOUTED, GET_PRODUCT_CATEGORIES,
-    GET_PRODUCT_CATEGORY,
+    GET_PRODUCT_CATEGORY, GET_AREAS, GET_DISTRICTS, GET_WARDS,
 } from '../Dispatch/type';
 
 export const ProductsContext = createContext();
@@ -131,6 +131,90 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
     }
 
     /**
+ * @author: <vanhau.vo@urekamedia.vn>
+ * @todo: get areas
+ * @param {string} page
+ * @param {string} keySearch
+ * @return {void}
+ */
+    const get_areas = (page, keySearch) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/get_areas?page=${page}`, {...keySearch})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { areas } = res.data.data;
+                dispatch({ type: GET_AREAS, payload: areas });
+                // dispatch({ type: SET_PAGINATION, payload: { total, current: current_page, defaultPageSize: per_page } })
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get districts
+     * @param {number} province_id
+     * @return {void}
+     */
+    const get_districs_by_province = (province_id = 0) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/address/address/get_districs_by_province`, {province_id})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { districts } = res.data.data;
+                dispatch({ type: GET_DISTRICTS, payload: districts });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: get wards
+     * @param {number} district_id
+     * @return {void}
+     */
+    const get_wards_by_district = (district_id = 0) => {
+            set_table_loading();
+            return axios
+            .get_secured()
+            .post(`/address/address/get_wards_by_district`, {district_id})
+            .then((res) => {
+                let { status } = res.data;
+                if(status) {
+                    let { wards } = res.data.data;
+                    dispatch({ type: GET_WARDS, payload: wards });
+                }
+            })
+            .catch((errors) => {})
+            .finally(() => {set_table_loading();});
+    }
+
+    const filter_products = (values) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/products/products/filter_products`, {...values})
+        .then((res) => {
+            let { status } = res.data;
+            if(status) {
+                let { products } = res.data.data;
+                dispatch({ type: GET_PRODUCTS, payload: products });
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: set table loading...
      * @return {void}
@@ -156,9 +240,9 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config}, get_product_categories, get_products_by_category,
-        history, dispatch, get_axios, get_products, get_product_category,
-        set_table_loading, set_mouted, setRouter,
+        data: {...data, config}, get_product_categories, get_products_by_category, filter_products,
+        history, dispatch, get_axios, get_products, get_product_category, get_areas,
+        set_table_loading, set_mouted, setRouter, get_districs_by_province, get_wards_by_district,
     };
 
     return (

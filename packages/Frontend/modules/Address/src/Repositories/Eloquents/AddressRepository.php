@@ -62,7 +62,7 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = "", $status = []){
+    public function get_all($keyword = '', $status = []){
 
     }
 
@@ -110,71 +110,71 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      * @return Illuminate\Support\Collection
      */
     public function get_customer_address($input) {
-        $user_id = $input["user_id"];
+        $user_id = $input['user_id'];
         $customer = $this->customer_model;
         if(empty($user_id)) return false;
         $result = $customer->where([
-            "status"  => 1,
-            "deleted" => 0,
-            "user_id" => $user_id
+            'status'  => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
         ])->with([
-            "customer_address" => function($query) {
+            'customer_address' => function($query) {
                 /**
                  * @note: Eager Loading Specific Columns->When using this feature,
                  * you should always include the id column and any relevant foreign key columns in the list of columns you wish to retrieve.
                  */
                 $query->with([
-                    "area:id,name,type",
-                    "country:id,name,type",
-                    "province:id,name,type",
-                    "district:id,name,type",
-                    "ward:id,name,type"
+                    'area:id,name,type',
+                    'country:id,name,type',
+                    'province:id,name,type',
+                    'district:id,name,type',
+                    'ward:id,name,type'
                 ]);
             }
         ])->first();
         if(!empty($result)) {
-            if(!empty($result["customer_address"])) {
-                foreach($result["customer_address"] as $key => $address) {
-                    if(!is_null($address["province"])) {
-                        switch($address["province"]["type"]) {
-                            case "province":
-                                $address["province"]["type"] = trans("AddressFrontend::common.0");
+            if(!empty($result['customer_address'])) {
+                foreach($result['customer_address'] as $key => $address) {
+                    if(!is_null($address['province'])) {
+                        switch($address['province']['type']) {
+                            case 'province':
+                                $address['province']['type'] = trans('AddressFrontend::common.0');
                                 break;
-                            case "city":
-                                $address["province"]["type"] = trans("AddressFrontend::common.1");
+                            case 'city':
+                                $address['province']['type'] = trans('AddressFrontend::common.1');
                                 break;
-                            default: $address["province"]["type"] = trans("AddressFrontend::common.0");
+                            default: $address['province']['type'] = trans('AddressFrontend::common.0');
                         }
                     }
-                    if(!is_null($address["district"])) {
-                        switch($address["district"]["type"]) {
-                            case "district":
-                                $address["district"]["type"] = trans("AddressFrontend::common.2");
+                    if(!is_null($address['district'])) {
+                        switch($address['district']['type']) {
+                            case 'district':
+                                $address['district']['type'] = trans('AddressFrontend::common.2');
                                 break;
-                            case "city":
-                                $address["district"]["type"] = trans("AddressFrontend::common.1");
+                            case 'city':
+                                $address['district']['type'] = trans('AddressFrontend::common.1');
                                 break;
-                            case "district_city":
-                                $address["district"]["type"] = trans("AddressFrontend::common.4");
+                            case 'district_city':
+                                $address['district']['type'] = trans('AddressFrontend::common.4');
                                 break;
-                            case "town":
-                                $address["district"]["type"] = trans("AddressFrontend::common.3");
+                            case 'town':
+                                $address['district']['type'] = trans('AddressFrontend::common.3');
                                 break;
-                            default: $address["district"]["type"] = trans("AddressFrontend::common.2");
+                            default: $address['district']['type'] = trans('AddressFrontend::common.2');
                         }
                     }
-                    if(!is_null($address["ward"])) {
-                        switch($address["ward"]["type"]) {
-                            case "ward":
-                                $address["ward"]["type"] = trans("AddressFrontend::common.6");
+                    if(!is_null($address['ward'])) {
+                        switch($address['ward']['type']) {
+                            case 'ward':
+                                $address['ward']['type'] = trans('AddressFrontend::common.6');
                                 break;
-                            case "commune":
-                                $address["ward"]["type"] = trans("AddressFrontend::common.5");
+                            case 'commune':
+                                $address['ward']['type'] = trans('AddressFrontend::common.5');
                                 break;
-                            case "town":
-                                $address["ward"]["type"] = trans("AddressFrontend::common.7");
+                            case 'town':
+                                $address['ward']['type'] = trans('AddressFrontend::common.7');
                                 break;
-                            default: $address["ward"]["type"] = trans("AddressFrontend::common.6");
+                            default: $address['ward']['type'] = trans('AddressFrontend::common.6');
                         }
                     }
                 }
@@ -191,19 +191,17 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      * @return Illuminate\Support\Collection
      */
     public function get_areas($input) {
-        $user_id = $input["user_id"];
-        if(empty($user_id)) return false;
         $result = $this->areas_model->where([
-            "id" => 3
+            'id' => 3
         ])->first();
-        $result["countries"] = $this->countries_model->where([
-            "area_id" => $result->id
+        $result['countries'] = $this->countries_model->where([
+            'area_id' => $result->id
         ])->with([
-            "provinces" => function($query) {}
+            'provinces' => function($query) {}
         ])->first();
         if(!empty($result)) {
-            $result["countries"]["distincts"] = [];
-            $result["countries"]["wards"] = [];
+            $result['countries']['distincts'] = [];
+            $result['countries']['wards'] = [];
             return $result;
         };
         return false;
@@ -216,13 +214,13 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      * @return Illuminate\Support\Collection
      */
     public function get_districs_by_province($input) {
-        $user_id = $input["user_id"];
-        $province_id = $input["province_id"];
+        $user_id = $input['user_id'];
+        $province_id = $input['province_id'];
         if(empty($user_id)) return false;
         $result = $this->districts_model->where([
-            "status" => 1,
-            "deleted" => 0,
-            "province_id" => $province_id
+            'status' => 1,
+            'deleted' => 0,
+            'province_id' => $province_id
         ])->get();
         if(!empty($result)) return $result;
         return false;
@@ -235,13 +233,13 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
      * @return Illuminate\Support\Collection
      */
     public function get_wards_by_district($input) {
-        $user_id = $input["user_id"];
-        $district_id = $input["district_id"];
+        $user_id = $input['user_id'];
+        $district_id = $input['district_id'];
         if(empty($user_id)) return false;
         $result = $this->wards_model->where([
-            "status" => 1,
-            "deleted" => 0,
-            "district_id" => $district_id
+            'status' => 1,
+            'deleted' => 0,
+            'district_id' => $district_id
         ])->get();
         if(!empty($result)) return $result;
         return false;

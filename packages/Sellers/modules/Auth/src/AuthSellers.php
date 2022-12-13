@@ -28,7 +28,7 @@ class AuthSellers {
      * @return string
      */
     public function get_guard() {
-        return Config::get("packages.sellers.auth.guard", "sellers");
+        return Config::get('packages.sellers.auth.guard', 'sellers');
     }
 
     /**
@@ -41,7 +41,7 @@ class AuthSellers {
         if (empty($field)) {
             return Auth::guard((new self)->get_guard())->user();
         }
-        return !empty(Auth::guard((new self)->get_guard())->user()->$field) ? Auth::guard((new self)->get_guard())->user()->$field : "";
+        return !empty(Auth::guard((new self)->get_guard())->user()->$field) ? Auth::guard((new self)->get_guard())->user()->$field : '';
     }
 
     /**
@@ -51,26 +51,26 @@ class AuthSellers {
      */
     public static function get_acl() {
         $segments = request()->segments();
-        $auth = Auth::guard(Config::get("module.auth.guard", "module"))->getUser();
+        $auth = Auth::guard(Config::get('module.auth.guard', 'module'))->getUser();
         $acl_list = [];
-        if (!empty($segments[0]) && $segments[0] == "api") {
+        if (!empty($segments[0]) && $segments[0] == 'api') {
             $acl_list = $auth->acl_list();
         } else {
             $acl_list = $auth->acl_list();
         }
 
-        $module_name = "Index";
-        $controller_name = "Index";
-        if (!empty($segments[0]) && $segments[0] == Config::get("module.core.backend_url", "admin") && !empty($segments[1]) && $segments[1] == "api") {
-            $module_name = !empty($segments[2]) ? ucfirst($segments[2]) : "Index";
-            $controller_name = !empty($segments[3]) ? ucfirst($segments[3]) : "Index";
+        $module_name = 'Index';
+        $controller_name = 'Index';
+        if (!empty($segments[0]) && $segments[0] == Config::get('module.core.backend_url', 'admin') && !empty($segments[1]) && $segments[1] == 'api') {
+            $module_name = !empty($segments[2]) ? ucfirst($segments[2]) : 'Index';
+            $controller_name = !empty($segments[3]) ? ucfirst($segments[3]) : 'Index';
         }
         $action_method = Route::getCurrentRoute()->getActionMethod(); // $action_method = request()->route()->getActionMethod();
-        $configName = "module." . strtolower($module_name) . ".map_acl_action_list";
-        $config = Config::get($configName, Config::get("module.core.map_acl_action_list"));
+        $configName = 'module.' . strtolower($module_name) . '.map_acl_action_list';
+        $config = Config::get($configName, Config::get('module.core.map_acl_action_list'));
         $action = isset($config[$action_method]) ? $config[$action_method] : $action_method;
         // extend_permission
-        $configExtend = "module." . strtolower($module_name) . ".extend_permission";
+        $configExtend = 'module.' . strtolower($module_name) . '.extend_permission';
         $extendPermission = Config::get($configExtend, []);
         if (!empty($extendPermission)) {
             $action = (isset($extendPermission[$action_method]) && $extendPermission[$action_method]) ? $action_method : $action;

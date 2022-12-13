@@ -1,4 +1,7 @@
-import { GET_MODULE, SET_LOCATE, CHANGE_SIDER } from '../Dispatch/type';
+import {
+    GET_MODULE, SET_LOCATE, CHANGE_SIDER,
+    GET_USER
+} from '../Dispatch/type';
 
 export const initialState = {
     config: {
@@ -13,7 +16,20 @@ export const initialState = {
             adminPrefix: ''
         }
     },
-    user: {},
+    user: {
+        is_login: false,
+        seller: {
+            id: 0,
+            fullname: '',
+            phone: '',
+            date_of_birth: '',
+            is_accepted: -1,
+            status: 0,
+            user_id: 0,
+        },
+        avatar: '',
+        email: '',
+    },
     access_user: false,
     siderBar: {
         collapsed: false
@@ -23,7 +39,8 @@ export const initialState = {
     language: {
         locales: [],
         locale: 'en'
-    }
+    },
+    mouted: true,
 };
 
 /**
@@ -50,6 +67,8 @@ export const CoreReducer = (state = initialState, action) => {
                 modules: payload.modules,
                 language: payload.language
             };
+        case GET_USER:
+            return {...state, user: payload};
         default: return state;
     }
 };

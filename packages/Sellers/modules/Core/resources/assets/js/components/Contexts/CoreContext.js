@@ -1,6 +1,8 @@
 import React, { createContext, useReducer } from 'react';
-import { initialState, CoreReducer } from '../Reducers/CoreReducer';
-import { GET_MODULE} from '../Dispatch/type';
+import {
+    initialState, CoreReducer
+} from '../Reducers/CoreReducer';
+import { GET_MODULE, GET_USER, SET_TABLE_LOADING } from '../Dispatch/type';
 import api from '../../helpers/api';
 
 export const CoreContext = createContext();
@@ -43,6 +45,40 @@ const CoreContextProvicer = ({ children, axios, history }) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: Authentication User
+     * @param
+     * @returns {void}
+     */
+    const get_user = () => {
+        set_table_loading();
+        return api
+        .get_secured().post(
+            `${window.sparrowConfig.app.backendURL}/api/auth/auth/authenticate_user`
+        ).then(res => {
+            let { status, message, data } = res.data;
+            if(status) {
+                const { status, user } = data;
+                if(status) {
+                    dispatch({ type: GET_USER, payload: user});
+                }
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});;
+    };
+
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: set table loading...
+     * @return {void}
+     */
+     const set_table_loading = () => {
+        dispatch({ type: SET_TABLE_LOADING });
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo:
      * @param /
      * @returns {Object}
@@ -52,7 +88,7 @@ const CoreContextProvicer = ({ children, axios, history }) => {
     };
 
     const todoContextData = {
-        data,
+        data, get_user, set_table_loading,
         dispatch,
         get_axios,
         get_module

@@ -32,20 +32,20 @@ class AddressController extends ControllerBase {
      * @return void
      */
     public function get_customer_address(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthFrontend::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
             $result = $this->AddressRepository->get_customer_address($input);
-            if(!empty($result) && isset($result["customer_address"])) {
+            if(!empty($result) && isset($result['customer_address'])) {
                 return $this->response_base([
-                    "status" => true,
-                    "address" => $result["customer_address"]
-                ], "You have got address successfully !!!", 200);
+                    'status' => true,
+                    'address' => $result['customer_address']
+                ], 'You have got address successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get address !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get address !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -55,20 +55,18 @@ class AddressController extends ControllerBase {
      * @return void
      */
     public function get_areas(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthFrontend::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
             $result = $this->AddressRepository->get_areas($input);
             if(!empty($result)) {
                 return $this->response_base([
-                    "status" => true,
-                    "areas" => $result
-                ], "You have got areas successfully !!!", 200);
+                    'status' => true,
+                    'areas' => $result
+                ], 'You have got areas successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get areas !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get areas !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -78,21 +76,21 @@ class AddressController extends ControllerBase {
      * @return void
      */
     public function get_districs_by_province(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthFrontend::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
-            $input["province_id"] = isset($input["province_id"]) ? $input["province_id"] : null;
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $input['province_id'] = isset($input['province_id']) ? $input['province_id'] : null;
             $result = $this->AddressRepository->get_districs_by_province($input);
             if(!empty($result)) {
                 return $this->response_base([
-                    "status" => true,
-                    "districts" => $result
-                ], "You have got districts successfully !!!", 200);
+                    'status' => true,
+                    'districts' => $result
+                ], 'You have got districts successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get districts !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get districts !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -102,21 +100,21 @@ class AddressController extends ControllerBase {
      * @return void
      */
     public function get_wards_by_district(Request $request) {
-        if($request->isMethod("post")) {
+        if($request->isMethod('post')) {
             $input = $request->all();
-            $auth_id = AuthFrontend::info("id");
-            $input["user_id"] = isset($auth_id) ? $auth_id : null;
-            $input["district_id"] = isset($input["district_id"]) ? $input["district_id"] : null;
+            $auth_id = AuthFrontend::info('id');
+            $input['user_id'] = isset($auth_id) ? $auth_id : null;
+            $input['district_id'] = isset($input['district_id']) ? $input['district_id'] : null;
             $result = $this->AddressRepository->get_wards_by_district($input);
             if(!empty($result)) {
                 return $this->response_base([
-                    "status" => true,
-                    "wards" => $result
-                ], "You have got wards successfully !!!", 200);
+                    'status' => true,
+                    'wards' => $result
+                ], 'You have got wards successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get wards !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get wards !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 
     /**
@@ -181,9 +179,9 @@ class AddressController extends ControllerBase {
                     'item' => $result,
                 ], 'You have got item successfully !!!', 200);
             }
-            return $this->response_base(["status" => false], "You have failed to get item !!!", 200);
+            return $this->response_base(['status' => false], 'You have failed to get item !!!', 200);
         }
-        return $this->response_base(["status" => false], "Access denied !", 200);
+        return $this->response_base(['status' => false], 'Access denied !', 200);
     }
 }
 

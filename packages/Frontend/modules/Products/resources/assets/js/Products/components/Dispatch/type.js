@@ -6,3 +6,6 @@ export const SET_DRAWER             = 'SET_DRAWER';
 export const MOUTED                 = 'MOUTED';
 export const GET_PRODUCT_CATEGORIES = 'GET_PRODUCT_CATEGORIES';
 export const GET_PRODUCT_CATEGORY   = 'GET_PRODUCT_CATEGORY';
+export const GET_AREAS              = 'GET_AREAS';
+export const GET_DISTRICTS          = 'GET_DISTRICTS';
+export const GET_WARDS              = 'GET_WARDS';

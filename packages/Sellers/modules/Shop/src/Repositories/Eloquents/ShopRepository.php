@@ -57,6 +57,12 @@ class ShopRepository extends BaseRepository implements ShopRepositoryInterface {
             $this->stores_model->brand_logo = $input['brand_logo'];
             $this->stores_model->joined_date = $input['joined_date'] ?? date('Y-m-d H:i:s');
             $this->stores_model->category_id = $input['category_id'] ?? 0;
+            $this->stores_model->area_id = 3;
+            $this->stores_model->country_id = 1;
+            $this->stores_model->province_id = 50;
+            $this->stores_model->district_id = 558;
+            $this->stores_model->ward_id = 9240;
+            $this->stores_model->address = '';
             $this->stores_model->status = 1;
             $this->stores_model->description = $input['description'];
             $this->stores_model->user_created_id = $input['user_id'];

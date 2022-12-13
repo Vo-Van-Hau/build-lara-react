@@ -54,6 +54,7 @@ const AddressContextProvider = ({ children, axios, history, config,navigate }) =
         .catch((errors) => {})
         .finally(() => {set_table_loading();});
     }
+    
     /**
      * @author: <vanhau.vo@urekamedia.vn>
      * @todo: get areas

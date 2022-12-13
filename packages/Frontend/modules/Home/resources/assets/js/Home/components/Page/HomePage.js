@@ -351,7 +351,6 @@ const HomePage = (props) => {
                 </Col>
             </Row>
             <Row className="categories_block_container">
-
                 <Space size={[10, 16]}
                     style={{
                         width: '100%', padding: '1rem',
@@ -367,7 +366,8 @@ const HomePage = (props) => {
                                     action: 'bycategory',
                                     id: item.value ? item.value : 0
                                 })}>
-                                    <Avatar src={`${baseURL}/${item.icon_link}`} size={48} />
+                                    {/* <Avatar src={`${baseURL}/${item.icon_link}`} size={48} /> */}
+                                    <Avatar src={item.icon_link} size={48} />
                                     <p>{item.label}</p>
                                 </Button>
                             </Col>
