@@ -1,25 +1,41 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-    CloseOutlined, CheckOutlined
+    PlusOutlined, CheckOutlined
 } from '@ant-design/icons';
-import { Image, Input, Layout, Popconfirm, Table, Tabs, Select, Space, Button, Typography, Switch  } from 'antd';
+import { Image, Row, Layout, Popconfirm, Table, Tabs, Select, Space, Button, Typography, Switch, Col } from 'antd';
 import { ProductsContext } from '../Contexts/ProductsContext';
 const { Option } = Select;
 const { Text, Title } = Typography;
 const { Content } = Layout;
 
-const ProductsPage = () => {
+const ProductsPage = (props) => {
 
     const { data, get_products, setRouter } = useContext(ProductsContext);
-    const { products, loading_table } = data;
+    const { products, loading_table, pagination } = data;
 
-    const [collapsed, setCollapsed] = useState(false);
     const onTabsChange = (key) => {
         console.log(key);
     };
 
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo:
+     * @param
+     * @return {void}
+     */
     const AllProductsTab = () => {
 
+        /**
+         * @author: <vanhau.vo@urekamedia.vn>
+         * @todo:
+         * @param {mixed} pagination
+         * @param {mixed} filters
+         * @return {void}
+         */
+        const handleTableChange = (pagination, filters) => {
+            return get_products(pagination.current, {});
+        }
+        
         const columns = [
             {
                 title: 'Sản phẩm',
@@ -117,8 +133,16 @@ const ProductsPage = () => {
                 }
             }
         ];
+
         return (
-            <Table columns={columns} dataSource={products} rowKey={`id`} loading={loading_table}/>
+            <Table
+                columns={columns}
+                dataSource={products}
+                rowKey={`id`}
+                loading={loading_table}
+                pagination={pagination}
+                onChange={handleTableChange}  // Callback executed when pagination, filters or sorter is changed
+            />
         )
     }
 
@@ -136,12 +160,6 @@ const ProductsPage = () => {
             </>
         )
     }
-    const selectBefore = (
-        <Select defaultValue="name" className="select-before">
-            <Option value="name">Product name</Option>
-            <Option value="productID">Product ID</Option>
-        </Select>
-    );
 
     useEffect(function() {
         get_products(1, {});
@@ -149,7 +167,21 @@ const ProductsPage = () => {
 
     return (<>
         <Content className="site-layout-background">
-            {/* <Input addonBefore={selectBefore} prefix=<SearchOutlined /> defaultValue="Search products here..." style={{ width: '500px' }} /> */}
+            <Row>
+                <Col>
+                    <Space wrap>
+                        <Button type="primary" icon={<PlusOutlined />}
+                            onClick={() => setRouter({
+                                module: 'products',
+                                controller: 'products',
+                                action: 'upsert'
+                            })}
+                        >
+                            Thêm sản phẩm
+                        </Button>
+                    </Space>
+                </Col>
+            </Row>
             <Tabs
                 defaultActiveKey={1}
                 onChange={onTabsChange}

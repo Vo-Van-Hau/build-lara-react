@@ -52,9 +52,9 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
         .then((res) => {
             let { status, message } = res.data;
             if(status) {
-                Helper.Notification('success', '[Thêm vào giỏ hàng]', message);
+                // Helper.Notification('success', '[Thêm vào giỏ hàng]', message);
             } else {
-                Helper.Notification('error', '[Thêm vào giỏ hàng]', message);
+                // Helper.Notification('error', '[Thêm vào giỏ hàng]', message);
             }
         })
         .catch((errors) => {})

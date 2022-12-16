@@ -133,7 +133,38 @@ if(!function_exists('get_string_between')) {
         return substr($string, $ini, $len);
     }
 }
-
+if(!function_exists('upload_singlefile_getfilename')) {
+    /**
+     * @author <hau@wacontre.com>
+     * @todo: upload file to folder and check existed file and get file name
+     * @param mixed $value
+     * @return string
+     */
+    function upload_singlefile_getfilename(\Illuminate\Http\Request $request, $input_name, $to_folder) {
+        $result = '';
+        try {
+            $upload_path = $to_folder;
+            if($request->hasFile($input_name)) {
+                $file = $request->file($input_name);
+                $file_name =  time() . '_' . str_replace(array('~', '`', ':', '\\', '/', '*', '#', '&', '?', ' '), '', $file->getClientOriginalName());
+                $file_path = $upload_path . '/' . $file_name;
+                if(in_array($file->getClientOriginalExtension(), array('jpg', 'png'))) {
+                    if(!file_exists($file_path)) {
+                        $file->move($upload_path, $file_name);
+                        if(file_exists($file_path)) {
+                            $result = $file_name;
+                        }
+                    } else {
+                        $result = $file_name;
+                    }
+                }
+            }
+            return $result;
+        } catch(Throwable $throwable) {
+            return $result;
+        }
+    }
+}
 //----------------------------------------Not Approve - Overview later----------------------------------------
 if (!function_exists('array_add')) {
     /**

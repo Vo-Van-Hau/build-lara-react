@@ -14,27 +14,9 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
     const { setRouter, data, get_products_by_category, get_product_categories, get_product_category } = useContext(ProductsContext);
     const { products, mouted, product_categories, product_category } = data;
 
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(5);
+    const [minShowProductsValue, setMinValue] = useState(0);
+    const [maxShowProductsValue, setMaxValue] = useState(50);
     const numEachPage = 5   // Use a constant here to keep track of number of cards per page
-    const imgSrc = [
-        { id: 1, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/42/6b/f0/4cb3546248e0a34e9b974481ed275590.jpg.webp' },
-        { id: 2, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/e5/db/cc/32b6b4268331a9ed46479ab0da46ae82.png.webp' },
-        { id: 3, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/71/77/c8/fc9e2f84c2790afd605c58a99a680dd6.jpg.webp' },
-        { id: 4, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/5f/8b/3d/96dc1c277cb1dbb4ea7d53a6f4c069f6.png.webp' },
-        { id: 5, url: 'https://salt.tikicdn.com/cache/w1080/ts/banner/3e/8f/20/f512b3f7fdbc4279cc6c17ae831a03bc.png.webp' },
-    ]
-    const contentStyle = {
-        height: '200px',
-        objectFit: 'cover',
-        color: '#fff',
-        textAlign: 'center',
-        background: '#364d79',
-    };
-    const handleChange = value => {
-        setMinValue((value - 1) * numEachPage);
-        setMaxValue(value * numEachPage);
-    };
 
     /**
      * @author: <hauvo1709@gmail.com>
@@ -54,12 +36,12 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
         }
     }
 
-    const menuRightItems = [
-        { key: 1, label: 'Popular' },
-        { key: 2, label: 'Selling' },
-        { key: 3, label: 'New Products' },
-        { key: 4, label: 'Low to high price' },
-        { key: 5, label: 'Price high to low' },
+    const menuTabRightItems = [
+        { key: 1, label: 'Phổ Biến' },
+        { key: 2, label: 'Bán Chạy' },
+        { key: 3, label: 'Hàng Mới' },
+        { key: 4, label: 'Giá Thấp Đến Cao' },
+        { key: 5, label: 'Giá Cao Đến Thấp' },
     ];
 
 
@@ -67,7 +49,7 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
         if(mouted) {
             get_products_by_category({keyID});
             get_product_category({keyID});
-            get_product_categories();
+            get_product_categories(1, {});
         }
     }, [keyID]);
 
@@ -79,25 +61,24 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
             <Breadcrumb.Item style={{ cursor: 'pointer' }}>
                 <span>Sản phẩm</span>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>Sản phẩm gợi ý</Breadcrumb.Item>
+            <Breadcrumb.Item>Sản phẩm theo thể loại</Breadcrumb.Item>
         </Breadcrumb>
         <Row className='products_by_category_container' gutter={24}>
             <Col className='leftSide' span={5}>
-                <Affix className='fixBar' offsetTop={0}>
+                {/* <Affix className='fixBar' offsetTop={0}> */}
                     <div>
                         <Title level={5}>Danh sách thể loại</Title>
                         <Menu items={product_categories}
                             onSelect={({ item, key, keyPath, selectedKeys, domEvent }) => getProductsByCategory({ item, key, keyPath, selectedKeys, domEvent })}
-                            // onClick={({ item, key, keyPath, domEvent }) => getProductsByCategory({ item, key, keyPath, domEvent })}
+                            onClick={({ item, key, keyPath, domEvent }) => console.log('Hi')}
                         />
                         <Divider />
-
                     </div>
-                </Affix>
+                {/* </Affix> */}
             </Col>
             <Col className='rightSide' span={19}>
                 <Title level={5} style={{ paddingLeft: 0 }}>Thể loại: {product_category && product_category.title ? product_category.title : ''}</Title>
-                {products &&                                                                                                                                                                                                                                                                                                                                                                            products.length <= 0 ? (<Alert
+                {/* {products &&                                                                                                                                                                                                                                                                                                                                                                            products.length <= 0 ? (<Alert
                     message='Thông báo'
                     description='Xin lỗi, hiện tại không có sản phẩm nào thuộc danh mục này, hãy tìm những sản phẩm thuộc danh mục khác có thể.'
                     type='info'
@@ -119,7 +100,7 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
                                 </Carousel>
                             </Col>
                         </Row>
-                        <Menu items={menuRightItems} mode="horizontal" />
+
                         <Row>
                             <Space size={[4, 4]} wrap style={{ width: '100%' }} >
                                 {products.slice(minValue, maxValue).map((item, index) => (
@@ -152,7 +133,60 @@ const ProductsByCategoryPage = ({keyID, ...props}) => {
                                 onChange={handleChange}
                                 total={products.length}//total number of card data available/>
                             />
-                        </Row></>)}
+                        </Row></>)} */}
+                <Menu items={menuTabRightItems} mode="horizontal" />
+                <Row className="productContainer">
+                    <Space size={[10, 16]} style={{ width: '100%' }}>
+                        <Row gutter={[8, 8]}>
+                            {products.length > 0 ? products.slice(minShowProductsValue, maxShowProductsValue).map((item, index) => (
+                                <Col span={4} key={`${item.id}_${index}`}>
+                                    <Card className="productItem"
+                                        key={index}
+                                        hoverable
+                                        cover={<img alt={item.slug_name} src={item.image_link} />}
+                                        onClick={() => setRouter({
+                                            module: 'products',
+                                            controller: 'productdetail',
+                                            action: 'view',
+                                            id: item.id,
+                                        })}
+                                        style={{ padding: 12 }}
+                                        bodyStyle={{ padding: '8px 0'}}
+                                    >
+                                        <Space
+                                            direction="vertical"
+                                            size={0}
+                                            style={{
+                                                display: 'flex',
+                                            }}
+                                        >
+                                            <Text style={{ fontWeight: 490, fontSize: 14 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                            <div className="rating" style={{marginTop: 5, marginBottom: 5}}>
+                                                {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                                <span style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: {item.quantity_sold ? item.quantity_sold.length : 0} </span>
+                                            </div>
+                                            <Text className="price" type="danger" style={{fontSize: 16}}>{item.price_format ? item.price_format : ``} đ</Text>
+                                        </Space>
+                                    </Card>
+                                </Col>
+                            ))
+                            : <>
+                                <Alert
+                                    message="Rất tiếc, không tìm thấy sản phẩm phù hợp với lựa chọn của bạn"
+                                    type="warning"
+                                    showIcon
+                                    closable={false}
+                                />
+                            </>}
+                        </Row>
+                    </Space>
+                    {/* <Pagination
+                        defaultCurrent={1}
+                        // defaultPageSize={5} //default size of page
+                        // onChange={handleChange}
+                        total={products.length}//total number of card data available/>
+                    /> */}
+                </Row>
             </Col>
         </Row>
     </>)

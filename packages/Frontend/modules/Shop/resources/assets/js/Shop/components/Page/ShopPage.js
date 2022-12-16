@@ -18,7 +18,7 @@ const ShopPage = (props) => {
 
     const items = [
         { label: 'Cửa Hàng', key: '1', children: <ShopTab data={data} /> }, // remember to pass the key prop
-        { label: 'Tất Cả Sản Phẩm', key: '2', children: <AllProductsTab data={data} /> },
+        // { label: 'Tất Cả Sản Phẩm', key: '2', children: <AllProductsTab data={data} /> },
         { label: 'Bộ Sưu Tập', key: '3', children: <CollectionTab data={data} /> },
         { label: 'Hồ Sơ Cửa Hàng', key: '4', children: <StoreProfile data={data} /> },
     ];
@@ -51,7 +51,7 @@ const ShopPage = (props) => {
             </Col>
             <Col span={3} >
                 <Button type='primary' icon={<PlusOutlined />} size='default' >
-                    Follow
+                    Theo dõi
                 </Button>
             </Col>
             <Col span={10} offset={12} >
@@ -83,39 +83,57 @@ const ShopPage = (props) => {
  */
 const ShopTab = (props) => {
     const { data } = props;
-    const { products} = data;
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(5);
+    const { products, get_products } = data;
+    const [minShowProductsValue, setMinValue] = useState(0);
+    const [maxShowProductsValue, setMaxValue] = useState(50);
     const numEachPage = 5  // Use a constant here to keep track of number of cards per page
 
-    const handleChange = value => {
-        setMinValue((value - 1) * numEachPage);
-        setMaxValue(value * numEachPage);
-    };
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param {mixed} pagination
+     * @param {mixed} filters
+     * @return {void}
+     */
+    const handleTableChange = (pagination, filters) => {
+        return get_products(pagination.current, {});
+    }
 
     return <div className='shop_tab_container'>
         <Row className="productContainer">
-            <Space size={[20, 16]} wrap style={{ width: '100%' }} >
-                {products.slice(minValue, maxValue).map((item, index) => (
-                    <Card className='productItem'
-                        key={index}
-                        hoverable
-                        style={{ width: 200, }}
-                        cover={<img alt='Product-Sellers' src={item.image_link} />}
-                    >
-                        <Meta title={item.name} />
-                        <div className='rating'>
-                            <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled />
-                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
-                        </div>
-                        <Text className="price" type="danger" strong>{ item.price } đ</Text>
-                    </Card>
-                ))}
+            <Space size={[10, 16]} style={{ width: '100%' }}>
+                <Row gutter={[8, 8]}>
+                    {products.slice(minShowProductsValue, maxShowProductsValue).map((item, index) => (
+                    <Col span={4} key={`${item.id}_${index}`}>
+                            <Card className="productItem"
+                                key={index}
+                                hoverable
+                                // style={{ width: 200 }}
+                                cover={<img alt={item.slug_name} src={item.image_link} />}
+                                onClick={() => setRouter({
+                                    module: 'products',
+                                    controller: 'productdetail',
+                                    action: 'view',
+                                    id: item.id,
+                                })}
+                                style={{ padding: 12 }}
+                                bodyStyle={{ padding: 0 }}
+                            >
+                                <Text style={{ fontWeight: 400 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                <div className="rating">
+                                    {/* <Rate style={{ fontSize: 12 }} disabled /> */}
+                                    <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
+                                </div>
+                                <Text className="price" type="danger" strong>{item.price_format} đ</Text>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
             </Space>
             <Pagination
                 defaultCurrent={1}
-                defaultPageSize={5} // Default size of page
-                onChange={handleChange}
+                defaultPageSize={50} // Default size of page
+                onChange={handleTableChange}
                 total={products.length} // Total number of card data available/>
             />
         </Row>
@@ -134,15 +152,7 @@ const AllProductsTab = (props) => {
     const { store } = shop;
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(5);
-    const productArr = [
-        { img: '', title: 'Desk, Study Table With Handy Drawer Nordic Style IGA - GP185', price: 120000, rating: 4, soldquantity: 11, popular: true, new: true },
-        { img: '', title: 'Europe Street beat 2', price: 120000, rating: 3, soldquantity: 11, popular: true, new: true },
-        { img: '', title: 'Europe Street beat 3', price: 120000, rating: 5, soldquantity: 11, popular: true, new: true },
-        { img: '', title: 'Europe Street beat 4', price: 120000, rating: 4, soldquantity: 11, popular: false, new: false },
-        { img: '', title: 'Europe Street beat 5', price: 120000, rating: 2, soldquantity: 11, popular: true, new: true },
-        { img: '', title: 'Europe Street beat 6', price: 120000, rating: 4, soldquantity: 11, popular: false, new: false },
-        { img: '', title: 'Europe Street beat 7', price: 120000, rating: 3, soldquantity: 11, popular: false, new: false },
-    ];
+
     const [filterData, setFilterData] = useState(products);
     const numEachPage = 5;  // Use a constant here to keep track of number of cards per page
     const handlePaginationChange = value => {

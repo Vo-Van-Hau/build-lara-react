@@ -62,7 +62,6 @@ const Products = (props) => {
 
     useEffect(function() {
         get_action();
-        // get_config();
     }, [props]);
 
     return (

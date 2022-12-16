@@ -206,7 +206,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $sale_price_id = 0;
         $cogs = $price;
         $mobile_link = '';
-        $image_link = '';
+        $image_link = isset($input['image_link']) ? $input['image_link'] : url('/userdata/defaults/product_default_v1_20221215_0148.png');
         $category_id = isset($input['category_id']) ? $input['category_id'] : 0;
         $currency_id = 1;
         $availability = 'in_stock';

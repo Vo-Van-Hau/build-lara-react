@@ -92,6 +92,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         if(!empty($result)) {
             foreach($result as $key => $item) {
                 $result[$key]->price_format = number_format($item->price, 0, '.', ',');
+                $result[$key]->quantity_sold = $this->order_detail_model->get_by_product_id($item->id ?? 0) ?? [];
             }
             return $result;
         } else {
@@ -121,6 +122,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         if(!empty($result)) {
             foreach($result as $key => $item) {
                 $result[$key]->price_format = number_format($item->price, 0, '.', ',');
+                $result[$key]->quantity_sold = $this->order_detail_model->get_by_product_id($item->id ?? 0) ?? [];
             }
             return $result;
         } else {
@@ -161,7 +163,11 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             $result->similar_products = $this->model->where('id', '<>', $id)
                 ->whereRaw("products.category_id = {$result->category->id}")
                 ->orderByRaw('products.id DESC')
-                ->limit(Config::get('packages.frontend.products.limit_similar_products', 36))->get();
+                ->limit(Config::get('packages.frontend.products.limit_similar_products', 36))->get() ?? [];
+            foreach ($result->similar_products as $item) {
+                $item->price_format = number_format($item->price, 0, '.', ',');
+                $item->quantity_sold = $this->order_detail_model->get_by_product_id($item->id ?? 0) ?? [];
+            }
         }
         return $result;
     }
@@ -200,15 +206,8 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $result = $this->product_category_model->where([
             'deleted' => 0,
             'status' => 1
-        ])->select('title', 'title as label', 'id as value', 'icon_link')->find($id);
-        // foreach($result as $key => $item) {
-        //     $id = $item->value;
-        //     $item->children = $this->product_category_model->where([
-        //         'parent_id' => $id,
-        //         'deleted' => 0,
-        //         'status' => 1
-        //     ])->select('title as label', 'id as value')->get();
-        // }
+        ])
+        ->select('title', 'title as label', 'id as value', 'icon_link')->find($id);
         return $result;
     }
 
@@ -231,10 +230,31 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             'deleted' => 0,
             'seller_id' => $seller->id
         ])->with([
-            'product_stock'
-        ])->paginate(10);
-        if(empty($existed)) return false;
-        return $existed;
+            'product_stock' => function($query) {
+
+            },
+            'seller' => function($query) {
+                $query->select('id', 'is_accepted');
+            },
+            'product_description_detail' => function($query) {
+                $query->select('id', 'condition', 'color');
+            },
+            'category' => function($query) {
+                $query->with([
+                    'product_category_brands' => function($query) {
+                        $query->select('id', 'name', 'category_id', 'status');
+                    }
+                ])->select('id', 'title');
+            }
+        ])->paginate(50);
+        if(!empty($existed)) {
+            foreach($existed as $key => $item) {
+                $existed[$key]->price_format = number_format($item->price, 0, '.', ',');
+            }
+            return $existed;
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -245,12 +265,36 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     public function get_products_by_category($data) {
         $category_id = isset($data['category_id']) ? $data['category_id'] : 0;
-        $result = $this->model->where([
+        $result = $this->model
+        ->with([
+            'seller' => function($query) {
+                $query->select('id', 'is_accepted');
+            },
+            'product_description_detail' => function($query) {
+                $query->select('id', 'condition', 'color');
+            },
+            'category' => function($query) {
+                $query->with([
+                    'product_category_brands' => function($query) {
+                        $query->select('id', 'name', 'category_id', 'status');
+                    }
+                ])->select('id', 'title');
+            }
+        ])
+        ->where([
             'status' => 1,
             'deleted' => 0,
             'category_id' => $category_id
         ])->get();
-        return $result;
+        if(!empty($result)) {
+            foreach($result as $key => $item) {
+                $result[$key]->price_format = number_format($item->price, 0, '.', ',');
+                $result[$key]->quantity_sold = $this->order_detail_model->get_by_product_id($item->id ?? 0) ?? [];
+            }
+            return $result;
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -350,5 +394,4 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             return [];
         }
     }
-
 }

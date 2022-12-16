@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Google\Cloud\Translate\V2\TranslateClient;
 use Carbon\Carbon;
+use App\Http\Controllers\UploadImageController;
 
 /*
 |--------------------------------------------------------------------------

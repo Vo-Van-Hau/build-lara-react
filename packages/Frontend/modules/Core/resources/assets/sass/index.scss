@@ -453,9 +453,9 @@ main.ant-layout-content {
         }
 
         .product_add {
-            border-radius: 4px;
-            background-color: rgb(250, 250, 250);
-            padding: 1rem 16px 12px;
+            border-radius: 8px;
+            background-color: rgb(241 241 241);
+            padding: 1.5rem;
             .product_price__current-price {
                 color: rgb(255, 66, 78);
                 font-size: 32px;
@@ -485,11 +485,11 @@ main.ant-layout-content {
         }
 
         .shop_info {
-            border-radius: 4px;
-            padding: 1rem;
+            border-radius: 8px;
+            padding: 1.5rem;
             box-shadow: #f2f2f2 1px 1px 0px 0px inset, #f2f2f2 -1px -1px 0px 0px inset;
-            .shop_rating,
-            .shop_follow {
+            background: #f0f8ff;
+            .shop_rating, .shop_follow {
                 text-align: center;
             }
             .btn-group {

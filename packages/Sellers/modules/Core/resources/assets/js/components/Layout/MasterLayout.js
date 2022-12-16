@@ -20,8 +20,6 @@ const MasterLayout = (props) => {
     const { seller, is_login } = user;
     const { is_accepted } = seller;
 
-    console.log(props);
-
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 

@@ -177,7 +177,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             'order_tracking_status' => function($query) {
                 $query->select('id', 'title', 'code', 'tag_name');
             }
-        ])->get();
+        ])->orderBy('id', 'desc')->get();
         if(!empty($result)) return $result;
         return false;
     }

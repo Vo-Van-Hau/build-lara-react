@@ -8,7 +8,8 @@ export const initialState = {
         seller: {
             store: {
                 name: '',
-                brand_logo: ''
+                brand_logo: '',
+                user_follow_stores: [],
             }
         },
         category: {

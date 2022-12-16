@@ -16,8 +16,6 @@ const { Text, Title } = Typography;
 
 const ProductDetailPage = (props) => {
 
-    console.log(props);
-
     const { id } = props;
     const { user, config } = props.data;
     const { is_login, customer } = user;
@@ -31,6 +29,7 @@ const ProductDetailPage = (props) => {
     const { product_item, mouted } = data;
     const { seller, similar_products, products_additional_image_link, product_identifiers } = product_item;
     const { store } = seller;
+    const { user_follow_stores } = store;
 
     const [quantity, setQuantity] = useState(1);
     const [selectedImg, setSelectedImg] = useState(false);
@@ -309,7 +308,7 @@ const ProductDetailPage = (props) => {
 
     return (<>
         <>
-            <Breadcrumb style={{ padding: '12px' }}>
+            <Breadcrumb style={{ padding: '0 1rem', marginTop: '1rem' }}>
                 <Breadcrumb.Item style={{ cursor: 'pointer' }} >
                     <HomeOutlined />
                 </Breadcrumb.Item>
@@ -325,21 +324,26 @@ const ProductDetailPage = (props) => {
                     style={{ objectFit: 'contain', borderRadius: '3px' }}
                     src={selectedImg ? selectedImg : product_item.image_link}
                 />
-                <div style={{
+                {/* <div style={{
                     marginTop: 24, paddingLeft: 36, paddingRight: 36, paddingTop: 12, paddingBottom: 12,
-                    background: 'yellowgreen', border: '1px solid #000000', borderRadius: 4
+                    background: '#F5F5FA', border: '1px solid #F5F5FA', borderRadius: 4
                 }}>
                     <SliderSlick {...slickSettings}>
                         {products_additional_image_link.map((item, index) => {
                             return (
-                                <img style={{ width: 64, height: 64 }} className="galery-img-item" key={index} src={item.url} alt="images" onClick={() => setSelectedImg(item.url)} />
+                                <img style={{ width: 64, height: 64 }}
+                                    className="galery-img-item"
+                                    key={index} src={item.url}
+                                    alt="images"
+                                    onClick={() => setSelectedImg(item.url)}
+                                />
                             )
                         })}
                     </SliderSlick>
-                </div>
+                </div> */}
             </Col>
-            <Col className='separate'></Col>
-            <Col span={15} className='product_info_container'>
+            {/* <Col className='separate'></Col> */}
+            <Col span={16} className='product_info_container'>
                 <Row className='head'>
                     <Col span={24} style={{}}>
                         <Text style={{fontWeight: 480, fontSize: 16,}}>
@@ -352,7 +356,7 @@ const ProductDetailPage = (props) => {
                         </Text>
                     </Col>
                     <Col span={24} style={{marginBottom: 8, marginTop: 8}}>
-                        <Text style={{fontWeight: 300,fontSize: 24, color: 'rgb(36, 36, 36)'}}>{product_item.name || ''}</Text>
+                        <Text style={{fontWeight: 490, fontSize: 24, color: 'rgb(36, 36, 36)'}}>{product_item.name || ''}</Text>
                     </Col>
                     <Col className='rating' span={24}>
                         <Space split={<Divider type="vertical" />}>
@@ -369,29 +373,39 @@ const ProductDetailPage = (props) => {
                         <span className='product_price__list-price'>{product_item.price_format} ₫</span>
                         <span className='product_price__discount-rate'>-32%</span>
                         <Divider/>
-                        <Card className='client_info' title="Giao tới" extra={<a href="#" onClick={() => setRouter({module: 'customer', controller: 'address', action: '#', id: '#',})}>Thay đổi</a>}>
-                            <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : ''}</Title>
-                            <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : ''}</span>
-                            <span> <Divider type="vertical"/></span>
-                            <span className='address'>
-                                {
-                                    (defaultDeliveryTo && defaultDeliveryTo.address && defaultDeliveryTo.ward && defaultDeliveryTo.district && defaultDeliveryTo.province)
-                                    ? `${defaultDeliveryTo.address || ''}, ${defaultDeliveryTo.ward.name || ''},
-                                    ${defaultDeliveryTo.district.type || ''} ${defaultDeliveryTo.district.name || ''},
-                                    ${defaultDeliveryTo.province.type || ''} ${defaultDeliveryTo.province.name || ''}` : ''
-                                }
-                            </span>
-                        </Card>
-                        <Divider/>
+                        {is_login ? <>
+                            <Card className='client_info' title="Giao tới"
+                                extra={<a href="#" onClick={() => setRouter({module: 'customer', controller: 'address', action: '#', id: '#',})}>Thay đổi</a>}
+                                bodyStyle={{padding: 16}}
+                                style={{borderRadius: 8}}
+                            >
+                                <Title level={5}>{ defaultDeliveryTo && defaultDeliveryTo.customer_name ? defaultDeliveryTo.customer_name : ''}</Title>
+                                <span className='phone_number'>{ defaultDeliveryTo && defaultDeliveryTo.phone ? defaultDeliveryTo.phone : ''}</span>
+                                <span> <Divider type="vertical"/></span>
+                                <span className='address'>
+                                    {(defaultDeliveryTo && defaultDeliveryTo.address && defaultDeliveryTo.ward && defaultDeliveryTo.district && defaultDeliveryTo.province)
+                                        ? `${defaultDeliveryTo.address || ''}, ${defaultDeliveryTo.ward.name || ''},
+                                        ${defaultDeliveryTo.district.type || ''} ${defaultDeliveryTo.district.name || ''},
+                                        ${defaultDeliveryTo.province.type || ''} ${defaultDeliveryTo.province.name || ''}` : ''}
+                                </span>
+                            </Card><Divider/></> : <></>}
                         <div className='product_quantity'>
                             <>
-                                <div style={{marginBottom: 4}}>
+                                <div style={{marginBottom: 10}}>
                                     <Text strong>Số Lượng</Text>
                                 </div>
                                 <Button.Group>
-                                    <Button icon={<MinusOutlined />} type="ghost" onClick={() => handleDecrease()} />
+                                    <Button
+                                        icon={<MinusOutlined />} type="ghost"
+                                        onClick={() => handleDecrease()}
+                                        style={{borderRadius: '50%', backgroundColor: '#f1c40f', color: '#FFFFFF', marginRight: 8}}
+                                    />
                                     <Input value={quantity} style={{ width: '60px', textAlign: 'center' }} />
-                                    <Button icon={<PlusOutlined />} type="ghost" onClick={() => handleIncrease()} />
+                                    <Button
+                                        icon={<PlusOutlined />} type="ghost"
+                                        onClick={() => handleIncrease()}
+                                        style={{borderRadius: '50%', backgroundColor: '#f1c40f', color: '#FFFFFF', marginLeft: 8,}}
+                                    />
                                 </Button.Group>
                             </>
                         </div>
@@ -401,25 +415,26 @@ const ProductDetailPage = (props) => {
                     </Col>
                     <Col className='shop_info' span={8} offset={1}>
                         <Row gutter={[16, 16]}>
-                            <Col >
-                                <Avatar size={48} src={store.brand_logo ? store.brand_logo : ''} />
+                            <Col span={8} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                <Avatar size={56} src={store.brand_logo ? store.brand_logo : ''} style={{border: '1px solid #e67e22'}}/>
                             </Col>
-                            <Col span={12}>
-                                <><Button type='link' onClick={() => setRouter({
-                                    module: 'shop',
-                                    controller: 'shop',
-                                    action: 'view',
-                                    id: seller.id ? seller.id : '#'
-                                })}>{store.name ? store.name : ''}</Button></>
+                            <Col span={16}>
+                                <Space
+                                    direction="vertical"
+                                    size={0}
+                                    style={{
+                                        display: 'small',
+                                    }}
+                                    align={`start`}
+                                >
+                                    <Text style={{fontWeight: 490,}}><ShopOutlined /> {store.name ? store.name : ''}</Text>
+                                    <Text>{user_follow_stores.length} Lượt theo dõi</Text>
+                                </Space>
                             </Col>
                             <Col span={12} className='shop_rating'>
-                                <div>4.5 / 5  <StarFilled /></div>
+                                {/* <div>4.5 / 5  <StarFilled /></div> */}
                                 <div></div>
                             </Col>
-                            <Col span={12} className='shop_follow'>
-                                <div>250k+ Theo dõi</div>
-                            </Col>
-
                             <Space wrap className='btn-group' style={{ justifyContent: 'center' }}>
                                 <Button icon={<ShopOutlined />} size='middle' onClick={() => setRouter({
                                     module: 'shop',
@@ -433,7 +448,6 @@ const ProductDetailPage = (props) => {
                                     Theo Dõi
                                 </Button>
                             </Space>
-
                         </Row>
                     </Col>
                 </Row>
@@ -468,15 +482,14 @@ const ProductDetailPage = (props) => {
                     prevArrow=<SlickArrowLeft />
                     nextArrow=<SlickArrowRight />
                     swipeToSlide draggable
+                    style={{width: '100%'}}
                 >
                     {similar_products.map((item, index) => (
-                        <Card key={item.id}
-                            className="productItem"
-                            hoverable
+                        <Card key={item.id} className="productItem" hoverable
                             cover={<img
-                                alt={item.name ? item.name : `product-img`}
-                                style={{ padding: 10, height: '200px', width: '100%', objectFit: 'contain' }}
-                                src={item.image_link ? item.image_link : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEX09PTMzMzJycnPz8/d3d3V1dXi4uLo6Ojw8PDx8fH39/ft7e3Y2NjQ0NDp6enb29uHE20LAAACaklEQVR4nO3b6W6CQBhGYUTWD9T7v9uylLIN6jCk8Cbn+deEGo6DMOAYRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIJyFiuzshLesStJAdVZdufEV38LFydkZm6w+IrBJrK86itkxgU1ifnaKmz363QvUvsbjmoNYdjuXPPMQz6R7lfLsGKeq3bd76LvfHwnFIXt0tOKYwjuF51kVtjMUbzqFVmR1/cpK30idwv7qH98yz0SVwvI+XP19JygqhY9xehMnXokihfl0/hZ77a5I4WM2zXz5DKJI4XwKvjHLNGeGRmE1L7w7N7fKeRLSKCy+KGwCnedZjcJofruXuo7SbpwdiRqFlk4D42y9rf0eyOtEjcL5BzFeb2rV5oRApNAmj6QcjyRs8g4sE0UKJ4nxemJq8yGeJ6oURpY/uic26frppy0uJvNEmcI2JM/yovlz8cxlGbhIFCrcsA6cX0/kC52Bt3hMlC90Bk5HUbzQPYL9KA6b6BXmk8/YZuCYqFdYj/f47wL/EtUKrR6/LXsfOCSKFbaBQ+KnwGa79sqpVWjp7x1Ec6B+DhQsHAK7xM+BeoVjYLPzr499eoXTwO+IFfoHihXuWbWgVVh792kV7lt3IlRoe0ZQqvCLax+FZ8c4UUghheebFu6jU1gk++gU7l3t3f2rRmGAyxcGr329cuEh60stunBh2Z3y6yxM/wX52S1u/bf3Ryzzdq9tuIDnYWv1q7NTNlhy0O8t/Nb6/SfLbnHoYbpjSep/sjLfOZ0ZXfTXJKPgH69deAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDyA0uAKIxQw0bjAAAAAElFTkSuQmCC'}
+                                alt={item.name ? item.name : `-`}
+                                style={{ padding: 12, height: '200px', width: '100%', objectFit: 'contain' }}
+                                src={item.image_link ? item.image_link : ''}
                             />}
                             onClick={() => setRouter({
                                 module: 'products',
@@ -484,15 +497,25 @@ const ProductDetailPage = (props) => {
                                 action: 'view',
                                 id: item.id,
                             })}
-                            style={{ padding: 12, marginLeft: 5 }}
+                            style={{ padding: 12 }}
+                            bodyStyle={{padding: 12}}
                         >
-                            <Meta title={item.name ? item.name : ``} />
-                            <div className="rating">
-                                {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
-                            </div>
-                            <Text className="price" type="danger" strong>{item.price ? item.price : ``} đ</Text>
-                            <Space size={[0]} direction="vertical" className="productItem-btn-group">
+                            {/* <Meta title={item.name ? item.name : ``}/> */}
+                            <Space
+                                direction="vertical"
+                                size={0}
+                                style={{
+                                    display: 'flex',
+                                }}
+                            >
+                                <Text style={{ fontWeight: 490, fontSize: 16 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                <div className="rating" style={{marginTop: 5, marginBottom: 5}}>
+                                    {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                    <span style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: {item.quantity_sold ? item.quantity_sold.length : 0} </span>
+                                </div>
+                                <Text className="price" type="danger" style={{fontSize: 16}}>{item.price_format ? item.price_format : ``} đ</Text>
+                            </Space>
+                            {/* <Space size={[0]} direction="vertical" className="productItem-btn-group">
                                 <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
                                     <Button icon={<HeartOutlined />} href="#" />
                                 </Tooltip>
@@ -517,14 +540,12 @@ const ProductDetailPage = (props) => {
                                     </>}>
                                     <Button icon={<ShareAltOutlined />} href="#" />
                                 </Popover>
-                            </Space>
+                            </Space> */}
                         </Card>
                     ))}
                 </Carousel>
             </Col>
         </Row>
-
-
 
         <Modal title="Đăng nhập tài khoản của bạn"
             open={isModalConfirmLogin} onOk={() => {

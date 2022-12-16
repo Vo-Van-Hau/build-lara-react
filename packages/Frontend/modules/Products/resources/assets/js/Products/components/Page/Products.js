@@ -30,7 +30,7 @@ const ProductsPage = ({keyID, ...props}) => {
         stores: [],
     });
 
-    const menuRightItems = [
+    const menuTabRightItems = [
         { key: 1, label: 'Phổ Biến' },
         { key: 2, label: 'Bán Chạy' },
         { key: 3, label: 'Hàng Mới' },
@@ -319,7 +319,7 @@ const ProductsPage = ({keyID, ...props}) => {
                         </Carousel>
                     </Col>
                 </Row> */}
-                <Menu items={menuRightItems} mode="horizontal" />
+                <Menu items={menuTabRightItems} mode="horizontal" />
                 <Row className="productContainer">
                     <Space size={[10, 16]} style={{ width: '100%' }}>
                         <Row gutter={[8, 8]}>
@@ -328,7 +328,6 @@ const ProductsPage = ({keyID, ...props}) => {
                                     <Card className="productItem"
                                         key={index}
                                         hoverable
-                                        // style={{ width: 200 }}
                                         cover={<img alt={item.slug_name} src={item.image_link} />}
                                         onClick={() => setRouter({
                                             module: 'products',
@@ -337,14 +336,22 @@ const ProductsPage = ({keyID, ...props}) => {
                                             id: item.id,
                                         })}
                                         style={{ padding: 12 }}
-                                        bodyStyle={{ padding: 0 }}
+                                        bodyStyle={{ padding: '8px 0'}}
                                     >
-                                        <Text style={{ fontWeight: 400 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
-                                        <div className="rating">
-                                            {/* <Rate style={{ fontSize: 12 }} disabled /> */}
-                                            <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
-                                        </div>
-                                        <Text className="price" type="danger" strong>{item.price_format} đ</Text>
+                                         <Space
+                                            direction="vertical"
+                                            size={0}
+                                            style={{
+                                                display: 'flex',
+                                            }}
+                                        >
+                                            <Text style={{ fontWeight: 490, fontSize: 14 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                            <div className="rating" style={{marginTop: 5, marginBottom: 5}}>
+                                                {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                                <span style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: {item.quantity_sold ? item.quantity_sold.length : 0} </span>
+                                            </div>
+                                            <Text className="price" type="danger" style={{fontSize: 16}}>{item.price_format ? item.price_format : ``} đ</Text>
+                                        </Space>
                                     </Card>
                                 </Col>
                             ))

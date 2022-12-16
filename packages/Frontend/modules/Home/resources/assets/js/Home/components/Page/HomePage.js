@@ -181,10 +181,6 @@ const HomePage = (props) => {
         }
     }, []);
 
-    // return (
-    //     <>This is homepage</>
-    // )
-
     return (
         <>
             <Tabs activeKey={'none'}
@@ -256,10 +252,10 @@ const HomePage = (props) => {
             </Row>
             <Row className="titleHeading">
                 <Col span={22}>
-                    <h2>Thương hiệu chính hãng</h2>
+                    <h2 style={{marginTop: 0, marginBottom: 0}}>Thương hiệu chính hãng</h2>
                 </Col>
                 <Col span={2} className='more-btn'>
-                    <Typography.Link type="primary" >Xem thêm</Typography.Link>
+                    <Typography.Link type="primary">Xem thêm</Typography.Link>
                 </Col>
             </Row>
             <Row className="productContainer">
@@ -291,9 +287,7 @@ const HomePage = (props) => {
                         nextArrow={<SlickArrowRight />}
                         swipeToSlide draggable >
                         {products.map((item) => (
-                            <Card key={item.id}
-                                className="productItem"
-                                hoverable
+                            <Card key={item.id} className="productItem" hoverable
                                 cover={<img
                                     alt={item.name ? item.name : `product-img`}
                                     style={{ padding: 10, height: '200px', width: '100%', objectFit: 'contain' }}
@@ -305,40 +299,22 @@ const HomePage = (props) => {
                                     action: 'view',
                                     id: item.id,
                                 })}
-                                style={{ padding: 12, marginLeft: 5 }}
+                                style={{ padding: 12 }}
+                                bodyStyle={{padding: 12}}
                             >
-                                <Meta title={item.name ? item.name : ``} />
-                                <div className="rating">
-                                    {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                                    <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
-                                </div>
-                                <Text className="price" type="danger" strong>{item.price_format ? item.price_format : ``} đ</Text>
-                                <Space size={[0]} direction="vertical" className="productItem-btn-group">
-                                    <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
-                                        <Button icon={<HeartOutlined />} type='link' />
-                                    </Tooltip>
-                                    <Tooltip placement="right" title={'Thêm vào giỏ hàng'}>
-                                        <Button icon={<ShoppingCartOutlined />} type='link' />
-                                    </Tooltip>
-                                    <Popover
-                                            placement="rightTop"
-                                            id="socialBtnBar"
-                                            trigger="click"
-                                            open={openSharingPopup}
-                                            onOpenChange={handleOpenSharingPopupChange}
-                                            content={<>
-                                                <a className="close-btn" onClick={hide}><CloseOutlined /></a>
-                                                <Space className="social-bar-container" align="end" size="small">
-                                                    Chia sẻ:
-                                                    <img src="/facebook.png" width={20} />
-                                                    <img src="/icon_instagram.png" width={20} />
-                                                    <img src="/twitter.png" width={20} />
-                                                    {/* <CopyOutlined className={copyTextClipBrd==true ? 'copyClicked' : ''} style={{fontSize:16,}} onClick={copyToClipBoard}/> */}
-                                                </Space>
-                                            </>}
-                                    >
-                                        <Button icon={<ShareAltOutlined />} type='link' />
-                                    </Popover>
+                                <Space
+                                    direction="vertical"
+                                    size={0}
+                                    style={{
+                                        display: 'flex',
+                                    }}
+                                >
+                                    <Text style={{ fontWeight: 490, fontSize: 16 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                    <div className="rating" style={{marginTop: 5, marginBottom: 5}}>
+                                        {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                        <span style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: {item.quantity_sold ? item.quantity_sold.length : 0} </span>
+                                    </div>
+                                    <Text className="price" type="danger" style={{fontSize: 16}}>{item.price_format ? item.price_format : ``} đ</Text>
                                 </Space>
                             </Card>
                         ))}
@@ -347,7 +323,7 @@ const HomePage = (props) => {
             </Row>
             <Row className="titleHeading">
                 <Col>
-                    <h2>Danh mục sản phẩm</h2>
+                    <h2 style={{marginTop: 0, marginBottom: 0}}>Danh mục sản phẩm</h2>
                 </Col>
             </Row>
             <Row className="categories_block_container">
@@ -432,12 +408,12 @@ const HomePage = (props) => {
                         <Row gutter={[8, 8]}>
                             {products.map((item, index) => (
                                 <Col span={4} key={`${item.id}_${index}`}>
-                                    <Card className="productItem"
-                                        hoverable
+                                    <Card className="productItem" hoverable
                                         cover={<img
-                                            alt={item.name ? item.name : ``}
-                                            style={{ height: 189, width: 165, objectFit: `contain` }}
-                                            src={item.image_link} loading={lazy}
+                                            alt={item.name ? item.name : `-`}
+                                            style={{ padding: 12, height: '200px', width: '100%', objectFit: 'contain' }}
+                                            src={item.image_link ? item.image_link : ''}
+                                            loading={lazy}
                                         />}
                                         onClick={() => setRouter({
                                             module: 'products',
@@ -446,18 +422,23 @@ const HomePage = (props) => {
                                             id: item.id,
                                         })}
                                         style={{ padding: 12 }}
-                                        bodyStyle={{ padding: 0 }}
+                                        bodyStyle={{padding: 12}}
                                     >
-                                        <div>
-                                            {/* <Meta title={item.name ? item.name : ``} style={{fontWeight: 400}}/> */}
-                                            <Text style={{ fontWeight: 400 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
-                                            <div className="rating">
+                                        <Space
+                                            direction="vertical"
+                                            size={0}
+                                            style={{
+                                                display: 'flex',
+                                            }}
+                                        >
+                                            <Text style={{ fontWeight: 490, fontSize: 16 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                            <div className="rating" style={{marginTop: 5, marginBottom: 5}}>
                                                 {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
-                                                <small style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: 100++ </small>
+                                                <span style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: {item.quantity_sold ? item.quantity_sold.length : 0} </span>
                                             </div>
-                                            <Text className="price" type="danger" strong>{item.price_format ? item.price_format : ``} đ</Text>
-                                        </div>
-                                        <Space size={[0]} direction="vertical" className="productItem-btn-group">
+                                            <Text className="price" type="danger" style={{fontSize: 16}}>{item.price_format ? item.price_format : ``} đ</Text>
+                                        </Space>
+                                        {/* <Space size={[0]} direction="vertical" className="productItem-btn-group">
                                             <Tooltip placement="rightTop" title={'Thêm vào Yêu thích'}>
                                                 <Button icon={<HeartOutlined />} type="link" />
                                             </Tooltip>
@@ -483,7 +464,7 @@ const HomePage = (props) => {
                                             >
                                                 <Button icon={<ShareAltOutlined />} type="link" />
                                             </Popover>
-                                        </Space>
+                                        </Space> */}
                                     </Card>
                                 </Col>
                             ))}
