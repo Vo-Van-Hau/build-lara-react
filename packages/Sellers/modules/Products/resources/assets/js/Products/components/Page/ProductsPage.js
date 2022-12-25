@@ -4,18 +4,16 @@ import {
 } from '@ant-design/icons';
 import { Image, Row, Layout, Popconfirm, Table, Tabs, Select, Space, Button, Typography, Switch, Col } from 'antd';
 import { ProductsContext } from '../Contexts/ProductsContext';
+import Helper from '../Helper/Helper';
+
 const { Option } = Select;
 const { Text, Title } = Typography;
 const { Content } = Layout;
 
 const ProductsPage = (props) => {
 
-    const { data, get_products, setRouter } = useContext(ProductsContext);
+    const { data, get_products, setRouter, update } = useContext(ProductsContext);
     const { products, loading_table, pagination } = data;
-
-    const onTabsChange = (key) => {
-        console.log(key);
-    };
 
     /**
      * @author: <hauvo1709@gmail.com>
@@ -34,6 +32,30 @@ const ProductsPage = (props) => {
          */
         const handleTableChange = (pagination, filters) => {
             return get_products(pagination.current, {});
+        }
+
+        /**
+         * @author: <vanhau.vo@urekamedia.vn>
+         * @todo:
+         * @param {Object} product
+         * @return {void}
+         */
+        const handleChangeProductStatus = async (checked, event, product) => {
+            if(product && product.id) {
+                let values = {
+                    type: 'UPDATE_STATUS'
+                };
+                values.id = product.id;
+                if(checked) {
+                    values.status = 1; 
+                } else {
+                    values.status = 0; 
+                }
+                return await update(values);
+
+            } else {
+                Helper.Notification('success', '[Cập nhật]', 'Cập nhật thất bại');
+            }
         }
         
         const columns = [
@@ -83,7 +105,11 @@ const ProductsPage = (props) => {
             },{
                 title: 'Tồn kho',
                 render: (_, record) => {
-                    return (<>{ record.product_stock && record.product_stock.product_quantity ? record.product_stock.product_quantity : 'Undefined'}</>)
+               
+                    if(record.id === 91) {
+                        console.log(record.product_stock.product_quantity);
+                    }
+                    return (<>{ record.product_stock && record.product_stock.product_quantity ? record.product_stock.product_quantity : '-'}</>)
                 }
             },{
                 title: 'Ngày tạo',
@@ -106,7 +132,8 @@ const ProductsPage = (props) => {
                         <Switch
                             checkedChildren={`Bật`}
                             unCheckedChildren={`Tắt`}
-                            defaultChecked
+                            defaultChecked={record.status === 1 ? true : false}
+                            onChange={(checked, event) => handleChangeProductStatus(checked, event, record)}
                         />
                     </>)
                 }
@@ -184,21 +211,21 @@ const ProductsPage = (props) => {
             </Row>
             <Tabs
                 defaultActiveKey={1}
-                onChange={onTabsChange}
                 items={[
                     {
                         label: `Tất cả`,
                         key: '1',
                         children: <AllProductsTab />,
-                    },{
-                        label: `Đang chờ duyệt`,
-                        key: '2',
-                        children: <SellingTab />,
-                    },{
-                        label: `Đang bán`,
-                        key: '3',
-                        children: <OutStockTab />,
                     },
+                    // {
+                    //     label: `Đang chờ duyệt`,
+                    //     key: '2',
+                    //     children: <SellingTab />,
+                    // },{
+                    //     label: `Đang bán`,
+                    //     key: '3',
+                    //     children: <OutStockTab />,
+                    // },
                 ]}
             />
         </Content>

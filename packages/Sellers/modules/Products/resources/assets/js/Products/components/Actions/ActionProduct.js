@@ -1,6 +1,6 @@
 import React, { createRef, useState, useContext, useEffect, useRef } from 'react';
 import {
-    RightOutlined, UploadOutlined, LeftOutlined
+    RightOutlined, UploadOutlined, LeftOutlined, EditOutlined,
  } from '@ant-design/icons';
 import {
   Form, Input, Button, Select, Cascader, Upload, InputNumber,
@@ -74,8 +74,8 @@ const ActionProduct = (props) => {
             const formData = new FormData();
             const selectedFile = event.target.files[0];
             const axios = get_axios();
-            formData.append('image_link', selectedFile);
-            axios
+            await formData.append('image_link', selectedFile);
+            await axios
             .get_secured()
             .post(`${baseURL}/payloadv2/upload/v2/image`, formData, {
                 headers: {
@@ -130,7 +130,7 @@ const ActionProduct = (props) => {
 
         useEffect(function() {
 
-        });
+        }, []);
 
         return (<>
             <Form
@@ -147,6 +147,7 @@ const ActionProduct = (props) => {
                     cogs: keyID && item.cogs ? item.cogs : 0,
                     price: keyID && item.price ? item.price : 0,
                     description: keyID && item.description ? item.description : '',
+                    category_id: keyID && item.category_ids ? item.category_ids : [],
                 }}
             >
                 <Row gutter={[50, 5]}>
@@ -178,13 +179,25 @@ const ActionProduct = (props) => {
                                 options={categories}
                                 expandTrigger="hover"
                                 displayRender={displayRender}
+                                // defaultValue={20}
                             />
                         </Form.Item>
                         <Form.Item name="cogs" label="Giá vốn hàng bán">
-                            <InputNumber addonAfter="VNĐ" style={{ width: '100%' }} min={0}/>
+                            <InputNumber 
+                                addonAfter="VNĐ" 
+                                style={{ width: '100%' }} 
+                                min={0} 
+                                placeholder="Nhập giá vốn hàng bán"
+                                decimalSeparator={`,`}
+                            />
                         </Form.Item>
                         <Form.Item name="price" label="Giá bán thực tế" >
-                            <InputNumber addonAfter="VNĐ" style={{ width: '100%' }} min={0}/>
+                            <InputNumber 
+                                addonAfter="VNĐ" 
+                                style={{ width: '100%' }} 
+                                min={0} 
+                                placeholder="Nhập giá bán thực tế"
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -249,31 +262,29 @@ const ActionProduct = (props) => {
                 supplier_id: keyID && item.product_identifiers ? item.product_identifiers.supplier_id : '',
             }}
         >
-            <Form.Item name="supplier_id" label="Nhà cung cấp" >
-            <Select
-                    showSearch
-                    placeholder="Chọn nhãn hiệu"
-                    optionFilterProp="children"
-                    filterOption={(input, option) => option.children.toLowerCase().includes(input)}
-                    filterSort={(optionA, optionB) =>
-                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                    }
-            >
-                <Option value="1">Adidas</Option>
-                <Option value="2">Nike</Option>
-                <Option value="3">H&M</Option>
-                <Option value="4">Shein</Option>
-            </Select>
-            </Form.Item>
-
+            {/* <Form.Item name="supplier_id" label="Nhà cung cấp" >
+                <Select
+                        showSearch
+                        placeholder="Chọn nhãn hiệu"
+                        optionFilterProp="children"
+                        filterOption={(input, option) => option.children.toLowerCase().includes(input)}
+                        filterSort={(optionA, optionB) =>
+                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                        }
+                >
+                    <Option value="1">Adidas</Option>
+                    <Option value="2">Nike</Option>
+                    <Option value="3">H&M</Option>
+                    <Option value="4">Shein</Option>
+                </Select>
+            </Form.Item> */}
             <Form.Item
                 name="sku" label="SKU" span={12}
                 tooltip="SKU(đơn vị phân loại hàng hóa tồn kho) là một dạng quy ước nhằm phân loại mặt hàng để bán, đó có thể là một sản phẩm hoặc dịch vụ, và kèm tất cả các thông số, thuộc tính liên quan với các loại item mà phân biệt nó với các loại mặt hàng khác. vd:4225-776-3234">
-                <Input placeholder=""/>
+                <Input placeholder="Nhập mã SKU"/>
             </Form.Item>
-
             <Form.Item name="gtin" label="GTIN" span={12} tooltip="GTIN ( mã số sản phẩm thương mại toàn cầu ) còn được biết đến là mã vạch" >
-                <Input placeholder=""/>
+                <Input placeholder="Nhập mã GTIN"/>
             </Form.Item>
 
             <Affix style={{ position: 'fixed', bottom: 0, right: 0, width: '100%', background: '#fff', boxShadow: '0px -1px 6px -2px rgba(171,171,171,0.75)' }} justify='between' align='middle' >
@@ -295,10 +306,7 @@ const ActionProduct = (props) => {
                     </Button>
                 </Form.Item>
             </Affix>
-
-        </Form>
-
-        </>)
+        </Form></>)
     }
 
     /**
@@ -335,13 +343,15 @@ const ActionProduct = (props) => {
                 condition: keyID && item.product_description_detail ? item.product_description_detail.condition : 'new',
                 weight: keyID && item.product_description_detail ? item.product_description_detail.weight : '',
                 gender: keyID && item.product_description_detail ? item.product_description_detail.gender : '',
-                material: keyID && item.product_description_detail ? item.product_description_detail.material : '',
+                material: keyID && item.product_description_detail ? item.product_description_detail.material : '0',
                 length: keyID && item.product_description_detail ? item.product_description_detail.length : '',
                 width: keyID && item.product_description_detail ? item.product_description_detail.width : '',
                 height: keyID && item.product_description_detail ? item.product_description_detail.height : '',
                 age_group: keyID && item.product_description_detail ? item.product_description_detail.age_group : '',
                 size: keyID && item.product_description_detail ? item.product_description_detail.size : '',
                 size_type: keyID && item.product_description_detail ? item.product_description_detail.size_type : '',
+                color: keyID && item.product_description_detail ? item.product_description_detail.color : '0',
+                countries: keyID && item.countries ? item.product_description_detail.countries : 0,
             }}
         >
             <Row gutter={[50, 5]}>
@@ -363,101 +373,230 @@ const ActionProduct = (props) => {
                 </Form.Item>
                 <Form.Item name="color" label="Chọn màu sắc sản phẩm">
                     <Select
-                        mode="multiple"
                         allowClear
                         style={{
                             width: '100%',
                         }}
                         placeholder="Chọn màu sắc sản phẩm"
-                    >
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
-                                return (
-                                    <Option key={item.toString(36) + item}>{item.toString(36) + item}</Option>
-                                )
-                        })}
-                    </Select>
+                        options={[
+                            {
+                                id: 0,
+                                label: 'Chọn màu sắc sản phẩm',
+                                value:'0',
+                            },{
+                                id: 1,
+                                label: 'Đỏ',
+                                value: '1',
+                            },{
+                                id: 2,
+                                label: 'Xanh da trời',
+                                value: '2',
+                            },{
+                                id: 3,
+                                label: 'Xanh lá',
+                                value: '3',
+                            },{
+                                id: 4,
+                                label: 'Vàng',
+                                value: '4',
+                            },{
+                                id: 5,
+                                label: 'Tím',
+                                value: '5',
+                            },{
+                                id: 6,
+                                label: 'Hồng',
+                                value: '6',
+                            },{
+                                id: 7,
+                                label: 'Cam',
+                                value: '7',
+                            },{
+                                id: 8,
+                                label: 'Nâu',
+                                value: '8',
+                            },{
+                                id: 9,
+                                label: 'Đen',
+                                value: '9',
+                            },{
+                                id: 10,
+                                label: 'Trắng',
+                                value: '10',
+                            },{
+                                id: 11,
+                                label: 'Xám',
+                                value: '11',
+                            },{
+                                id: 12,
+                                label: 'Bạc',
+                                value: '12',
+                            }
+                        ]}
+                    />
                 </Form.Item>
                 <Form.Item name="weight" label="Trọng lượng sau đóng gói (KG) " >
                     <InputNumber placeholder='Nhập trọng lượng' addonAfter="KG" style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item name="gender" label="Nhóm giới tính">
-                    <Select placeholder="Chọn nhóm giới tính">
-                        <Select.Option value="male">Sản phẩm dành cho nam</Select.Option>
-                        <Select.Option value="female">Sản phẩm dành cho nữ</Select.Option>
-                        <Select.Option value="all">Tất cả</Select.Option>
+                    <Select 
+                        placeholder="Chọn nhóm giới tính"
+                        options={[
+                            {
+                                id: 0,
+                                label: 'Chọn nhóm giới tính',
+                                value: '',
+                            },{
+                                id: 1,
+                                label: 'Sản phẩm dành cho nam',
+                                value: 'male',
+                            },{
+                                id: 2,
+                                label: 'Sản phẩm dành cho nữ',
+                                value: 'female',
+                            },{
+                                id: 3,
+                                label: 'Tất cả',
+                                value: 'all',
+                            },
+                        ]}
+                    >
                     </Select>
                 </Form.Item>
             </Col>
             <Col span={12}>
                 <Form.Item name="material" label="Vật liệu sản phẩm">
-                <Select
-                    showSearch
-                    placeholder="Nhập để tìm kiếm"
-                    optionFilterProp="children"
-                    filterOption={(input, option) => option.children.includes(input)}
-                    filterSort={(optionA, optionB) =>
-                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                    }
-                    defaultValue={`0`}
-                >
-                     <Option value="0">Chọn vật liệu</Option>
-                    <Option value="1">Hữu cơ</Option>
-                    <Option value="1">Hữu cơ</Option>
-                    <Option value="2">Nhựa</Option>
-                    <Option value="3">Kim loại</Option>
-                    <Option value="4">Thủy tinh</Option>
-                    <Option value="5">Chất lỏng</Option>
-                </Select>
+                    <Select
+                        showSearch
+                        placeholder="Nhập để tìm kiếm"
+                        optionFilterProp="children"
+                        // filterOption={(input, option) => option.children.includes(input)}
+                        // filterSort={(optionA, optionB) =>
+                        //     optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                        // }
+                        options={[
+                            {
+                                id: 0,
+                                label: 'Chọn vật liệu',
+                                value: '0',
+                            },{
+                                id: 1,
+                                label: 'Kim loại',
+                                value: '1',
+                            },{
+                                id: 2,
+                                label: 'Nhựa',
+                                value: '2',
+                            },{
+                                id: 3,
+                                label: 'Thủy tinh',
+                                value: '3',
+                            },{
+                                id: 4,
+                                label: 'Chất lỏng',
+                                value: '4',
+                            },{
+                                id: 5,
+                                label: 'Hữu cơ',
+                                value: '5',
+                            },{
+                                id: 6,
+                                label: 'Giấy',
+                                value: '6',
+                            },
+                        ]}
+                    />
                 </Form.Item>
                 <Form.Item name="countries" label="Xuất xứ">
-                <Select placeholder="Xuất xứ sản phẩm">
-                    <Select.Option value="1">Việt Nam</Select.Option>
-                    <Select.Option value="2">Nhật Bản</Select.Option>
-                    <Select.Option value="3">Trung Quốc</Select.Option>
-                    <Select.Option value="4">Singapore</Select.Option>
-                </Select>
+                    <Select 
+                        placeholder="Xuất xứ sản phẩm"
+                        options={[
+                            {
+                                id: 0,
+                                label: 'Chọn xuất xứ sản phẩm',
+                                value: 0,
+                            },{
+                                id: 1,
+                                label: 'Việt Nam',
+                                value: 1,
+                            },{
+                                id: 2,
+                                label: 'Nhật Bản',
+                                value: 2,
+                            },{
+                                id: 3,
+                                label: 'Trung Quốc',
+                                value: 3,
+                            },{
+                                id: 4,
+                                label: 'Singapore',
+                                value: 4,
+                            },
+                        ]}
+                    />
                 </Form.Item>
-                <Form.Item label="Kích thước sau đóng gói (dài x rộng x cao) "  >
                 <Row gutter={[5, 16]} justify='between'>
                     <Col span={8}>
-                    <Form.Item name="length">
-                        <InputNumber
-                            addonAfter="Cm"
-                            placeholder='Nhập chiều dài'
-                            min={0}
-                        />
-                    </Form.Item>
+                        <Form.Item name="length" label="Chiều dài sản phẩm" labelCol={{span: 24}}>
+                            <InputNumber
+                                addonAfter="Cm"
+                                placeholder='Nhập chiều dài'
+                                min={0}
+                            />
+                        </Form.Item>
                     </Col>
                     <Col span={8}>
-                    <Form.Item name="width">
-                        <InputNumber
-                            addonAfter="Cm"
-                            placeholder='Nhập chiều rộng'
-                            min={0}
-                        />
-                    </Form.Item>
+                        <Form.Item name="width" label="Chiều rộng sản phẩm" labelCol={{span: 24}}>
+                            <InputNumber
+                                addonAfter="Cm"
+                                placeholder='Nhập chiều rộng'
+                                min={0}
+                            />
+                        </Form.Item>
                     </Col>
                     <Col span={8}>
-                    <Form.Item name="height">
-                        <InputNumber
-                            addonAfter="Cm"
-                            placeholder='Nhập chiều cao'
-                            min={0}
-                        />
-                    </Form.Item>
+                        <Form.Item name="height"  label="Chiều cao sản phẩm" labelCol={{span: 24}}>
+                            <InputNumber
+                                addonAfter="Cm"
+                                placeholder='Nhập chiều cao'
+                                min={0}
+                            />
+                        </Form.Item>
                     </Col>
                 </Row>
-                </Form.Item>
                 <Form.Item name="size_type" label="Nhóm độ tuổi">
-                    <Select placeholder="Chọn nhóm độ tuổi">
-                        <Select.Option value="newborn">Trẻ sơ sinh</Select.Option>
-                        <Select.Option value="toddler">Trẻ mới biết đi</Select.Option>
-                        <Select.Option value="kids">Trẻ em</Select.Option>
-                        <Select.Option value="adult">Người lớn</Select.Option>
-                        <Select.Option value="all">Tất cả</Select.Option>
-                    </Select>
+                    <Select 
+                        placeholder="Chọn nhóm độ tuổi"
+                        options={[
+                            {
+                                id: 0,
+                                label: 'Chọn nhóm độ tuổi',
+                                value: '',
+                            },{
+                                id: 1,
+                                label: 'Trẻ sơ sinh',
+                                value: 'newborn',
+                            },{
+                                id: 2,
+                                label: 'Trẻ mới biết đi',
+                                value: 'toddler',
+                            },{
+                                id: 3,
+                                label: 'Trẻ em',
+                                value: 'kids',
+                            },{
+                                id: 4,
+                                label: 'Người lớn',
+                                value: 'adult',
+                            },{
+                                id: 5,
+                                label: 'Tất cả',
+                                value: 'all',
+                            },
+                        ]}
+                    />
                 </Form.Item>
-                <Form.Item name="size" label="Size sản phẩm">
+                {/* <Form.Item name="size" label="Size sản phẩm">
                     <Select placeholder="Chọn size sản phẩm">
                         <Select.Option value="S">Size S</Select.Option>
                         <Select.Option value="M">Size M</Select.Option>
@@ -476,17 +615,17 @@ const ActionProduct = (props) => {
                         <Select.Option value="tall">Cao</Select.Option>
                         <Select.Option value="plus">To</Select.Option>
                     </Select>
-                </Form.Item>
+                </Form.Item> */}
             </Col>
             </Row>
             <Affix style={{ position: 'fixed', bottom: 0, right: 0, width: '100%', background: '#fff', boxShadow: '0px -1px 6px -2px rgba(171,171,171,0.75)' }} justify='between' align='middle'>
             <Form.Item style={{ padding: '1.5rem 2rem', marginBottom: '0', textAlign: 'right', }}  >
                 <Popconfirm
-                placement="top"
-                title={'Bạn có muốn reset?'}
-                onConfirm={onReset}
-                okText="Yes"
-                cancelText="No"
+                    placement="top"
+                    title={'Bạn có muốn reset?'}
+                    onConfirm={onReset}
+                    okText="Yes"
+                    cancelText="No"
                 >
                 <Button htmlType="button" style={{ marginRight: '1rem' }}>
                     Hủy
@@ -500,8 +639,7 @@ const ActionProduct = (props) => {
                 </Button>
             </Form.Item>
             </Affix>
-        </Form>
-        </>)
+        </Form></>)
     }
 
 
@@ -571,9 +709,14 @@ const ActionProduct = (props) => {
                     <Button onClick={() => onKeyChange('3')} style={{ marginRight: '1rem' }} icon={<LeftOutlined />}>
                         Trở lại
                     </Button>
-                    <Button type="primary" htmlType="submit" icon={<UploadOutlined />}>
-                        Tạo mới
-                    </Button>
+                    {((keyID !== '' || keyID !== '#') && keyID) ? 
+                        <Button type="primary" htmlType="submit" icon={<EditOutlined />}>
+                            Cập nhật
+                        </Button> : 
+                        <Button type="primary" htmlType="submit" icon={<UploadOutlined />}>
+                            Tạo mới
+                        </Button>
+                    }
                 </Form.Item>
             </Affix>
         </Form>
@@ -581,8 +724,8 @@ const ActionProduct = (props) => {
     }
 
   useEffect(function() {
-    get_product_categories();
     if(mouted) {
+        get_product_categories(1, {});
         if((keyID !== '' || keyID !== '#') && keyID) {
             get_product_item(keyID);
         }

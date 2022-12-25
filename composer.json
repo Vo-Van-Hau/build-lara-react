@@ -33,10 +33,10 @@
         "fruitcake/laravel-cors": "^2.0",
         "google/cloud-translate": "^1.12",
         "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "^2.7",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "lokalise/php-lokalise-api": "^4.1",
         "modules/address": "*@dev",
         "modules/auth": "*@dev",
         "modules/carts": "*@dev",
@@ -60,8 +60,9 @@
         "sellers/products": "*@dev",
         "sellers/publishers": "*@dev",
         "sellers/sellers": "*@dev",
-        "sellers/users": "*@dev",
-        "sellers/shop": "*@dev"
+        "sellers/settings": "*@dev",
+        "sellers/shop": "*@dev",
+        "sellers/users": "*@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -283,6 +284,10 @@
         },{
             "type": "path",
             "url": "packages/Sellers/modules/Shop",
+            "symlink": false
+        },{
+            "type": "path",
+            "url": "packages/Sellers/modules/Settings",
             "symlink": false
         }
     ]

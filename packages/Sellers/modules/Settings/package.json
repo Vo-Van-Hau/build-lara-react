@@ -1,0 +1,38 @@
+{
+    "name": "settings",
+    "version": "1.00.000",
+    "author": [
+        {
+            "email": "vanhau.vo@urekamedia.vn",
+            "name": "vovanhau"
+        }
+    ],
+    "dependencies": {},
+    "devDependencies": {},
+    "component": {},
+    "menu": {
+        "Settings": {
+            "name": "Settings",
+            "icon": "fas fa-user",
+            "controller": "Settings",
+            "group": "systems",
+            "position": 2,
+            "child": [
+                {
+                    "name": "Seller Settings",
+                    "link": "\/settings\/seller",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Settings"
+                }, {
+                    "name": "Store Settings",
+                    "link": "\/settings\/store",
+                    "role": "view",
+                    "icon": "fa fa-table",
+                    "controller": "Settings"
+                }
+            ]
+        }
+    },
+    "status": false
+}

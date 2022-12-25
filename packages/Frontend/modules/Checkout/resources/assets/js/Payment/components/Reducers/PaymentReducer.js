@@ -10,7 +10,11 @@ export const initialState = {
             customer: {
                 customer_address: [],
             }
-        }
+        },
+        estimated_delivery_date: {
+            date: '', time: ''
+        },
+        delivery_date: '',
     },
     payment_methods: [],
     config:{

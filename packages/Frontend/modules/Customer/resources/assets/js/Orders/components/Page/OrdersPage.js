@@ -2,7 +2,7 @@ import React, { useEffect, useContext, Fragment } from 'react';
 import { BarcodeOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
     CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined, ControlOutlined
 } from '@ant-design/icons';
-import { Layout, Table, Col, Result, Space, Tag, Divider,
+import { Layout, Table, Col, Empty, Space, Tag, Divider,
     Row, Typography, Button, Tabs, Image
 } from 'antd';
 import { OrdersContext } from '../Contexts/OrdersContext';
@@ -15,11 +15,37 @@ const OrdersPage = ({keyID, ...props}) => {
     const { data, setRouter, get_orders_history }  = useContext(OrdersContext);
     const { orders } = data;
 
-    const onTabsChange = (key) => {
-        console.log(key);
-    };
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo:
+     * @param
+     * @returns {void}
+     */
+    const AllOrders = (values) => {
 
-    const AllOrders = () => {
+        const { type } = values;
+        let orders_tab = type > -1 ? orders.filter((_orders, _index) => {
+            if(_orders.order_tracking_status) {
+                const { group_status_id } = _orders.order_tracking_status;
+                return group_status_id === type;
+            }
+        }) : orders;
+
+        switch(type) {
+            case -1:
+                break;
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+
         return (<Space
             direction="vertical"
             size="large"
@@ -27,7 +53,7 @@ const OrdersPage = ({keyID, ...props}) => {
                 display: 'flex',
             }}
         >
-            {orders.map((order) => {
+            {orders_tab.length > 0 ? orders_tab.map((order) => {
                 let { order_detail, order_tracking_status } = order;
                 const columns = [
                     {
@@ -69,13 +95,13 @@ const OrdersPage = ({keyID, ...props}) => {
                         align: 'center',
                         render: (_, record) => {
                             return (
-                                <>{ record.price }</>
+                                <>{ record.price_format || '-' }</>
                             )
                         }
                     },
 
                 ];
-                return (<Fragment>
+                return (<Fragment key={order.id}>
                     <div>
                         <div>
                             <Space size={`small`} direction="vertical" style={{paddingBottom: 12, paddingTop: 12}}>
@@ -101,7 +127,7 @@ const OrdersPage = ({keyID, ...props}) => {
                                             }}
                                         >
                                             <div>
-                                                <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div>
+                                                <div className="total_price" align='right'>Tổng cộng: <b>{order.total_amount_format || '-'} đ</b></div>
                                             </div>
                                             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
                                                 <Space wrap>
@@ -122,81 +148,15 @@ const OrdersPage = ({keyID, ...props}) => {
                     </div>
                     <Divider />
                 </Fragment>)
-            })}
+            }) : <Empty
+                description={`Chưa có đơn hàng`}
+            />}
         </Space>)
-    };
-
-    const Processing = () => {
-        return <Result title="No orders yet" />
-    };
-    const Transporting = () => {
-        return <Result title="No orders yet" />
-    };
-    const Delivered = () => {
-        const columns = [
-            {
-                title: 'Order status here',
-                dataIndex: 'img',
-                render: (item) => <img src={item} alt='cart-item-img' />,
-            },
-            {
-                title: 'Product',
-                dataIndex: 'title',
-                width: 300,
-                render: (text) => <a>{text}</a>,
-            },
-            {
-                title: 'Quantity',
-                align: 'center',
-                dataIndex: 'quantity',
-            },
-            {
-                title: 'Unit Price',
-                align: 'center',
-                dataIndex: 'unitPrice',
-            },
-
-        ];
-        const data = [
-            {
-                key: '1',
-                img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-                title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-                unitPrice: 32000,
-                quantity: 1,
-            },
-            {
-                key: '2',
-                img: 'https://salt.tikicdn.com/cache/w78/ts/product/37/7f/04/0e29466f6e96224b9a9980bb8643bdc4.jpg.webp',
-                title: 'We Will Be Happy, In Different Ways [Bonus: 01 Bookmark]',
-                unitPrice: 32000,
-                quantity: 1,
-            },
-        ];
-        return <>
-
-            <Title level={5} className='shop_name'>
-                <ShopOutlined /> OrderID here
-            </Title>
-            <Table
-                pagination={false}
-                columns={columns}
-                dataSource={data}
-                footer={() => { return <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div> }}
-            />
-            <Row align='end'>
-                <Button type="primary" size={'large'} style={{ margin: '1rem' }} >See detail</Button>
-            </Row>
-
-        </>
-    };
-    const Canceled = () => {
-        return <Result title="No orders yet" />
     };
 
     useEffect(() => {
         if(keyID !== '' || keyID !== '#') {
-            get_orders_history();
+            get_orders_history(1, {});
         }
     }, []);
 
@@ -213,29 +173,32 @@ const OrdersPage = ({keyID, ...props}) => {
                             <Col className="page_container" span={24}>
                                 <Tabs
                                     type="card"
-                                    defaultActiveKey="1"
-                                    onChange={onTabsChange}
+                                    defaultActiveKey={-1}
                                     items={[
                                         {
                                             label: `Tất cả đơn`,
-                                            key: '1',
-                                            children: <AllOrders />,
+                                            key: -1,
+                                            children: <AllOrders type={-1}/>,
+                                        },{
+                                            label: `Chờ xác nhận`,
+                                            key: 1,
+                                            children: <AllOrders type={1}/>,
                                         },{
                                             label: `Đang xử lý`,
-                                            key: '2',
-                                            children: <Processing />,
+                                            key: 2,
+                                            children: <AllOrders type={2} />,
                                         },{
                                             label: `Đang vận chuyển`,
-                                            key: '3',
-                                            children: <Transporting />,
+                                            key: 3,
+                                            children: <AllOrders type={3} />,
                                         },{
-                                            label: `Đã giao`,
-                                            key: '4',
-                                            children: <Delivered />,
+                                            label: `Giao hàng thành công`,
+                                            key: 4,
+                                            children: <AllOrders type={4} />,
                                         },{
-                                            label: `Đã huỷ`,
-                                            key: '5',
-                                            children: <Canceled />,
+                                            label: `Đơn hàng đã hủy`,
+                                            key: 0,
+                                            children: <AllOrders type={0} />,
                                         }
                                     ]} />
                             </Col>
@@ -243,13 +206,6 @@ const OrdersPage = ({keyID, ...props}) => {
                     </Content>
                 </Layout>
             </Content>
-            <Footer
-                style={{
-                    textAlign: 'center',
-                }}
-            >
-                MS Mall ©2022 Created
-            </Footer>
         </Layout>
     )
 };

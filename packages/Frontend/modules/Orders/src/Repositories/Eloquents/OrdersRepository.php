@@ -6,10 +6,12 @@ use Frontend\Core\Repositories\Eloquents\BaseRepository;
 use Frontend\Orders\Interfaces\OrdersRepositoryInterface;
 use Frontend\Orders\Models\Orders;
 use Frontend\Orders\Models\OrderDetail;
+use Frontend\Orders\Models\OrderTrackingDetails;
 use Frontend\Checkout\Models\Carts;
 use Frontend\Checkout\Models\CartDetail;
 use Illuminate\Support\Facades\Config;
 use Frontend\Auth\AuthFrontend;
+use Frontend\Products\Models\ProductStock;
 
 class OrdersRepository extends BaseRepository implements OrdersRepositoryInterface {
 
@@ -17,7 +19,8 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @var Eloquent | Model
      */
     protected $model;
-    protected $order_detail;
+    protected OrderDetail $order_detail_model;
+    protected OrderTrackingDetails $order_tracking_details_model;
 
     /**
      * @var Eloquent | Model
@@ -29,10 +32,15 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
      * @param Model|Eloquent $model
      *
      */
-    public function __construct(Orders $model, OrderDetail $order_detail) {
+    public function __construct(
+        Orders $model,
+        OrderDetail $order_detail_model,
+        OrderTrackingDetails $order_tracking_details_model
+    ) {
         $this->model = $model;
         $this->originalModel = $model;
-        $this->order_detail = $order_detail;
+        $this->order_detail_model = $order_detail_model;
+        $this->order_tracking_details_model = $order_tracking_details_model;
     }
 
     /**
@@ -123,7 +131,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         // $new->shipping_method_id = $input['shipping_method_id']
         $new->shipping_method_id = 1;
         $new->transporter_id = 0;
-        $new->delivery_date = date('Y-m-d', strtotime('+7 days'));
+        $new->delivery_date = date('Y-m-d 22:00:00', strtotime('+7 days'));
         $new->status = 0;
         if($new->save()) {
             $order_id = $new->id;
@@ -131,7 +139,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
                 $product = $item['product'];
                 $quantity = $item['product_quantity'];
                 try {
-                    OrderDetail::create([
+                    $order_detail = OrderDetail::create([
                         'order_id' => $order_id,
                         'product_id' => $product['id'],
                         'product_name' => $product['name'],
@@ -139,8 +147,17 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
                         'quantity' => $quantity,
                         'price' => $product['price']
                     ]);
+                    $order_tracking_detail = $this->create_order_tracking_detail([
+                        'status_target' => 1,
+                        'order_id' => $order_id ?? 0,
+                        'order_detail_id' => $order_detail->id ?? 0,
+                    ]);
+                    $updateStock = $this->update_quantity_in_stock([
+                        'product_id' => $product['id'],
+                        'quantity' => $quantity,
+                    ]);
                 }
-                catch (\Exception $errors) {
+                catch (\Exception $exception) {
                     $new->delete();
                     return false;
                 }
@@ -159,6 +176,66 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
+     * @param array $data
+     * @return mixed
+     */
+    public function create_order_tracking_detail($data) {
+        try {
+            $status_target = isset($data['status_target']) ? $data['status_target'] : 0;
+            $order_id = isset($data['order_id']) ? $data['order_id'] : 0;
+            $order_detail_id = isset($data['order_detail_id']) ? $data['order_detail_id'] : 0;
+            $order_tracking_detail= OrderTrackingDetails::create([
+                'code' => rand(0, 10) . time(),
+                'order_id' => $order_id,
+                'order_detail_id' => $order_detail_id,
+                'order_tracking_status_id' => $status_target,
+                'tracking_at' => date('Y-m-d H:i:s'),
+                'order_type' => 2,
+                'status' => 1,
+            ]);
+            if(!empty($order_tracking_detail)) {
+                return $order_tracking_detail;
+            } else {
+                return false;
+            }
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $data
+     * @return mixed
+     */
+    public function update_quantity_in_stock($data) {
+        try {
+            $product_id = isset($data['product_id']) ? $data['product_id'] : 0;
+            $quantity = isset($data['quantity']) ? $data['quantity'] : 0;
+            $productStock = ProductStock::where([
+                'product_id' => $product_id,
+                'deleted' => 0,
+                'status' => 1,
+            ])->select('id', 'product_id', 'product_quantity', 'warehouse_id', 'status')->first();
+            if(!empty($productStock)) {
+                $existed_quantity = $productStock->product_quantity ?? 0;
+                if(intval($existed_quantity) > intval($quantity)) {
+                    (int) $new_quantity = $existed_quantity - $quantity;
+                    $productStock->product_quantity = $new_quantity;
+                    if($productStock->save()) return true;
+                    else return false;
+                }
+            }
+            return false;
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
      * @param array $input
      * @return Illuminate\Support\Collection
      */
@@ -169,15 +246,39 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         $result = $order->where([
             'deleted' => 0,
             'user_id' => $user_id
-        ])->with([
-            'customer',
-            'order_detail' => function($query) {
-                $query->select('id', 'order_id', 'order_tracking_status_id', 'product_id', 'product_name', 'product_image_link', 'quantity', 'price', 'note');
-            },
-            'order_tracking_status' => function($query) {
-                $query->select('id', 'title', 'code', 'tag_name');
+        ])
+            ->with([
+                'customer',
+                'order_detail' => function($query) {
+                    $query->select('id', 'order_id', 'order_tracking_status_id', 'product_id', 'product_name', 'product_image_link', 'quantity', 'price', 'note');
+                },
+                'order_tracking_status' => function($query) {
+                    $query->select('id', 'group_status_id', 'title', 'code', 'tag_name')
+                    ->with([
+                        'order_tracking_group_status' => function($query) {
+                            $query->select('id', 'title', 'tag_name', 'status');
+                        }
+                    ]);
+                }
+            ])
+            ->select('id', 'code', 'receiver_name', 'receiver_phone', 'receiver_country_id', 'receiver_province_id', 'receiver_district_id',
+                'receiver_ward_id', 'receiver_address', 'subtotal', 'total_amount', 'item_quantity', 'discount', 'user_id', 'shipping_id', 'payment_method_id',
+                'contact_type_id', 'order_tracking_status_id', 'shipping_method_id', 'transporter_id', 'delivery_date', 'order_date', 'status',
+            )
+            ->orderBy('id', 'desc')
+            ->get();
+        foreach($result as $item) {
+            $item->total_amount_format = number_format($item->total_amount, 0, '.', ',');
+            $item->estimated_delivery_date = [
+                'date' => date('d/m/Y', strtotime($item->delivery_date)),
+                'time' => date('H:m', strtotime($item->delivery_date)),
+            ];
+            if($item->order_detail) {
+                foreach($item->order_detail as $order_detail) {
+                    $order_detail->price_format = number_format($order_detail->price, 0, '.', ',');
+                }
             }
-        ])->orderBy('id', 'desc')->get();
+        }
         if(!empty($result)) return $result;
         return false;
     }
@@ -225,8 +326,16 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         ])->select(
             'id', 'code', 'receiver_name', 'receiver_phone', 'receiver_country_id', 'receiver_province_id', 'receiver_district_id', 'receiver_ward_id', 'receiver_address',
             'subtotal', 'total_amount', 'item_quantity', 'discount', 'shipping_id', 'payment_method_id', 'contact_type_id', 'order_tracking_status_id', 'shipping_method_id',
-            'transporter_id', 'delivery_date', 'order_date', 'status'
+            'transporter_id', 'delivery_date', 'order_date', 'status',
         )->first();
+        $result->total_amount_format = number_format($result->total_amount, 0, '.', ',');
+        $result->estimated_delivery_date = [
+            'date' => date('d/m/Y', strtotime($result->delivery_date)),
+            'time' => date('H:m', strtotime($result->delivery_date)),
+        ];
+        foreach($result->order_detail as $order_detail) {
+            $order_detail->price_format = number_format($order_detail->price, 0, '.', ',');
+        }
         if(!empty($result)) return $result;
         return false;
     }

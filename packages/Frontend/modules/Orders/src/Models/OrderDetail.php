@@ -49,6 +49,15 @@ class OrderDetail extends ModelBase {
      */
     public function product() {
         return $this->belongsTo(Products::class, 'product_id', 'id')
+        ->with([
+            'product_identifiers' => function($query) {
+                $query->select('id', 'brand', 'product_id', 'supplier_id', 'sku', 'gtin', 'mpn', 'status');
+            },
+            'product_description_detail' => function($query) {
+                $query->select('id', 'product_id', 'condition', 'color', 'for_adult', 'material', 'age_group', 'multipack', 'is_bundle',
+                'size_type', 'size', 'gender', 'size_system', 'highlight', 'width', 'height', 'length', 'weight', 'product_detail','status');
+            }
+        ])
         ->where([
             'products.status' => 1,
             'products.deleted' => 0

@@ -40,13 +40,7 @@ class SellersRepository extends BaseRepository implements SellersRepositoryInter
      * @param array $status
      * @return Illuminate\Support\Collection
      */
-    public function get_all($keyword = '', $status = []) {
-        // $result = $this->model->where(['deleted' => 0]);
-        // if(!empty($status)) {
-        //     $result = $result->whereIn('status', $status);
-        // }
-        // return $result->paginate(Config::get('packages.frontend.products.item_per_page', 10));
-    }
+    public function get_all($keyword = '', $status = []) {}
 
     /**
      * @author <vanhau.vo@urekamedia.vn>
@@ -63,10 +57,15 @@ class SellersRepository extends BaseRepository implements SellersRepositoryInter
             'deleted' => 0
         ])
         ->with([
-            'store' => function($query) use ($seller_id) {
-
+            'store' => function($query) {
+                $query->select(
+                    'id', 'name', 'seller_id', 'brand_logo', 'area_id', 'country_id', 'province_id', 
+                    'district_id', 'ward_id', 'address', 'status', 'description'
+                );
             }
-        ])->first();
+        ])
+        ->select('id', 'fullname', 'phone', 'status')
+        ->first();
         if(empty($seller)) return false;
         if(isset($seller->store)) {
             $seller['store']['joined_date'] = date_format(date_create($seller->store->joined_date), 'd/m/Y');

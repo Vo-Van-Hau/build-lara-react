@@ -4,8 +4,9 @@ import {
     Divider, Input, notification, Breadcrumb, Typography, Tooltip, Popover, Modal
 } from 'antd';
 import {
-    HomeOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined, AppstoreOutlined,
-    MinusOutlined, StarFilled, TagsOutlined, GlobalOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, CloseOutlined, CopyOutlined
+    HomeOutlined, ShopOutlined, PlusOutlined, MoreOutlined, LikeOutlined, AppstoreOutlined, CheckOutlined,
+    MinusOutlined, StarFilled, TagsOutlined, GlobalOutlined, HeartOutlined, ShoppingCartOutlined, ShareAltOutlined, 
+    CloseOutlined, CopyOutlined
 } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ProductDetailContext } from '../Contexts/ProductsDetailContext';
@@ -16,7 +17,7 @@ const { Text, Title } = Typography;
 
 const ProductDetailPage = (props) => {
 
-    const { id } = props;
+    const { id, get_user } = props;
     const { user, config } = props.data;
     const { is_login, customer } = user;
     const { customer_address } = customer;
@@ -24,7 +25,7 @@ const ProductDetailPage = (props) => {
     const { baseURL, adminPrefix } = app;
 
     const {
-        data, get_product_item, add_to_cart, setRouter, get_similar_products
+        data, get_product_item, add_to_cart, setRouter, get_similar_products, followStore
     } = useContext(ProductDetailContext);
     const { product_item, mouted } = data;
     const { seller, similar_products, products_additional_image_link, product_identifiers } = product_item;
@@ -81,6 +82,7 @@ const ProductDetailPage = (props) => {
     }
 
     /**
+     * @author: <hauvo1709@gmail.com>
      * @todo: add product to cart
      * @param:
      * @return {void}
@@ -120,6 +122,22 @@ const ProductDetailPage = (props) => {
         } else {
             setIsModalConfirmLogin(true);
         }
+    }
+
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo: follow store
+     * @param:
+     * @return {void}
+     */
+    const handleFollowStore = async (storeItem) => {
+       return await Promise.all([
+            followStore({
+                store_id: storeItem.id || 0,
+            }),
+            get_product_item({ id: props.id }),
+            get_user(),
+       ])
     }
 
     const IconText = ({ icon, text }) => (
@@ -435,8 +453,8 @@ const ProductDetailPage = (props) => {
                                 {/* <div>4.5 / 5  <StarFilled /></div> */}
                                 <div></div>
                             </Col>
-                            <Space wrap className='btn-group' style={{ justifyContent: 'center' }}>
-                                <Button icon={<ShopOutlined />} size='middle' onClick={() => setRouter({
+                            <Space className='btn-group' style={{ justifyContent: 'center' }}>
+                                <Button icon={<ShopOutlined />} size='small' onClick={() => setRouter({
                                     module: 'shop',
                                     controller: 'shop',
                                     action: 'view',
@@ -444,9 +462,17 @@ const ProductDetailPage = (props) => {
                                 })}>
                                     Xem Shop
                                 </Button>
-                                <Button icon={<PlusOutlined />} size='middle' >
-                                    Theo Dõi
-                                </Button>
+                                {user.user_follow_stores.map(item => item.store_id).includes(store.id || 0) ? 
+                                    <Button icon={<CheckOutlined />} size='small' disabled style={{borderColor: '#52c41a', color: '#52c41a',}}>
+                                        Đang theo dõi
+                                    </Button> 
+
+                                    :
+                                    <Button icon={<PlusOutlined />} size='small' 
+                                        onClick={() => handleFollowStore(store)}
+                                    >
+                                        Theo Dõi
+                                    </Button>}
                             </Space>
                         </Row>
                     </Col>

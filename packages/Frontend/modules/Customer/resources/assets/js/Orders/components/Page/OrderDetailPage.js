@@ -2,22 +2,26 @@ import React, { useEffect, useContext, useState } from 'react';
 import { BarcodeOutlined, BellOutlined, ShoppingCartOutlined, HomeOutlined,
     CreditCardOutlined, TagOutlined, HeartOutlined, ShopOutlined, ControlOutlined
 } from '@ant-design/icons';
-import { Layout, Table, Col, Card, Space, Tag, Divider,
+import { Layout, Table, Col, Card, Space, Anchor, Divider,
     Row, Typography, Button, Tabs, Image
 } from 'antd';
 import { OrdersContext } from '../Contexts/OrdersContext';
 import SideBar from '../../../Customer/components/Layout/Sidebar';
 import OrderTrackingStatusDrawer from '../Actions/OrderTrackingStatusDrawer';
+
 const { Content, Footer } = Layout;
 const { Title, Text } = Typography;
 
 const OrderDetailPage = ({keyID, ...props}) => {
 
-    const { data, setRouter, get_detail }  = useContext(OrdersContext);
+    const { config } = props.data;
+    const { app } = config;
+    const { baseURL} = app;
+    const { data, setRouter, get_detail } = useContext(OrdersContext);
     const { detail_item } = data;
     const {
         order_detail, country, province, district, ward, receiver_address, receiver_name, receiver_phone,
-        payment_method,
+        payment_method, estimated_delivery_date,
     } = detail_item;
     const [viewAction, setViewAction] = useState(false);
     const [orderDetail, setOrderDetail] = useState({});
@@ -26,8 +30,10 @@ const OrderDetailPage = ({keyID, ...props}) => {
         {
             title: '',
             render: (_, record) => {
-                const { seller } = record.product;
+                const { seller, product_identifiers } = record.product;
                 const { store } = seller;
+                const { sku } = product_identifiers;
+
                 return (
                     <><Space align="start">
                         <Image width={78} height={78} src={record.product.image_link} alt={'product-image'} onClick={() => setRouter({
@@ -37,17 +43,22 @@ const OrderDetailPage = ({keyID, ...props}) => {
                             id: record.product.id
                         })}/>
                             <div>
-                                <><ShopOutlined />  { store && store.name ? store.name : `` }</><br/>
+                                <Text strong>{ record.product_name ? record.product_name : '-'}</Text><br/>
+                                <Text><ShopOutlined />  { store && store.name ? store.name : `-` }</Text><br/>
+                                <Text><BarcodeOutlined />  SKU { sku ? sku : `-` }</Text><br/><br/>
+                                <Space>
+                                    <Button>Chat với nhà bán</Button>
+                                    <Button>Viết nhận xét</Button>
+                                    <Button onClick={() => setRouter({
+                                        module: 'products',
+                                        controller: 'productdetail',
+                                        action: 'view',
+                                        id: record.product.id
+                                    })}>Mua lại</Button>
+                                </Space>
+
                             </div>
                     </Space></>)
-            },
-        },{
-            title: 'Tên sản phẩm',
-            width: 300,
-            render: (_, record) => {
-                return (
-                    <a>{ record.product_name }</a>
-                )
             },
         },{
             title: 'Số lượng',
@@ -62,7 +73,7 @@ const OrderDetailPage = ({keyID, ...props}) => {
             align: 'center',
             render: (_, record) => {
                 return (
-                    <>{ record.price }</>
+                    <>{ record.price_format }đ</>
                 )
             }
         },{
@@ -139,8 +150,8 @@ const OrderDetailPage = ({keyID, ...props}) => {
                                                         display: 'flex',
                                                     }}
                                                 >
-                                                    <Text>Giao trước 11:59 ngày 28/03/2022</Text>
-                                                    <Text>Được giao bởi TikiNOW Smart Logistics (giao từ Hồ Chí Minh)</Text>
+                                                    <Text>Giao trước {estimated_delivery_date.time || '-'} ngày {estimated_delivery_date.date || '-'}</Text>
+                                                    <Text>Được giao bởi <Text style={{fontWeight: 500}}>Giaohangtietkiem</Text></Text>
                                                     <Text>Phí vận chuyển: 14.000đ</Text>
                                                 </Space>
                                             </Card>
@@ -176,17 +187,11 @@ const OrderDetailPage = ({keyID, ...props}) => {
                                                     }}
                                                 >
                                                     <div>
-                                                        <div className="total_price" align='right'>Tổng cộng: <b>200.000đ</b></div>
+                                                        <div className="total_price" align='right'>Tổng cộng: <b>{detail_item.total_amount_format || '-'}đ</b></div>
                                                     </div>
                                                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
                                                         <Space wrap>
-                                                            <Button size={'small'}>Mua lại</Button>
-                                                            <Button size={'small'} onClick={() => setRouter({
-                                                                module: 'customer',
-                                                                controller: 'orders',
-                                                                action: 'detail',
-                                                                id: detail_item.id || 0
-                                                            })}>Xem chi tiết</Button>
+                                                            <Button size={'small'} type={'link'}>Xem hóa đơn</Button>
                                                         </Space>
                                                     </div>
                                                 </Space>
@@ -200,13 +205,6 @@ const OrderDetailPage = ({keyID, ...props}) => {
                     </Content>
                 </Layout>
             </Content>
-            <Footer
-                style={{
-                    textAlign: 'center',
-                }}
-            >
-                MS Mall ©2022 Created
-            </Footer>
         </Layout>
     )
 };

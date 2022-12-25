@@ -40,7 +40,7 @@ class OrdersController extends ControllerBase {
             //
             $input['payment_method_id'] = isset($input['payment_method_id']) ? $input['payment_method_id'] : null;
             $input['shipping_method_id'] = isset($input['shipping_method_id']) ? $input['shipping_method_id'] : null;
-            $result = $this->OrdersRepository->store($input);
+            return $result = $this->OrdersRepository->store($input);
             if($result && is_array($result) && $result['status']) {
                 $mail_to = '';
                 if($result['user_email']) {

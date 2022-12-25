@@ -9,7 +9,7 @@ class OrderTrackingStatus extends ModelBase {
 
     protected $connection = 'mysql';
     protected $table = 'order_tracking_status';
-
+    const LAST_STATUS_ID = 10;
     /**
      * @link: https://www.shiprocket.in/shipment-tracking/
      * @link: https://www.shiprocket.in/blog/understanding-the-basic-shipping-terms/
@@ -138,11 +138,7 @@ class OrderTrackingStatus extends ModelBase {
         ],
     ];
 
-    protected $fillable = [
-        'name',
-        'status',
-        'description'
-    ];
+    protected $fillable = [];
 
     /**=======================
      *     RelationShip

@@ -35,6 +35,9 @@ export const initialState = {
             id: 0,
             name: '',
             status: '',
+        }, 
+        estimated_delivery_date: {
+            date: '', time: ''
         }
     },
     config:{

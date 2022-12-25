@@ -23,13 +23,13 @@ class OrderTrackingStatus extends Notification {
     }
 
     /**
-     * Get the notification"s delivery channels.
+     * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable) {
-        return ["database"];
+        return ['database'];
     }
 
     /**
@@ -40,9 +40,9 @@ class OrderTrackingStatus extends Notification {
      */
     public function toMail($notifiable) {
         return (new MailMessage)
-                    ->line("The introduction to the notification.")
-                    ->action("Notification Action", url("/"))
-                    ->line("Thank you for using our application!");
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -53,9 +53,9 @@ class OrderTrackingStatus extends Notification {
      */
     public function toArray($notifiable) {
         return [
-            "name"  => $this->user->name,
-            "email" => $this->user->email,
-            "message" => "Hi Node Server...!"
+            'name'  => $this->user->name,
+            'email' => $this->user->email,
+            'message' => 'Hi Node Server...!'
         ];
     }
 }

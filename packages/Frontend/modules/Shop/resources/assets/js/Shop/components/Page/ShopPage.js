@@ -1,8 +1,11 @@
-import { useState, useEffect, useContext } from 'react';
-import { Pagination, Space, Card, Rate, Affix, Menu, List, Avatar, Col, Divider, Row, Typography, Button, Tabs, Input, Image } from 'antd';
+import { useState, useEffect, useContext, useMemo } from 'react';
+import { 
+    Pagination, Space, Card, Rate, Affix, Menu, List, Avatar, Col, Divider, Row, 
+    Typography, Button, Tabs, Input, Image 
+} from 'antd';
 import {
     AntDesignOutlined, UserAddOutlined, StarOutlined, PlusOutlined, SearchOutlined,
-    CalendarOutlined, InboxOutlined, ShopOutlined, StarFilled
+    CalendarOutlined, InboxOutlined, ShopOutlined, StarFilled, CheckOutlined,
 } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 import { ShopContext } from '../Contexts/ShopContext';
@@ -11,17 +14,35 @@ const { Title, Text } = Typography;
 
 const ShopPage = (props) => {
 
-    const { keyID } = props;
-    const { data, get_products, setRouter, get_shop } = useContext(ShopContext);
+    const { keyID, get_user } = props;
+    const { user, config } = props.data;
+
+    const { data, get_products, setRouter, get_shop, followStore } = useContext(ShopContext);
     const { products, mouted, shop } = data;
     const { store } = shop;
+    const { user_follow_stores } = store;
 
     const items = [
-        { label: 'Cửa Hàng', key: '1', children: <ShopTab data={data} /> }, // remember to pass the key prop
+        { label: 'Cửa Hàng', key: '1', children: <ShopTab data={data} setRouter={setRouter} /> },
         // { label: 'Tất Cả Sản Phẩm', key: '2', children: <AllProductsTab data={data} /> },
-        { label: 'Bộ Sưu Tập', key: '3', children: <CollectionTab data={data} /> },
+        // { label: 'Bộ Sưu Tập', key: '3', children: <CollectionTab data={data} /> },
         { label: 'Hồ Sơ Cửa Hàng', key: '4', children: <StoreProfile data={data} /> },
     ];
+
+     /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo: follow store
+     * @param:
+     * @return {void}
+     */
+    const handleFollowStore = async (storeItem) => {
+        return await Promise.all([
+            followStore({
+                store_id: storeItem.id || 0,
+            }),
+            get_user(),
+        ])
+    }
 
     useEffect(function() {
         if(mouted) {
@@ -44,19 +65,27 @@ const ShopPage = (props) => {
                 <Title level={4} style={{ color: '#fff' }}>{ store.name }</Title>
                 <img src='https://salt.tikicdn.com/ts/upload/5d/4c/f7/0261315e75127c2ff73efd7a1f1ffdf2.png' alt='official-ico' width={70} />
                 <div style={{ color: '#fff' }}>
-                    <StarOutlined /> 4.5/5
+                    {/* <StarOutlined /> 4.5/5 */}
                     <Divider type='vertical' />
-                    <UserAddOutlined /> Followers : 10.000
+                    <UserAddOutlined /> Số lượng theo dõi : {user_follow_stores.length || '-'}
                 </div>
             </Col>
-            <Col span={3} >
-                <Button type='primary' icon={<PlusOutlined />} size='default' >
-                    Theo dõi
-                </Button>
+            <Col span={3}>
+                {user.user_follow_stores.map(item => item.store_id).includes(store.id || 0) ? 
+                    <Button icon={<CheckOutlined />} size='small' disabled style={{borderColor: '#52c41a', color: '#52c41a',}}>
+                        Đang theo dõi
+                    </Button> 
+
+                    :
+                    <Button icon={<PlusOutlined />} size='small' 
+                        onClick={() => handleFollowStore(store)}
+                    >
+                        Theo Dõi
+                    </Button>}
             </Col>
             <Col span={10} offset={12} >
                 <Input
-                    placeholder="Searching product..."
+                    placeholder="Tìm kiếm sản phẩm..."
                     size='default'
                     prefix={<SearchOutlined className="site-form-item-icon" />}
                     style={{ width: '80%' }} />
@@ -82,7 +111,7 @@ const ShopPage = (props) => {
  * @return {void}
  */
 const ShopTab = (props) => {
-    const { data } = props;
+    const { data, setRouter } = props;
     const { products, get_products } = data;
     const [minShowProductsValue, setMinValue] = useState(0);
     const [maxShowProductsValue, setMaxValue] = useState(50);
@@ -119,12 +148,20 @@ const ShopTab = (props) => {
                                 style={{ padding: 12 }}
                                 bodyStyle={{ padding: 0 }}
                             >
-                                <Text style={{ fontWeight: 400 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
-                                <div className="rating">
-                                    {/* <Rate style={{ fontSize: 12 }} disabled /> */}
-                                    <small style={{ color: 'rgb(128, 128, 137)' }}> | Sold: 100++ </small>
-                                </div>
-                                <Text className="price" type="danger" strong>{item.price_format} đ</Text>
+                                <Space
+                                    direction="vertical"
+                                    size={0}
+                                    style={{
+                                        display: 'flex',
+                                    }}
+                                >
+                                    <Text style={{ fontWeight: 490, fontSize: 14 }} ellipsis={true}>{item.name ? item.name : ``}</Text>
+                                    <div className="rating" style={{marginTop: 5, marginBottom: 5}}>
+                                        {/* <Rate defaultValue={item.rating} style={{ fontSize: 12 }} disabled /> */}
+                                        <span style={{ color: 'rgb(128, 128, 137)' }}> | Đã bán: {item.quantity_sold ? item.quantity_sold.length : 0} </span>
+                                    </div>
+                                    <Text className="price" type="danger" style={{fontSize: 16}}>{item.price_format ? item.price_format : ``} đ</Text>
+                                </Space>
                             </Card>
                         </Col>
                     ))}
@@ -510,6 +547,7 @@ const StoreProfile = (props) => {
     const { data } = props;
     const { products, mouted, shop } = data;
     const { store } = shop;
+    const { user_follow_stores } = store;
     const list = [
         {
             title: 'Ngày tham gia',
@@ -518,24 +556,27 @@ const StoreProfile = (props) => {
         },{
             title: 'Sản phẩm',
             icon: <InboxOutlined />,
-            content: `${products.length}+`,
+            content: `${products.length}`,
         },{
             title: 'Mô tả cửa hàng',
             icon: <ShopOutlined />,
             content: `${store.description}`,
-        },{
-            title: 'Đánh giá',
-            icon: <StarOutlined />,
-            content: <>4/5 <StarFilled style={{ color: 'rgb(255, 196, 0)' }} /> </>,
-        },{
+        }
+        // {
+        //     title: 'Đánh giá',
+        //     icon: <StarOutlined />,
+        //     content: <>4/5 <StarFilled style={{ color: 'rgb(255, 196, 0)' }} /> </>,
+        // }
+        ,{
             title: 'Người theo dõi',
             icon: <UserAddOutlined />,
-            content: '10.000'
-        },{
-            title: 'Xếp hạng',
-            icon: <StarOutlined />,
-            content: `VIP Gold`,
+            content: user_follow_stores.length || '-'
         }
+        // {
+        //     title: 'Xếp hạng',
+        //     icon: <StarOutlined />,
+        //     content: `VIP Gold`,
+        // }
     ];
     return (
         <Row align='middle'>

@@ -303,10 +303,15 @@ class UsersRepository extends BaseRepository implements UsersRepositoryInterface
         ->with([
             'groups.parent_group:id,name,status',
             'publishers:id,name,status',
-            'customer' => function ($query) {
-                $query->select('user_id', 'id', 'fullname', 'nickname', 'phone');
-            }
-        ])->first();
+            'customer' => function($query) {
+                $query->select('user_id', 'id', 'fullname', 'nickname', 'phone', 'gender', 'date_of_birth', 'status');
+            },
+            'user_follow_stores' => function($query) {
+                $query->select('user_id', 'id', 'store_id', 'followed_at', 'status');
+            },
+        ])
+        ->select('id', 'avatar', 'username', 'email', 'name', 'status', 'is_admin', 'role_id', 'special', 'type', 'is_publisher')
+        ->first();
         return $result;
     }
 }

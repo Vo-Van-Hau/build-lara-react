@@ -11,11 +11,7 @@ class OrderDetail extends ModelBase {
     protected $connection = 'mysql';
     protected $table = 'order_detail';
 
-    protected $fillable = [
-        'name',
-        'status',
-        'description'
-    ];
+    protected $fillable = [];
 
     /**=======================
      *     RelationShip

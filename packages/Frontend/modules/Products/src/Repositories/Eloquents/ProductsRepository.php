@@ -108,7 +108,10 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return Illuminate\Support\Collection
      */
     public function get_per_page($keyword = '', $status = [], $start = 0) {
-        $result = $this->model->where(['deleted' => 0]);
+        $result = $this->model->where([
+            'deleted' => 0,
+            'status' => 1,
+        ]);
         if(!empty($status)) {
             $result = $result->whereIn('status', $status);
         }
@@ -137,7 +140,11 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      * @return Illuminate\Support\Collection
      */
     public function get_by_id($id) {
-        $result = $this->model->where('id', $id)
+        $result = $this->model->where([
+            'id' => $id,
+            'deleted' => 0,
+            'status' => 1,
+        ])
         ->with([
             'seller' => function($query) {
                 $query->select('id', 'user_id', 'fullname', 'phone', 'status');
@@ -226,12 +233,12 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ])->first();
         if(empty($seller_id) || empty($seller)) return false;
         $existed = $this->model->where([
-            // 'status' => 1,
+            'status' => 1,
             'deleted' => 0,
             'seller_id' => $seller->id
         ])->with([
             'product_stock' => function($query) {
-
+                $query->select('id', 'product_id', 'warehouse_id', 'product_quantity', 'status');
             },
             'seller' => function($query) {
                 $query->select('id', 'is_accepted');
@@ -246,10 +253,16 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                     }
                 ])->select('id', 'title');
             }
-        ])->paginate(50);
+        ])
+        ->select(
+            'id', 'name', 'slug_name', 'price', 'sale_price_id', 'cogs', 'link', 'mobile_link', 'image_link', 
+            'additional_image_link', 'category_id', 'currency_id', 'availability', 'availability_date', 'expiration_date',
+            'status'
+        )->paginate(50);
         if(!empty($existed)) {
             foreach($existed as $key => $item) {
                 $existed[$key]->price_format = number_format($item->price, 0, '.', ',');
+                $existed[$key]->quantity_sold = $this->order_detail_model->get_by_product_id($item->id ?? 0) ?? [];
             }
             return $existed;
         } else {

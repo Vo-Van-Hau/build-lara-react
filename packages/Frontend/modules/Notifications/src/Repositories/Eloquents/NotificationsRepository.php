@@ -42,7 +42,12 @@ class NotificationsRepository extends BaseRepository implements NotificationsRep
         $user = $this->users_model->find($user_id);
         if(!empty($user)) {
             $notifications = $user->notifications;
-            if($notifications) return $notifications;
+            if($notifications) {
+                foreach($notifications as $key => $item) {
+                    $notifications[$key]->created_at = date_format(date_create($item->created_at), 'd-m-Y H:m:s');
+                }
+                return $notifications;
+            };
         }
         return [];
     }

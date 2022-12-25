@@ -706,7 +706,7 @@ const HeaderSection = (props) => {
                         </Space>
                     </Col>
                     <Col className='header_cart_container' span={3}>
-                        <Badge count={0}>
+                        <Badge count={cart_detail && cart_detail.length}>
                             <ShoppingCartOutlined style={{ color: '#fff', fontSize: '32px' }}
                                 onClick={() => setRouter({
                                     module: 'checkout',
@@ -735,7 +735,12 @@ const HeaderSection = (props) => {
                                                 <List.Item key={item.id}>
                                                     <List.Item.Meta
                                                         avatar={<Avatar src={`${product.image_link}`} />}
-                                                        title={<a href="https://ant.design">{product.name}</a>}
+                                                        title={<a onClick={() => setRouter({
+                                                            module: 'products',
+                                                            controller: 'productdetail',
+                                                            action: 'view',
+                                                            id: product.id || 0,
+                                                        })}>{product.name}</a>}
                                                         description={() => {
                                                             return (<>
                                                                 Giá: {product.price}

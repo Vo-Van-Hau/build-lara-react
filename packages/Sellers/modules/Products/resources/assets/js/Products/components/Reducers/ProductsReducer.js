@@ -31,7 +31,6 @@ export const ProductsReducer = (state = initialState, action) => {
         case GET_PRODUCT_CATEGORIES:
             return {...state, categories: [...payload]};
         case GET_ITEM:
-            console.log(payload)
             return {...state, item: {...payload}};
         case SET_PAGINATION:
             return {...state, pagination: {...payload, showSizeChanger: false}};

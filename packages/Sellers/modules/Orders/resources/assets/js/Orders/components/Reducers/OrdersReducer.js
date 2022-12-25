@@ -7,7 +7,13 @@ export const initialState = {
     orders: [],
     order_tracking_detail: {
         current_tracking: [],
-        next_tracking_status: {},
+        next_tracking_status: {
+            title: '',
+            order_tracking_group_status: {
+                title: '',
+            }
+        },
+        is_order_cancelled: 0,
     },
     config: {
         status: []

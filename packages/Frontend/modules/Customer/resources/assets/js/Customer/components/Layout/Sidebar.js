@@ -45,24 +45,24 @@ const SideBar = (props) => {
             action: '#',
             id: '#'
         })}>Sổ địa chỉ</Button></>, icon: <HomeOutlined /> },
-        { key: 5, label: <><Button type='link' onClick={() => setRouter({
-            module: 'customer',
-            controller: 'payment',
-            action: '#',
-            id: '#'
-        })}>Thông tin thanh toán</Button></>, icon: <CreditCardOutlined /> },
-        { key: 6, label: <><Button type='link' onClick={() => setRouter({
-            module: 'customer',
-            controller: 'reviewed',
-            action: '#',
-            id: '#'
-        })}>Đánh giá sản phẩm</Button></>, icon: <TagOutlined /> },
-        { key: 7, label: <><Button type='link' onClick={() => setRouter({
-            module: 'customer',
-            controller: 'favor',
-            action: '#',
-            id: '#'
-        })}>Sản phẩm yêu thích</Button></>, icon: <HeartOutlined /> }
+        // { key: 5, label: <><Button type='link' onClick={() => setRouter({
+        //     module: 'customer',
+        //     controller: 'payment',
+        //     action: '#',
+        //     id: '#'
+        // })}>Thông tin thanh toán</Button></>, icon: <CreditCardOutlined /> },
+        // { key: 6, label: <><Button type='link' onClick={() => setRouter({
+        //     module: 'customer',
+        //     controller: 'reviewed',
+        //     action: '#',
+        //     id: '#'
+        // })}>Đánh giá sản phẩm</Button></>, icon: <TagOutlined /> },
+        // { key: 7, label: <><Button type='link' onClick={() => setRouter({
+        //     module: 'customer',
+        //     controller: 'favor',
+        //     action: '#',
+        //     id: '#'
+        // })}>Sản phẩm yêu thích</Button></>, icon: <HeartOutlined /> }
     ];
 
     /**

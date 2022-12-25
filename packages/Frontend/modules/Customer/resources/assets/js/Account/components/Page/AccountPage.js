@@ -115,6 +115,7 @@ const AccountPage = (props) => {
             if(user.is_login) {
                 if(user.customer) {
                     let customer = user.customer;
+                    console.log(customer);
                     form.setFieldsValue({
                         fullname: customer.fullname,
                         phone: customer.phone,
@@ -145,7 +146,7 @@ const AccountPage = (props) => {
                                             <Title level={5}>Thông tin cá nhân</Title>
                                             <Row style={{ marginBottom: '1rem' }}>
                                                 <Col className="customer_avatar_col" span={5}>
-                                                    <Avatar
+                                                    {/* <Avatar
                                                         className="customer_avatar"
                                                         onClick={() => setPreviewOpen(true)}
                                                         size={100}
@@ -161,7 +162,7 @@ const AccountPage = (props) => {
                                                     </Modal>
                                                     <Upload {...uploadProps} className='customer_avatar_upload_btn'>
                                                         <Button icon={<UploadOutlined />}></Button>
-                                                    </Upload>
+                                                    </Upload> */}
                                                 </Col>
                                                 <Col span={19} >
                                                     <Form.Item name="fullname" label="Họ tên" rules={[{ required: true }]}>
@@ -219,13 +220,6 @@ const AccountPage = (props) => {
                     </Content>
                 </Layout>
             </Content>
-            <Footer
-                style={{
-                    textAlign: 'center',
-                }}
-            >
-                MS Mall ©2022 Created
-            </Footer>
         </Layout>
     )
 };

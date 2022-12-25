@@ -72,7 +72,7 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
         set_table_loading();
         return axios
         .get_secured()
-        .post(`/products/products/get_product_categories?page=${page}`, {...keySearch})
+        .post(`/products/products/get_product_categories_for_store?page=${page}`, {...keySearch})
         .then((res) => {
             let { status } = res.data;
             if(status) {
@@ -125,10 +125,11 @@ const ProductsContextProvider = ({ children, axios, history, config, navigate })
         .then((res) => {
             let { status, message } = res.data;
             if(status) {
-                Helper.Notification('success', '[Update Users]', message);
+                Helper.Notification('success', '[Cập nhật]', 'Cập nhật thành công');
             } else {
-                Helper.Notification('error', '[Storage Users]', message);
+                Helper.Notification('success', '[Cập nhật]', 'Cập nhật thất bại');
             }
+            get_products(1, {});
         })
         .catch((errors) => {})
         .finally(() => {set_table_loading();});

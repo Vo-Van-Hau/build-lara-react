@@ -14,7 +14,7 @@ const PaymentPage = (props) => {
 
     const { data, get_cart, setRouter, get_payment_methods, storage_order }  = useContext(PaymentContext);
     const { cart, loading_table, payment_methods } = data;
-    const { cart_detail, user } = cart;
+    const { cart_detail, user, estimated_delivery_date, delivery_date } = cart;
     const { customer } = user;
     const { customer_address } = customer;
 
@@ -66,7 +66,9 @@ const PaymentPage = (props) => {
                 <section className='section_container'>
                     <Title level={4}>Chọn hình thức giao hàng</Title>
                     <fieldset>
-                        <legend className='store_name'><CalendarFilled /> Package 1:Delivered on Wednesday, September 28</legend>
+                        <legend className='store_name'>
+                            <CalendarFilled /> Mã gói hàng #{cart.id || '-'}: Giao trước {estimated_delivery_date.time || '-'} ngày {estimated_delivery_date.date || '-'}
+                        </legend>
                         <List
                             itemLayout="horizontal"
                             dataSource={cart_detail}

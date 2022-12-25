@@ -24,6 +24,7 @@ export const initialState = {
         carts: {
             count: 0
         },
+        user_follow_stores: [],
     },
     access_user: false,
     siderBar: {

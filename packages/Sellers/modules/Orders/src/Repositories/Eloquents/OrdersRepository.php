@@ -112,25 +112,44 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
         $order_detail_list = $this->order_detail_model
-        ->join('orders', 'orders.id', '=', 'order_detail.order_id')
-        ->join('products', 'order_detail.product_id', '=', 'products.id')
-        ->where([
-            'products.seller_id' => $seller->id
-        ])
-        ->selectRaw('order_detail.*')
-        ->get();
+            ->join('orders', 'orders.id', '=', 'order_detail.order_id')
+            ->join('products', 'order_detail.product_id', '=', 'products.id')
+            ->where([
+                'products.seller_id' => $seller->id
+            ])
+            ->selectRaw('order_detail.*')
+            ->get();
         $orders_list = [];
         foreach($order_detail_list as $key => $order_detail) {
-            $order_detail['product'] = $this->products_model->find($order_detail['product_id']);
+            $order_detail['product'] = $this->products_model
+                ->select(
+                    'id', 'seller_id', 'name', 'slug_name', 'price', 'sale_price_id', 'cogs', 'link', 'mobile_link', 'image_link',
+                    'additional_image_link', 'category_id', 'currency_id', 'availability', 'expiration_date', 'availability_date', 'status', 'description',
+                )->find($order_detail['product_id']);
             $order_detail['order_tracking_status'] = $this->order_tracking_status_model
-            ->select('id', 'title', 'tag_name')
-            ->find($order_detail['order_tracking_status_id']);
+                ->select('id', 'title', 'tag_name')
+                ->find($order_detail['order_tracking_status_id']);
+            $order_detail['price_format'] =  number_format($order_detail['price'], 0, '.', ',');
             $orders_list[$order_detail['order_id']]['order_detail'][] = $order_detail;
         }
         foreach($orders_list as $key => $_order) {
-            $order = $this->model->find($key);
+            $order = $this->model
+                ->select('id', 'code', 'receiver_name', 'receiver_phone', 'receiver_country_id', 'receiver_province_id', 'receiver_district_id',
+                    'receiver_ward_id', 'receiver_address', 'subtotal', 'total_amount', 'item_quantity', 'discount', 'user_id', 'shipping_id', 'payment_method_id',
+                    'contact_type_id', 'order_tracking_status_id', 'shipping_method_id', 'transporter_id', 'delivery_date', 'order_date', 'status',
+                )
+                ->find($key);
             if(!empty($order)) {
+                $order->total_amount_format = number_format($order->total_amount, 0, '.', ',');
                 $order['order_detail'] = $_order['order_detail'];
+                $order['order_tracking_status'] = $this->order_tracking_status_model
+                    ->with([
+                        'order_tracking_group_status' => function($query) {
+                            $query->select('id', 'title', 'tag_name', 'status');
+                        }
+                    ])
+                    ->select('id', 'group_status_id', 'title', 'code', 'tag_name')
+                    ->find($order['order_tracking_status_id']);
                 $result[] = $order;
             }
         }
@@ -208,20 +227,24 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         if(is_null($user_id) || is_null($seller)) return false;
         $condition = "orders.order_date BETWEEN '{$start_date}' AND '{$end_date}'";
         $order_detail_list = $this->order_detail_model->join('orders', 'orders.id', '=', 'order_detail.order_id')
-        ->join('products', 'order_detail.product_id', '=', 'products.id')
-        ->where([
-            'products.seller_id' => $seller->id
-        ])
-        ->whereRaw($condition)
-        ->selectRaw('order_detail.*')
-        ->get();
+            ->join('products', 'order_detail.product_id', '=', 'products.id')
+            ->where([
+                'products.seller_id' => $seller->id
+            ])
+            ->whereRaw($condition)
+            ->selectRaw('order_detail.*')
+            ->get();
         $result = array();
         $orders_list = [];
         foreach($order_detail_list as $key => $order_detail) {
-            $order_detail['product'] = $this->products_model->find($order_detail['product_id']);
+            $order_detail['product'] = $this->products_model->find($order_detail['product_id'])
+                ->select(
+                    'id', 'seller_id', 'name', 'slug_name', 'price', 'sale_price_id', 'cogs', 'link', 'mobile_link', 'image_link',
+                    'additional_image_link', 'category_id', 'currency_id', 'availability', 'expiration_date', 'availability_date', 'status', 'description',
+                );
             $order_detail['order_tracking_status'] = $this->order_tracking_status_model
-            ->select('id', 'title', 'tag_name')
-            ->find($order_detail['order_tracking_status_id']);
+                ->select('id', 'group_status_id', 'title', 'code', 'tag_name')
+                ->find($order_detail['order_tracking_status_id']);
             $orders_list[$order_detail['order_id']]['order_detail'][] = $order_detail;
         }
         foreach($orders_list as $key => $_order) {
@@ -250,10 +273,10 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
             $seller = $this->sellers_model->where([
                 'status' => 1,
                 'deleted' => 0,
-                'user_id' => $user_id
+                'user_id' => $user_id,
             ])->first();
             if(is_null($user_id) || is_null($seller)) return false;
-            $status_target = isset($data['status_target']) ? $status_target : 0;
+            $status_target = isset($data['status_target']) ? $data['status_target'] : 0;
             $order_id = isset($data['order_id']) ? $data['order_id'] : 0;
             $order_detail_id = isset($data['order_detail_id']) ? $data['order_detail_id'] : 0;
             $new = $this->order_tracking_details_model;
@@ -316,6 +339,13 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
                 }
             }
             $response['current_tracking'] = $result;
+            $response['is_order_cancelled'] = 0;
+            foreach($result as $tracking_details) {
+                if((int) $tracking_details->order_tracking_status_id === 0) {
+                    $response['is_order_cancelled'] = 1;
+                    break;
+                }
+            }
             return $response;
         } catch (\Exception $exception) {
             return $exception->getMessage();

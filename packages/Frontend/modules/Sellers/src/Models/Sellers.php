@@ -44,7 +44,7 @@ class Sellers extends ModelBase {
         return $this->hasOne(Stores::class, 'seller_id', 'id')
             ->with([
                 'user_follow_stores' => function($query) {
-                    
+                    $query->select('id', 'user_id', 'store_id', 'followed_at', 'status');
                 }
             ])
             ->where([

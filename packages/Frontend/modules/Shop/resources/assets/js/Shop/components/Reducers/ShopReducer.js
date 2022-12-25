@@ -6,9 +6,15 @@ import {
 export const initialState = {
     products: [],
     shop: {
+        fullname: '',
+        phone: '',
         store: {
             name: '',
-            joined_date: '00/00/0000'
+            joined_date: '00/00/0000',
+            user_follow_stores: [],
+            brand_logo: '',
+            description: '',
+            address: '',
         }
     },
     config: {

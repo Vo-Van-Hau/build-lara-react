@@ -19,8 +19,8 @@ class Stores extends ModelBase {
      public function user_follow_stores() {
         return $this->hasMany(UserFollowStores::class, 'store_id', 'id')
         ->where([
-            'status' => 1,
-            'deleted' => 0,
+            'user_follow_stores.status' => 1,
+            'user_follow_stores.deleted' => 0,
         ]);
      }
 }

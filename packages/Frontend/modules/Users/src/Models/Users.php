@@ -13,6 +13,7 @@ use Frontend\Users\Models\Roles;
 use Frontend\Users\Models\Groups;
 use Frontend\Publishers\Models\Publishers;
 use Frontend\Customer\Models\Customer;
+use Frontend\Shop\Models\UserFollowStores;
 
 /**
  * @author <hauvo1709@gmail.com>
@@ -117,6 +118,18 @@ class Users extends Authenticatable {
                     'address', 'is_verified', 'is_default', 'delivery_address_type', 'status', 'phone', 'company_name'
                 );
             }
+        ]);
+    }
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: relationship
+     * @return void
+     */
+    public function user_follow_stores() {
+        return $this->hasMany(UserFollowStores::class, 'user_id', 'id')->where([
+            'user_follow_stores.status' => 1,
+            'user_follow_stores.deleted' => 0,
         ]);
     }
 }

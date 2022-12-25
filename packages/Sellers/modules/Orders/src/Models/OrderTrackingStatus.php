@@ -12,11 +12,7 @@ class OrderTrackingStatus extends ModelBase {
     protected $table = 'order_tracking_status';
     const LAST_STATUS_ID = 10;
 
-    protected $fillable = [
-        'name',
-        'status',
-        'description',
-    ];
+    protected $fillable = [];
 
     /**
     * @author: <hauvo1709@gmail.com>
@@ -33,10 +29,15 @@ class OrderTrackingStatus extends ModelBase {
             case 1:
                 break;
         }
-        $next_step = $this->select('id', 'title', 'code', 'tag_name', 'status')
+        $next_step = $this->select('id', 'title', 'code', 'tag_name', 'status', 'group_status_id')
         ->where([
             'status' => 1,
             'deleted' => 0,
+        ])
+        ->with([
+            'order_tracking_group_status' => function($query) {
+                $query->select('id', 'title', 'status_code',  'tag_name', 'status');
+            }
         ])
         ->find(intval($order_tracking_status_id) + 1);
         if(!empty($next_step)) return $next_step;

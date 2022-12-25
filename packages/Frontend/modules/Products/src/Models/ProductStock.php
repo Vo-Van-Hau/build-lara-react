@@ -9,9 +9,5 @@ class ProductStock extends ModelBase {
     protected $connection = 'mysql';
     protected $table = 'product_stock';
 
-    protected $fillable = [
-        'name',
-        'status',
-        'description'
-    ];
+    protected $fillable = [];
 }

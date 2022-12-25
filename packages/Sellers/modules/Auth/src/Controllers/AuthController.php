@@ -94,6 +94,7 @@ class AuthController extends ControllerBase {
                          */
                         $id = Auth::guard(Config::get('packages.sellers.auth.guard', 'sellers'))->id(); // Get the currently authenticated user's ID...
                         Auth::guard(Config::get('packages.sellers.auth.guard', 'sellers'))->loginUsingId($id, $request->has('remember')); // Login and 'remember' the given user...
+                        // return $this->build_session();
                         if(!$this->build_session()) {
                             throw new ApiException(trans('AuthSellers::auth.failed'), 400, []);
                         }
@@ -193,7 +194,7 @@ class AuthController extends ControllerBase {
             if($result) {
                 $result['is_login'] = true;
                 if(!empty($result)) {
-                   
+
                 }
                 return $this->response_base([
                     'status' => true,

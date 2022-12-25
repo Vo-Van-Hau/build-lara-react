@@ -9,7 +9,9 @@ class UserFollowStores extends ModelBase {
     protected $connection = 'mysql';
     protected $table = 'user_follow_stores';
 
-    protected $fillable = [];
+    protected $fillable = [
+        'user_id', 'store_id'
+    ];
 
     /**=======================
      *     RelationShip

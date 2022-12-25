@@ -9,11 +9,7 @@ class OrderTrackingGroupStatus extends ModelBase {
     protected $connection = 'mysql';
     protected $table = 'order_tracking_group_status';
 
-    protected $fillable = [
-        'name',
-        'status',
-        'description'
-    ];
+    protected $fillable = [];
 
     /**=======================
      *     RelationShip

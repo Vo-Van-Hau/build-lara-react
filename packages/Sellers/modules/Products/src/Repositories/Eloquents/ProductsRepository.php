@@ -15,6 +15,7 @@ use Sellers\Products\Models\ProductCaterory;
 use Sellers\Sellers\Models\Sellers;
 use Sellers\Orders\Models\Orders;
 use Sellers\Orders\Models\OrderDetail;
+use Sellers\Shop\Models\Stores;
 
 class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface {
 
@@ -145,7 +146,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             'product_description_detail' => function ($query) {
 
             }
-        ])
+        ])->orderBy('id', 'desc')
         ->paginate(10);
         if(!empty($existed)) {
             foreach($existed as $item) {
@@ -155,7 +156,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                         'time' => date_format(date_create($item->created_at), 'H:i:s'),
                     ];
                 }
-                $item->price_format = number_format($item->price, 3, ',', '.');
+                $item->price_format = number_format($item->price, 0, ',', '.');
             }
         }
         if(empty($existed)) return false;
@@ -170,6 +171,45 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
      */
     public function get_categories() {
         $result = $this->product_category_model->where([
+            'parent_id' => 0,
+            'deleted' => 0,
+            'status' => 1
+        ])->select('title as label', 'id as value')->get();
+        foreach($result as $key => $item) {
+            $id = $item->value;
+            $item->children = $this->product_category_model->where([
+                'parent_id' => $id,
+                'deleted' => 0,
+                'status' => 1
+            ])->select('title as label', 'id as value')->get();
+        }
+        return $result;
+    }
+
+    
+    /**
+     * @author <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param array $input
+     * @return mixed
+     */
+    public function get_categories_for_store($input) {
+        $user_id = $input['user_id'];
+        $seller = $this->sellers_model->where([
+            'status' => 1,
+            'deleted' => 0,
+            'user_id' => $user_id
+        ])->first();
+        if(is_null($user_id) || is_null($seller)) return false;
+        $store = Stores::where([
+            'seller_id' => $seller->id ?? 0,
+            'status' => 1,
+            'deleted' => 0,
+        ])->select('id', 'category_id')->first();
+        if(empty($store)) return false;
+        $category_id = $store->category_id ?? 0;
+        $result = $this->product_category_model->where([
+            'id' => $category_id ?? 0,
             'parent_id' => 0,
             'deleted' => 0,
             'status' => 1
@@ -215,13 +255,14 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $status = 0;
         $description = isset($input['description']) ? $input['description'] : '';
         $colors = '';
-        foreach($input['color'] ?? [] as $key => $_colors) {
-            if($key == count($input['color'] ?? []) - 1) {
-                $colors .= $_colors;
-            } else {
-                $colors .= $_colors . '-';
-            }
-        }
+        $color = isset($input['color']) ? $input['color'] : 0;
+        // foreach($input['color'] ?? [] as $key => $_colors) {
+        //     if($key == count($input['color'] ?? []) - 1) {
+        //         $colors .= $_colors;
+        //     } else {
+        //         $colors .= $_colors . '-';
+        //     }
+        // }
         $new = $this->model;
         $new->name = $name;
         $new->seller_id = $seller_id;
@@ -297,6 +338,23 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             'user_id' => $user_id
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
+        $status = isset($input['status']) ? $input['status'] : -1;
+        /**
+         * Update status of product
+         */
+        if($status !== -1) {
+            if($status === 0 || $status === 1) {
+                $existed = $this->model->find($id);
+                if(empty($existed)) return false;
+                $existed->status = $status;
+                return $existed->update();
+            } else {
+                return false;
+            }
+        }   
+        /**
+         * 
+         */
         $name = isset($input['name']) ? $input['name'] : '';
         $seller_id = isset($seller->id) ? $seller->id : 0;
         $slug_name = Str::slug($name);
@@ -304,7 +362,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $sale_price_id = 0;
         $cogs = $price;
         $mobile_link = '';
-        $image_link = '';
+        $image_link = isset($input['image_link']) ? $input['image_link'] : url('/userdata/defaults/product_default_v1_20221215_0148.png');
         $category_id = isset($input['category_id']) ? $input['category_id'] : 0;
         $currency_id = 1;
         $availability = 'in_stock';
@@ -313,13 +371,14 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $status = 0;
         $description = isset($input['description']) ? $input['description'] : '';
         $colors = '';
-        foreach($input['color'] ?? [] as $key => $_colors) {
-            if($key == count($input['color'] ?? []) - 1) {
-                $colors .= $_colors;
-            } else {
-                $colors .= $_colors . '-';
-            }
-        }
+        $color = isset($input['color']) ? $input['color'] : 0;
+        // foreach($input['color'] ?? [] as $key => $_colors) {
+        //     if($key == count($input['color'] ?? []) - 1) {
+        //         $colors .= $_colors;
+        //     } else {
+        //         $colors .= $_colors . '-';
+        //     }
+        // }
         $existed = $this->model->find($id);
         if(empty($existed)) return false;
         $existed->name = $name;
@@ -328,7 +387,9 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $existed->sale_price_id = $sale_price_id;
         $existed->cogs = $cogs;
         $existed->mobile_link = $mobile_link;
-        // $existed->image_link = $image_link;
+        if(isset($input['image_link'])) {
+            $existed->image_link = $image_link;
+        }
         $existed->category_id = $category_id;
         $existed->currency_id = $currency_id;
         $existed->availability = $availability;
@@ -409,22 +470,41 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         ])->first();
         if(is_null($user_id) || is_null($seller)) return false;
         $existed = $this->model->where([
-            // 'status' => 1,
             'deleted' => 0,
             'seller_id' => $seller->id,
             'id' => $input['id']
         ])->with([
-            'product_stock' => function ($query) {
-
+            'product_stock' => function($query) {
+                $query->select(
+                    'id', 'product_id', 'warehouse_id', 'product_quantity', 'status', 'status'
+                );
             },
-            'product_identifiers' => function ($query) {
-
+            'product_identifiers' => function($query) {
+                
             },
-            'product_description_detail' => function ($query) {
+            'product_description_detail' => function($query) {
 
             }
         ])->first();
         if(empty($existed)) return false;
+        $category_ids = [];
+        $category = ProductCaterory::where([
+            'id' => $existed->category_id ?? 0,
+            'status' => 1,
+            'deleted' => 0,
+        ])->first();
+        if(!empty($category)) {
+            array_unshift($category_ids, $category->id);
+            $category = ProductCaterory::where([
+                'id' => $category->parent_id ?? 0,
+                'status' => 1,
+                'deleted' => 0,
+            ])->first();
+            if(!empty($category)) {
+                array_unshift($category_ids, $category->id);
+            }
+        }
+        $existed->category_ids = $category_ids;
         return $existed;
     }
 }

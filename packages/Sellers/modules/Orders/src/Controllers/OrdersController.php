@@ -92,6 +92,12 @@ class OrdersController extends ControllerBase {
                         ];
                     }
                 }
+                usort($result, function ($item1, $item2) {
+                    if($item1['id'] === $item2['id']) {
+                        return 0;
+                    }
+                    return ($item1['id'] < $item2['id']) ? 1 : -1;
+                });
                 return $this->response_base([
                     'status' => true,
                     'orders' => $result

@@ -28,7 +28,7 @@ trait Auth {
         $user->seller = $user->seller;
         $acl_list = array();
         if(!empty($user->roles)) {
-            foreach ($user->roles->acl_role as $key => $item) {
+            foreach($user->roles->acl_role as $key => $item) {
                 if(empty($acl_list[$item->module_name])) {
                     $acl_list[$item->module_name] = [];
                 }
@@ -63,7 +63,7 @@ trait Auth {
             if(!empty($config->status) && $config->status == true) {
                 if(!empty($config->menu)) {
                     $menus = $config->menu;
-                    if($user->is_admin) {
+                    if(!empty($user->is_admin)) {
                         foreach($menus as $key_menu => $menu) {
                             $group = !empty($menu->group) ? $menu->group : '';
                             $menu_acl[$group][$key_menu] = array();
@@ -74,7 +74,7 @@ trait Auth {
                             $menu_acl[$group][$key_menu]['controller'] = !empty($menu->controller) ? $menu->controller : '';
                             $menu_acl[$group][$key_menu]['group'] = $group;
                             $child_menus = !empty($menu->child) ? $menu->child : [];
-                            foreach ($child_menus as $key_child => $child_menu) {
+                            foreach($child_menus as $key_child => $child_menu) {
                                 $menu_acl[$group][$key_menu]['child'][] = (array) $child_menu;
                             }
                         }
@@ -115,6 +115,7 @@ trait Auth {
             });
             $menu_acl[$key] = $menu;
         }
+
         /**
          *
          */
@@ -138,7 +139,7 @@ trait Auth {
                 )'
             )->get();
         $list_users_of_groups = array();
-        foreach ($users_of_groups as $key => $user_gr) {
+        foreach($users_of_groups as $key => $user_gr) {
             $list_users_of_groups[] = $user_gr->user_id;
         }
         $user->user_group = $list_users_of_groups;

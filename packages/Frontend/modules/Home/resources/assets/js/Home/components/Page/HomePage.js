@@ -226,9 +226,9 @@ const HomePage = (props) => {
                 gutter={[10, 20]}
                 style={{ padding: '1rem 0' }}>
                 {DummyImgList02.map((item, index) => {
-                    return <Col span={item.col} id={index}>
+                    return <Col span={item.col} id={index} key={index}>
                         <Image preview={false}
-                            loading={lazy}
+                            // loading={lazy}
                             style={{ objectFit: 'cover', borderRadius: '3px' }}
                             src={`${baseURL}/images/${item.url}`}
                         />
@@ -270,7 +270,7 @@ const HomePage = (props) => {
                     >
                         {DummyImgList.map((item, index) => {
                             return <Image
-                                loading={lazy}
+                                // loading={lazy}
                                 key={index}
                                 preview={false}
                                 style={CarouselContentStyle}
@@ -358,26 +358,28 @@ const HomePage = (props) => {
             >
                 <Col span={6}>
                     <Image preview={false}
-                        loading={lazy}
+                        // loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/d6/86/61/2bd493a55e955d6b70afe7ba5d0c8bdd.png.webp'}
                     />
                 </Col>
                 <Col span={6}>
                     <Image preview={false}
-                        loading={lazy}
+                        // loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/40/7b/ec/c74769be66862263dc3d95ed92e73cfd.png.webp'}
                     />
                 </Col>
                 <Col span={6}>
-                    <Image preview={false} loading={lazy}
+                    <Image preview={false}
+                        // loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/f2/cb/06/5b1f4c52c2a4e312919e32470ccd2554.png.webp'}
                     />
                 </Col>
                 <Col span={6}>
-                    <Image preview={false} loading={lazy}
+                    <Image preview={false}
+                        // loading={lazy}
                         style={{ objectFit: 'cover', borderRadius: '3px' }}
                         src={'https://salt.tikicdn.com/cache/w400/ts/banner/63/67/34/84a791b2a02dcc9f1ce93df1414ca207.png.webp'}
                     />

@@ -5,6 +5,7 @@ import {
     GET_SHOP,
 } from '../Dispatch/type';
 import { createSearchParams } from 'react-router-dom';
+import Helper from '../Helper/Helper';
 
 export const ShopContext = createContext();
 
@@ -60,6 +61,28 @@ const ShopContextProvider = ({ children, axios, history, config, navigate }) => 
         .finally(() => {set_table_loading();});
     }
 
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: 
+     * @param {Object} values
+     * @return {void}
+     */
+    const followStore = (values) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/shop/shop/follow_store`, { ...values })
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                Helper.Notification('success', '[Theo dõi cửa hàng]', `Theo dõi thành công`);
+            } else {
+                Helper.Notification('error', '[Theo dõi cửa hàng]', `Theo dõi thất bại`);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -113,7 +136,7 @@ const ShopContextProvider = ({ children, axios, history, config, navigate }) => 
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: {...data, config}, get_products,
+        data: {...data, config}, get_products, followStore,
         history, dispatch, get_axios, set_mouted,
         set_table_loading, setRouter, get_shop,
     };

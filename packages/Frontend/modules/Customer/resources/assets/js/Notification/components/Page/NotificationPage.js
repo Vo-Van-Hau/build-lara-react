@@ -142,13 +142,6 @@ const NotificationPage = (props) => {
                     </Content>
                 </Layout>
             </Content>
-            <Footer
-                style={{
-                    textAlign: 'center',
-                }}
-            >
-                MS Mall ©2022 Created
-            </Footer>
         </Layout>)
 };
 

@@ -11,11 +11,7 @@ class OrderTrackingDetails extends ModelBase {
     protected $connection = 'mysql';
     protected $table = 'order_tracking_details';
 
-    protected $fillable = [
-        'name',
-        'status',
-        'description',
-    ];
+    protected $fillable = [];
 
     /**=======================
      *     RelationShip

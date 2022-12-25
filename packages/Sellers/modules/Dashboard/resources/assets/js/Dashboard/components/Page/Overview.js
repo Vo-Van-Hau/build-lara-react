@@ -98,18 +98,17 @@ const Overview = ({keyID, ...props}) => {
                 orders: 0,
             },
         ];
+
         orders_in_year.map((item, i) => {
             dataSource[i].orders = item.total;
         });
+
         const config = {
             data: dataSource,
             xField: 'type',
             yField: 'orders',
             label: {
-                // 可手动配置 label 数据标签位置
                 position: 'middle',
-                // 'top', 'bottom', 'middle',
-                // 配置样式
                 style: {
                     fill: '#FFFFFF',
                     opacity: 0.6,
@@ -130,6 +129,7 @@ const Overview = ({keyID, ...props}) => {
                 },
             },
         };
+
         return <ColumnChart {...config} />;
     };
 
@@ -147,7 +147,7 @@ const Overview = ({keyID, ...props}) => {
                         <Title level={4}>Sellers Report</Title>
                     </Col>
                     <Col span={12} style={{display: 'flex', justifyContent: 'end'}}>
-                        <RangePicker />
+                        {/* <RangePicker /> */}
                     </Col>
                 </Row>
                 <Divider />
@@ -261,11 +261,11 @@ const Overview = ({keyID, ...props}) => {
                     </Col>
                 </Row>
                 <Divider />
-                <Row>
+                {/* <Row>
                     <Col span={24}>
                         <LineChart />
                     </Col>
-                </Row>
+                </Row> */}
             </>
         </div>
     );

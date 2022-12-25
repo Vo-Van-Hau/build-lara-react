@@ -2,8 +2,8 @@
 
 return [
 
-    "namespace"     => "SellersSellers",
-    "version"       => "1.00.000",
+    'namespace'     => 'SellersSellers',
+    'version'       => '1.00.000',
 
     /*
     |--------------------------------------------------------------------------
@@ -11,6 +11,6 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    "sellers_url" => env("APP_SELLERS_URL", "sellers"),
-    "item_per_page" => 10,
+    'sellers_url' => env('APP_SELLERS_URL', 'sellers'),
+    'item_per_page' => 10,
 ];

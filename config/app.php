@@ -182,6 +182,11 @@ return [
          * you may also need to add the following to the provider’s section in your app.php file
          */
         // Jenssegers\Mongodb\MongodbServiceProvider::class,
+
+        /*
+         * Library Service Providers...
+         */
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -237,6 +242,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        /*
+         * Library Aliases... 
+         */
+        'InterventionImage' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

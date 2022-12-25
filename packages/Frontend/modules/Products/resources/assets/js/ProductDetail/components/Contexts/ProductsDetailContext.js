@@ -6,6 +6,7 @@ import {
     ADD_TO_CART
 } from '../Dispatch/type';
 import Helper from '../Helper/Helper';
+
 export const ProductDetailContext = createContext();
 
 const ProductDetailContextProvicer = ({ children, axios, history, config, navigate, ...props }) => {
@@ -39,9 +40,8 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
-     * @todo: get groups
-     * @param {string} page
-     * @param {string} keySearch
+     * @todo: 
+     * @param {Object} values
      * @return {void}
      */
     const add_to_cart = (values) => {
@@ -55,6 +55,29 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
                 // Helper.Notification('success', '[Thêm vào giỏ hàng]', message);
             } else {
                 // Helper.Notification('error', '[Thêm vào giỏ hàng]', message);
+            }
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});
+    }
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
+     * @todo: 
+     * @param {Object} values
+     * @return {void}
+     */
+    const followStore = (values) => {
+        set_table_loading();
+        return axios
+        .get_secured()
+        .post(`/shop/shop/follow_store`, { ...values })
+        .then((res) => {
+            let { status, message } = res.data;
+            if(status) {
+                Helper.Notification('success', '[Theo dõi cửa hàng]', `Theo dõi thành công`);
+            } else {
+                Helper.Notification('error', '[Theo dõi cửa hàng]', `Theo dõi thất bại`);
             }
         })
         .catch((errors) => {})
@@ -135,7 +158,7 @@ const ProductDetailContextProvicer = ({ children, axios, history, config, naviga
     const get_axios = () => axios;
 
     const todoContextData = {
-        data: { ...data, config }, get_similar_products,
+        data: { ...data, config }, get_similar_products, followStore,
         history, dispatch, get_axios, set_table_loading,
         set_mouted, get_product_item, add_to_cart, setRouter
     };

@@ -56,9 +56,7 @@ const OrdersContextProvicer = ({ children, axios, history, config, navigate }) =
                 if(current_tracking && next_tracking_status) {
                     dispatch({
                         type: GET_ORDER_TRACKING_DETAIL,
-                        payload: {
-                            current_tracking, next_tracking_status
-                        }
+                        payload: {...tracking}
                     });
                 }
             }
@@ -74,14 +72,19 @@ const OrdersContextProvicer = ({ children, axios, history, config, navigate }) =
      * @return {void}
      */
     const create_order_tracking_detail = (data) => {
+        let input = data;
         set_table_loading();
         return axios
         .get_secured()
         .post(`/orders/orders/create_order_tracking_detail`, {...data})
         .then((res) => {
-            const { status, message, data } = res.data;
+            const { status, message } = res.data;
             if(status) {
                 Helper.Notification('success', '[Update Order Tracking Status]', message);
+                get_order_tracking_detail({
+                    order_detail_id: input.order_detail_id,
+                    order_id: input.order_id,
+                });
             }
         })
         .catch((errors) => {})

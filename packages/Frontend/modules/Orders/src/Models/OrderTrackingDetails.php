@@ -11,9 +11,8 @@ class OrderTrackingDetails extends ModelBase {
     protected $table = 'order_tracking_details';
 
     protected $fillable = [
-        'name',
-        'status',
-        'description',
+        'code', 'order_id', 'order_detail_id', 'order_tracking_status_id',
+        'tracking_at', 'order_type', 'status'
     ];
 
     /**=======================

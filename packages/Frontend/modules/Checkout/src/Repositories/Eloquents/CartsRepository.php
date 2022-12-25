@@ -215,7 +215,11 @@ class CartsRepository extends BaseRepository implements CartsRepositoryInterface
                 }
                 $result->total_amount_format = number_format($result->total_amount, 0, '.', ',');
             }
-
+            $result->delivery_date = date('Y-m-d 22:00:00', strtotime('+7 days'));
+            $result->estimated_delivery_date = [
+                'date' => date('d/m/Y', strtotime($result->delivery_date)),
+                'time' => date('H:m', strtotime($result->delivery_date)),
+            ];
             return $result;
         }
         return false;
