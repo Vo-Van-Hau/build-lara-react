@@ -37,10 +37,18 @@ class OrdersController extends ControllerBase {
             $input = $request->all();
             $auth_id = AuthFrontend::info('id');
             $input['user_id'] = isset($auth_id) ? $auth_id : null;
-            //
             $input['payment_method_id'] = isset($input['payment_method_id']) ? $input['payment_method_id'] : null;
             $input['shipping_method_id'] = isset($input['shipping_method_id']) ? $input['shipping_method_id'] : null;
-            return $result = $this->OrdersRepository->store($input);
+            $result = $this->OrdersRepository->store($input);
+            try {
+                $user = \Modules\Users\Models\Users::find($auth_id);
+                if(!empty($user)) {
+                    $user->notify(new \App\Notifications\OrderTrackingStatus($user));
+                }
+            } catch (Throwable $throwable) {
+
+            }
+            return $result;
             if($result && is_array($result) && $result['status']) {
                 $mail_to = '';
                 if($result['user_email']) {

@@ -108,7 +108,7 @@ const OrdersPage = ({keyID, ...props}) => {
                                 <Text className='shop_name'>
                                     <BarcodeOutlined /> Mã đơn hàng: #{ order.code ? order.code : '' }
                                 </Text>
-                                <Text><ControlOutlined /> Trạng thái: <><Tag color={order_tracking_status.tag_name ? order_tracking_status.tag_name : 'blue'}>{ order_tracking_status.title ? order_tracking_status.title : '' }</Tag></></Text>
+                                {/* <Text><ControlOutlined /> Trạng thái: <><Tag color={order_tracking_status.tag_name ? order_tracking_status.tag_name : 'blue'}>{ order_tracking_status.title ? order_tracking_status.title : '' }</Tag></></Text> */}
                             </Space>
                         </div>
                         <div>
