@@ -187,4 +187,86 @@ Route::prefix('testing')->group(function() {
     });
 });
 
+Route::get("/list/category", function() {
+    $result = DB::table('product_categories')->where([
+        'parent_id' => 0,
+        'deleted' => 0,
+        'status' => 1
+    ])->select('title as label', 'id as key', 'id as value', 'icon_link')->get();
+    foreach($result as $key => $item) {
+        $id = $item->value;
+        $result[$key]->children = DB::table('product_categories')->where([
+            'parent_id' => $id,
+            'deleted' => 0,
+            'status' => 1
+        ])->select('title as label', 'id as key', 'id as value', 'icon_link')->get();
+    }
+   return view('category',compact('result'));
+});
 
+Route::get("/list/category/sub-category/{parentid}", function($parentid) {
+    $result = DB::table('product_categories')->where([
+        'parent_id' => $parentid,
+        'deleted' => 0,
+        'status' => 1
+    ])->select('title as label', 'id as key', 'id as value', 'icon_link')->get();
+   return view('sub-category', compact('result'));
+});
+
+Route::any("/list/category/sub-category/update/{id}", function($id,Request $request) {
+    if($request->isMethod('get')){
+        $result = DB::table('product_categories')->where([
+            'id' => $id,
+            'deleted' => 0,
+            'status' => 1
+        ])->select('title as label', 'id as key', 'id as value', 'icon_link')->first();
+       return view('update-subcategory',compact('result'));
+    }else{
+        $result = DB::table('product_categories')->where([
+            'id' => $id,
+            'deleted' => 0,
+            'status' => 1
+        ])->select('title as label', 'parent_id', 'id as key', 'id as value', 'icon_link')->update([
+            'title' => $request->name,
+        ]);
+        $result_id = DB::table('product_categories')->where([
+            'id' => $id,
+            'deleted' => 0,
+            'status' => 1
+        ])->select('parent_id')->first();
+        return redirect('/list/category/sub-category/'.$result_id->parent_id)->with('status', 'Cập nhật thành công!');
+    }
+   
+});
+
+Route::any("/list/category/sub-category/add/{parent_id}", function($parent_id, Request $request) {
+  
+    if($request->isMethod('get')){
+       return view('add_cate', compact('parent_id'));
+    }else{
+        $result = DB::table('product_categories')->insert([
+            'parent_id' => $parent_id,
+            'deleted' => 0,
+            'status' => 1,
+            'icon_link' => '',
+            'title' => $request->title,
+            'uncle_id' => 1,
+            'friend_id' => 2,
+            'user_created_id'=> 0
+        ]);
+          return redirect('/list/category/sub-category')->with('status', 'Cập nhật thành công!');
+        // $result = DB::table('product_categories')->where([
+        //     'id' => $id,
+        //     'deleted' => 0,
+        //     'status' => 1
+        // ])->select('title as label', 'parent_id', 'id as key', 'id as value', 'icon_link')->update([
+        //     'title' => $request->name,
+        // ]);
+        // $result_id = DB::table('product_categories')->where([
+        //     'id' => $id,
+        //     'deleted' => 0,
+        //     'status' => 1
+        // ])->select('parent_id')->first();
+        // return redirect('/list/category/sub-category/'.$result_id->parent_id)->with('status', 'Cập nhật thành công!');
+    }
+});
