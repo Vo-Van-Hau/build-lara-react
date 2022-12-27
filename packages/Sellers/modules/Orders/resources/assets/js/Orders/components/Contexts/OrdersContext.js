@@ -80,7 +80,7 @@ const OrdersContextProvicer = ({ children, axios, history, config, navigate }) =
         .then((res) => {
             const { status, message } = res.data;
             if(status) {
-                Helper.Notification('success', '[Update Order Tracking Status]', message);
+                Helper.Notification('success', '[Cập nhật trạng thái đơn hàng]', 'Cập nhật thành công');
                 get_order_tracking_detail({
                     order_detail_id: input.order_detail_id,
                     order_id: input.order_id,

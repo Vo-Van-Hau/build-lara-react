@@ -12,7 +12,7 @@ const { RangePicker } = DatePicker;
 const Overview = ({keyID, ...props}) => {
     const { data, set_table_loading, get_overview } = useContext(DashboardContext);
     const { config, mouted, loading_table, pagination, overview } = data;
-    const { products, orders } = overview;
+    const { products, orders, revenues } = overview;
     const { orders_in_year } = orders;
 
     /**
@@ -187,7 +187,7 @@ const Overview = ({keyID, ...props}) => {
                             <div className="site-statistic-box">
                                 <Statistic
                                     title="Tổng Doanh thu: "
-                                    value={9300000}
+                                    value={revenues.all}
                                     precision={0}
                                     valueStyle={{
                                         color: '#3f8600',
@@ -232,7 +232,7 @@ const Overview = ({keyID, ...props}) => {
                         <div className="site-statistic-box">
                             <Statistic
                                 title="Doanh thu hôm nay: "
-                                value={650000}
+                                value={revenues.today}
                                 precision={0}
                                 valueStyle={{
                                     color: '#3f8600',

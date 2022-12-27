@@ -111,6 +111,19 @@ const ListOrders = (props) => {
                                     )
                                 },
                             },{
+                                title: 'Thông tin liên hệ',
+                                render: (_, record) => {
+                                    return (
+                                        <><Space align="end">
+                                            <div>
+                                                <Text><Text strong>Tên khách hàng:</Text> { order.receiver_name || '-'}</Text><br/>
+                                                <Text><Text strong>Số điện thoại:</Text> { order.receiver_phone || '-' }</Text><br/>
+                                                <Text><Text strong>Địa chỉ:</Text> { order.delivery_location || '-'}</Text><br/>
+                                            </div>
+                                        </Space></>
+                                    )
+                                },
+                            },{
                                 title: 'Trạng thái đơn hàng',
                                 align: 'center',
                                 render: (_, record) => {

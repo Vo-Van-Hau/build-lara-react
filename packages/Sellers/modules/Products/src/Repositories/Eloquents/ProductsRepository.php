@@ -157,6 +157,8 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                     ];
                 }
                 $item->price_format = number_format($item->price, 0, ',', '.');
+                $item->FanthbolFee = number_format(($item->price) * (11/100), 0, ',', '.');
+                $item->revenue = number_format($item->price - (($item->price) * (11/100)), 0, ',', '.');
             }
         }
         if(empty($existed)) return false;
@@ -186,7 +188,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         return $result;
     }
 
-    
+
     /**
      * @author <vanhau.vo@urekamedia.vn>
      * @todo:
@@ -351,9 +353,9 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             } else {
                 return false;
             }
-        }   
+        }
         /**
-         * 
+         *
          */
         $name = isset($input['name']) ? $input['name'] : '';
         $seller_id = isset($seller->id) ? $seller->id : 0;
@@ -480,7 +482,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                 );
             },
             'product_identifiers' => function($query) {
-                
+
             },
             'product_description_detail' => function($query) {
 

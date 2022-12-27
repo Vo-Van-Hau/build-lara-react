@@ -47,9 +47,9 @@ const ProductsPage = (props) => {
                 };
                 values.id = product.id;
                 if(checked) {
-                    values.status = 1; 
+                    values.status = 1;
                 } else {
-                    values.status = 0; 
+                    values.status = 0;
                 }
                 return await update(values);
 
@@ -57,7 +57,7 @@ const ProductsPage = (props) => {
                 Helper.Notification('success', '[Cập nhật]', 'Cập nhật thất bại');
             }
         }
-        
+
         const columns = [
             {
                 title: 'Sản phẩm',
@@ -83,29 +83,27 @@ const ProductsPage = (props) => {
                 title: 'Giá bán',
                 render: (_, record) => {
                     return (
-                        <><Text>{ record.price_format ? record.price_format : `` }</Text></>
+                        <><Text>{ record.price_format ? record.price_format : `-` }đ</Text></>
                     )
                 },
             },{
                 title: 'Phí Fanthbol thu',
                 render: (_, record) => {
-                    let FanthbolFee = record.price * (11 / 100);
                     return (<>
-                        { record.price ? new Intl.NumberFormat().format(FanthbolFee) : ``}
+                        { record.FanthbolFee ? record.FanthbolFee : `-`}đ
                     </>)
                 }
             },{
                 title: 'Lợi nhuận',
                 render: (_, record) => {
-                    let FanthbolFee = record.price * (11 / 100);
                     return (<>
-                        { record.price ? new Intl.NumberFormat().format(record.price - FanthbolFee) : ``}
+                        { record.revenue ? record.revenue : `-`}đ
                     </>)
                 }
             },{
                 title: 'Tồn kho',
                 render: (_, record) => {
-               
+
                     if(record.id === 91) {
                         console.log(record.product_stock.product_quantity);
                     }

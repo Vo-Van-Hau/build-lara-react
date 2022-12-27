@@ -16,20 +16,13 @@ const { Text } = Typography;
 const { Search } = Input;
 
 const HeaderSection = (props) => {
-    const { data, navigate, setRouter, searchParams } = props;
+    const { data, navigate, setRouter, searchParams, logout } = props;
     const { user, config } = data;
     const { is_login, carts } = user;
     const { cart_detail } = carts;
     const { app } = config;
     const { baseURL, adminPrefix } = app;
     const [searchKeywordHistory, setSearchKeywordHistory] = useLocalStorage('search-keyword', []);
-
-    /**
-     * @author: <vanhau.vo@urekamedia.vn>
-     * @todo:
-     * @returns {Object}
-     */
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [keySearch, setKeySearch] = useState({
         q: '',
@@ -44,50 +37,6 @@ const HeaderSection = (props) => {
         },
     });
 
-    const [openReLog, setOpen] = useState(true);
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [email, setEmail] = useState('');
-    const [logBy, setLogby] = useState('');
-    const [currentForm, setCurrentForm] = useState('registerForm');
-
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
-    const showReLog = () => {
-        setOpen(true);
-    };
-
-    const hideReLog = () => {
-        setCurrentForm('phoneNumForm');
-        setOpen(false);
-    };
-
-    const submitStep1Form = (values) => {
-        values['remember'] === true ?
-            setCurrentForm('logInForm')
-            : setCurrentForm('registerForm');
-        if (currentForm === 'phoneNumForm') {
-            setPhoneNumber(values['phoneNumber']);
-            setLogby('phoneNum');
-        } else {
-            setEmail(values['email']);
-            setLogby('email');
-        }
-    }
-
-    const onSubmitForm = (values) => {
-        console.log('Success:', values);
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     const searchPopular = [
         { id: 1, name: 'Bia Tiger bạc', url: 'https://salt.tikicdn.com/cache/280x280/ts/product/45/e9/11/a61363ae49fc2cca3626fb70f2d0724c.jpg' },
         { id: 2, name: 'Rượu vang', url: 'https://salt.tikicdn.com/cache/280x280/ts/product/17/7b/0c/84668ec248ed95d532f915afb913c108.jpg' },
@@ -97,6 +46,7 @@ const HeaderSection = (props) => {
         { id: 6, name: 'Đèn pin siêu sáng', url: 'https://salt.tikicdn.com/cache/280x280/ts/product/c0/9f/3f/c6576e6a39f4b4ce3e9814cb8803e9cc.jpg' }
 
     ];
+
     const searchPopularCategory = [
         { id: 1, name: 'Bách hóa online', url: 'https://image.voso.vn/users/vosoimage/images/0f53ee50010327a8f71eeead5d90900a?t%5B0%5D=maxSize%3Awidth%3D150%2Cheight%3D150&t%5B1%5D=compress%3Alevel%3D100&accessToken=e6ebd93f1d65ed458cd77dd62eb3e5e8a7921215c9405420c7f7c6a8b8ea363a' },
         { id: 2, name: 'Nhà cửa đời sống', url: 'https://salt.tikicdn.com/cache/280x280/ts/product/17/7b/0c/84668ec248ed95d532f915afb913c108.jpg' },
@@ -308,6 +258,16 @@ const HeaderSection = (props) => {
     }
 
     /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: Log out
+     * @param {string}
+     * @return {void}
+     */
+    const handleLogout = () => {
+       return logout();
+    }
+
+    /**
      * @author: <hauvo1709@gmail.com>
      * @todo
      * @param
@@ -319,15 +279,6 @@ const HeaderSection = (props) => {
         const { user } = data;
 
         return (<>
-            {/* <Dropdown menu={accountdropdown} placement="bottom" arrow>
-                <>
-                <Row justify='center' align='center' style={{justify: 'center', align: 'center'}}>
-                        <Col span={24} style={{padding: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}><Text level={4}><span style={{color: '#FFFFFF'}}>Tài khoản</span></Text></Col>
-                        <Col span={24} style={{padding: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'center'}}><Text keyboard level={3}><span style={{color: '#FFFFFF'}}>{ user.name ? user.name : '' }</span></Text></Col>
-                </Row>
-                <DownOutlined />
-                </>
-            </Dropdown> */}
             <Popover content={() => {
                 return (<>
                     <List itemLayout="horizontal"
@@ -361,7 +312,7 @@ const HeaderSection = (props) => {
                                 label: (
                                     <><Space align="center">
                                         <LogoutOutlined style={{ fontSize: '20px' }} />
-                                        <Link to=''>Thoát tài khoản</Link>
+                                        <Link to='#' onClick={() => handleLogout()}>Thoát tài khoản</Link>
                                     </Space></>
                                 )
                             }]}
@@ -386,255 +337,6 @@ const HeaderSection = (props) => {
 
                 </>
             </Popover>
-
-            {/* <Button type="primary" onClick={showReLog}>
-                Đăng nhập / Đăng ký
-            </Button>
-            <Modal
-                className='reLogForm_wrapper'
-                keyboard={true}
-                footer={null}
-                open={openReLog}
-                onCancel={hideReLog}
-            >
-                <Row className='reLogForm' gutter={24} align='middle'>
-                    <Col span={14} align='center'>
-                        {currentForm === 'phoneNumForm' && (
-                            <Form name="reLog"
-                                wrapperCol={{ span: 24, }}
-                                initialValues={{ remember: true, }}
-                                onFinish={submitStep1Form}
-                                onFinishFailed={onFinishFailed}
-                                autoComplete="off"
-
-                            >
-                                <h2>Xin chào</h2> <h4>Đăng nhập hoặc Tạo tài khoản</h4>
-                                <Form.Item name="phoneNumber"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không để trống số điện thoại',
-                                        },
-                                    ]}
-                                    style={{ marginBottom: 0, textAlign: 'left' }}
-                                >
-                                    <Input placeholder="Nhập số điện thoại"
-                                        style={{ lineHeight: '50px', borderBottom: '1px solid lightgrey', marginBottom: 20 }}
-                                        size='large'
-                                        bordered={false}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    name="remember"
-                                    valuePropName="checked"
-                                    style={{ textAlign: 'left' }}
-                                >
-                                    <Checkbox>Toogle <small>(true= đăng nhập, false = đăng ký)</small></Checkbox>
-                                </Form.Item>
-
-                                <Form.Item>
-                                    <Button type="primary" size='large' htmlType='submit' danger block >Tiếp tục</Button>
-                                </Form.Item>
-                            </Form>
-                        )}
-
-                        {currentForm === 'emailForm' && (
-                            <Form name="reLog"
-                                wrapperCol={{ span: 24, }}
-                                initialValues={{ remember: true, }}
-                                onFinish={submitStep1Form}
-                                onFinishFailed={onFinishFailed}
-                                autoComplete="off"
-
-                            >
-                                <h2>Xin chào</h2> <h4>Đăng nhập hoặc Tạo tài khoản</h4>
-                                <Form.Item name="email"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không để trống Email',
-                                        },
-                                    ]}
-                                    style={{ marginBottom: 0, textAlign: 'left' }}
-                                >
-                                    <Input placeholder="Nhập Email..."
-                                        style={{ lineHeight: '50px', borderBottom: '1px solid lightgrey', marginBottom: 20 }}
-                                        size='large'
-                                        bordered={false}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                    name="remember"
-                                    valuePropName="checked"
-                                    style={{ textAlign: 'left' }}
-                                >
-                                    <Checkbox>Toogle <small>(true= đăng nhập, false = đăng ký)</small></Checkbox>
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" size='large' htmlType='submit' danger block >Tiếp tục</Button>
-                                </Form.Item>
-                            </Form>
-                        )}
-
-                        {currentForm === 'logInForm' && (
-                            <>
-                                <Form name="reLog"
-                                    wrapperCol={{ span: 24, }}
-                                    initialValues={{ remember: true, }}
-                                    onFinish={onSubmitForm}
-                                    onFinishFailed={onFinishFailed}
-                                    autoComplete="off"
-                                >
-                                    <Button type='link' className='prevBtn' onClick={() => { logBy === 'phoneNum' ? setCurrentForm('phoneNumForm') : setCurrentForm('emailForm') }}><LeftOutlined /></Button>
-                                    <h2>Nhập mật khẩu</h2> <h4>Vui lòng nhập mật khẩu của {logBy === 'phoneNum' ? <>số điện thoại <strong>{phoneNumber}</strong></> : <>email <strong>{email}</strong></>} </h4>
-                                    <Form.Item
-                                        name="password"
-                                        rules={[{ required: true, message: 'Không để trống mật khẩu!' }]}
-                                    >
-                                        <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
-                                            type="password"
-                                            placeholder="Nhập mật khẩu"
-                                            style={{ lineHeight: '50px', borderBottom: '1px solid lightgrey', marginBottom: 10 }}
-                                            size='large'
-                                            bordered={false}
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="remember"
-                                        valuePropName="checked"
-                                        style={{ textAlign: 'left' }}
-                                    >
-                                        <Checkbox>Nhớ tài khoản</Checkbox>
-                                    </Form.Item>
-
-                                    <Form.Item>
-                                        <Button type="primary" size='large' htmlType='submit' danger block >Đăng nhập</Button>
-                                    </Form.Item>
-                                </Form>
-                                <Button type='link'>Quên mật khẩu ?</Button>
-
-                            </>
-                        )}
-
-                        {currentForm === 'registerForm' && (
-                            <Form name="register"
-                                wrapperCol={{ span: 24, }}
-                                initialValues={{ remember: true, }}
-                                layout="inline"
-                                onFinish={onSubmitForm}
-                                onFinishFailed={onFinishFailed}
-                                autoComplete="off"
-                            >
-                                <h2>Số điện thoại chưa đăng ký tài khoản</h2> <h4>Vui lòng nhập thông tin đăng ký tài khoản <strong>{phoneNumber}</strong></h4>
-                                <Form.Item wrapperCol={12} name="firstname"
-                                    rules={[{ required: true, message: 'Không để trống Họ!' }]}>
-                                    <Input placeholder='Nhập họ' bordered={false} />
-                                </Form.Item>
-
-                                <Form.Item wrapperCol={12} name="lastname"
-                                    rules={[{ required: true, message: 'Không để trống Tên!' }]}>
-                                    <Input placeholder='Nhập tên' bordered={false} />
-                                </Form.Item>
-
-                                <Form.Item
-                                    name="password"
-                                    hasFeedback
-                                    wrapperCol={24}
-                                    rules={[{ required: true, message: 'Không để trống mật khẩu!' }]}
-                                >
-                                    <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
-                                        type="password"
-                                        size='large'
-                                        placeholder="Tạo mật khẩu"
-                                        bordered={false}
-                                    />
-                                </Form.Item>
-
-                                <Form.Item
-                                    name="password-confirm"
-                                    dependencies={['password']}
-                                    hasFeedback
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không để trống mật khẩu',
-                                        },
-                                        ({ getFieldValue }) => ({
-                                            validator(_, value) {
-                                                if (!value || getFieldValue('password') === value) {
-                                                    return Promise.resolve();
-                                                }
-                                                return Promise.reject(new Error('Mật khẩu chưa khớp !'));
-                                            },
-                                        }),
-                                    ]}
-                                >
-                                    <Input.Password prefix={<LockOutlined className="site-form-item-icon" />}
-                                        type="password"
-                                        size='large'
-                                        placeholder="Nhập lại mật khẩu"
-                                        bordered={false}
-                                    />
-                                </Form.Item>
-
-                                <Form.Item name="email"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không để trống địa chỉ email',
-                                        },
-                                    ]}
-                                >
-                                    <Input placeholder="Nhập Email đăng ký"
-                                        size='large'
-                                        bordered={false}
-                                    />
-                                </Form.Item>
-
-                                <Form.Item name="address"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Không để trống địa chỉ',
-                                        },
-                                    ]}
-                                >
-                                    <Input placeholder="Nhập địa chỉ"
-                                        size='large'
-                                        bordered={false}
-                                    />
-                                </Form.Item>
-
-                                <Form.Item
-                                    name="acceptRegister"
-                                    valuePropName="checked"
-                                    style={{ border: 'none' }}
-                                >
-                                    <Checkbox className='accept_txt'>
-                                        <small> Bằng cách nhấp vào Đăng ký, bạn đồng ý với <a href='#' target="_blank"> Điều khoản, Chính sách quyền riêng tư và Chính sách cookie của chúng tôi.</a> Bạn có thể nhận được thông báo của chúng tôi qua SMS và hủy nhận bất kỳ lúc nào.
-                                        </small>
-                                    </Checkbox>
-                                </Form.Item>
-
-                                <Form.Item>
-                                    <Button type="primary" size='large' htmlType='submit' danger block >Đăng ký</Button>
-                                </Form.Item>
-                            </Form>
-                        )}
-                        {
-                            (currentForm === 'emailForm' || currentForm === 'phoneNumForm') && (<>
-                                <Text type="secondary">Hoặc</Text> <br />
-                                <Button type='link' onClick={() => currentForm === 'emailForm' ? setCurrentForm('phoneNumForm') : setCurrentForm('emailForm')}>Đăng nhập bằng {currentForm === 'emailForm' ? 'Số điện thoại' : 'Email'}</Button>
-                            </>
-                            )
-                        }
-
-                    </Col>
-                    <Col span={10} className='reLogRight' >
-                        <Image width={'50%'} preview={false} src='https://salt.tikicdn.com/ts/upload/eb/f3/a3/25b2ccba8f33a5157f161b6a50f64a60.png' />
-                    </Col>
-                </Row>
-            </Modal> */}
         </>)
     }
 
@@ -764,52 +466,6 @@ const HeaderSection = (props) => {
                 </Row>
             </header>
         </Affix>
-
-        {/* <Modal className='login_popup_container'
-            open={isModalOpen}
-            footer={null}
-            onCancel={handleCancel}
-        >
-            <Row className='login_popup' >
-                <Col className='leftside' span={16} >
-                    <h1>Welcome,</h1>
-                    <p>Login / Signup </p>
-                    <Form name="login_form"
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 16, }}
-                        initialValues={{ remember: true, }}
-                        autoComplete="off"  >
-
-                        <Form.Item label="Username" name="username"
-                            rules={[{
-                                required: true,
-                                message: 'Please input your username!',
-                            }]} >
-                            <Input />
-                        </Form.Item>
-
-                        <Form.Item label="Password" name="password"
-                            rules={[{
-                                required: true,
-                                message: 'Please input your password!',
-                            }]}
-                        >
-                            <Input.Password />
-                        </Form.Item>
-
-                        <Form.Item wrapperCol={{ offset: 8, span: 16, }} >
-                            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-                                Submit
-                            </Button>
-                        </Form.Item>
-
-                    </Form>
-                </Col>
-                <Col className='rightside' span={8} >
-                    <img src='https://salt.tikicdn.com/ts/upload/eb/f3/a3/25b2ccba8f33a5157f161b6a50f64a60.png' alt='login_img' />
-                </Col>
-            </Row>
-        </Modal> */}
     </>);
 };
 

@@ -13,6 +13,7 @@ use Sellers\Products\Models\Products;
 use Illuminate\Support\Facades\Config;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class OrdersRepository extends BaseRepository implements OrdersRepositoryInterface {
 
@@ -134,11 +135,25 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
         }
         foreach($orders_list as $key => $_order) {
             $order = $this->model
-                ->select('id', 'code', 'receiver_name', 'receiver_phone', 'receiver_country_id', 'receiver_province_id', 'receiver_district_id',
-                    'receiver_ward_id', 'receiver_address', 'subtotal', 'total_amount', 'item_quantity', 'discount', 'user_id', 'shipping_id', 'payment_method_id',
-                    'contact_type_id', 'order_tracking_status_id', 'shipping_method_id', 'transporter_id', 'delivery_date', 'order_date', 'status',
-                )
-                ->find($key);
+            ->select('id', 'code', 'receiver_name', 'receiver_phone', 'receiver_country_id', 'receiver_province_id', 'receiver_district_id',
+                'receiver_ward_id', 'receiver_address', 'subtotal', 'total_amount', 'item_quantity', 'discount', 'user_id', 'shipping_id', 'payment_method_id',
+                'contact_type_id', 'order_tracking_status_id', 'shipping_method_id', 'transporter_id', 'delivery_date', 'order_date', 'status',
+            )
+            ->find($key);
+            $order['country'] = DB::table('countries')->where([
+                'id' => $order->receiver_country_id ?? 0,
+            ])->first();
+            $order['province'] = DB::table('provinces')->where([
+                'id' => $order->receiver_province_id ?? 0,
+            ])->first();
+            $order['district'] = DB::table('districts')->where([
+                'id' => $order->receiver_district_id ?? 0,
+            ])->first();
+            $order['ward'] = DB::table('districts')->where([
+                'id' => $order->receiver_ward_id ?? 0,
+            ])->first();
+            $order['delivery_location'] = $order->receiver_address . ', ' . ($order['ward']->name ?? '-') . ', ' .
+            ($order['district']->name ?? '-') . ', ' . ($order['province']->name ?? '-') . ', ' . ($order['country']->name ?? '-');
             if(!empty($order)) {
                 $order->total_amount_format = number_format($order->total_amount, 0, '.', ',');
                 $order['order_detail'] = $_order['order_detail'];

@@ -300,4 +300,17 @@ class AuthController extends ControllerBase {
         if($count == 0) return true;
         return false;
     }
+
+    /**
+     * @author: <hauvo1709@gmail.com>
+     * @todo: Log the user out of the application.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request) {
+        \Illuminate\Support\Facades\Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return true;
+    }
 }

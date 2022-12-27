@@ -52,7 +52,7 @@ i18n
  */
 const App = (props) => {
 
-    const { data, get_module, get_user, setRouter } = useContext(CoreContext);
+    const { data, get_module, get_user, setRouter, logout } = useContext(CoreContext);
     const { history } = props;
     const { mouted } = data;
     const { t } = useTranslation();
@@ -65,7 +65,7 @@ const App = (props) => {
     }, [props]);
 
     return RoutesWeb({
-        data, get_user, t, i18n, setRouter, history
+        data, get_user, t, i18n, setRouter, history, logout
     });
 };
 

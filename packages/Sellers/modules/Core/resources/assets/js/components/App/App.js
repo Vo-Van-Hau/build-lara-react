@@ -11,7 +11,7 @@ import { CoreContext } from '../Contexts/CoreContext';
 const App = (props) => {
 
     const { history } = props;
-    const { data, get_module, get_user } = useContext(CoreContext);
+    const { data, get_module, get_user, logout } = useContext(CoreContext);
     const { mouted }  = data;
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const App = (props) => {
     }, [props]);
 
     return RoutesWeb({
-        data, history
+        data, get_user, history, logout
     });
 };
 

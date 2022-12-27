@@ -1,13 +1,17 @@
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../Contexts/AuthContext';
-import { Form, Input, Button, Row, Spin } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Row, Spin, Space } from 'antd';
+import { UserOutlined, LockOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import Helper from '../../helpers/helper';
 
 const Login = ({ history, ...props }) => {
 
     const { login } = useContext(AuthContext);
-    const { change_page } = props;
+    const { change_page, data } = props;
+    console.log(props);
+    const { config } = data;
+    const { app } = config;
+    const { baseURL, adminPrefix } = app;
     const [error, setError] = useState(null);
     const [loadingStatus, setLoadingStatus] = useState(false);
     const [form] = Form.useForm();
@@ -71,6 +75,10 @@ const Login = ({ history, ...props }) => {
                         )}
                     </Form.Item>
                 </Row>
+                <Space style={{width: '100%' }} align="center">
+                    <Button type="text" icon={<ShoppingCartOutlined />} onClick={() => ( window.location.replace(`${baseURL}/${adminPrefix}/home/home`))}>Tiếp tục mua sắm</Button>
+                    <Button type="text" icon={<UserOutlined />} onClick={() => ( window.location.replace(`${baseURL}/${adminPrefix}/auth/register`))}>Bạn chưa có tài khoản?</Button>
+                </Space>
             </Form>
         </>
     );

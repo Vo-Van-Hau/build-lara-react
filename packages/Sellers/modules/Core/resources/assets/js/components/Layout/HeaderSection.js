@@ -1,8 +1,20 @@
-import { Layout, Menu } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { Layout, Menu, Row, Col, Button } from 'antd';
+import { AppstoreOutlined, MailOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
 const { Header } = Layout;
 
 const HeaderSection = ({...props}) => {
+
+    const { data, navigate, setRouter, searchParams, logout } = props;
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo: Log out
+     * @param {string}
+     * @return {void}
+     */
+    const handleLogout = () => {
+        return logout();
+    }
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
@@ -42,10 +54,18 @@ const HeaderSection = ({...props}) => {
     return (
         <>
             <Header style={{color: '#FFFFFF', paddingLeft: '0px', paddingRight: '0px'}} theme='light'>
-                <Menu
+                {/* <Menu
                     mode='horizontal'
                     items={items}
-                />
+                /> */}
+                <Row style={{height: '100%'}}>
+                    <Col span={12}></Col>
+                    <Col span={12} style={{display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
+                        <Button onClick={() => {handleLogout()}} style={{marginRight: 50}} icon={<LogoutOutlined />}>
+                            Thoát
+                        </Button>
+                    </Col>
+                </Row>
             </Header>
         </>
     )

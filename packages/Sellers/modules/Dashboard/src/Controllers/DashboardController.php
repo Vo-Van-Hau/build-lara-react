@@ -55,6 +55,10 @@ class DashboardController extends ControllerBase {
             $input['user_id'] = isset($auth_id) ? $auth_id : null;
             $result['products'] = $this->ProductsRepository->get_products_sellers_overview($input);
             $result['orders'] = $this->OrdersRepository->get_orders_sellers_overview($input);
+            $result['revenues'] = [
+                'all' => $this->get_all_revenue($result['orders']['data'] ?? []),
+                'today' => $this->get_today_revenue($result['orders']['data'] ?? []),
+            ];
             if($result) {
                 return $this->response_base([
                     'status' => true,
@@ -64,5 +68,40 @@ class DashboardController extends ControllerBase {
             return $this->response_base(['status' => false], 'You have failed to get data !!!', 200);
         }
         return $this->response_base(['status' => false], 'Access denied !', 200);
+    }
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo:
+     * @param:
+     * @return void
+     */
+    public function get_all_revenue($orders) {
+        $result = 0;
+        foreach($orders as $order) {
+            $result += $order->total_amount;
+        }
+        return $result;
+    }
+
+    /**
+     * @author <hauvo1709@gmail.com>
+     * @todo:
+     * @param:
+     * @return void
+     */
+    public function get_today_revenue($orders) {
+        $result = 0;
+        foreach($orders as $order) {
+            $order_date = $order->order_date;
+            $today = [
+                'start' => date('Y-m-d 00:00:00'),
+                'end' => date('Y-m-d 23:59:59')
+            ];
+            if($order_date <= $today['end'] && $order_date >= $today['start']) {
+                $result += $order->total_amount;
+            }
+        }
+        return $result;
     }
 }

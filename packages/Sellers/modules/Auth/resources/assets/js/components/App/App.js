@@ -10,7 +10,7 @@ const App = (props) => {
         get_config();
     }, []);
 
-    return RoutesWeb(props);
+    return RoutesWeb({...props, data});
 };
 
 export default App;

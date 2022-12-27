@@ -16,6 +16,10 @@ export const initialState = {
             data: [],
             total: 0,
             orders_in_year: [],
+        },
+        revenues: {
+            all: 0,
+            today: 0,
         }
     },
     pagination: {

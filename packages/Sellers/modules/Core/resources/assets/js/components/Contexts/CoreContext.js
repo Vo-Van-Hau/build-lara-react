@@ -70,6 +70,25 @@ const CoreContextProvicer = ({ children, axios, history }) => {
 
     /**
      * @author: <vanhau.vo@urekamedia.vn>
+     * @todo:
+     * @param
+     * @returns {void}
+     */
+    const logout = () => {
+        set_table_loading();
+        return api
+        .get_secured().post(
+            `${window.sparrowConfig.app.backendURL}/api/auth/auth/logout`
+        ).then(res => {
+            let { status, message, data } = res.data;
+            return window.location.href = `${window.sparrowConfig.app.backendURL}/auth/login`;
+        })
+        .catch((errors) => {})
+        .finally(() => {set_table_loading();});;
+    };
+
+    /**
+     * @author: <vanhau.vo@urekamedia.vn>
      * @todo: set table loading...
      * @return {void}
      */
@@ -89,7 +108,7 @@ const CoreContextProvicer = ({ children, axios, history }) => {
 
     const todoContextData = {
         data, get_user, set_table_loading,
-        dispatch,
+        dispatch, logout,
         get_axios,
         get_module
     };
